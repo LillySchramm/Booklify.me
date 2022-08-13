@@ -1,0 +1,26 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id   Int    @id
+  name String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Session   Session[]
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  key       String   @db.VarChar(512)
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  createdAt DateTime @default(now())
+}

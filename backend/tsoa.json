@@ -1,0 +1,20 @@
+{
+    "entryFile": "src/app.ts",
+    "noImplicitAdditionalProperties": "throw-on-extras",
+    "controllerPathGlobs": ["src/**/*.controller.ts"],
+    "spec": {
+        "outputDirectory": "build",
+        "specVersion": 3,
+        "securityDefinitions": {
+            "bearer": {
+                "type": "apiKey",
+                "name": "authorization",
+                "in": "header"
+            }
+        }
+    },
+    "routes": {
+        "routesDir": "build",
+        "authenticationModule": "src/middleware/auth.middleware.ts"
+    }
+}
