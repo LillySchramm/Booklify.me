@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GeneralService } from 'src/app/api';
 import { environment } from 'src/environments/environment';
 
 @Component({

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { AuthService, LoginSuccessResponse } from 'src/app/api';
+import { AuthService, GeneralService, LoginSuccessResponse } from 'src/app/api';
 
 @Component({
     selector: 'app-login-page',
@@ -8,7 +9,7 @@ import { AuthService, LoginSuccessResponse } from 'src/app/api';
     styleUrls: ['./github-success-page.component.scss'],
 })
 export class GithubSuccessPageComponent implements OnInit {
-    constructor(private authService: AuthService) {}
+    constructor(private authService: AuthService, private router: Router) {}
 
     async ngOnInit(): Promise<void> {
         const queryString = window.location.search;
@@ -25,7 +26,8 @@ export class GithubSuccessPageComponent implements OnInit {
         if (!bearerResponse) {
             return;
         }
+        localStorage.setItem('auth', bearerResponse.bearer);
 
-        console.log(bearerResponse.bearer);
+        this.router.navigate(['']);
     }
 }
