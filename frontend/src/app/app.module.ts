@@ -2,24 +2,27 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ButtonModule } from 'primeng/button';
+import { environment } from 'src/environments/environment';
+import { BASE_PATH } from './api';
 import { ApiModule } from './api/api.module';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginPageComponent } from './pages/login-page/login-page.component';
+import { GithubSuccessPageModule } from './pages/github-success-page/github-success-page.module';
+import { LoginPageModule } from './pages/login-page/login-page.module';
 
 @NgModule({
-    declarations: [AppComponent, LoginPageComponent],
+    declarations: [AppComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
-        ApiModule,
         BrowserAnimationsModule,
-        ButtonModule,
+        ApiModule,
+        GithubSuccessPageModule,
+        LoginPageModule,
     ],
-    providers: [],
+    providers: [{ provide: BASE_PATH, useValue: environment.API_BASE_PATH }],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

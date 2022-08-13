@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-login-page',
@@ -6,11 +7,15 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./login-page.component.scss'],
 })
 export class LoginPageComponent implements OnInit {
-    constructor() {
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        console.log(urlParams.get('code'));
-    }
+    constructor() {}
 
     ngOnInit(): void {}
+
+    public openGithubAuth(): void {
+        window.open(
+            'https://github.com/login/oauth/authorize?scope=user:email&client_id=' +
+                environment.oAuthClientId,
+            '_self'
+        );
+    }
 }
