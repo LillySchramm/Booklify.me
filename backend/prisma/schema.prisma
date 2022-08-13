@@ -18,9 +18,10 @@ model User {
 }
 
 model Session {
-  id        String   @id @default(uuid())
-  key       String   @db.VarChar(512)
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
-  createdAt DateTime @default(now())
+  id          String   @id @default(uuid())
+  key         String   @db.VarChar(512)
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int
+  invalidated Boolean  @default(false)
+  createdAt   DateTime @default(now())
 }

@@ -48,7 +48,12 @@ export async function newSession(
     return { ...session, bearer: fullToken };
 }
 
-export async function verifySession(bearer: string): Promise<User | null> {
+export async function verifySession(bearer: string): Promise<
+    | (Session & {
+          user: User;
+      })
+    | null
+> {
     if (!bearer.startsWith('Bearer ')) {
         return null;
     }
@@ -59,7 +64,9 @@ export async function verifySession(bearer: string): Promise<User | null> {
     const sessionKey = sessionString.split(':')[1];
 
     const session = await prisma.session.findFirst({
-        where: { id: sessionId },
+        where: {
+            AND: { id: sessionId, NOT: { invalidated: { equals: true } } },
+        },
         include: { user: true },
     });
     if (!session) {
@@ -77,5 +84,9 @@ export async function verifySession(bearer: string): Promise<User | null> {
         return null;
     }
 
-    return session.user;
+    return session;
+}
+
+export async function invalidateSession(id: string): Promise<void> {
+    await prisma.session.update({ where: { id }, data: { invalidated: true } });
 }

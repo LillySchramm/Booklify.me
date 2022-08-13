@@ -13,10 +13,10 @@ export async function expressAuthentication(
             return Promise.reject({});
         }
 
-        const user = await verifySession(bearer);
+        const session = await verifySession(bearer);
 
-        if (user) {
-            return Promise.resolve(user);
+        if (session) {
+            return Promise.resolve({ ...session.user, sessionId: session.id });
         }
     }
     return Promise.reject({});
