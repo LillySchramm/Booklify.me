@@ -1,13 +1,10 @@
 import { User, Session } from '@prisma/client';
 import got from 'got';
-import { env } from 'process';
 import { GitHubUserResponse } from '../models/github.model';
 import { prisma } from '../server';
+import { SESSION_TIMEOUT_IN_MINUTES } from '../tools/config';
 import { checkHash, secureHash } from '../tools/hash';
 import { getRandomString64 } from '../tools/random';
-
-export const SESSION_TIMEOUT_IN_MINUTES =
-    Number(env.SESSION_TIMEOUT_IN_MINUTES) || 600;
 
 export async function updateUserInformation(token: string): Promise<User> {
     const userResponse: GitHubUserResponse = await got

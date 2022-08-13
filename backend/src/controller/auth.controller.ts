@@ -1,16 +1,13 @@
 import got from 'got';
-import { env } from 'process';
-import { Controller, Get, Path, Query, Response, Route } from 'tsoa';
+import { Controller, Get, Query, Response, Route, Tags } from 'tsoa';
 import { newSession, updateUserInformation } from '../data/user.manager';
 import { LoginSuccessResponse } from '../models/auth.model';
 import { GitHubAuthResponse } from '../models/github.model';
-import { PingResponse } from '../models/ping.model';
+import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from '../tools/config';
 
 @Route('v1/auth')
+@Tags('Auth')
 export class AuthController extends Controller {
-    private clientId = env.GITHUB_CLIENT_ID;
-    private clientSecret = env.GITHUB_CLIENT_SECRET;
-
     /**
      * Authentication via GitHub.
      */
@@ -22,8 +19,8 @@ export class AuthController extends Controller {
         const authResponse: GitHubAuthResponse = await got
             .post('https://github.com/login/oauth/access_token', {
                 json: {
-                    client_id: this.clientId,
-                    client_secret: this.clientSecret,
+                    client_id: GITHUB_CLIENT_ID,
+                    client_secret: GITHUB_CLIENT_SECRET,
                     code,
                     accept: 'json',
                 },
