@@ -6,12 +6,7 @@ import {
     RouterStateSnapshot,
     UrlTree,
 } from '@angular/router';
-import {
-    catchError,
-    Observable,
-    of,
-    switchMap,
-} from 'rxjs';
+import { catchError, Observable, of, switchMap } from 'rxjs';
 import { GeneralService } from '../api';
 
 @Injectable({
@@ -34,6 +29,7 @@ export class AuthGuard implements CanActivate {
                 );
             }),
             catchError(() => {
+                localStorage.removeItem('auth');
                 return of(
                     rejectAuthenticated
                         ? true
