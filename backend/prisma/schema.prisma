@@ -25,3 +25,38 @@ model Session {
   invalidated Boolean  @default(false)
   createdAt   DateTime @default(now())
 }
+
+model Book {
+  isbn             String     @id
+  title            String?
+  subtitle         String?
+  authors          Author[]
+  publisher        Publisher? @relation(fields: [publisherId], references: [id])
+  publishedDate    String?
+  description      String?
+  pageCount        Int?
+  printedPageCount Int?
+  language         String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  publisherId String?
+}
+
+model Author {
+  id    String @id @default(uuid())
+  name  String @unique
+  books Book[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Publisher {
+  id   String @id @default(uuid())
+  name String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Book      Book[]
+}
