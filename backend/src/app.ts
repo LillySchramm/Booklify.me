@@ -7,7 +7,8 @@ import { readFileSync } from 'fs';
 import jpeg from 'jpeg-js';
 
 export const app = express();
-export const notFoundImage = jpeg.decode(readFileSync('./public/notFound.jpg'));
+export const rawNotFoundImage = readFileSync('./public/notFound.jpg');
+export const notFoundImage = jpeg.decode(rawNotFoundImage);
 
 app.use(cors());
 // Use body parser to read sent json payloads

@@ -4,7 +4,7 @@ import got from 'got';
 import jpeg from 'jpeg-js';
 import { GoogleBookResponse, GoogleVolume } from '../models/books.model';
 import { createWriteStream, mkdir, readFileSync } from 'fs';
-import { notFoundImage } from '../app';
+import { notFoundImage, rawNotFoundImage } from '../app';
 import { Author, Book, Prisma, Publisher } from '@prisma/client';
 import { prisma } from '../server';
 
@@ -109,7 +109,7 @@ export class BookController extends Controller {
                 const image = await got.get(imageLink);
                 imageBody = image.rawBody;
             } else {
-                imageBody = notFoundImage.data;
+                imageBody = rawNotFoundImage;
             }
         }
 
