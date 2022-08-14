@@ -2,9 +2,11 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.epsdev.mangalistcompanion"
+    android:targetSandboxVersion="1"
 >
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,6 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MangalistCompanion"
+        android:usesCleartextTraffic="true"
     >
         <activity android:name=".MainActivity">
             <intent-filter>

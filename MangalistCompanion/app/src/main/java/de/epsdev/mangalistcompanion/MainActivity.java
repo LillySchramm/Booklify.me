@@ -3,12 +3,27 @@ package de.epsdev.mangalistcompanion;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import com.journeyapps.barcodescanner.CaptureActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import org.apache.commons.io.IOUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +36,11 @@ public class MainActivity extends AppCompatActivity {
 
         btn_scan = findViewById(R.id.btn_scan);
         btn_scan.setOnClickListener(v -> scanCode());
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+            .permitAll()
+            .build();
+        StrictMode.setThreadPolicy(policy);
     }
 
     private void scanCode() {
@@ -42,8 +62,14 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(
                 MainActivity.this
             );
-            builder.setTitle("Result");
-            builder.setMessage(result.getContents());
+            builder.setTitle("Title");
+            try {
+                builder.setMessage(
+                    getBookDetails(result.getContents()).getString("title")
+                );
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
             builder
                 .setPositiveButton(
                     "OK",
@@ -54,4 +80,20 @@ public class MainActivity extends AppCompatActivity {
                 .show();
         }
     );
+
+    JSONObject getBookDetails(String isbn) throws IOException, JSONException {
+        URL url = new URL("http://192.168.2.100:8000/v1/books/" + isbn);
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        String rawResponse = "";
+        try {
+            InputStream in = new BufferedInputStream(
+                urlConnection.getInputStream()
+            );
+            rawResponse = IOUtils.toString(in, StandardCharsets.UTF_8);
+        } finally {
+            urlConnection.disconnect();
+        }
+
+        return new JSONObject(rawResponse);
+    }
 }
