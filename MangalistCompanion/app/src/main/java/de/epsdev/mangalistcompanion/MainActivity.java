@@ -1,9 +1,12 @@
 package de.epsdev.mangalistcompanion;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.media.AudioAttributes;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
@@ -46,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private void scanCode() {
         ScanOptions options = new ScanOptions();
         options.setPrompt("Volume up to activate flash");
-        options.setBeepEnabled(true);
+        options.setBeepEnabled(false);
         options.setOrientationLocked(true);
         options.setCaptureActivity(CaptureAct.class);
         barLauncher.launch(options);
@@ -78,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 )
                 .show();
+            Vibrator vibrator = (Vibrator) getSystemService(
+                Context.VIBRATOR_SERVICE
+            );
+            vibrator.vibrate(200);
         }
     );
 
