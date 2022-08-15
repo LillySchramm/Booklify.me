@@ -9,9 +9,12 @@ import android.os.StrictMode;
 import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
+import com.bumptech.glide.Glide;
 import com.journeyapps.barcodescanner.CaptureActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
@@ -30,15 +33,21 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btn_scan;
+    Button scanButton;
+    TextView titleView;
+    TextView subTitleView;
+    ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btn_scan = findViewById(R.id.btn_scan);
-        btn_scan.setOnClickListener(v -> scanCode());
+        scanButton = findViewById(R.id.scanButton);
+        scanButton.setOnClickListener(v -> scanCode());
+        titleView = findViewById(R.id.titleText);
+        subTitleView = findViewById(R.id.subTitleText);
+        imageView = findViewById(R.id.imageView);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
             .permitAll()
@@ -62,25 +71,26 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(
-                MainActivity.this
-            );
-            builder.setTitle("Title");
             try {
-                builder.setMessage(
-                    getBookDetails(result.getContents()).getString("title")
-                );
+                JSONObject bookData = getBookDetails(result.getContents());
+                titleView.setText(bookData.getString("title"));
+                String subtitle = bookData.getString("subtitle");
+
+                if (!subtitle.equals("null")) {
+                    subTitleView.setText(subtitle);
+                }
+
+                Glide
+                    .with(MainActivity.this)
+                    .load(
+                        "http://192.168.2.100:8000/public/thumbnails/" +
+                        bookData.getString("isbn") +
+                        ".png"
+                    )
+                    .into(imageView);
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
-            builder
-                .setPositiveButton(
-                    "OK",
-                    (dialog, which) -> {
-                        dialog.dismiss();
-                    }
-                )
-                .show();
             Vibrator vibrator = (Vibrator) getSystemService(
                 Context.VIBRATOR_SERVICE
             );
