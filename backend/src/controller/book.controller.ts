@@ -9,6 +9,9 @@ import { Author, Book, Prisma, Publisher } from '@prisma/client';
 import { prisma } from '../server';
 import { minioClient } from '../tools/s3';
 import { MINIO_BUCKET_NAME } from '../tools/config';
+import { createBook, getBookByIsbn } from '../data/book.manager';
+import { upsertPublisher } from '../data/publisher.manager';
+import { upsertAuthor } from '../data/author.manager';
 
 @Route('v1/books')
 @Tags('Books')
@@ -27,16 +30,7 @@ export class BookController extends Controller {
         (Book & { authors: Author[]; publisher: Publisher | null }) | undefined
     > {
         const isbnString = isbn.toString();
-        // this is just a small POC. will be refactored in the near future
-        const dbBook = await prisma.book.findFirst({
-            where: {
-                isbn: isbnString,
-            },
-            include: {
-                authors: true,
-                publisher: true,
-            },
-        });
+        const dbBook = await getBookByIsbn(isbnString);
 
         if (dbBook) {
             return dbBook;
@@ -55,8 +49,7 @@ export class BookController extends Controller {
             .get(googleBookResponse.items[0].selfLink)
             .json();
 
-        // These are 3 fucking redundant systems to get the fucking cover bc someone is alway missing one
-
+        // These are 3 fucking redundant systems to get the fucking cover bc someone is always missing one
         let imageBody: Buffer | undefined;
 
         const isbndbUrl = `${this.bookCoverBase}/${isbnString.substring(
@@ -124,50 +117,26 @@ export class BookController extends Controller {
         book.volumeInfo.authors = book.volumeInfo.authors
             ? book.volumeInfo.authors
             : [];
-        book.volumeInfo.authors.forEach(async (name) => {
-            await prisma.author.upsert({
-                where: {
-                    name,
-                },
-                create: {
-                    name,
-                },
-                update: {},
-            });
-        });
+        for (const name of book.volumeInfo.authors) {
+            upsertAuthor(name);
+        }
 
         let publisher;
         if (book.volumeInfo.publisher) {
-            publisher = await prisma.publisher.upsert({
-                where: {
-                    name: book.volumeInfo.publisher,
-                },
-                create: {
-                    name: book.volumeInfo.publisher,
-                },
-                update: {},
-            });
+            publisher = await upsertPublisher(book.volumeInfo.publisher);
         }
 
-        return prisma.book.create({
-            data: {
-                isbn: isbnString,
-                title: book.volumeInfo.title,
-                subtitle: book.volumeInfo.subtitle,
-                description: book.volumeInfo.description,
-                authors: {
-                    connect: book.volumeInfo.authors.map((name) => ({ name })),
-                },
-                publisherId: publisher?.id,
-                language: book.volumeInfo.language,
-                pageCount: book.volumeInfo.pageCount,
-                printedPageCount: book.volumeInfo.printedPageCount,
-                publishedDate: book.volumeInfo.publishedDate,
-            },
-            include: {
-                authors: true,
-                publisher: true,
-            },
-        });
+        return createBook(
+            isbnString,
+            book.volumeInfo.title,
+            book.volumeInfo.subtitle,
+            book.volumeInfo.description,
+            publisher?.id,
+            book.volumeInfo.language,
+            book.volumeInfo.pageCount,
+            book.volumeInfo.printedPageCount,
+            book.volumeInfo.publishedDate,
+            book.volumeInfo.authors
+        );
     }
 }
