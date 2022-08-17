@@ -12,9 +12,10 @@ model User {
   id   Int    @id
   name String
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  Session   Session[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  Session         Session[]
+  OwnershipStatus OwnershipStatus[]
 }
 
 model Session {
@@ -38,9 +39,10 @@ model Book {
   printedPageCount Int?
   language         String?
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  publisherId String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  publisherId     String?
+  OwnershipStatus OwnershipStatus[]
 }
 
 model Author {
@@ -59,4 +61,23 @@ model Publisher {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Book      Book[]
+}
+
+model OwnershipStatus {
+  user   User       @relation(fields: [userId], references: [id])
+  book   Book       @relation(fields: [bookIsbn], references: [isbn])
+  status BookStatus
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    Int
+  bookIsbn  String
+
+  @@id([userId, bookIsbn])
+}
+
+enum BookStatus {
+  NONE
+  OWNED
+  WHISHLISTED
 }
