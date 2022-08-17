@@ -7,6 +7,8 @@ import { createWriteStream, mkdir, readFileSync } from 'fs';
 import { notFoundImage, rawNotFoundImage } from '../app';
 import { Author, Book, Prisma, Publisher } from '@prisma/client';
 import { prisma } from '../server';
+import { minioClient } from '../tools/s3';
+import { MINIO_BUCKET_NAME } from '../tools/config';
 
 @Route('v1/books')
 @Tags('Books')
@@ -113,11 +115,11 @@ export class BookController extends Controller {
             }
         }
 
-        mkdir('./public/thumbnails', { recursive: true }, () => {
-            createWriteStream('./public/thumbnails/' + isbn + '.png').write(
-                imageBody
-            );
-        });
+        await minioClient.putObject(
+            MINIO_BUCKET_NAME,
+            'thumbnails/' + isbn + '.png',
+            imageBody
+        );
 
         book.volumeInfo.authors = book.volumeInfo.authors
             ? book.volumeInfo.authors
