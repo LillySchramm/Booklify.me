@@ -3,6 +3,7 @@ package de.epsdev.mangalistcompanion;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -33,15 +34,24 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
+    String endpoint = "";
+    String authToken = "";
+
     Button scanButton;
     TextView titleView;
     TextView subTitleView;
     ImageView imageView;
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor preferenceEditor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
+        preferenceEditor = sharedPreferences.edit();
 
         scanButton = findViewById(R.id.scanButton);
         scanButton.setOnClickListener(v -> scanCode());
@@ -53,6 +63,19 @@ public class MainActivity extends AppCompatActivity {
             .permitAll()
             .build();
         StrictMode.setThreadPolicy(policy);
+
+        endpoint = sharedPreferences.getString("endpoint", "");
+        authToken = sharedPreferences.getString("authToken", "");
+
+        if (!endpoint.isEmpty() && !authToken.isEmpty()) {
+            Toast
+                .makeText(
+                    MainActivity.this,
+                    "Loaded credentials for " + endpoint,
+                    Toast.LENGTH_LONG
+                )
+                .show();
+        }
     }
 
     private void scanCode() {
@@ -71,6 +94,27 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
+            if (
+                result.getContents().length() > 13 &&
+                result.getContents().contains("$")
+            ) {
+                this.endpoint = result.getContents().split("\\$")[0];
+                this.authToken = result.getContents().split("\\$")[1];
+
+                preferenceEditor.putString("endpoint", this.endpoint);
+                preferenceEditor.putString("authToken", this.authToken);
+                preferenceEditor.commit();
+
+                Toast
+                    .makeText(
+                        MainActivity.this,
+                        "Registered new credentials.",
+                        Toast.LENGTH_LONG
+                    )
+                    .show();
+                return;
+            }
+
             try {
                 JSONObject bookData = getBookDetails(result.getContents());
                 titleView.setText(bookData.getString("title"));
@@ -83,7 +127,8 @@ public class MainActivity extends AppCompatActivity {
                 Glide
                     .with(MainActivity.this)
                     .load(
-                        "http://192.168.2.100:8000/public/thumbnails/" +
+                        endpoint +
+                        "/public/thumbnails/" +
                         bookData.getString("isbn") +
                         ".png"
                     )
@@ -99,8 +144,12 @@ public class MainActivity extends AppCompatActivity {
     );
 
     JSONObject getBookDetails(String isbn) throws IOException, JSONException {
-        URL url = new URL("http://192.168.2.100:8000/v1/books/" + isbn);
+        URL url = new URL(endpoint + "/v1/books/" + isbn);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setRequestProperty(
+            "Authorization",
+            "Bearer " + authToken
+        );
         String rawResponse = "";
         try {
             InputStream in = new BufferedInputStream(
