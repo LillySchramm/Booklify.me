@@ -1,20 +1,37 @@
-import { Controller, Get, Path, Route, Tags } from 'tsoa';
-import { PingResponse } from '../models/ping.model';
+import {
+    Controller,
+    Get,
+    Path,
+    Post,
+    Request,
+    Route,
+    Security,
+    Tags,
+} from 'tsoa';
 import got from 'got';
 import jpeg from 'jpeg-js';
 import { GoogleBookResponse, GoogleVolume } from '../models/books.model';
-import { createWriteStream, mkdir, readFileSync } from 'fs';
 import { notFoundImage, rawNotFoundImage } from '../app';
-import { Author, Book, Prisma, Publisher } from '@prisma/client';
-import { prisma } from '../server';
+import {
+    Author,
+    Book,
+    BookStatus,
+    OwnershipStatus,
+    Publisher,
+} from '@prisma/client';
 import { minioClient } from '../tools/s3';
 import { MINIO_BUCKET_NAME } from '../tools/config';
-import { createBook, getBookByIsbn } from '../data/book.manager';
+import {
+    createBook,
+    getBookByIsbn,
+    setOwnershipStatus,
+} from '../data/book.manager';
 import { upsertPublisher } from '../data/publisher.manager';
 import { upsertAuthor } from '../data/author.manager';
 
 @Route('v1/books')
 @Tags('Books')
+@Security('bearer')
 export class BookController extends Controller {
     private bookApiBase = 'https://www.googleapis.com/books/v1/volumes';
     private bookCoverBase = 'https://images.isbndb.com/covers';
@@ -25,12 +42,18 @@ export class BookController extends Controller {
      */
     @Get('{isbn}')
     public async getBook(
-        @Path() isbn: number
+        @Path() isbn: number,
+        @Request() request: any
     ): Promise<
-        (Book & { authors: Author[]; publisher: Publisher | null }) | undefined
+        | (Book & {
+              authors: Author[];
+              publisher: Publisher | null;
+              ownershipStatus: OwnershipStatus[];
+          })
+        | undefined
     > {
         const isbnString = isbn.toString();
-        const dbBook = await getBookByIsbn(isbnString);
+        const dbBook = await getBookByIsbn(isbnString, request.user.id);
 
         if (dbBook) {
             return dbBook;
@@ -136,7 +159,21 @@ export class BookController extends Controller {
             book.volumeInfo.pageCount,
             book.volumeInfo.printedPageCount,
             book.volumeInfo.publishedDate,
-            book.volumeInfo.authors
+            book.volumeInfo.authors,
+            request.user.id
         );
+    }
+
+    /**
+     * Set book status
+     * @example isbn 9781648275784
+     */
+    @Post('{isbn}/status/{status}')
+    public async setBookStatus(
+        @Path() isbn: string,
+        @Path() status: BookStatus,
+        @Request() request: any
+    ): Promise<void> {
+        await setOwnershipStatus(isbn, request.user.id, status);
     }
 }
