@@ -7,6 +7,7 @@ import { readFileSync } from 'fs';
 import jpeg from 'jpeg-js';
 import { minioClient } from './tools/s3';
 import { MINIO_BUCKET_NAME } from './tools/config';
+import morgan from 'morgan';
 
 export const app = express();
 export const rawNotFoundImage = readFileSync('./public/notFound.jpg');
@@ -14,6 +15,7 @@ export const notFoundImage = jpeg.decode(rawNotFoundImage);
 
 const NUMBER_REGEX = /^\d+$/;
 
+app.use(morgan('tiny'));
 app.use(cors());
 // Use body parser to read sent json payloads
 app.use(
