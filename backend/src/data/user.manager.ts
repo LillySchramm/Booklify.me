@@ -31,7 +31,8 @@ export async function updateUserInformation(token: string): Promise<User> {
 }
 
 export async function newSession(
-    userId: number
+    userId: number,
+    persistent?: boolean
 ): Promise<Session & { bearer: string }> {
     const bearer = getRandomString64(512);
     const hash = await secureHash(bearer);
@@ -40,6 +41,7 @@ export async function newSession(
         data: {
             key: hash,
             userId: userId,
+            persistent,
         },
     });
 
@@ -75,7 +77,7 @@ export async function verifySession(bearer: string): Promise<
 
     const timeDelta = Date.now() - session.createdAt.getTime();
     const maxTimeDelta = SESSION_TIMEOUT_IN_MINUTES * 60 * 1000;
-    if (timeDelta > maxTimeDelta) {
+    if (timeDelta > maxTimeDelta && !session.persistent) {
         return null;
     }
 

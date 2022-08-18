@@ -1,5 +1,14 @@
 import got from 'got';
-import { Controller, Get, Query, Response, Route, Tags } from 'tsoa';
+import {
+    Controller,
+    Get,
+    Query,
+    Request,
+    Response,
+    Route,
+    Security,
+    Tags,
+} from 'tsoa';
 import { newSession, updateUserInformation } from '../data/user.manager';
 import { LoginSuccessResponse } from '../models/auth.model';
 import { GitHubAuthResponse } from '../models/github.model';
@@ -34,6 +43,20 @@ export class AuthController extends Controller {
 
         const user = await updateUserInformation(authResponse.access_token);
         const session = await newSession(user.id);
+
+        return { bearer: session.bearer };
+    }
+
+    /**
+     * Get a persistent Bearer Key.
+     */
+    @Get('/persistent')
+    @Response('200')
+    @Security('bearer')
+    public async persistentSession(
+        @Request() request: any
+    ): Promise<LoginSuccessResponse | void> {
+        const session = await newSession(request.user.id, true);
 
         return { bearer: session.bearer };
     }
