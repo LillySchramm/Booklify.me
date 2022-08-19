@@ -1,3 +1,5 @@
 .angular/
 **/build/
 **/.idea
+frontend/src/app/api
+frontend/dist
