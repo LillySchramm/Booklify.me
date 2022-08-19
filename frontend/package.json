@@ -19,6 +19,8 @@
         "@angular/platform-browser": "^14.1.0",
         "@angular/platform-browser-dynamic": "^14.1.0",
         "@angular/router": "^14.1.0",
+        "@types/lodash-es": "^4.17.6",
+        "lodash-es": "^4.17.21",
         "primeicons": "^5.0.0",
         "primeng": "^14.0.1",
         "rxjs": "~7.5.0",
@@ -29,6 +31,7 @@
         "@angular-devkit/build-angular": "^14.1.2",
         "@angular/cli": "~14.1.2",
         "@angular/compiler-cli": "^14.1.0",
+        "@openapitools/openapi-generator-cli": "^2.5.1",
         "@types/jasmine": "~4.0.0",
         "jasmine-core": "~4.2.0",
         "karma": "~6.4.0",
@@ -37,7 +40,6 @@
         "karma-jasmine": "~5.1.0",
         "karma-jasmine-html-reporter": "~2.0.0",
         "ng-openapi-gen": "^0.21.2",
-        "typescript": "~4.7.2",
-        "@openapitools/openapi-generator-cli": "^2.5.1"
+        "typescript": "~4.7.2"
     }
 }

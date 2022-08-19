@@ -27,7 +27,7 @@
                         "styles": [
                             "src/styles.scss",
                             "node_modules/primeicons/primeicons.css",
-                            "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
+                            "node_modules/primeng/resources/themes/lara-dark-purple/theme.css",
                             "node_modules/primeng/resources/primeng.min.css"
                         ],
                         "scripts": []
@@ -95,7 +95,7 @@
                         "styles": [
                             "src/styles.scss",
                             "node_modules/primeicons/primeicons.css",
-                            "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
+                            "node_modules/primeng/resources/themes/lara-dark-purple/theme.css",
                             "node_modules/primeng/resources/primeng.min.css"
                         ],
                         "scripts": []
