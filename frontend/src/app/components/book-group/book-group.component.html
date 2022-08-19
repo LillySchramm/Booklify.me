@@ -1,0 +1,10 @@
+<p-accordion [multiple]="true">
+    <p-accordionTab header="Misc" [selected]="true">
+        <div class="books">
+            <app-book-item
+                *ngFor="let book of books"
+                [book]="book"
+            ></app-book-item>
+        </div>
+    </p-accordionTab>
+</p-accordion>

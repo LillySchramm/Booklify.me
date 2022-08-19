@@ -125,5 +125,8 @@ export async function getBooksByStatus(
             authors: true,
             publisher: true,
         },
+        orderBy: {
+            isbn: 'asc',
+        },
     });
 }
