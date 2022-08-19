@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { take } from 'rxjs';
 import { GeneralService } from 'src/app/api';
 import { environment } from 'src/environments/environment';
 
@@ -8,14 +9,22 @@ import { environment } from 'src/environments/environment';
     styleUrls: ['./login-page.component.scss'],
 })
 export class LoginPageComponent implements OnInit {
-    constructor() {}
+    private oAuthClientId = ""
 
-    ngOnInit(): void {}
+    constructor(
+        private generalService: GeneralService
+    ) {}
+
+    ngOnInit(): void {
+        this.generalService.config().pipe(take(1)).subscribe((config) => {
+            this.oAuthClientId = config.GITHUB_CLIENT_ID;
+        })
+    }
 
     public openGithubAuth(): void {
         window.open(
             'https://github.com/login/oauth/authorize?scope=user:email&client_id=' +
-                environment.oAuthClientId,
+                this.oAuthClientId,
             '_self'
         );
     }

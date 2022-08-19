@@ -2,6 +2,7 @@ export * from './auth200Response';
 export * from './author';
 export * from './book';
 export * from './bookStatus';
+export * from './frontendConfig';
 export * from './getBook200Response';
 export * from './getBook200ResponseAllOf';
 export * from './getBook200ResponseAllOfPublisher';

@@ -13,6 +13,7 @@ model/auth200Response.ts
 model/author.ts
 model/book.ts
 model/bookStatus.ts
+model/frontendConfig.ts
 model/getBook200Response.ts
 model/getBook200ResponseAllOf.ts
 model/getBook200ResponseAllOfPublisher.ts
