@@ -24,6 +24,7 @@ import { MINIO_BUCKET_NAME } from '../tools/config';
 import {
     createBook,
     getBookByIsbn,
+    getBooksByStatus,
     setOwnershipStatus,
 } from '../data/book.manager';
 import { upsertPublisher } from '../data/publisher.manager';
@@ -162,6 +163,26 @@ export class BookController extends Controller {
             book.volumeInfo.authors,
             request.user.id
         );
+    }
+
+    /**
+     * Get books by status.
+     */
+    @Get('user/{status}')
+    public async getUserBooksByStatus(
+        @Path() status: BookStatus,
+        @Request() request: any
+    ): Promise<
+        (Book & {
+            authors: Author[];
+            publisher: Publisher | null;
+        })[]
+    > {
+        if (status === BookStatus.NONE) {
+            return [];
+        }
+
+        return getBooksByStatus(request.user.id, status);
     }
 
     /**

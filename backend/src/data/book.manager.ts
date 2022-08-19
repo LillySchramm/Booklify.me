@@ -100,3 +100,30 @@ export async function setOwnershipStatus(
         },
     });
 }
+
+export async function getBooksByStatus(
+    userId: number,
+    status: BookStatus
+): Promise<
+    (Book & {
+        authors: Author[];
+        publisher: Publisher | null;
+    })[]
+> {
+    return prisma.book.findMany({
+        where: {
+            ownershipStatus: {
+                some: {
+                    AND: {
+                        status,
+                        userId,
+                    },
+                },
+            },
+        },
+        include: {
+            authors: true,
+            publisher: true,
+        },
+    });
+}
