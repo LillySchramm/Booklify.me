@@ -11,7 +11,14 @@
  */
 
 
-export interface LoginSuccessResponse { 
-    bearer: string;
-}
+/**
+ * Enums
+ */
+export type BookStatus = 'NONE' | 'OWNED' | 'WHISHLISTED';
+
+export const BookStatus = {
+    None: 'NONE' as BookStatus,
+    Owned: 'OWNED' as BookStatus,
+    Whishlisted: 'WHISHLISTED' as BookStatus
+};
 

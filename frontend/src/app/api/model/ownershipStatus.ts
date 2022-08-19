@@ -9,9 +9,17 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { BookStatus } from './bookStatus';
 
 
-export interface LoginSuccessResponse { 
-    bearer: string;
+/**
+ * Model OwnershipStatus
+ */
+export interface OwnershipStatus { 
+    bookIsbn: string;
+    userId: number;
+    updatedAt: string;
+    createdAt: string;
+    status: BookStatus;
 }
 

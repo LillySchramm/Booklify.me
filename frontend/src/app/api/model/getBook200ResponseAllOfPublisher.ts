@@ -9,9 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Publisher } from './publisher';
 
 
-export interface LoginSuccessResponse { 
-    bearer: string;
+export interface GetBook200ResponseAllOfPublisher { 
+    updatedAt: string;
+    createdAt: string;
+    name: string;
+    id: string;
 }
 

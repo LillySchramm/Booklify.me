@@ -9,9 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { GetBook200ResponseAllOfPublisher } from './getBook200ResponseAllOfPublisher';
+import { Author } from './author';
 
 
-export interface LoginSuccessResponse { 
-    bearer: string;
+export interface GetUserBooksByStatus200ResponseInnerAllOf { 
+    publisher: GetBook200ResponseAllOfPublisher | null;
+    authors: Array<Author>;
 }
 

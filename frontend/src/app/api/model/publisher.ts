@@ -11,7 +11,13 @@
  */
 
 
-export interface LoginSuccessResponse { 
-    bearer: string;
+/**
+ * Model Publisher
+ */
+export interface Publisher { 
+    updatedAt: string;
+    createdAt: string;
+    name: string;
+    id: string;
 }
 
