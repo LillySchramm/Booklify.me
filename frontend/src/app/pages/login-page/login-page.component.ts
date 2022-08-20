@@ -9,16 +9,17 @@ import { environment } from 'src/environments/environment';
     styleUrls: ['./login-page.component.scss'],
 })
 export class LoginPageComponent implements OnInit {
-    private oAuthClientId = ""
+    private oAuthClientId = '';
 
-    constructor(
-        private generalService: GeneralService
-    ) {}
+    constructor(private generalService: GeneralService) {}
 
     ngOnInit(): void {
-        this.generalService.config().pipe(take(1)).subscribe((config) => {
-            this.oAuthClientId = config.GITHUB_CLIENT_ID;
-        })
+        this.generalService
+            .config()
+            .pipe(take(1))
+            .subscribe((config) => {
+                this.oAuthClientId = config.GITHUB_CLIENT_ID;
+            });
     }
 
     public openGithubAuth(): void {

@@ -3,3 +3,4 @@
 **/.idea
 frontend/src/app/api
 frontend/dist
+deployments/
