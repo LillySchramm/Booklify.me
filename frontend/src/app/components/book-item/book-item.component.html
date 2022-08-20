@@ -2,9 +2,11 @@
     <p-card>
         <img [src]="baseUrl + '/public/thumbnails/' + book.isbn + '.png'" />
         <div class="title">{{ book.title }}</div>
+        <!--
         <div class="author" *ngFor="let author of book.authors">
             {{ author.name }}
         </div>
         <div class="isbn">{{ book.isbn | isbn }}</div>
+        -->
     </p-card>
 </div>
