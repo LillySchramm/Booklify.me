@@ -46,6 +46,7 @@ export class HomePageComponent implements OnInit {
     }
 
     private getSeriesNameFromBookTitle(title: string): string {
+        const blacklistedChunks = ['vol.', 'band', '-'];
         let groupName = this.DEFAULT_GROUP_NAME;
 
         const splitTitle = title.split(' ');
@@ -54,12 +55,13 @@ export class HomePageComponent implements OnInit {
 
         if (lastChunkIsNumber) {
             splitTitle.pop();
-            if (
-                splitTitle[splitTitle.length - 1].toLocaleLowerCase() === 'vol.'
+            while (
+                blacklistedChunks.includes(
+                    splitTitle[splitTitle.length - 1].toLocaleLowerCase()
+                )
             ) {
                 splitTitle.pop();
             }
-
             groupName = splitTitle.join(' ');
         }
 
@@ -84,6 +86,10 @@ export class HomePageComponent implements OnInit {
             const bName = b.name;
             if (aName === this.DEFAULT_GROUP_NAME) {
                 return 1;
+            }
+
+            if (bName === this.DEFAULT_GROUP_NAME) {
+                return -1;
             }
 
             return aName > bName ? 1 : -1;
