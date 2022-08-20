@@ -32,7 +32,7 @@ export class HomePageComponent implements OnInit {
                 this.ownedBooks = this.processBookList(books);
             });
         setInterval(async () => {
-            const currentIsbns = this.getAllCurrentIsbns();
+            const currentIsbns = this.getAllCurrentIsbns().sort();
 
             const bookResponse = await firstValueFrom(
                 this.booksService.getUserBooksByStatus(BookStatus.Owned)
@@ -106,5 +106,9 @@ export class HomePageComponent implements OnInit {
         );
 
         return isbns;
+    }
+
+    public trackSeries(_: number, item: Series) {
+        return item.name;
     }
 }

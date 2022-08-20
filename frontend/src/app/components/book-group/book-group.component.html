@@ -1,5 +1,8 @@
 <p-accordion [multiple]="true">
-    <p-accordionTab [header]="name" [selected]="true">
+    <p-accordionTab
+        [header]="name + ' (' + books.length + ')'"
+        [selected]="false"
+    >
         <div class="books">
             <app-book-item
                 *ngFor="let book of books"
