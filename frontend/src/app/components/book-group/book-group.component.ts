@@ -11,6 +11,7 @@ export class BookGroupComponent implements OnInit {
         authors: Author[];
         publisher: Publisher | null;
     })[];
+    @Input() name: string = '';
 
     constructor() {}
 

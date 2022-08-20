@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { take } from 'rxjs';
 import { GeneralService } from 'src/app/api';
-import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'app-login-page',
