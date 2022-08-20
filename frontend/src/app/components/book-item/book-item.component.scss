@@ -1,6 +1,8 @@
 $width: 8rem;
 
 .container {
+    cursor: pointer;
+
     margin: 0.5rem;
     margin-top: 0;
 
@@ -23,17 +25,29 @@ $width: 8rem;
     }
 
     div {
+        &.title {
+            font-size: 0.8rem;
+        }
+    }
+}
+
+.sidebar-content {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1rem;
+        color: var(--primary-300);
+    }
+
+    div {
         &.isbn {
             color: var(--indigo-400);
-            font-size: 0.8rem;
         }
 
         &.author {
             color: var(--green-500);
-            font-size: 0.8rem;
-        }
-        &.title {
-            font-size: 0.8rem;
         }
     }
 }

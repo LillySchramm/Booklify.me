@@ -9,10 +9,19 @@ import { environment } from 'src/environments/environment';
     encapsulation: ViewEncapsulation.None,
 })
 export class BookItemComponent implements OnInit {
+    displaySidebar = false;
     @Input() book!: Book & { authors: Author[]; publisher: Publisher | null };
     public baseUrl = environment.API_BASE_PATH;
 
     constructor() {}
+
+    public getLanguage(code: string): string {
+        const languages = new Intl.DisplayNames(['en'], {
+            type: 'language',
+        });
+
+        return languages.of(code) || '';
+    }
 
     ngOnInit(): void {}
 }

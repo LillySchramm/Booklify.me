@@ -1,12 +1,49 @@
-<div class="container">
+<div class="container" (click)="displaySidebar = true">
     <p-card>
         <img [src]="baseUrl + '/public/thumbnails/' + book.isbn + '.png'" />
         <div class="title">{{ book.title }}</div>
-        <!--
+    </p-card>
+</div>
+
+<p-sidebar
+    [(visible)]="displaySidebar"
+    [position]="'right'"
+    [style]="{ width: 'min(35em, 80vw)' }"
+>
+    <div class="sidebar-content">
+        <h1>{{ book.title }}</h1>
+        <h2>{{ book.subtitle }}</h2>
+        <div class="pages" *ngIf="book.printedPageCount || book.pageCount">
+            {{ book.printedPageCount || book.pageCount }} Pages
+        </div>
+        <ng-container *ngIf="book.description">
+            <div class="description" [innerHTML]="book.description"></div>
+        </ng-container>
+        <ng-container *ngIf="book.language">
+            <h3>Language:</h3>
+            <div class="language">
+                {{ getLanguage(book.language) }}
+            </div>
+        </ng-container>
+        <ng-container *ngIf="book.publishedDate">
+            <h3>Release:</h3>
+            <div class="release">
+                {{ book.publishedDate }}
+            </div>
+        </ng-container>
+
+        <h3>Author(s):</h3>
         <div class="author" *ngFor="let author of book.authors">
             {{ author.name }}
         </div>
+        <ng-container *ngIf="book.publisher">
+            <h3>Publisher:</h3>
+            <div class="author">
+                {{ book.publisher.name }}
+            </div>
+        </ng-container>
+
+        <br />
         <div class="isbn">{{ book.isbn | isbn }}</div>
-        -->
-    </p-card>
-</div>
+    </div>
+</p-sidebar>
