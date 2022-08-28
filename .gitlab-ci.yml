@@ -84,7 +84,7 @@ deploy-to-kubernetes:
         - build_frontend_container
     script:
         - helm uninstall backend --namespace mangalist || true
-        - helm upgrade --install backend ./deployments/mangalist-backend
+        - helm upgrade --atomic --install backend ./deployments/mangalist-backend
           --values ./deployments/mangalist-backend/values.yaml
           --set image.repository=registry01.eps-dev.de/mangalist/backend/${CI_COMMIT_REF_SLUG}
           --set config[0].value=${DATABASE_URL}
@@ -98,7 +98,7 @@ deploy-to-kubernetes:
           --set config[8].value=${MINIO_SECRET_KEY}
           --namespace mangalist
         - helm uninstall frontend --namespace mangalist || true
-        - helm upgrade --install frontend ./deployments/mangalist-frontend
+        - helm upgrade --atomic --install frontend ./deployments/mangalist-frontend
           --values ./deployments/mangalist-frontend/values.yaml
           --set image.repository=registry01.eps-dev.de/mangalist/frontend/${CI_COMMIT_REF_SLUG}
           --namespace mangalist
