@@ -15,13 +15,5 @@ export class BookItemComponent implements OnInit {
 
     constructor() {}
 
-    public getLanguage(code: string): string {
-        const languages = new Intl.DisplayNames(['en'], {
-            type: 'language',
-        });
-
-        return languages.of(code) || '';
-    }
-
     ngOnInit(): void {}
 }

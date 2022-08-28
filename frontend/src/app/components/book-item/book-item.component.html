@@ -22,7 +22,7 @@
         <ng-container *ngIf="book.language">
             <h3>Language:</h3>
             <div class="language">
-                {{ getLanguage(book.language) }}
+                {{ book.language | language }}
             </div>
         </ng-container>
         <ng-container *ngIf="book.publishedDate">
