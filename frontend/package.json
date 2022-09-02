@@ -20,9 +20,11 @@
         "@angular/platform-browser-dynamic": "^14.1.0",
         "@angular/router": "^14.1.0",
         "@types/lodash-es": "^4.17.6",
+        "@types/qrcode": "^1.5.0",
         "lodash-es": "^4.17.21",
         "primeicons": "^5.0.0",
         "primeng": "^14.0.1",
+        "qrcode": "^1.5.1",
         "rxjs": "~7.5.0",
         "tslib": "^2.3.0",
         "zone.js": "~0.11.4"

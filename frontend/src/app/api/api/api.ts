@@ -4,4 +4,6 @@ export * from './books.service';
 import { BooksService } from './books.service';
 export * from './general.service';
 import { GeneralService } from './general.service';
-export const APIS = [AuthService, BooksService, GeneralService];
+export * from './session.service';
+import { SessionService } from './session.service';
+export const APIS = [AuthService, BooksService, GeneralService, SessionService];

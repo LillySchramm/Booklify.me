@@ -1,4 +1,3 @@
-export * from './auth200Response';
 export * from './author';
 export * from './book';
 export * from './bookStatus';
@@ -9,6 +8,8 @@ export * from './getBook200ResponseAllOfPublisher';
 export * from './getUserBooksByStatus200ResponseInner';
 export * from './getUserBooksByStatus200ResponseInnerAllOf';
 export * from './loginSuccessResponse';
+export * from './minimalSession';
 export * from './ownershipStatus';
+export * from './persistentSession200Response';
 export * from './pingResponse';
 export * from './publisher';

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 import { firstValueFrom, take } from 'rxjs';
 import { Author, Book, BooksService, BookStatus, Publisher } from 'src/app/api';
@@ -18,8 +18,9 @@ interface Series {
     templateUrl: './home-page.component.html',
     styleUrls: ['./home-page.component.scss'],
 })
-export class HomePageComponent implements OnInit {
+export class HomePageComponent implements OnInit, OnDestroy {
     private DEFAULT_GROUP_NAME = 'Misc.';
+    private interval?: any;
 
     public ownedBooks: Series[] = [];
     constructor(private booksService: BooksService) {}
@@ -31,7 +32,7 @@ export class HomePageComponent implements OnInit {
             .subscribe((books) => {
                 this.ownedBooks = this.processBookList(books);
             });
-        setInterval(async () => {
+        this.interval = setInterval(async () => {
             const currentIsbns = this.getAllCurrentIsbns().sort();
 
             const bookResponse = await firstValueFrom(
@@ -110,5 +111,9 @@ export class HomePageComponent implements OnInit {
 
     public trackSeries(_: number, item: Series) {
         return item.name;
+    }
+
+    ngOnDestroy(): void {
+        clearInterval(this.interval);
     }
 }

@@ -8,9 +8,12 @@ import { ApiModule } from './api/api.module';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { PageHeaderModule } from './components/page-header/page-header.module';
+import { ExternalDevicesPageModule } from './pages/external-devices-page/external-devices-page.module';
 import { GithubSuccessPageModule } from './pages/github-success-page/github-success-page.module';
 import { HomePageModule } from './pages/home-page/home-page.module';
 import { LoginPageModule } from './pages/login-page/login-page.module';
+import { QrDialogComponent } from './components/qr-dialog/qr-dialog.component';
 
 @NgModule({
     declarations: [AppComponent],
@@ -21,8 +24,10 @@ import { LoginPageModule } from './pages/login-page/login-page.module';
         BrowserAnimationsModule,
         ApiModule,
         GithubSuccessPageModule,
+        ExternalDevicesPageModule,
         LoginPageModule,
         HomePageModule,
+        PageHeaderModule,
     ],
     providers: [
         {

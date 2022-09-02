@@ -32,7 +32,8 @@ export async function updateUserInformation(token: string): Promise<User> {
 
 export async function newSession(
     userId: number,
-    persistent?: boolean
+    persistent?: boolean,
+    name?: string
 ): Promise<Session & { bearer: string }> {
     const bearer = getRandomString64(512);
     const hash = await secureHash(bearer);
@@ -42,6 +43,7 @@ export async function newSession(
             key: hash,
             userId: userId,
             persistent,
+            name,
         },
     });
 
@@ -87,6 +89,14 @@ export async function verifySession(bearer: string): Promise<
     }
 
     return session;
+}
+
+export async function getAllActivePersistentSessions(
+    userId: number
+): Promise<Session[]> {
+    return prisma.session.findMany({
+        where: { AND: { userId, invalidated: false, persistent: true } },
+    });
 }
 
 export async function invalidateSession(id: string): Promise<void> {

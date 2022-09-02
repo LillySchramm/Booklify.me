@@ -5,11 +5,11 @@ api/api.ts
 api/auth.service.ts
 api/books.service.ts
 api/general.service.ts
+api/session.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
 index.ts
-model/auth200Response.ts
 model/author.ts
 model/book.ts
 model/bookStatus.ts
@@ -20,8 +20,10 @@ model/getBook200ResponseAllOfPublisher.ts
 model/getUserBooksByStatus200ResponseInner.ts
 model/getUserBooksByStatus200ResponseInnerAllOf.ts
 model/loginSuccessResponse.ts
+model/minimalSession.ts
 model/models.ts
 model/ownershipStatus.ts
+model/persistentSession200Response.ts
 model/pingResponse.ts
 model/publisher.ts
 variables.ts

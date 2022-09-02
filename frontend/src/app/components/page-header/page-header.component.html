@@ -1,0 +1,13 @@
+<p-menubar [model]="items">
+    <ng-template pTemplate="start">
+        <h1>Mangalist</h1>
+    </ng-template>
+    <ng-template pTemplate="end">
+        <button
+            pButton
+            label="Logout"
+            icon="pi pi-power-off"
+            (click)="onLogout()"
+        ></button>
+    </ng-template>
+</p-menubar>
