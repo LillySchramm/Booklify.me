@@ -9,19 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { CreateSnapshot200ResponseAllOf } from './createSnapshot200ResponseAllOf';
-import { User } from './user';
-import { SnapshotWithNumberAsTTL } from './snapshotWithNumberAsTTL';
-import { GetUserBooksByStatus200ResponseInner } from './getUserBooksByStatus200ResponseInner';
 
 
-export interface CreateSnapshot200Response { 
+export interface SnapshotWithNumberAsTTL { 
     id: string;
     ttl: number | null;
     invalidated: boolean;
     createdAt: string;
     userId: number;
-    books: Array<GetUserBooksByStatus200ResponseInner>;
-    user: User;
 }
 

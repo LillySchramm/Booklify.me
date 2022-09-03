@@ -30,6 +30,6 @@ model/ownershipStatus.ts
 model/persistentSession200Response.ts
 model/pingResponse.ts
 model/publisher.ts
-model/snapshot.ts
+model/snapshotWithNumberAsTTL.ts
 model/user.ts
 variables.ts

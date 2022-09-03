@@ -16,5 +16,5 @@ export * from './ownershipStatus';
 export * from './persistentSession200Response';
 export * from './pingResponse';
 export * from './publisher';
-export * from './snapshot';
+export * from './snapshotWithNumberAsTTL';
 export * from './user';

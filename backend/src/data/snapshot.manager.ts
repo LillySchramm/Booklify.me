@@ -8,12 +8,13 @@ import {
     User,
 } from '@prisma/client';
 import { getBooksByStatus } from './book.manager';
+import { SnapshotWithNumberAsTTL } from '../models/snapshot.model';
 
 export async function createNewSnapshotForUser(
     userId: number,
     ttl: number = -1
 ): Promise<
-    Snapshot & {
+    SnapshotWithNumberAsTTL & {
         user: User;
         books: (Book & {
             authors: Author[];
@@ -22,8 +23,7 @@ export async function createNewSnapshotForUser(
     }
 > {
     const currentBooks = await getBooksByStatus(userId, BookStatus.OWNED);
-
-    return prisma.snapshot.create({
+    const snapshot = await prisma.snapshot.create({
         data: {
             books: {
                 connect: currentBooks.map((book) => ({ isbn: book.isbn })),
@@ -41,13 +41,14 @@ export async function createNewSnapshotForUser(
             user: true,
         },
     });
+    return { ...snapshot, ttl: Number(snapshot.ttl) };
 }
 
 export async function getSnapshot(
     userId: number,
     id: string
 ): Promise<
-    | (Snapshot & {
+    | (SnapshotWithNumberAsTTL & {
           user: User;
           books: (Book & {
               authors: Author[];
@@ -79,10 +80,12 @@ export async function getSnapshot(
         return null;
     }
 
-    return snapshot;
+    return { ...snapshot, ttl: Number(snapshot.ttl) };
 }
 
-export async function getSnapshots(userId: number): Promise<Snapshot[]> {
+export async function getSnapshots(
+    userId: number
+): Promise<SnapshotWithNumberAsTTL[]> {
     const snapshots = await prisma.snapshot.findMany({
         where: {
             AND: {
@@ -92,7 +95,9 @@ export async function getSnapshots(userId: number): Promise<Snapshot[]> {
         },
     });
 
-    return snapshots.filter((snapshot) => isWithinTTL(snapshot));
+    return snapshots
+        .filter((snapshot) => isWithinTTL(snapshot))
+        .map((snapshot) => ({ ...snapshot, ttl: Number(snapshot.ttl) }));
 }
 
 export async function invalidateSnapshot(id: string): Promise<void> {

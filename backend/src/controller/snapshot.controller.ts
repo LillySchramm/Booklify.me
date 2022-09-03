@@ -17,7 +17,10 @@ import {
     getSnapshots,
     invalidateSnapshot,
 } from '../data/snapshot.manager';
-import { MinimalSnapshot } from '../models/snapshot.model';
+import {
+    MinimalSnapshot,
+    SnapshotWithNumberAsTTL,
+} from '../models/snapshot.model';
 
 @Route('v1/snapshot')
 @Tags('Snapshot')
@@ -31,7 +34,7 @@ export class SnapshotController extends Controller {
         @Request() request: any,
         @Query() ttl: number = -1
     ): Promise<
-        Snapshot & {
+        SnapshotWithNumberAsTTL & {
             user: User;
             books: (Book & {
                 authors: Author[];
@@ -84,7 +87,7 @@ export class SnapshotController extends Controller {
         @Path() userId: number,
         @Path() id: string
     ): Promise<
-        | (Snapshot & {
+        | (SnapshotWithNumberAsTTL & {
               user: User;
               books: (Book & {
                   authors: Author[];

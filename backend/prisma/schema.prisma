@@ -72,7 +72,7 @@ model Snapshot {
   id          String    @id @default(uuid())
   user        User      @relation(fields: [userId], references: [id])
   books       Book[]
-  ttl         Int?
+  ttl         BigInt?
   invalidated Boolean   @default(false)
 
   createdAt DateTime @default(now())
