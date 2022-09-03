@@ -6,6 +6,7 @@ import { AuthService } from './api/auth.service';
 import { BooksService } from './api/books.service';
 import { GeneralService } from './api/general.service';
 import { SessionService } from './api/session.service';
+import { SnapshotService } from './api/snapshot.service';
 
 @NgModule({
   imports:      [],

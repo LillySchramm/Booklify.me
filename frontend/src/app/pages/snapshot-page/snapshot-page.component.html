@@ -1,0 +1,14 @@
+<div class="groups" *ngIf="snapshot">
+    <div class="p-card p-component info">
+        <h1>
+            Snapshot by {{ snapshot.user.name }} ({{
+                snapshot.createdAt | date
+            }})
+        </h1>
+    </div>
+    <app-book-group
+        *ngFor="let series of books"
+        [books]="series.books"
+        [name]="series.name"
+    ></app-book-group>
+</div>

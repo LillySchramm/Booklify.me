@@ -1,4 +1,4 @@
-import { Book, Snapshot, User } from '@prisma/client';
+import { Author, Book, Publisher, Snapshot, User } from '@prisma/client';
 import {
     Controller,
     Delete,
@@ -30,7 +30,15 @@ export class SnapshotController extends Controller {
     public async createSnapshot(
         @Request() request: any,
         @Query() ttl: number = -1
-    ): Promise<Snapshot & { user: User; books: Book[] }> {
+    ): Promise<
+        Snapshot & {
+            user: User;
+            books: (Book & {
+                authors: Author[];
+                publisher: Publisher | null;
+            })[];
+        }
+    > {
         return createNewSnapshotForUser(request.user.id, ttl);
     }
 
@@ -75,7 +83,16 @@ export class SnapshotController extends Controller {
     public async getSnapshot(
         @Path() userId: number,
         @Path() id: string
-    ): Promise<(Snapshot & { user: User; books: Book[] }) | undefined> {
+    ): Promise<
+        | (Snapshot & {
+              user: User;
+              books: (Book & {
+                  authors: Author[];
+                  publisher: Publisher | null;
+              })[];
+          })
+        | undefined
+    > {
         const snapshot = await getSnapshot(userId, id);
         if (!snapshot) {
             this.setStatus(404);

@@ -14,6 +14,7 @@ import { GithubSuccessPageModule } from './pages/github-success-page/github-succ
 import { HomePageModule } from './pages/home-page/home-page.module';
 import { LoginPageModule } from './pages/login-page/login-page.module';
 import { QrDialogComponent } from './components/qr-dialog/qr-dialog.component';
+import { SnapshotPageModule } from './pages/snapshot-page/snapshot-page.module';
 
 @NgModule({
     declarations: [AppComponent],
@@ -27,6 +28,7 @@ import { QrDialogComponent } from './components/qr-dialog/qr-dialog.component';
         ExternalDevicesPageModule,
         LoginPageModule,
         HomePageModule,
+        SnapshotPageModule,
         PageHeaderModule,
     ],
     providers: [

@@ -6,6 +6,7 @@ api/auth.service.ts
 api/books.service.ts
 api/general.service.ts
 api/session.service.ts
+api/snapshot.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -13,6 +14,8 @@ index.ts
 model/author.ts
 model/book.ts
 model/bookStatus.ts
+model/createSnapshot200Response.ts
+model/createSnapshot200ResponseAllOf.ts
 model/frontendConfig.ts
 model/getBook200Response.ts
 model/getBook200ResponseAllOf.ts
@@ -21,9 +24,12 @@ model/getUserBooksByStatus200ResponseInner.ts
 model/getUserBooksByStatus200ResponseInnerAllOf.ts
 model/loginSuccessResponse.ts
 model/minimalSession.ts
+model/minimalSnapshot.ts
 model/models.ts
 model/ownershipStatus.ts
 model/persistentSession200Response.ts
 model/pingResponse.ts
 model/publisher.ts
+model/snapshot.ts
+model/user.ts
 variables.ts

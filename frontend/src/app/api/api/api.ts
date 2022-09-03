@@ -6,4 +6,6 @@ export * from './general.service';
 import { GeneralService } from './general.service';
 export * from './session.service';
 import { SessionService } from './session.service';
-export const APIS = [AuthService, BooksService, GeneralService, SessionService];
+export * from './snapshot.service';
+import { SnapshotService } from './snapshot.service';
+export const APIS = [AuthService, BooksService, GeneralService, SessionService, SnapshotService];

@@ -1,3 +1,5 @@
+import { Author, Book, OwnershipStatus, Publisher } from '@prisma/client';
+
 export interface GoogleBookResponse {
     totalItems: number;
     items: GoogleVolume[];

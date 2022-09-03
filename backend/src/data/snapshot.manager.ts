@@ -1,11 +1,26 @@
 import { prisma } from '../server';
-import { Book, BookStatus, Snapshot, User } from '@prisma/client';
+import {
+    Author,
+    Book,
+    BookStatus,
+    Publisher,
+    Snapshot,
+    User,
+} from '@prisma/client';
 import { getBooksByStatus } from './book.manager';
 
 export async function createNewSnapshotForUser(
     userId: number,
     ttl: number = -1
-): Promise<Snapshot & { user: User; books: Book[] }> {
+): Promise<
+    Snapshot & {
+        user: User;
+        books: (Book & {
+            authors: Author[];
+            publisher: Publisher | null;
+        })[];
+    }
+> {
     const currentBooks = await getBooksByStatus(userId, BookStatus.OWNED);
 
     return prisma.snapshot.create({
@@ -17,7 +32,12 @@ export async function createNewSnapshotForUser(
             ttl,
         },
         include: {
-            books: true,
+            books: {
+                include: {
+                    authors: true,
+                    publisher: true,
+                },
+            },
             user: true,
         },
     });
@@ -26,7 +46,16 @@ export async function createNewSnapshotForUser(
 export async function getSnapshot(
     userId: number,
     id: string
-): Promise<(Snapshot & { user: User; books: Book[] }) | null> {
+): Promise<
+    | (Snapshot & {
+          user: User;
+          books: (Book & {
+              authors: Author[];
+              publisher: Publisher | null;
+          })[];
+      })
+    | null
+> {
     const snapshot = await prisma.snapshot.findFirst({
         where: {
             AND: {
@@ -36,7 +65,12 @@ export async function getSnapshot(
             },
         },
         include: {
-            books: true,
+            books: {
+                include: {
+                    authors: true,
+                    publisher: true,
+                },
+            },
             user: true,
         },
     });
