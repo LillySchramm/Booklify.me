@@ -1,3 +1,4 @@
+import { User } from '@prisma/client';
 import got from 'got';
 import {
     Controller,
@@ -12,6 +13,7 @@ import {
 } from 'tsoa';
 import {
     getAllActivePersistentSessions,
+    getUser,
     newSession,
     updateUserInformation,
 } from '../data/user.manager';
@@ -50,5 +52,14 @@ export class AuthController extends Controller {
         const session = await newSession(user.id);
 
         return { bearer: session.bearer };
+    }
+
+    /**
+     * Get basic user information about the current user.
+     */
+    @Get('/info')
+    @Security('bearer')
+    public async userInfo(@Request() request: any): Promise<User> {
+        return (await getUser(request.user.id))!;
     }
 }

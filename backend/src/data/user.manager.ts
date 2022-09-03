@@ -102,3 +102,7 @@ export async function getAllActivePersistentSessions(
 export async function invalidateSession(id: string): Promise<void> {
     await prisma.session.update({ where: { id }, data: { invalidated: true } });
 }
+
+export async function getUser(id: number): Promise<User | null> {
+    return prisma.user.findFirst({ where: { id } });
+}
