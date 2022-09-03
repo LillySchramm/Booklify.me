@@ -16,6 +16,7 @@ model User {
   updatedAt       DateTime          @updatedAt
   Session         Session[]
   OwnershipStatus OwnershipStatus[]
+  Snapshot        Snapshot[]
 }
 
 model Session {
@@ -46,6 +47,7 @@ model Book {
   updatedAt       DateTime          @updatedAt
   publisherId     String?
   ownershipStatus OwnershipStatus[]
+  snapshots       Snapshot[]
 }
 
 model Author {
@@ -64,6 +66,17 @@ model Publisher {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Book      Book[]
+}
+
+model Snapshot {
+  id          String    @id @default(uuid())
+  user        User      @relation(fields: [userId], references: [id])
+  books       Book[]
+  ttl         Int?
+  invalidated Boolean   @default(false)
+
+  createdAt DateTime @default(now())
+  userId    Int
 }
 
 model OwnershipStatus {
