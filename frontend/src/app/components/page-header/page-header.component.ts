@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
+import { take } from 'rxjs';
+import { SessionService } from 'src/app/api/api/session.service';
 
 @Component({
     selector: 'app-page-header',
@@ -8,7 +10,10 @@ import { MenuItem } from 'primeng/api';
     styleUrls: ['./page-header.component.scss'],
 })
 export class PageHeaderComponent implements OnInit {
-    constructor(private router: Router) {}
+    constructor(
+        private router: Router,
+        private sessionService: SessionService
+    ) {}
 
     items: MenuItem[] = [];
 
@@ -28,7 +33,12 @@ export class PageHeaderComponent implements OnInit {
     }
 
     onLogout(): void {
-        localStorage.clear();
-        this.router.navigate(['login']);
+        this.sessionService
+            .invalidate()
+            .pipe(take(1))
+            .subscribe(() => {
+                localStorage.clear();
+                this.router.navigate(['login']);
+            });
     }
 }
