@@ -25,6 +25,11 @@ export class PageHeaderComponent implements OnInit {
                 routerLink: '/home',
             },
             {
+                label: 'Snapshots',
+                icon: 'pi pi-camera',
+                routerLink: '/snapshots',
+            },
+            {
                 label: 'External Devices',
                 icon: 'pi pi-qrcode',
                 routerLink: '/external',

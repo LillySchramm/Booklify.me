@@ -22,6 +22,7 @@
         "@types/lodash-es": "^4.17.6",
         "@types/qrcode": "^1.5.0",
         "lodash-es": "^4.17.21",
+        "pretty-ms": "^8.0.0",
         "primeicons": "^5.0.0",
         "primeng": "^14.0.1",
         "qrcode": "^1.5.1",

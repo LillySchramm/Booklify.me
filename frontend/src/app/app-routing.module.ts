@@ -6,6 +6,7 @@ import { ExternalDevicesPageComponent } from './pages/external-devices-page/exte
 import { GithubSuccessPageComponent } from './pages/github-success-page/github-success-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
+import { SnapshotManagePageComponent } from './pages/snapshot-manage-page/snapshot-manage-page.component';
 import { SnapshotPageComponent } from './pages/snapshot-page/snapshot-page.component';
 
 const routes: Routes = [
@@ -24,6 +25,11 @@ const routes: Routes = [
     {
         path: 'external',
         component: ExternalDevicesPageComponent,
+        canActivate: [AuthGuard],
+    },
+    {
+        path: 'snapshots',
+        component: SnapshotManagePageComponent,
         canActivate: [AuthGuard],
     },
     {

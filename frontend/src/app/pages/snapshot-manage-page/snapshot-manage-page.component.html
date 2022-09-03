@@ -1,0 +1,48 @@
+<div class="pcontainer">
+    <div class="p-inputgroup">
+        <button
+            type="button"
+            pButton
+            pRipple
+            label="Create"
+            (click)="createSnapshot()"
+        ></button>
+        <p-dropdown
+            [options]="durations"
+            [(ngModel)]="selectedDuration"
+            optionLabel="name"
+            optionValue="duration"
+        ></p-dropdown>
+    </div>
+    <p-table [value]="snapshots">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Date</th>
+                <th>TTL</th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-snapshot>
+            <tr>
+                <td>{{ snapshot.createdAt }}</td>
+                <td>{{ snapshot.ttl | ms }}</td>
+                <td class="buttons">
+                    <button
+                        pButton
+                        type="button"
+                        label="View"
+                        class="p-button-success"
+                        (click)="viewSnapshot(snapshot)"
+                    ></button>
+                    <button
+                        pButton
+                        type="button"
+                        label="Delete"
+                        class="p-button-danger"
+                        (click)="deleteSnapshot(snapshot)"
+                    ></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
