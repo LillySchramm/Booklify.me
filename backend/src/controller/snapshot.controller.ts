@@ -14,9 +14,10 @@ import {
 import {
     createNewSnapshotForUser,
     getSnapshot,
+    getSnapshots,
     invalidateSnapshot,
 } from '../data/snapshot.manager';
-import { PingResponse } from '../models/ping.model';
+import { MinimalSnapshot } from '../models/snapshot.model';
 
 @Route('v1/snapshot')
 @Tags('Snapshot')
@@ -49,6 +50,22 @@ export class SnapshotController extends Controller {
         }
 
         invalidateSnapshot(id);
+    }
+
+    /**
+     * Get all active snapshots of current user.
+     */
+    @Get('/all')
+    @Security('bearer')
+    public async getSnapshots(
+        @Request() request: any
+    ): Promise<MinimalSnapshot[]> {
+        const snapshots = await getSnapshots(request.user.id);
+        return snapshots.map((snapshot) => ({
+            id: snapshot.id,
+            createdAt: snapshot.createdAt,
+            ttl: snapshot.ttl || -1,
+        }));
     }
 
     /**

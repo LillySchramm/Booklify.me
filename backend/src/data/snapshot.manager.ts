@@ -48,6 +48,19 @@ export async function getSnapshot(
     return snapshot;
 }
 
+export async function getSnapshots(userId: number): Promise<Snapshot[]> {
+    const snapshots = await prisma.snapshot.findMany({
+        where: {
+            AND: {
+                invalidated: false,
+                userId,
+            },
+        },
+    });
+
+    return snapshots.filter((snapshot) => isWithinTTL(snapshot));
+}
+
 export async function invalidateSnapshot(id: string): Promise<void> {
     await prisma.snapshot.update({
         where: {
@@ -63,8 +76,6 @@ function isWithinTTL(snapshot: Snapshot): boolean {
     if (!snapshot.ttl || snapshot.ttl < 0) {
         return true;
     }
-
-    console.log(Date.now() - snapshot.createdAt.getTime());
 
     const timeDelta = Date.now() - snapshot.createdAt.getTime();
 
