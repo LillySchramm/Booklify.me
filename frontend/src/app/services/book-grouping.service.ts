@@ -18,7 +18,12 @@ export interface Series {
 export class BookGroupingService {
     private DEFAULT_GROUP_NAME = 'Misc.';
     private BLACKLISTED_CHUNKS = ['vol.', 'band', '-', '(finale)'];
-    private SCHEMALESS_SERIES_NAMES = [/^black butler/gim, /^die walkinder/gim];
+    private SCHEMALESS_SERIES_NAMES = [
+        /^black butler/gim,
+        /^die walkinder/gim,
+        /^Detektiv Conan Special Black Edition/gim,
+        /^boruto/gim,
+    ];
 
     private removeBlacklistedChunks(splitTitle: string[]): void {
         while (
@@ -65,7 +70,9 @@ export class BookGroupingService {
         const foundGroups: Map<string, Series> = new Map();
 
         books.forEach((book) => {
-            const groupName = this.getSeriesNameFromBookTitle(book.title || '');
+            const groupName = this.getSeriesNameFromBookTitle(
+                book.title || ''
+            ).replace(',', '');
 
             let series = foundGroups.get(groupName);
             series = series ? series : { name: groupName, books: [] };
