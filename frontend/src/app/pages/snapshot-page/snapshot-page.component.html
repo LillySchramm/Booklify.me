@@ -6,9 +6,5 @@
             }})
         </h1>
     </div>
-    <app-book-group
-        *ngFor="let series of books"
-        [books]="series.books"
-        [name]="series.name"
-    ></app-book-group>
+    <app-books-display [rawBooks]="snapshot.books"></app-books-display>
 </div>

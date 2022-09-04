@@ -4,7 +4,7 @@ import { take } from 'rxjs';
 import { CreateSnapshot200Response, SnapshotService } from 'src/app/api';
 import {
     BookGroupingService,
-    Series,
+    BookWithMeta,
 } from 'src/app/services/book-grouping.service';
 
 @Component({
@@ -13,12 +13,10 @@ import {
     styleUrls: ['./snapshot-page.component.scss'],
 })
 export class SnapshotPageComponent implements OnInit {
-    public books: Series[] = [];
     public snapshot?: CreateSnapshot200Response;
 
     constructor(
         private snapshotService: SnapshotService,
-        private groupingService: BookGroupingService,
         private route: ActivatedRoute
     ) {}
 
@@ -31,9 +29,6 @@ export class SnapshotPageComponent implements OnInit {
             .pipe(take(1))
             .subscribe((snapshot) => {
                 this.snapshot = snapshot;
-                this.books = this.groupingService.processBookList(
-                    snapshot.books
-                );
             });
     }
 }

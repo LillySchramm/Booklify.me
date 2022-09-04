@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SnapshotPageComponent } from './snapshot-page.component';
-import { BookGroupModule } from 'src/app/components/book-group/book-group.module';
 import { CardModule } from 'primeng/card';
+import { BooksDisplayModule } from 'src/app/components/books-display/books-display.module';
 
 @NgModule({
     declarations: [SnapshotPageComponent],
-    imports: [CommonModule, BookGroupModule, CardModule],
+    imports: [CommonModule, BooksDisplayModule, CardModule],
 })
 export class SnapshotPageModule {}
