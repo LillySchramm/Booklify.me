@@ -1,7 +1,7 @@
 <p-accordion [multiple]="true">
     <p-accordionTab
         [header]="name + ' (' + books.length + ')'"
-        [selected]="false"
+        [selected]="openByDefault"
     >
         <div class="books">
             <app-book-item

@@ -12,6 +12,7 @@ export class BookGroupComponent implements OnInit {
         publisher: Publisher | null;
     })[];
     @Input() name: string = '';
+    @Input() openByDefault = false;
 
     constructor() {}
 
