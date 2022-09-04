@@ -17,26 +17,44 @@ export interface Series {
 })
 export class BookGroupingService {
     private DEFAULT_GROUP_NAME = 'Misc.';
+    private BLACKLISTED_CHUNKS = ['vol.', 'band', '-', '(finale)'];
+    private SCHEMALESS_SERIES_NAMES = [/^black butler/gim, /^die walkinder/gim];
 
-    constructor() {}
+    private removeBlacklistedChunks(splitTitle: string[]): void {
+        while (
+            this.BLACKLISTED_CHUNKS.includes(
+                splitTitle[splitTitle.length - 1].toLocaleLowerCase()
+            )
+        ) {
+            splitTitle.pop();
+        }
+    }
+
+    private getVolumeNumber(splitTitle: string[]): number {
+        this.removeBlacklistedChunks(splitTitle);
+        return Number(splitTitle[splitTitle.length - 1]);
+    }
+
+    private isKnownSchemaless(title: string): boolean {
+        return !!this.SCHEMALESS_SERIES_NAMES.find((regex) =>
+            regex.test(title)
+        );
+    }
 
     private getSeriesNameFromBookTitle(title: string): string {
-        const blacklistedChunks = ['vol.', 'band', '-'];
         let groupName = this.DEFAULT_GROUP_NAME;
 
+        if (this.isKnownSchemaless(title)) {
+            return groupName;
+        }
+
         const splitTitle = title.split(' ');
-        const lastChunkNumber = Number(splitTitle[splitTitle.length - 1]);
-        const lastChunkIsNumber = !_.isNaN(lastChunkNumber);
+        const volumeNumber = this.getVolumeNumber(splitTitle);
+        const lastChunkIsNumber = !_.isNaN(volumeNumber);
 
         if (lastChunkIsNumber) {
             splitTitle.pop();
-            while (
-                blacklistedChunks.includes(
-                    splitTitle[splitTitle.length - 1].toLocaleLowerCase()
-                )
-            ) {
-                splitTitle.pop();
-            }
+            this.removeBlacklistedChunks(splitTitle);
             groupName = splitTitle.join(' ');
         }
 
@@ -70,6 +88,19 @@ export class BookGroupingService {
             return aName > bName ? 1 : -1;
         });
 
-        return foundGroupArray;
+        return foundGroupArray.map((series) => {
+            series.books = series.books.sort((a, b) => {
+                if (series.name === this.DEFAULT_GROUP_NAME) {
+                    return (a.title || '') > (b.title || '') ? 1 : -1;
+                }
+
+                const aNumber = this.getVolumeNumber(a.title?.split(' ') || []);
+                const bNumber = this.getVolumeNumber(b.title?.split(' ') || []);
+
+                return aNumber > bNumber ? 1 : -1;
+            });
+
+            return series;
+        });
     }
 }
