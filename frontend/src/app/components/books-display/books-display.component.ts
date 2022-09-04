@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import * as _ from 'lodash';
 import {
     BookGroupingService,
     BookWithMeta,
@@ -18,8 +19,15 @@ export class BooksDisplayComponent implements OnChanges {
     public openByDefault = false;
     private combineAll = false;
     constructor(private groupingService: BookGroupingService) {}
-    ngOnChanges(_: SimpleChanges): void {
-        this.updateGroups();
+    ngOnChanges(changes: SimpleChanges): void {
+        if (
+            !_.isEqual(
+                changes['rawBooks'].currentValue,
+                changes['rawBooks'].previousValue
+            )
+        ) {
+            this.updateGroups();
+        }
     }
 
     public trackSeries(_: number, item: Series) {
