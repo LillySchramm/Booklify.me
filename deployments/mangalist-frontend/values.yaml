@@ -45,9 +45,9 @@ ingress:
   enabled: true
   className: ""
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
     kubernetes.io/ingress.class: traefik
-    traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.tls.certresolver: le
   hosts:
     - host: mangalist.eps-dev.de
       paths:
