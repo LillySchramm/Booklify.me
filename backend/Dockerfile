@@ -1,5 +1,5 @@
 # Remains this fucking unoprimized until I get esbuild to return useable files.
-FROM node:16-alpine
+FROM node:16
 
 WORKDIR /app
 
