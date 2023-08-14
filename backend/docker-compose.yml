@@ -1,0 +1,10 @@
+version: '2.8'
+services:
+    db:
+        image: postgres:15-alpine
+        environment:
+            - POSTGRES_USER=uwu
+            - POSTGRES_PASSWORD=owo
+            - POSTGRES_DB=mangalist
+        ports:
+            - 5432:5432
