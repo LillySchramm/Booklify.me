@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "Snapshot" ALTER COLUMN "ttl" SET DATA TYPE BIGINT;
