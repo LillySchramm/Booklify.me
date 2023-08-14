@@ -1,106 +1,106 @@
-stages:
-    - pre-build
-    - build
-    - container-build
-    - deploy
+# stages:
+#     - pre-build
+#     - build
+#     - container-build
+#     - deploy
 
-install_npm_dependencies:
-    image: node:16-alpine
-    stage: pre-build
-    artifacts:
-        untracked: false
-        expire_in: 1 hrs
-        paths:
-            - backend/node_modules
-            - frontend/node_modules
-    script:
-        - cd backend && yarn
-        - cd ../frontend && yarn
+# install_npm_dependencies:
+#     image: node:16-alpine
+#     stage: pre-build
+#     artifacts:
+#         untracked: false
+#         expire_in: 1 hrs
+#         paths:
+#             - backend/node_modules
+#             - frontend/node_modules
+#     script:
+#         - cd backend && yarn
+#         - cd ../frontend && yarn
 
-build_frontend:
-    image: node:16-alpine
-    stage: build
-    needs:
-        - install_npm_dependencies
-    artifacts:
-        untracked: false
-        expire_in: 1 hrs
-        paths:
-            - frontend/dist
-    script:
-        - cd frontend && npx ng build --configuration production
+# build_frontend:
+#     image: node:16-alpine
+#     stage: build
+#     needs:
+#         - install_npm_dependencies
+#     artifacts:
+#         untracked: false
+#         expire_in: 1 hrs
+#         paths:
+#             - frontend/dist
+#     script:
+#         - cd frontend && npx ng build --configuration production
 
-build_backend:
-    image: node:16
-    stage: build
-    needs:
-        - install_npm_dependencies
-    artifacts:
-        untracked: false
-        expire_in: 1 hrs
-        paths:
-            - backend/build
-    script:
-        - cd backend && yarn build
+# build_backend:
+#     image: node:16
+#     stage: build
+#     needs:
+#         - install_npm_dependencies
+#     artifacts:
+#         untracked: false
+#         expire_in: 1 hrs
+#         paths:
+#             - backend/build
+#     script:
+#         - cd backend && yarn build
 
-build_frontend_container:
-    stage: container-build
-    image:
-        name: "gcr.io/kaniko-project/executor:debug"
-        entrypoint: [""]
-    needs:
-        - build_frontend
-    script:
-        - mkdir -p /kaniko/.docker
-        - echo "{\"auths\":{\"registry01.eps-dev.de\":{\"auth\":\"$(printf "%s:%s" "${PRIVATE_REG_USER}" "${PRIVATE_REG_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
-        - >-
-            /kaniko/executor
-            --context "${CI_PROJECT_DIR}/frontend"
-            --dockerfile "${CI_PROJECT_DIR}/frontend/Dockerfile"
-            --destination "registry01.eps-dev.de/mangalist/frontend/${CI_COMMIT_REF_SLUG}:latest"
+# build_frontend_container:
+#     stage: container-build
+#     image:
+#         name: "gcr.io/kaniko-project/executor:debug"
+#         entrypoint: [""]
+#     needs:
+#         - build_frontend
+#     script:
+#         - mkdir -p /kaniko/.docker
+#         - echo "{\"auths\":{\"registry01.eps-dev.de\":{\"auth\":\"$(printf "%s:%s" "${PRIVATE_REG_USER}" "${PRIVATE_REG_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+#         - >-
+#             /kaniko/executor
+#             --context "${CI_PROJECT_DIR}/frontend"
+#             --dockerfile "${CI_PROJECT_DIR}/frontend/Dockerfile"
+#             --destination "registry01.eps-dev.de/mangalist/frontend/${CI_COMMIT_REF_SLUG}:latest"
 
-build_backend_container:
-    stage: container-build
-    needs: []
-    image:
-        name: "gcr.io/kaniko-project/executor:debug"
-        entrypoint: [""]
-    script:
-        - mkdir -p /kaniko/.docker
-        - echo "{\"auths\":{\"registry01.eps-dev.de\":{\"auth\":\"$(printf "%s:%s" "${PRIVATE_REG_USER}" "${PRIVATE_REG_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
-        - >-
-            /kaniko/executor
-            --context "${CI_PROJECT_DIR}/backend"
-            --dockerfile "${CI_PROJECT_DIR}/backend/Dockerfile"
-            --destination "registry01.eps-dev.de/mangalist/backend/${CI_COMMIT_REF_SLUG}:latest"
+# build_backend_container:
+#     stage: container-build
+#     needs: []
+#     image:
+#         name: "gcr.io/kaniko-project/executor:debug"
+#         entrypoint: [""]
+#     script:
+#         - mkdir -p /kaniko/.docker
+#         - echo "{\"auths\":{\"registry01.eps-dev.de\":{\"auth\":\"$(printf "%s:%s" "${PRIVATE_REG_USER}" "${PRIVATE_REG_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+#         - >-
+#             /kaniko/executor
+#             --context "${CI_PROJECT_DIR}/backend"
+#             --dockerfile "${CI_PROJECT_DIR}/backend/Dockerfile"
+#             --destination "registry01.eps-dev.de/mangalist/backend/${CI_COMMIT_REF_SLUG}:latest"
 
-deploy-to-kubernetes:
-    stage: deploy
-    image:
-        name: "registry01.eps-dev.de/devops/deployment-containers/helmctl:latest"
-        entrypoint: [""]
-    needs:
-        - build_backend_container
-        - build_frontend_container
-    script:
-        - helm uninstall backend --namespace mangalist || true
-        - helm upgrade --atomic --install backend ./deployments/mangalist-backend
-          --values ./deployments/mangalist-backend/values.yaml
-          --set image.repository=registry01.eps-dev.de/mangalist/backend/${CI_COMMIT_REF_SLUG}
-          --set config[0].value=${DATABASE_URL}
-          --set config[1].value=${GITHUB_CLIENT_ID}
-          --set config[2].value=${GITHUB_CLIENT_SECRET}
-          --set config[3].value=${MINIO_BUCKET_NAME}
-          --set config[4].value=${MINIO_ENDPOINT}
-          --set config[5].value=${MINIO_PORT}
-          --set config[6].value=${MINIO_USE_SSL}
-          --set config[7].value=${MINIO_ACCESS_KEY}
-          --set config[8].value=${MINIO_SECRET_KEY}
-          --namespace mangalist
-        - helm uninstall frontend --namespace mangalist || true
-        - helm upgrade --atomic --install frontend ./deployments/mangalist-frontend
-          --values ./deployments/mangalist-frontend/values.yaml
-          --set image.repository=registry01.eps-dev.de/mangalist/frontend/${CI_COMMIT_REF_SLUG}
-          --namespace mangalist
-    only:
-        - master
+# deploy-to-kubernetes:
+#     stage: deploy
+#     image:
+#         name: "registry01.eps-dev.de/devops/deployment-containers/helmctl:latest"
+#         entrypoint: [""]
+#     needs:
+#         - build_backend_container
+#         - build_frontend_container
+#     script:
+#         - helm uninstall backend --namespace mangalist || true
+#         - helm upgrade --atomic --install backend ./deployments/mangalist-backend
+#           --values ./deployments/mangalist-backend/values.yaml
+#           --set image.repository=registry01.eps-dev.de/mangalist/backend/${CI_COMMIT_REF_SLUG}
+#           --set config[0].value=${DATABASE_URL}
+#           --set config[1].value=${GITHUB_CLIENT_ID}
+#           --set config[2].value=${GITHUB_CLIENT_SECRET}
+#           --set config[3].value=${MINIO_BUCKET_NAME}
+#           --set config[4].value=${MINIO_ENDPOINT}
+#           --set config[5].value=${MINIO_PORT}
+#           --set config[6].value=${MINIO_USE_SSL}
+#           --set config[7].value=${MINIO_ACCESS_KEY}
+#           --set config[8].value=${MINIO_SECRET_KEY}
+#           --namespace mangalist
+#         - helm uninstall frontend --namespace mangalist || true
+#         - helm upgrade --atomic --install frontend ./deployments/mangalist-frontend
+#           --values ./deployments/mangalist-frontend/values.yaml
+#           --set image.repository=registry01.eps-dev.de/mangalist/frontend/${CI_COMMIT_REF_SLUG}
+#           --namespace mangalist
+#     only:
+#         - master
