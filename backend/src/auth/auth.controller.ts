@@ -17,6 +17,9 @@ import { UserDto } from 'src/users/dto/user.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { emailRegex, passwordRegex, userNameRegex } from './constants';
 import { UsersService } from 'src/users/users.service';
+import { Request as ExpressRequest } from 'express';
+import { SessionDto } from './dto/session.dto';
+import { UserTokenDto } from './dto/userToken.dto';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -28,8 +31,33 @@ export class AuthController {
 
     @HttpCode(HttpStatus.OK)
     @Post('login')
-    signIn(@Body() signInDto: SignUpDto) {
-        return this.authService.signIn(signInDto.email, signInDto.password);
+    async signIn(
+        @Body() signInDto: SignUpDto,
+        @Request() request: ExpressRequest,
+    ): Promise<UserTokenDto> {
+        return await this.authService.signIn(
+            signInDto.email,
+            signInDto.password,
+            request.headers['user-agent'] || '',
+        );
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Post('logout')
+    @UseGuards(AuthGuard)
+    async signOut(@Request() request: any) {
+        await this.authService.invalidateSession(request.session.id);
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ type: UserTokenDto })
+    @Get('token')
+    @UseGuards(AuthGuard)
+    async getNewToken(@Request() request: any): Promise<UserTokenDto> {
+        return await this.authService.createNewToken(
+            request.user,
+            request.session,
+        );
     }
 
     @ApiOkResponse({ type: UserDto })
@@ -77,5 +105,12 @@ export class AuthController {
     @ApiOkResponse({ type: UserDto })
     getProfile(@Request() req: any) {
         return new UserDto(req.user);
+    }
+
+    @UseGuards(AuthGuard)
+    @Get('session')
+    @ApiOkResponse({ type: SessionDto })
+    getSession(@Request() req: any) {
+        return new SessionDto(req.session);
     }
 }

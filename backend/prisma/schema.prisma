@@ -32,14 +32,16 @@ model User {
 
 model Session {
   id          String  @id @default(uuid())
-  key         String  @db.Char(512)
   user        User    @relation(fields: [userId], references: [id])
   userId      String
   invalidated Boolean @default(false)
-  persistent  Boolean @default(false)
   name        String  @default("")
 
   createdAt DateTime @default(now())
+
+  @@index([id])
+  @@index([invalidated])
+  @@index([userId])
 }
 
 model Book {
