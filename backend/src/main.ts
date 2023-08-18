@@ -4,6 +4,9 @@ import { AppModule } from './app.module';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { writeFileSync } from 'fs';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import * as dotenv from 'dotenv';
+
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 

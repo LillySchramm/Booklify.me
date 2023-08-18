@@ -15,6 +15,8 @@ export class UserDto implements User {
     createdAt: Date;
     @ApiProperty()
     updatedAt: Date;
+    @ApiProperty()
+    activated: boolean;
 
     constructor(partial: Partial<UserDto>) {
         Object.assign(this, partial);

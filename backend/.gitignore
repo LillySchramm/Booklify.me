@@ -3,3 +3,5 @@ node_modules
 .env
 dist
 *-spec.json
+
+config/local*.json5
