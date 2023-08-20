@@ -16,7 +16,12 @@ import { Author, Book, BookCover, Publisher } from '@prisma/client';
 import { Retryable } from 'typescript-retry-decorator';
 import { TesseractService } from 'src/tesseract/tesseract.service';
 import { Magic } from 'mmmagic';
-// import *  mimeMagic from 'file-type-cjs';
+
+interface CoverCrawlResult {
+    buffer: Buffer | null;
+    url: string;
+}
+
 @Injectable()
 export class BooksService {
     private bookApiBase = 'https://www.googleapis.com/books/v1/volumes';
@@ -132,14 +137,14 @@ export class BooksService {
         const existingBook = await this.getBookByIsbn(isbn);
         if (existingBook != null) return existingBook;
 
-        await this.scrapeBookMetaData(isbn);
-        await this.scrapeBookCover(isbn);
+        const metadata = await this.scrapeBookMetaData(isbn);
+        await this.scrapeBookCover(isbn, metadata);
 
         return await this.getBookByIsbn(isbn);
     }
 
     @Retryable({ maxAttempts: 3, backOff: 1000 })
-    async scrapeBookMetaData(isbn: string) {
+    async scrapeBookMetaData(isbn: string): Promise<GoogleVolumeInfo> {
         const googleBookResponse = await gotScraping.get(
             this.bookApiBase + '?q=isbn:' + isbn,
         );
@@ -164,45 +169,107 @@ export class BooksService {
             .json();
 
         await this.upsertBook(book.volumeInfo, isbn);
+
+        return googleBookData.items[0].volumeInfo;
     }
 
-    async scrapeBookCover(isbn: string) {
+    async scrapeBookCoverFromIsbnDb(isbn: string): Promise<CoverCrawlResult> {
         const isbndbUrl = `${this.bookCoverBase}/${isbn.substring(
             isbn.length - 4,
             isbn.length - 2,
         )}/${isbn.substring(isbn.length - 2, isbn.length)}/${isbn}.jpg`;
 
-        let imageBody: Buffer | undefined;
         const isbndbImage = await gotScraping.get(isbndbUrl);
         if (isbndbImage.statusCode === 200) {
-            imageBody = isbndbImage.rawBody;
+            return { buffer: isbndbImage.rawBody, url: isbndbUrl };
         }
 
-        if (imageBody) {
-            const type: string | string[] = await new Promise((resolve) => {
-                const magic = new Magic();
-                magic.detect(imageBody as Buffer, (_, result) =>
-                    resolve(result),
-                );
-            });
+        return { buffer: null, url: isbndbUrl };
+    }
 
-            if (!type.includes('JPEG') || type.includes('Premature')) {
-                await this.setBookCover(isbn, null);
+    async scrapeBookCoverFromGoogle(
+        metadata: GoogleVolumeInfo,
+    ): Promise<CoverCrawlResult> {
+        if (!metadata.imageLinks || !metadata.imageLinks.thumbnail) {
+            const googleBookResponseFromTitle: GoogleBookResponse =
+                await gotScraping
+                    .get(this.bookApiBase + '?q=title:' + metadata.title)
+                    .json();
 
-                return;
-            }
-
-            const onBlacklist = await this.doesCoverContainBlacklistedWord(
-                imageBody,
+            const bookWithSameTitle = googleBookResponseFromTitle.items.find(
+                (book) => book.volumeInfo.title.startsWith(metadata.title),
             );
-            if (onBlacklist) {
-                await this.setBookCover(isbn, null);
 
-                return;
+            if (
+                !bookWithSameTitle ||
+                !bookWithSameTitle.volumeInfo.imageLinks ||
+                !bookWithSameTitle.volumeInfo.imageLinks.thumbnail
+            ) {
+                return { buffer: null, url: '' };
             }
 
-            const cover = await this.saveCoverImage(isbndbUrl, imageBody);
-            await this.setBookCover(isbn, cover.id);
+            metadata.imageLinks = bookWithSameTitle.volumeInfo.imageLinks;
+        }
+
+        const googleImage = await gotScraping.get(
+            metadata.imageLinks.thumbnail!,
+        );
+        if (googleImage.statusCode === 200) {
+            return {
+                buffer: googleImage.rawBody,
+                url: metadata.imageLinks.thumbnail!,
+            };
+        }
+
+        return { buffer: null, url: metadata.imageLinks.thumbnail! };
+    }
+
+    async trySettingCover(
+        isbn: string,
+        url: string,
+        buffer: Buffer | null,
+    ): Promise<boolean> {
+        if (buffer === null) return false;
+
+        const type: string | string[] = await new Promise((resolve) => {
+            const magic = new Magic();
+            magic.detect(buffer as Buffer, (_, result) => resolve(result));
+        });
+
+        if (
+            !type.includes('JPEG') ||
+            type.includes('Premature') ||
+            type === 'data'
+        ) {
+            await this.setBookCover(isbn, null);
+
+            return false;
+        }
+
+        const onBlacklist = await this.doesCoverContainBlacklistedWord(buffer);
+        if (onBlacklist) {
+            await this.setBookCover(isbn, null);
+
+            return false;
+        }
+
+        const cover = await this.saveCoverImage(url, buffer);
+        await this.setBookCover(isbn, cover.id);
+
+        return true;
+    }
+
+    async scrapeBookCover(isbn: string, metadata: GoogleVolumeInfo) {
+        const isbnDbImage = await this.scrapeBookCoverFromIsbnDb(isbn);
+        const googleImage = await this.scrapeBookCoverFromGoogle(metadata);
+
+        for await (const blob of [isbnDbImage, googleImage]) {
+            const success = await this.trySettingCover(
+                isbn,
+                blob.url,
+                blob.buffer,
+            );
+            if (success) break;
         }
     }
 
