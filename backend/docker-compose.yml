@@ -8,3 +8,12 @@ services:
             - POSTGRES_DB=mangalist
         ports:
             - 5432:5432
+    s3:
+        image: adobe/s3mock:latest
+        ports:
+            - 9090:9090
+        environment:
+            - root=/s3mockroot
+            - retainFilesOnExit=true
+        volumes:
+            - ./data/s3:/s3mockroot/mangalist:rw

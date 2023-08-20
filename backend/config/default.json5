@@ -5,7 +5,15 @@
     "mail": {
         "enabled": false,
         "smtp": "",
-        "from": "\"Booklify <me@example.com>"
+        "from": "\"Booklify\" <me@example.com>"
     },
-    "url": "http://localhost:3000"
+    "url": "http://localhost:3000",
+    "s3": {
+        "endpoint": "",
+        "port": 9000,
+        "access_key": "",
+        "secret_key": "",
+        "use_ssl": false,
+        "bucket_name": "mangalist"
+    }
 }

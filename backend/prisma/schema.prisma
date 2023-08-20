@@ -26,9 +26,9 @@ model User {
   createdAt            DateTime               @default(now())
   updatedAt            DateTime               @updatedAt
   Session              Session[]
-  OwnershipStatus      OwnershipStatus[]
-  Snapshot             Snapshot[]
-  BookGroup            BookGroup[]
+  // OwnershipStatus      OwnershipStatus[]
+  // Snapshot             Snapshot[]
+  // BookGroup            BookGroup[]
   VerificationEmail    VerificationEmail[]
   PasswordResetRequest PasswordResetRequest[]
 }
@@ -69,13 +69,25 @@ model Book {
   pageCount        Int?
   printedPageCount Int?
   language         String?
+  cover            BookCover? @relation(fields: [bookCoverId], references: [id])
 
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
-  publisherId        String?
-  ownershipStatus    OwnershipStatus[]
-  bookGroups         BookGroup[]
-  snapshotBookGroups SnapshotBookGroup[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  publisherId String?
+  // ownershipStatus    OwnershipStatus[]
+  // bookGroups         BookGroup[]
+  // snapshotBookGroups SnapshotBookGroup[]
+  bookCoverId String?
+}
+
+model BookCover {
+  id String @id @default(uuid())
+
+  origin String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Book      Book[]
 }
 
 model Author {
@@ -96,50 +108,50 @@ model Publisher {
   Book      Book[]
 }
 
-model OwnershipStatus {
-  user   User       @relation(fields: [userId], references: [id])
-  book   Book       @relation(fields: [bookIsbn], references: [isbn])
-  status BookStatus
+// model OwnershipStatus {
+//   user   User       @relation(fields: [userId], references: [id])
+//   book   Book       @relation(fields: [bookIsbn], references: [isbn])
+//   status BookStatus
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    String
-  bookIsbn  String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   userId    String
+//   bookIsbn  String
 
-  @@id([userId, bookIsbn])
-}
+//   @@id([userId, bookIsbn])
+// }
 
-model Snapshot {
-  id          String              @id @default(uuid())
-  user        User                @relation(fields: [userId], references: [id])
-  bookGroups  SnapshotBookGroup[]
-  ttl         BigInt?
-  invalidated Boolean             @default(false)
+// model Snapshot {
+//   id          String              @id @default(uuid())
+//   user        User                @relation(fields: [userId], references: [id])
+//   bookGroups  SnapshotBookGroup[]
+//   ttl         BigInt?
+//   invalidated Boolean             @default(false)
 
-  createdAt DateTime @default(now())
-  userId    String
-}
+//   createdAt DateTime @default(now())
+//   userId    String
+// }
 
-model SnapshotBookGroup {
-  id         String    @id @default(uuid())
-  books      Book[]
-  name       String
-  Snapshot   Snapshot? @relation(fields: [snapshotId], references: [id])
-  snapshotId String?
-}
+// model SnapshotBookGroup {
+//   id         String    @id @default(uuid())
+//   books      Book[]
+//   name       String
+//   Snapshot   Snapshot? @relation(fields: [snapshotId], references: [id])
+//   snapshotId String?
+// }
 
-model BookGroup {
-  id    String @id @default(uuid())
-  user  User   @relation(fields: [userId], references: [id])
-  books Book[]
-  name  String
+// model BookGroup {
+//   id    String @id @default(uuid())
+//   user  User   @relation(fields: [userId], references: [id])
+//   books Book[]
+//   name  String
 
-  canBeDeleted Boolean @default(true)
+//   canBeDeleted Boolean @default(true)
 
-  userId String
+//   userId String
 
-  createdAt DateTime @default(now())
-}
+//   createdAt DateTime @default(now())
+// }
 
 model MailLog {
   id String @id
