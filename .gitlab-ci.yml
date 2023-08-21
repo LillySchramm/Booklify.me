@@ -30,19 +30,6 @@ build_frontend:
     script:
         - cd frontend && npx ng build --configuration production
 
-build_backend:
-    image: node:16
-    stage: build
-    needs:
-        - install_npm_dependencies
-    artifacts:
-        untracked: false
-        expire_in: 1 hrs
-        paths:
-            - backend/build
-    script:
-        - cd backend && yarn build
-
 build_frontend_container:
     stage: container-build
     image:
