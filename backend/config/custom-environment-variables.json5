@@ -1,5 +1,19 @@
 {
+  "url": "URL",
   "database": {
     "url": "DATABASE_URL"
   },
+  "mail": {
+      "enabled": "MAIL_ENABLED",
+      "smtp": "MAIL_SMTP",
+      "from": "MAIL_FROM"
+  },
+  "s3": {
+      "endpoint": "S3_ENDPOINT",
+      "port": "S3_PORT",
+      "access_key": "S3_ACCESS_KEY",
+      "secret_key": "S3_SECRET_KEY",
+      "use_ssl": "S3_USE_SSL",
+      "bucket_name": "S3_BUCKET_NAME"
+  }
 }
