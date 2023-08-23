@@ -3,6 +3,7 @@ import {
     Body,
     Controller,
     Get,
+    Logger,
     NotFoundException,
     Param,
     ParseUUIDPipe,
@@ -25,6 +26,8 @@ import { BookListDto } from './dto/bookList.dto';
 @Controller('books')
 @ApiTags('books')
 export class BooksController {
+    private readonly logger = new Logger(BooksController.name);
+
     constructor(
         private readonly bookService: BooksService,
         private readonly s3: S3Service,
@@ -46,7 +49,7 @@ export class BooksController {
     @UseGuards(AuthGuard)
     @ApiOkResponse({ type: BookDto })
     async getBook(@Param('isbn') isbn: string) {
-        return this.bookService.getBook(isbn);
+        return await this.bookService.getBook(isbn);
     }
 
     @Post(':isbn/status')
@@ -107,7 +110,7 @@ export class BooksController {
             res.status(200);
             return;
         } catch (e: any) {
-            console.warn('Public image warning: ' + e.message);
+            this.logger.warn('Public image warning: ' + e.message);
             throw new NotFoundException();
         }
     }

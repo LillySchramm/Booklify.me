@@ -48,7 +48,7 @@ export class BooksService {
     ) {}
 
     async upsertAuthor(name: string): Promise<Author> {
-        return this.prisma.author.upsert({
+        return await this.prisma.author.upsert({
             where: {
                 name,
             },
@@ -60,7 +60,7 @@ export class BooksService {
     }
 
     async upsertPublisher(name: string): Promise<Publisher> {
-        return this.prisma.publisher.upsert({
+        return await this.prisma.publisher.upsert({
             where: {
                 name,
             },
@@ -77,7 +77,7 @@ export class BooksService {
             select: { isbn: true },
         });
 
-        return book != null;
+        return book !== null;
     }
 
     async upsertBook(book: GoogleVolumeInfo, isbn: string) {
@@ -143,7 +143,7 @@ export class BooksService {
 
     async getBook(isbn: string): Promise<Book | null> {
         const existingBook = await this.getBookByIsbn(isbn);
-        if (existingBook != null) return existingBook;
+        if (existingBook !== null) return existingBook;
 
         const metadata = await this.scrapeBookMetaData(isbn);
         await this.scrapeBookCover(isbn, metadata);
@@ -166,8 +166,8 @@ export class BooksService {
         }
 
         if (
-            googleBookResponse.statusCode != 200 ||
-            googleBookData.totalItems == 0
+            googleBookResponse.statusCode !== 200 ||
+            googleBookData.totalItems === 0
         ) {
             throw new NotFoundException();
         }
@@ -305,6 +305,7 @@ export class BooksService {
     ): Promise<OwnershipStatus> {
         return await this.prisma.ownershipStatus.upsert({
             where: {
+                // eslint-disable-next-line camelcase
                 userId_bookIsbn: { bookIsbn: book.isbn, userId: user.id },
             },
             create: { status, bookIsbn: book.isbn, userId: user.id },
@@ -316,7 +317,7 @@ export class BooksService {
         const ownershipStatus = await this.prisma.ownershipStatus.findFirst({
             where: { bookIsbn: book.isbn, userId: user.id },
         });
-        if (ownershipStatus != null) return ownershipStatus;
+        if (ownershipStatus !== null) return ownershipStatus;
 
         return await this.setBookOwnership(user, book, BookStatus.NONE);
     }

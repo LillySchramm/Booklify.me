@@ -50,7 +50,7 @@ export class UsersService {
     }
 
     async getUserCount(): Promise<number> {
-        return this.prisma.user.count();
+        return await this.prisma.user.count();
     }
 
     async doesAlreadyExist(email: string, username: string): Promise<boolean> {
@@ -63,7 +63,7 @@ export class UsersService {
             },
         });
 
-        return user != null;
+        return user !== null;
     }
 
     async validateVerification(

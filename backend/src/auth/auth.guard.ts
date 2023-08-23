@@ -31,7 +31,7 @@ export class AuthGuard implements CanActivate {
             const session = await this.authService.findValidSession(
                 payload.jti,
             );
-            if (session == null) throw new UnauthorizedException();
+            if (session === null) throw new UnauthorizedException();
 
             request['authToken'] = payload;
             request['session'] = session;
