@@ -1,8 +1,67 @@
-# stages:
-#     - pre-build
-#     - build
-#     - container-build
-#     - deploy
+stages:
+    - pre-build
+    - build
+    - container-build
+    - deploy
+    - linting
+
+.cache0: &npm-cache
+    key: $CI_COMMIT_REF_SLUG-npm
+    paths:
+        - backend/node_modules/
+        # - frontend/node_modules/
+    policy: pull
+
+install_npm_dependencies:
+    image: node:18
+    stage: pre-build
+    cache:
+        <<: *npm-cache
+        policy: pull-push
+    script:
+        - cd backend
+        - yarn
+
+build_backend:
+    image: node:18
+    stage: build
+    needs:
+        - install_npm_dependencies
+    artifacts:
+        untracked: false
+        expire_in: 1 day
+        paths:
+            - backend/dist
+    cache:
+        <<: *npm-cache
+    script:
+        - cd backend
+        - npx prisma generate
+        - yarn run build
+
+prettier:
+    image: node:18-alpine
+    stage: linting
+    allow_failure: true
+    needs:
+        - install_npm_dependencies
+    cache:
+        <<: *npm-cache
+    script:
+        - cd backend
+        - yarn run format:check
+
+lint:
+    image: node:18-alpine
+    stage: linting
+    allow_failure: true
+    needs:
+        - install_npm_dependencies
+    cache:
+        <<: *npm-cache
+    script:
+        - cd backend
+        - yarn run lint
 
 # install_npm_dependencies:
 #     image: node:16-alpine
