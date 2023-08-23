@@ -12,7 +12,15 @@ import {
 } from './models/googleVolume.model';
 import { S3Service } from 'src/s3/s3.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Author, Book, BookCover, Publisher } from '@prisma/client';
+import {
+    Author,
+    Book,
+    BookCover,
+    BookStatus,
+    OwnershipStatus,
+    Publisher,
+    User,
+} from '@prisma/client';
 import { Retryable } from 'typescript-retry-decorator';
 import { TesseractService } from 'src/tesseract/tesseract.service';
 import { Magic } from 'mmmagic';
@@ -288,5 +296,36 @@ export class BooksService {
         }
 
         return false;
+    }
+
+    async setBookOwnership(
+        user: User,
+        book: Book,
+        status: BookStatus,
+    ): Promise<OwnershipStatus> {
+        return await this.prisma.ownershipStatus.upsert({
+            where: {
+                userId_bookIsbn: { bookIsbn: book.isbn, userId: user.id },
+            },
+            create: { status, bookIsbn: book.isbn, userId: user.id },
+            update: { status },
+        });
+    }
+
+    async getBookOwnership(user: User, book: Book): Promise<OwnershipStatus> {
+        const ownershipStatus = await this.prisma.ownershipStatus.findFirst({
+            where: { bookIsbn: book.isbn, userId: user.id },
+        });
+        if (ownershipStatus != null) return ownershipStatus;
+
+        return await this.setBookOwnership(user, book, BookStatus.NONE);
+    }
+
+    async getAllOwnedBooksOfUser(userId: string): Promise<Book[]> {
+        return await this.prisma.book.findMany({
+            where: {
+                OwnershipStatus: { some: { userId, status: BookStatus.OWNED } },
+            },
+        });
     }
 }

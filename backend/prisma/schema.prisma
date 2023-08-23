@@ -31,6 +31,7 @@ model User {
   // BookGroup            BookGroup[]
   VerificationEmail    VerificationEmail[]
   PasswordResetRequest PasswordResetRequest[]
+  OwnershipStatus      OwnershipStatus[]
 }
 
 model VerificationEmail {
@@ -71,13 +72,14 @@ model Book {
   language         String?
   cover            BookCover? @relation(fields: [bookCoverId], references: [id])
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  publisherId String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  publisherId     String?
   // ownershipStatus    OwnershipStatus[]
   // bookGroups         BookGroup[]
   // snapshotBookGroups SnapshotBookGroup[]
-  bookCoverId String?
+  bookCoverId     String?
+  OwnershipStatus OwnershipStatus[]
 }
 
 model BookCover {
@@ -106,6 +108,20 @@ model Publisher {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Book      Book[]
+}
+
+model OwnershipStatus {
+  user   User       @relation(fields: [userId], references: [id])
+  book   Book       @relation(fields: [bookIsbn], references: [isbn])
+  status BookStatus
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  bookIsbn  String
+
+  @@id([userId, bookIsbn])
+  @@index([status])
 }
 
 // model OwnershipStatus {
