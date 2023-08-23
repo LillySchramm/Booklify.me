@@ -4,10 +4,11 @@ import { BooksController } from './books.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { S3Module } from 'src/s3/s3.module';
 import { TesseractModule } from 'src/tesseract/tesseract.module';
-
+import { UsersModule } from 'src/users/users.module';
+import { AuthModule } from 'src/auth/auth.module';
 @Module({
     providers: [BooksService],
     controllers: [BooksController],
-    imports: [S3Module, PrismaModule, TesseractModule],
+    imports: [S3Module, PrismaModule, TesseractModule, UsersModule, AuthModule],
 })
 export class BooksModule {}

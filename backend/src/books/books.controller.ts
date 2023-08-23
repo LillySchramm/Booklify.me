@@ -5,12 +5,14 @@ import {
     Param,
     ParseUUIDPipe,
     Res,
+    UseGuards,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { BookDto } from './dto/book.dto';
 import { BooksService } from './books.service';
 import { S3Service } from 'src/s3/s3.service';
 import { Response } from 'express';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('books')
 @ApiTags('books')
@@ -21,12 +23,14 @@ export class BooksController {
     ) {}
 
     @Get(':isbn')
+    @UseGuards(AuthGuard)
     @ApiOkResponse({ type: BookDto })
     async getBook(@Param('isbn') isbn: string) {
         return this.bookService.getBook(isbn);
     }
 
     @Get('cover/:id.png')
+    @UseGuards(AuthGuard)
     async getBookCover(
         @Param('id', new ParseUUIDPipe()) id: string,
         @Res() res: Response,
