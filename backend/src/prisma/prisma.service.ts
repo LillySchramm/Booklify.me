@@ -7,7 +7,7 @@ import * as config from 'config';
 export class PrismaService extends PrismaClient implements OnModuleInit {
     constructor() {
         super({
-            datasources: { db: { url: config.get<string>('db.url') } },
+            datasources: { db: { url: config.get<string>('database.url') } },
             log: ['query', 'warn', 'error'],
         });
     }
