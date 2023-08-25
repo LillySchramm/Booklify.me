@@ -19,7 +19,6 @@ import { AuthGuard } from './auth.guard';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserDto } from 'src/users/dto/user.dto';
 import { SignUpDto } from './dto/signUp.dto';
-import { emailRegex, passwordRegex, userNameRegex } from './constants';
 import { UsersService } from 'src/users/users.service';
 import { Request as ExpressRequest } from 'express';
 import { SessionDto } from './dto/session.dto';
@@ -27,6 +26,7 @@ import { UserTokenDto } from './dto/userToken.dto';
 import { ResetPasswordRequestDto } from './dto/resetPasswordRequest.dto';
 import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { NewPasswordDto } from './dto/newPassword.dto';
+import { SignInDto } from './dto/signIn.dto';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -41,7 +41,7 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @Post('login')
     async signIn(
-        @Body() signInDto: SignUpDto,
+        @Body() signInDto: SignInDto,
         @Request() request: ExpressRequest,
     ): Promise<UserTokenDto> {
         return await this.authService.signIn(
@@ -72,26 +72,6 @@ export class AuthController {
     @ApiOkResponse({ type: UserDto })
     @Post('signup')
     async signUp(@Body() signUpDto: SignUpDto) {
-        if (
-            !signUpDto ||
-            !signUpDto.name ||
-            !signUpDto.email ||
-            !signUpDto.password
-        )
-            throw new BadRequestException();
-
-        if (!userNameRegex.test(signUpDto.name)) {
-            throw new BadRequestException('User name bad formatted');
-        }
-
-        if (!emailRegex.test(signUpDto.email)) {
-            throw new BadRequestException('EMail bad formatted');
-        }
-
-        if (!passwordRegex.test(signUpDto.password)) {
-            throw new BadRequestException('Password bad formatted');
-        }
-
         const doesAlreadyExist = await this.userService.doesAlreadyExist(
             signUpDto.email,
             signUpDto.name,
@@ -112,12 +92,6 @@ export class AuthController {
     @ApiOkResponse({ type: ResetPasswordDto })
     @Post('request-reset')
     async requestResetPassword(@Body() body: ResetPasswordRequestDto) {
-        if (!body || !body.email) throw new BadRequestException();
-
-        if (!emailRegex.test(body.email)) {
-            throw new BadRequestException('EMail bad formatted');
-        }
-
         const user = await this.userService.findByEmail(body.email);
         if (!user) {
             return new NotFoundException('User not found.');
@@ -136,19 +110,6 @@ export class AuthController {
     @ApiOkResponse()
     @Post('reset')
     async resetPassword(@Body() body: NewPasswordDto) {
-        if (
-            !body ||
-            !body.userId ||
-            !body.newPassword ||
-            !body.resetId ||
-            !body.resetToken
-        )
-            throw new BadRequestException();
-
-        if (!passwordRegex.test(body.newPassword)) {
-            throw new BadRequestException('Password bad formatted');
-        }
-
         const user = await this.userService.findById(body.userId);
         if (!user) {
             return new NotFoundException('User not found.');
