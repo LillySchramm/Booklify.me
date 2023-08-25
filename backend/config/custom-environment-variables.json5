@@ -10,7 +10,10 @@
   },
   "s3": {
       "endpoint": "S3_ENDPOINT",
-      "port": "S3_PORT",
+      "port": {
+          "__name": "S3_PORT",
+          "__format": "number"
+      },
       "access_key": "S3_ACCESS_KEY",
       "secret_key": "S3_SECRET_KEY",
       "use_ssl": "S3_USE_SSL",
