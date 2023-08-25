@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Session, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { SecretsService } from 'src/secrets/secrets.service';
 
 export interface UserToken {
     accessToken: string;
@@ -19,6 +20,7 @@ export class AuthService {
         private usersService: UsersService,
         private jwtService: JwtService,
         private prisma: PrismaService,
+        private secretService: SecretsService,
     ) {}
 
     async signIn(
@@ -40,6 +42,8 @@ export class AuthService {
     }
 
     async createNewToken(user: User, session: Session): Promise<UserToken> {
+        const privateKey = await this.secretService.getSecret('JWT_PRIVATE');
+
         const payload = {
             sub: user.id,
             name: user.name,
@@ -47,7 +51,10 @@ export class AuthService {
             jti: session.id,
         };
         return {
-            accessToken: await this.jwtService.signAsync(payload),
+            accessToken: await this.jwtService.signAsync(payload, {
+                algorithm: 'RS512',
+                privateKey: privateKey || '',
+            }),
         };
     }
 

@@ -15,5 +15,8 @@
         "secret_key": "",
         "use_ssl": false,
         "bucket_name": "mangalist"
+    },
+    "security": {
+        "key": "AVerySecurePassword"
     }
 }

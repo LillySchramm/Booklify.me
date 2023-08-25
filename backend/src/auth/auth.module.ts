@@ -3,22 +3,22 @@ import { AuthService } from './auth.service';
 import { UsersModule } from '../users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
-import { jwtConstants } from './constants';
 import { PrismaModule } from 'src/prisma/prisma.module';
+import { SecretsModule } from 'src/secrets/secrets.module';
 
 @Module({
     imports: [
         UsersModule,
         JwtModule.register({
             global: true,
-            secret: jwtConstants.secret,
             signOptions: {
                 expiresIn: '24h',
-                algorithm: 'HS512',
+                algorithm: 'RS256',
                 issuer: 'Mangalist',
             },
         }),
         PrismaModule,
+        SecretsModule,
     ],
     providers: [AuthService],
     controllers: [AuthController],

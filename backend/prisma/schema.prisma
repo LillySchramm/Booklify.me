@@ -124,6 +124,12 @@ model OwnershipStatus {
   @@index([status])
 }
 
+model Secret {
+  id         Int    @id @default(autoincrement())
+  identifier String @unique
+  value      String
+}
+
 // model OwnershipStatus {
 //   user   User       @relation(fields: [userId], references: [id])
 //   book   Book       @relation(fields: [bookIsbn], references: [isbn])

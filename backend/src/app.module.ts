@@ -8,6 +8,7 @@ import { MailModule } from './mail/mail.module';
 import { BooksModule } from './books/books.module';
 import { S3Module } from './s3/s3.module';
 import { TesseractModule } from './tesseract/tesseract.module';
+import { SecretsModule } from './secrets/secrets.module';
 
 @Module({
     imports: [
@@ -18,6 +19,7 @@ import { TesseractModule } from './tesseract/tesseract.module';
         BooksModule,
         S3Module,
         TesseractModule,
+        SecretsModule,
     ],
     controllers: [AppController],
     providers: [AppService],

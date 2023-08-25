@@ -6,9 +6,17 @@ import { S3Module } from 'src/s3/s3.module';
 import { TesseractModule } from 'src/tesseract/tesseract.module';
 import { UsersModule } from 'src/users/users.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { SecretsModule } from 'src/secrets/secrets.module';
 @Module({
     providers: [BooksService],
     controllers: [BooksController],
-    imports: [S3Module, PrismaModule, TesseractModule, UsersModule, AuthModule],
+    imports: [
+        S3Module,
+        PrismaModule,
+        TesseractModule,
+        UsersModule,
+        AuthModule,
+        SecretsModule,
+    ],
 })
 export class BooksModule {}
