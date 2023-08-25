@@ -53,8 +53,8 @@ build_backend_container:
             /kaniko/executor
             --context "${CI_PROJECT_DIR}/backend"
             --dockerfile "${CI_PROJECT_DIR}/backend/Dockerfile"
-            --destination "epsdev/booklify-ce/be-${CI_COMMIT_REF_SLUG}:${CI_COMMIT_SHA}"
-            --destination "epsdev/booklify-ce/be-${CI_COMMIT_REF_SLUG}:latest"
+            --destination "epsdev/booklify-ce:be-${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA}"
+            --destination "epsdev/booklify-ce:be-${CI_COMMIT_REF_SLUG}-latest"
 
 prettier:
     image: node:18-alpine
