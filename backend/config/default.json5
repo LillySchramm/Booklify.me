@@ -1,4 +1,6 @@
 {
+    "url": "http://localhost:3000",
+    "disable_registration": false,
     "db": {
         "url": "postgresql://uwu:owo@localhost:5432/mangalist?schema=public"
     },
@@ -7,7 +9,6 @@
         "smtp": "",
         "from": "\"Booklify\" <me@example.com>"
     },
-    "url": "http://localhost:3000",
     "s3": {
         "endpoint": "",
         "port": 9000,

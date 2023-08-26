@@ -27,6 +27,7 @@ import { ResetPasswordRequestDto } from './dto/resetPasswordRequest.dto';
 import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { NewPasswordDto } from './dto/newPassword.dto';
 import { SignInDto } from './dto/signIn.dto';
+import * as config from 'config';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -72,6 +73,11 @@ export class AuthController {
     @ApiOkResponse({ type: UserDto })
     @Post('signup')
     async signUp(@Body() signUpDto: SignUpDto) {
+        const userCount = await this.userService.getUserCount();
+        if (userCount !== 0 && config.get<boolean>('disable_registration')) {
+            throw new BadRequestException('Registration is disabled.');
+        }
+
         const doesAlreadyExist = await this.userService.doesAlreadyExist(
             signUpDto.email,
             signUpDto.name,

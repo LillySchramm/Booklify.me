@@ -18,5 +18,9 @@
       "secret_key": "S3_SECRET_KEY",
       "use_ssl": "S3_USE_SSL",
       "bucket_name": "S3_BUCKET_NAME"
+  },
+  "disable_registration": {
+      "__name": "DISABLE_REGISTRATION",
+      "__format": "boolean"
   }
 }
