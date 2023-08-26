@@ -22,6 +22,7 @@ import { SetOwnershipStatusDto } from './dto/setOwnershipStatus.dto';
 import { isISBN } from 'class-validator';
 import { OwnershipStatusDto } from './dto/ownershipStatus.dto';
 import { BookListDto } from './dto/bookList.dto';
+import { BookGroupsService } from 'src/book-groups/bookGroups.service';
 
 @Controller('books')
 @ApiTags('books')
@@ -31,6 +32,7 @@ export class BooksController {
     constructor(
         private readonly bookService: BooksService,
         private readonly s3: S3Service,
+        private readonly bookGroupService: BookGroupsService,
     ) {}
 
     @Get('owned')
@@ -48,8 +50,14 @@ export class BooksController {
     @Get(':isbn')
     @UseGuards(AuthGuard)
     @ApiOkResponse({ type: BookDto })
-    async getBook(@Param('isbn') isbn: string) {
-        return await this.bookService.getBook(isbn);
+    async getBook(@Param('isbn') isbn: string, @Request() req: any) {
+        const isIsbn = isISBN(isbn);
+        if (!isIsbn) throw new BadRequestException();
+
+        const book = await this.bookService.getBook(isbn, req.user.id);
+        if (!book) throw new NotFoundException();
+
+        return new BookDto(book);
     }
 
     @Post(':isbn/status')
@@ -63,13 +71,23 @@ export class BooksController {
         const isIsbn = isISBN(isbn);
         if (!isIsbn) throw new BadRequestException();
 
-        const book = await this.bookService.getBook(isbn);
+        const book = await this.bookService.getBook(isbn, req.user.id);
         if (!book) throw new NotFoundException();
+
+        if (body.bookGroupId !== null) {
+            const bookGroup = await this.bookGroupService.getBookGroup(
+                body.bookGroupId,
+                req.user.id,
+            );
+            if (!bookGroup)
+                throw new NotFoundException("Book group doesn't exist");
+        }
 
         const ownershipStatus = await this.bookService.setBookOwnership(
             req.user,
             book,
             body.status,
+            body.bookGroupId,
         );
         return new OwnershipStatusDto(ownershipStatus);
     }
@@ -84,7 +102,7 @@ export class BooksController {
         const isIsbn = isISBN(isbn);
         if (!isIsbn) throw new BadRequestException();
 
-        const book = await this.bookService.getBook(isbn);
+        const book = await this.bookService.getBook(isbn, req.user.id);
         if (!book) throw new NotFoundException();
 
         const ownershipStatus = await this.bookService.getBookOwnership(

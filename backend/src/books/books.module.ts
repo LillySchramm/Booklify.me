@@ -7,6 +7,7 @@ import { TesseractModule } from 'src/tesseract/tesseract.module';
 import { UsersModule } from 'src/users/users.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { SecretsModule } from 'src/secrets/secrets.module';
+import { BookGroupsModule } from 'src/book-groups/bookGroups.module';
 @Module({
     providers: [BooksService],
     controllers: [BooksController],
@@ -17,6 +18,7 @@ import { SecretsModule } from 'src/secrets/secrets.module';
         UsersModule,
         AuthModule,
         SecretsModule,
+        BookGroupsModule,
     ],
 })
 export class BooksModule {}

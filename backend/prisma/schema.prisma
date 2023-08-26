@@ -26,12 +26,10 @@ model User {
   createdAt            DateTime               @default(now())
   updatedAt            DateTime               @updatedAt
   Session              Session[]
-  // OwnershipStatus      OwnershipStatus[]
-  // Snapshot             Snapshot[]
-  // BookGroup            BookGroup[]
   VerificationEmail    VerificationEmail[]
   PasswordResetRequest PasswordResetRequest[]
   OwnershipStatus      OwnershipStatus[]
+  BookGroup            BookGroup[]
 }
 
 model VerificationEmail {
@@ -43,6 +41,7 @@ model VerificationEmail {
   userId String
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Session {
@@ -53,6 +52,7 @@ model Session {
   name        String  @default("")
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@index([id])
   @@index([invalidated])
@@ -60,26 +60,22 @@ model Session {
 }
 
 model Book {
-  isbn             String     @id
+  isbn             String            @id
   title            String?
   subtitle         String?
   authors          Author[]
-  publisher        Publisher? @relation(fields: [publisherId], references: [id])
+  publisher        Publisher?        @relation(fields: [publisherId], references: [id])
   publishedDate    String?
   description      String?
   pageCount        Int?
   printedPageCount Int?
   language         String?
-  cover            BookCover? @relation(fields: [bookCoverId], references: [id])
-
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  publisherId     String?
-  // ownershipStatus    OwnershipStatus[]
-  // bookGroups         BookGroup[]
-  // snapshotBookGroups SnapshotBookGroup[]
-  bookCoverId     String?
-  OwnershipStatus OwnershipStatus[]
+  cover            BookCover?        @relation(fields: [bookCoverId], references: [id])
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  publisherId      String?
+  bookCoverId      String?
+  OwnershipStatus  OwnershipStatus[]
 }
 
 model BookCover {
@@ -88,7 +84,7 @@ model BookCover {
   origin String
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
   Book      Book[]
 }
 
@@ -98,7 +94,7 @@ model Author {
   books Book[]
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Publisher {
@@ -106,7 +102,7 @@ model Publisher {
   name String @unique
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
   Book      Book[]
 }
 
@@ -114,11 +110,13 @@ model OwnershipStatus {
   user   User       @relation(fields: [userId], references: [id])
   book   Book       @relation(fields: [bookIsbn], references: [isbn])
   status BookStatus
+  group  BookGroup? @relation(fields: [bookGroupId], references: [id])
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    String
-  bookIsbn  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+  userId      String
+  bookIsbn    String
+  bookGroupId String?
 
   @@id([userId, bookIsbn])
   @@index([status])
@@ -128,6 +126,43 @@ model Secret {
   id         Int    @id @default(autoincrement())
   identifier String @unique
   value      String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model BookGroup {
+  id              String            @id @default(uuid())
+  name            String
+  user            User              @relation(fields: [userId], references: [id])
+  OwnershipStatus OwnershipStatus[]
+  userId          String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model MailLog {
+  id String @id
+
+  from    String
+  to      String
+  title   String
+  content String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model PasswordResetRequest {
+  id          String  @id @default(uuid())
+  user        User    @relation(fields: [userId], references: [id])
+  invalidated Boolean @default(false)
+  keyHash     String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  userId    String
 }
 
 // model OwnershipStatus {
@@ -174,24 +209,3 @@ model Secret {
 
 //   createdAt DateTime @default(now())
 // }
-
-model MailLog {
-  id String @id
-
-  from    String
-  to      String
-  title   String
-  content String
-
-  createdAt DateTime @default(now())
-}
-
-model PasswordResetRequest {
-  id          String  @id @default(uuid())
-  user        User    @relation(fields: [userId], references: [id])
-  invalidated Boolean @default(false)
-  keyHash     String
-
-  createdAt DateTime @default(now())
-  userId    String
-}

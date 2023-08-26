@@ -1,7 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Book } from '@prisma/client';
+import { Exclude, Expose } from 'class-transformer';
 
-export class BookDto implements Book {
+export type BookWithGroupId = Book & {
+    OwnershipStatus: {
+        bookGroupId: string | null;
+    }[];
+};
+
+export class BookDto implements BookWithGroupId {
     @ApiProperty()
     isbn: string;
     @ApiProperty({ nullable: true, type: String })
@@ -26,6 +33,18 @@ export class BookDto implements Book {
     publisherId: string | null;
     @ApiProperty({ nullable: true, type: String })
     bookCoverId: string | null;
+    @Exclude()
+    OwnershipStatus: { bookGroupId: string | null }[];
+
+    @ApiProperty({ type: String, nullable: true })
+    @Expose()
+    get groupId(): string | null {
+        if (this.OwnershipStatus.length === 0) {
+            return null;
+        }
+
+        return this.OwnershipStatus[0].bookGroupId;
+    }
 
     constructor(partial: Partial<BookDto>) {
         Object.assign(this, partial);

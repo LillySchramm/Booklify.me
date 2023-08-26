@@ -9,6 +9,7 @@ import { BooksModule } from './books/books.module';
 import { S3Module } from './s3/s3.module';
 import { TesseractModule } from './tesseract/tesseract.module';
 import { SecretsModule } from './secrets/secrets.module';
+import { BookGroupsModule } from './book-groups/bookGroups.module';
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import { SecretsModule } from './secrets/secrets.module';
         S3Module,
         TesseractModule,
         SecretsModule,
+        BookGroupsModule,
     ],
     controllers: [AppController],
     providers: [AppService],

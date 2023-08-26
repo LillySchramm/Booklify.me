@@ -11,6 +11,8 @@ export class ResetPasswordDto implements PasswordResetRequest {
     keyHash: string;
     @ApiProperty()
     createdAt: Date;
+    @Exclude()
+    updatedAt: Date;
     @ApiProperty()
     userId: string;
     @ApiProperty()

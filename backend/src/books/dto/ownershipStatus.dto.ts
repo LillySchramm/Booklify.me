@@ -13,6 +13,8 @@ export class OwnershipStatusDto implements OwnershipStatus {
     userId: string;
     @ApiProperty()
     bookIsbn: string;
+    @ApiProperty({ nullable: true, type: String })
+    bookGroupId: string | null;
 
     constructor(partial: Partial<OwnershipStatusDto>) {
         Object.assign(this, partial);

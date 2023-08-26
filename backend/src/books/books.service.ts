@@ -24,6 +24,7 @@ import {
 import { Retryable } from 'typescript-retry-decorator';
 import { TesseractService } from 'src/tesseract/tesseract.service';
 import { Magic } from 'mmmagic';
+import { BookWithGroupId } from './dto/book.dto';
 
 interface CoverCrawlResult {
     buffer: Buffer | null;
@@ -115,8 +116,19 @@ export class BooksService {
         });
     }
 
-    async getBookByIsbn(isbn: string): Promise<Book | null> {
-        return await this.prisma.book.findFirst({ where: { isbn } });
+    async getBookByIsbn(
+        isbn: string,
+        userId: string,
+    ): Promise<BookWithGroupId | null> {
+        return await this.prisma.book.findFirst({
+            where: { isbn },
+            include: {
+                OwnershipStatus: {
+                    where: { userId },
+                    select: { bookGroupId: true },
+                },
+            },
+        });
     }
 
     async saveCoverImage(
@@ -141,14 +153,17 @@ export class BooksService {
         });
     }
 
-    async getBook(isbn: string): Promise<Book | null> {
-        const existingBook = await this.getBookByIsbn(isbn);
+    async getBook(
+        isbn: string,
+        userId: string,
+    ): Promise<BookWithGroupId | null> {
+        const existingBook = await this.getBookByIsbn(isbn, userId);
         if (existingBook !== null) return existingBook;
 
         const metadata = await this.scrapeBookMetaData(isbn);
         await this.scrapeBookCover(isbn, metadata);
 
-        return await this.getBookByIsbn(isbn);
+        return await this.getBookByIsbn(isbn, userId);
     }
 
     @Retryable({ maxAttempts: 3, backOff: 1000 })
@@ -302,14 +317,20 @@ export class BooksService {
         user: User,
         book: Book,
         status: BookStatus,
+        bookGroupId: string | null = null,
     ): Promise<OwnershipStatus> {
         return await this.prisma.ownershipStatus.upsert({
             where: {
                 // eslint-disable-next-line camelcase
                 userId_bookIsbn: { bookIsbn: book.isbn, userId: user.id },
             },
-            create: { status, bookIsbn: book.isbn, userId: user.id },
-            update: { status },
+            create: {
+                status,
+                bookIsbn: book.isbn,
+                userId: user.id,
+                bookGroupId,
+            },
+            update: { status, bookGroupId },
         });
     }
 
@@ -322,10 +343,16 @@ export class BooksService {
         return await this.setBookOwnership(user, book, BookStatus.NONE);
     }
 
-    async getAllOwnedBooksOfUser(userId: string): Promise<Book[]> {
+    async getAllOwnedBooksOfUser(userId: string): Promise<BookWithGroupId[]> {
         return await this.prisma.book.findMany({
             where: {
                 OwnershipStatus: { some: { userId, status: BookStatus.OWNED } },
+            },
+            include: {
+                OwnershipStatus: {
+                    where: { userId },
+                    select: { bookGroupId: true },
+                },
             },
         });
     }

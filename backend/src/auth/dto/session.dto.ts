@@ -9,6 +9,8 @@ export class SessionDto implements Session {
     userId: string;
     @Exclude()
     invalidated: boolean;
+    @Exclude()
+    updatedAt: Date;
     @ApiProperty()
     name: string;
     @ApiProperty()
