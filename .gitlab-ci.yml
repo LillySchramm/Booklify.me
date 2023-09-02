@@ -9,11 +9,11 @@ stages:
     key: $CI_COMMIT_REF_SLUG-npm
     paths:
         - backend/node_modules/
-        # - frontend/node_modules/
+        - frontend/node_modules/
     policy: pull
 
 install_npm_dependencies:
-    image: node:18
+    image: ${DOCKER_CACHE}/node:18
     stage: pre-build
     cache:
         <<: *npm-cache
@@ -21,9 +21,11 @@ install_npm_dependencies:
     script:
         - cd backend
         - yarn
+        - cd ../frontend
+        - yarn
 
 build_backend:
-    image: node:18
+    image: ${DOCKER_CACHE}/node:18
     stage: build
     needs:
         - install_npm_dependencies
@@ -39,6 +41,22 @@ build_backend:
         - npx prisma generate
         - yarn run build
 
+build_frontend:
+    image: ${DOCKER_CACHE}/node:18
+    stage: build
+    needs:
+        - install_npm_dependencies
+    artifacts:
+        untracked: false
+        expire_in: 1 day
+        paths:
+            - frontend/dist
+    cache:
+        <<: *npm-cache
+    script:
+        - cd frontend
+        - yarn run build
+
 build_backend_container:
     stage: container-build
     needs:
@@ -48,17 +66,32 @@ build_backend_container:
         entrypoint: [""]
     script:
         - mkdir -p /kaniko/.docker
-        - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$(printf "%s:%s" "${DOCKER_HUB_USERNAME}" "${DOCKER_HUB_TOKEN}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+        - echo "{\"auths\":{\"registry.cdev.nexus\":{\"auth\":\"$(printf "%s:%s" "${PRIVATE_REG_USER}" "${PRIVATE_REG_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
         - >-
             /kaniko/executor
             --context "${CI_PROJECT_DIR}/backend"
             --dockerfile "${CI_PROJECT_DIR}/backend/Dockerfile"
-            --destination "epsdev/booklify-ce:be-${CI_COMMIT_REF_SLUG}-latest"
+            --destination "registry.cdev.nexus/booklify-ce/backend:${CI_COMMIT_REF_SLUG}"
 
-prettier:
-    image: node:18-alpine
+build_frontend_container:
+    stage: container-build
+    needs:
+        - build_frontend
+    image:
+        name: "gcr.io/kaniko-project/executor:debug"
+        entrypoint: [""]
+    script:
+        - mkdir -p /kaniko/.docker
+        - echo "{\"auths\":{\"registry.cdev.nexus\":{\"auth\":\"$(printf "%s:%s" "${PRIVATE_REG_USER}" "${PRIVATE_REG_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+        - >-
+            /kaniko/executor
+            --context "${CI_PROJECT_DIR}/frontend"
+            --dockerfile "${CI_PROJECT_DIR}/frontend/Dockerfile"
+            --destination "registry.cdev.nexus/booklify-ce/frontend:${CI_COMMIT_REF_SLUG}"
+
+backend_prettier:
+    image: ${DOCKER_CACHE}/node:18-alpine
     stage: linting
-    allow_failure: true
     needs:
         - install_npm_dependencies
     cache:
@@ -67,10 +100,9 @@ prettier:
         - cd backend
         - yarn run format:check
 
-lint:
-    image: node:18-alpine
+backend_lint:
+    image: ${DOCKER_CACHE}/node:18-alpine
     stage: linting
-    allow_failure: true
     needs:
         - install_npm_dependencies
     cache:
@@ -79,34 +111,27 @@ lint:
         - cd backend
         - yarn run lint
 
-# build_frontend:
-#     image: node:16-alpine
-#     stage: build
-#     needs:
-#         - install_npm_dependencies
-#     artifacts:
-#         untracked: false
-#         expire_in: 1 hrs
-#         paths:
-#             - frontend/dist
-#     script:
-#         - cd frontend && npx ng build --configuration production
+frontend_prettier:
+    image: ${DOCKER_CACHE}/node:18-alpine
+    stage: linting
+    needs:
+        - install_npm_dependencies
+    cache:
+        <<: *npm-cache
+    script:
+        - cd frontend
+        - yarn run format:check
 
-# build_frontend_container:
-#     stage: container-build
-#     image:
-#         name: "gcr.io/kaniko-project/executor:debug"
-#         entrypoint: [""]
-#     needs:
-#         - build_frontend
-#     script:
-#         - mkdir -p /kaniko/.docker
-#         - echo "{\"auths\":{\"registry01.eps-dev.de\":{\"auth\":\"$(printf "%s:%s" "${PRIVATE_REG_USER}" "${PRIVATE_REG_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
-#         - >-
-#             /kaniko/executor
-#             --context "${CI_PROJECT_DIR}/frontend"
-#             --dockerfile "${CI_PROJECT_DIR}/frontend/Dockerfile"
-#             --destination "registry01.eps-dev.de/mangalist/frontend/${CI_COMMIT_REF_SLUG}:latest"
+frontend_lint:
+    image: ${DOCKER_CACHE}/node:18-alpine
+    stage: linting
+    needs:
+        - install_npm_dependencies
+    cache:
+        <<: *npm-cache
+    script:
+        - cd frontend
+        - yarn run lint
 
 # deploy-to-kubernetes:
 #     stage: deploy
