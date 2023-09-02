@@ -10,6 +10,8 @@ import * as dotenv from 'dotenv';
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
+    app.enableCors();
+
     const config = new DocumentBuilder()
         .setTitle('Mangalist API')
         .setVersion('1.0')
