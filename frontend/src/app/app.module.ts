@@ -7,6 +7,7 @@ import { ApiModule, Configuration } from './api';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './common/header/header.component';
+import { TranslocoRootModule } from './transloco-root.module';
 
 @NgModule({
     declarations: [AppComponent],
@@ -17,6 +18,7 @@ import { HeaderComponent } from './common/header/header.component';
         ApiModule,
         HttpClientModule,
         HeaderComponent,
+        TranslocoRootModule,
     ],
     providers: [
         {
