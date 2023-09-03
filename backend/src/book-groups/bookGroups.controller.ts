@@ -11,7 +11,7 @@ import {
     Request,
     UseGuards,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { BookGroupsService } from './bookGroups.service';
 import { BookGroupDto } from './dto/bookGroupDto.dto';
@@ -25,6 +25,7 @@ export class BookGroupsController {
     constructor(private readonly bookGroupsService: BookGroupsService) {}
 
     @UseGuards(AuthGuard)
+    @ApiBearerAuth()
     @ApiOkResponse({ type: BookGroupListDto })
     @Get()
     async getAllBookGroups(@Request() req: any) {
@@ -39,6 +40,7 @@ export class BookGroupsController {
     }
 
     @UseGuards(AuthGuard)
+    @ApiBearerAuth()
     @ApiOkResponse({ type: BookGroupDto })
     @Post()
     async createBookGroup(@Request() req: any, @Body() body: BookGroupPostDto) {
@@ -50,6 +52,7 @@ export class BookGroupsController {
     }
 
     @UseGuards(AuthGuard)
+    @ApiBearerAuth()
     @ApiOkResponse({ type: BookGroupDto })
     @Patch(':id')
     async updateBookGroup(
@@ -73,6 +76,7 @@ export class BookGroupsController {
     }
 
     @UseGuards(AuthGuard)
+    @ApiBearerAuth()
     @ApiOkResponse()
     @Delete(':id')
     async deleteBookGroup(

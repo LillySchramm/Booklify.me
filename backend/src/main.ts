@@ -15,6 +15,11 @@ async function bootstrap() {
     const config = new DocumentBuilder()
         .setTitle('Mangalist API')
         .setVersion('1.0')
+        .addSecurity('bearer', {
+            type: 'apiKey',
+            name: 'authorization',
+            in: 'header',
+        })
         .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api', app, document);

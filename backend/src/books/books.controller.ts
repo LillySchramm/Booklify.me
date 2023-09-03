@@ -12,7 +12,7 @@ import {
     Res,
     UseGuards,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { BookDto } from './dto/book.dto';
 import { BooksService } from './books.service';
 import { S3Service } from 'src/s3/s3.service';
@@ -37,6 +37,7 @@ export class BooksController {
 
     @Get('owned')
     @UseGuards(AuthGuard)
+    @ApiBearerAuth()
     @ApiOkResponse({ type: BookListDto })
     async getAllOwnedBooks(@Request() req: any) {
         const books = await this.bookService.getAllOwnedBooksOfUser(
@@ -49,6 +50,7 @@ export class BooksController {
 
     @Get(':isbn')
     @UseGuards(AuthGuard)
+    @ApiBearerAuth()
     @ApiOkResponse({ type: BookDto })
     async getBook(@Param('isbn') isbn: string, @Request() req: any) {
         const isIsbn = isISBN(isbn);
@@ -62,6 +64,7 @@ export class BooksController {
 
     @Post(':isbn/status')
     @UseGuards(AuthGuard)
+    @ApiBearerAuth()
     @ApiOkResponse({ type: OwnershipStatusDto })
     async setBookOwnershipStatus(
         @Param('isbn') isbn: string,
@@ -94,6 +97,7 @@ export class BooksController {
 
     @Get(':isbn/status')
     @UseGuards(AuthGuard)
+    @ApiBearerAuth()
     @ApiOkResponse({ type: OwnershipStatusDto })
     async getBookOwnershipStatus(
         @Param('isbn') isbn: string,
@@ -114,6 +118,7 @@ export class BooksController {
 
     @Get('cover/:id.png')
     @UseGuards(AuthGuard)
+    @ApiBearerAuth()
     async getBookCover(
         @Param('id', new ParseUUIDPipe()) id: string,
         @Res() res: Response,

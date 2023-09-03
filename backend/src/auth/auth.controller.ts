@@ -16,7 +16,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserDto } from 'src/users/dto/user.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { UsersService } from 'src/users/users.service';
@@ -55,6 +55,7 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @Post('logout')
     @UseGuards(AuthGuard)
+    @ApiBearerAuth()
     async signOut(@Request() request: any) {
         await this.authService.invalidateSession(request.session.id);
     }
@@ -63,6 +64,7 @@ export class AuthController {
     @ApiOkResponse({ type: UserTokenDto })
     @Get('token')
     @UseGuards(AuthGuard)
+    @ApiBearerAuth()
     async getNewToken(@Request() request: any): Promise<UserTokenDto> {
         return await this.authService.createNewToken(
             request.user,
@@ -168,11 +170,13 @@ export class AuthController {
     @UseGuards(AuthGuard)
     @Get('profile')
     @ApiOkResponse({ type: UserDto })
+    @ApiBearerAuth()
     getProfile(@Request() req: any) {
         return new UserDto(req.user);
     }
 
     @UseGuards(AuthGuard)
+    @ApiBearerAuth()
     @Get('session')
     @ApiOkResponse({ type: SessionDto })
     getSession(@Request() req: any) {
