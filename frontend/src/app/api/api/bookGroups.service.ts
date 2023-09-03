@@ -11,18 +11,18 @@
  */
 /* tslint:disable:no-unused-variable member-ordering */
 
-import { Inject, Injectable, Optional } from '@angular/core';
 import {
     HttpClient,
+    HttpContext,
+    HttpEvent,
     HttpHeaders,
+    HttpParameterCodec,
     HttpParams,
     HttpResponse,
-    HttpEvent,
-    HttpParameterCodec,
-    HttpContext,
 } from '@angular/common/http';
-import { CustomHttpParameterCodec } from '../encoder';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
+import { CustomHttpParameterCodec } from '../encoder';
 
 // @ts-ignore
 import { BookGroupDto } from '../model/bookGroupDto';
@@ -34,8 +34,8 @@ import { BookGroupPatchDto } from '../model/bookGroupPatchDto';
 import { BookGroupPostDto } from '../model/bookGroupPostDto';
 
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
 import { Configuration } from '../configuration';
+import { BASE_PATH } from '../variables';
 
 @Injectable({
     providedIn: 'root',
