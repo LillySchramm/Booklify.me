@@ -22,7 +22,7 @@ install_npm_dependencies:
         - cd backend
         - yarn
         - cd ../frontend
-        - yarn
+        - npm i
 
 build_backend:
     image: ${DOCKER_CACHE}/node:18
@@ -55,7 +55,7 @@ build_frontend:
         <<: *npm-cache
     script:
         - cd frontend
-        - yarn run build
+        - npm run build
 
 build_backend_container:
     stage: container-build
