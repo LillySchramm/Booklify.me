@@ -1,4 +1,9 @@
-<app-header></app-header>
-<div>
-    <router-outlet></router-outlet>
+<app-header class="fixed z-50 w-full"></app-header>
+
+<div class="flex min-h-screen w-full flex-col">
+    <div class="mb-4 h-16"></div>
+    <div class="flex flex-grow">
+        <router-outlet></router-outlet>
+    </div>
+    <div class="mb-4 h-8"></div>
 </div>

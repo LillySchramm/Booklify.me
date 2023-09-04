@@ -1,0 +1,23 @@
+<div *transloco="let t" class="h-full">
+    <form [formGroup]="form" class="flex h-full flex-col p-4">
+        <mat-form-field color="accent">
+            <mat-label>{{ t('login.email') }}</mat-label>
+            <input matInput type="email" formControlName="email" required />
+        </mat-form-field>
+
+        <mat-form-field color="accent">
+            <mat-label>{{ t('login.password') }}</mat-label>
+            <input
+                matInput
+                type="password"
+                formControlName="password"
+                required
+            />
+        </mat-form-field>
+        <span class="flex-grow"></span>
+        <button mat-flat-button color="accent" class="mb-2">
+            {{ t('login.login') }}
+        </button>
+        <button mat-flat-button>{{ t('login.forgot') }}</button>
+    </form>
+</div>

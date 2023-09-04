@@ -4,9 +4,23 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+    height: 100%;
+}
+body {
+    margin: 0;
+    font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
 
 i {
     display: block !important;
+}
+
+.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field
+    .mdc-notched-outline__notch {
+    border-right-style: hidden;
+}
+.mat-mdc-input-element {
+    box-shadow: none !important;
 }

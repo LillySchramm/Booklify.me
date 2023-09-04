@@ -1,5 +1,13 @@
 {
-    "app": {
-        "name": "Booklify"
-    }
+  "app": {
+    "name": "Booklify"
+  },
+  "login": {
+    "email": "E-Mail",
+    "password": "Password",
+    "login": "Login",
+    "forgot": "Forgot Password",
+    "signup": "Signup",
+    "repeat-password": "Repeat Password"
+  }
 }
