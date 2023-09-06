@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { TranslocoModule } from '@ngneat/transloco';
 import { CustomValidators } from 'src/app/common/validators/validators';
@@ -24,11 +25,15 @@ import { FormErrorPipe } from 'src/app/pipes/form-error.pipe';
         MatButtonModule,
         TranslocoModule,
         FormErrorPipe,
+        MatIconModule,
     ],
     templateUrl: './signup-form.component.html',
     styleUrls: ['./signup-form.component.scss'],
 })
 export class SignupFormComponent {
+    hide1 = true;
+    hide2 = true;
+
     public form = new FormGroup({
         email: new FormControl('', [Validators.required, Validators.email]),
         username: new FormControl('', [

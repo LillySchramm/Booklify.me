@@ -20,10 +20,15 @@
             <mat-label>{{ t('login.password') }}</mat-label>
             <input
                 matInput
-                type="password"
+                [type]="hide1 ? 'password' : 'text'"
                 formControlName="password1"
                 required
             />
+            <button mat-icon-button matSuffix (click)="hide1 = !hide1">
+                <mat-icon>{{
+                    hide1 ? 'visibility_off' : 'visibility'
+                }}</mat-icon>
+            </button>
             <mat-error *ngIf="form.get('password1')?.invalid">{{
                 form.get('password1')?.errors | formError
             }}</mat-error>
@@ -33,10 +38,15 @@
             <mat-label>{{ t('login.repeat-password') }}</mat-label>
             <input
                 matInput
-                type="password"
+                [type]="hide2 ? 'password' : 'text'"
                 formControlName="password2"
                 required
             />
+            <button mat-icon-button matSuffix (click)="hide2 = !hide2">
+                <mat-icon>{{
+                    hide2 ? 'visibility_off' : 'visibility'
+                }}</mat-icon>
+            </button>
             <mat-error *ngIf="form.get('password2')?.invalid">{{
                 form.get('password2')?.errors | formError
             }}</mat-error>
