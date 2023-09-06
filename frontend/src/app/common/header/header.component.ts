@@ -8,7 +8,13 @@ import { TranslocoModule } from '@ngneat/transloco';
 @Component({
     selector: 'app-header',
     standalone: true,
-    imports: [CommonModule, MatToolbarModule, MatButtonModule, TranslocoModule, RouterModule],
+    imports: [
+        CommonModule,
+        MatToolbarModule,
+        MatButtonModule,
+        TranslocoModule,
+        RouterModule,
+    ],
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
 })

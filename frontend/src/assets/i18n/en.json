@@ -10,5 +10,18 @@
     "signup": "Signup",
     "repeat-password": "Repeat Password",
     "username": "Username"
+  },
+  "form-errors": {
+    "required": "This field is required",
+    "email": "Not a valid E-Mail",
+    "usernameMinLength": "Minimum 3 characters",
+    "usernameMaxLength": "Maximum 25 characters",
+    "passwordsNotEqual": "Passwords do not match",
+    "usernameRegex": "Allowed characters: a-Z, 0-9, _",
+    "passwordMinLength": "Minimum 8 characters",
+    "passwordContainsLowercase": "At least one lowercase character",
+    "passwordContainsUppercase": "At least one uppercase character",
+    "passwordContainsNumber": "At least one number",
+    "passwordContainsSpecialCharacter": "At least one special character"
   }
 }

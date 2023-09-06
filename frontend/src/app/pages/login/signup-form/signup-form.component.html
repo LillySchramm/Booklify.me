@@ -3,11 +3,17 @@
         <mat-form-field color="accent">
             <mat-label>{{ t('login.email') }}</mat-label>
             <input matInput type="email" formControlName="email" required />
+            <mat-error *ngIf="form.get('email')?.invalid">{{
+                form.get('email')?.errors | formError
+            }}</mat-error>
         </mat-form-field>
 
         <mat-form-field color="accent">
             <mat-label>{{ t('login.username') }}</mat-label>
-            <input matInput type="email" formControlName="email" required />
+            <input matInput type="text" formControlName="username" required />
+            <mat-error *ngIf="form.get('username')?.invalid">{{
+                form.get('username')?.errors | formError
+            }}</mat-error>
         </mat-form-field>
 
         <mat-form-field color="accent">
@@ -18,6 +24,9 @@
                 formControlName="password1"
                 required
             />
+            <mat-error *ngIf="form.get('password1')?.invalid">{{
+                form.get('password1')?.errors | formError
+            }}</mat-error>
         </mat-form-field>
 
         <mat-form-field color="accent">
@@ -28,9 +37,17 @@
                 formControlName="password2"
                 required
             />
+            <mat-error *ngIf="form.get('password2')?.invalid">{{
+                form.get('password2')?.errors | formError
+            }}</mat-error>
         </mat-form-field>
 
-        <button mat-flat-button color="accent" class="mb-2">
+        <button
+            mat-flat-button
+            color="accent"
+            class="mb-2"
+            [disabled]="form.invalid"
+        >
             {{ t('login.signup') }}
         </button>
     </form>
