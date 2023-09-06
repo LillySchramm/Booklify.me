@@ -11,7 +11,7 @@ export class SignUpDto {
     @ApiProperty({ example: 'lillychan', maxLength: 25 })
     @IsString()
     @Length(3, 25)
-    @Matches(/^([a-zA-Z,\._\-0-9])*$/)
+    @Matches(/^([a-zA-Z\._\-0-9])*$/)
     name: string;
 
     @ApiProperty({ example: 'me@example.com', maxLength: 50 })
