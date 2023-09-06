@@ -8,6 +8,7 @@
     "login": "Login",
     "forgot": "Forgot Password",
     "signup": "Signup",
-    "repeat-password": "Repeat Password"
+    "repeat-password": "Repeat Password",
+    "username": "Username"
   }
 }

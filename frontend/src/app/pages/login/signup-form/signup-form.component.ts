@@ -23,6 +23,7 @@ import { TranslocoModule } from '@ngneat/transloco';
 export class SignupFormComponent {
     form = new FormGroup({
         email: new FormControl(''),
+        username: new FormControl(''),
         password1: new FormControl(''),
         password2: new FormControl(''),
     });

@@ -6,6 +6,11 @@
         </mat-form-field>
 
         <mat-form-field color="accent">
+            <mat-label>{{ t('login.username') }}</mat-label>
+            <input matInput type="email" formControlName="email" required />
+        </mat-form-field>
+
+        <mat-form-field color="accent">
             <mat-label>{{ t('login.password') }}</mat-label>
             <input
                 matInput
