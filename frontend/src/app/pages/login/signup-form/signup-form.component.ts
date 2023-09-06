@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
     FormControl,
     FormGroup,
@@ -11,9 +12,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { TranslocoModule } from '@ngneat/transloco';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { CustomValidators } from 'src/app/common/validators/validators';
 import { FormErrorPipe } from 'src/app/pipes/form-error.pipe';
+import { UserActions } from 'src/app/state/user/user.actions';
+import { UserState } from 'src/app/state/user/user.state';
 
+@UntilDestroy()
 @Component({
     selector: 'app-signup-form',
     standalone: true,
@@ -30,7 +37,10 @@ import { FormErrorPipe } from 'src/app/pipes/form-error.pipe';
     templateUrl: './signup-form.component.html',
     styleUrls: ['./signup-form.component.scss'],
 })
-export class SignupFormComponent {
+export class SignupFormComponent implements OnInit {
+    @Select(UserState.signUpDisabled) signUpDisabled$!: Observable<boolean>;
+    $signUpDisabled = toSignal(this.signUpDisabled$);
+
     hide1 = true;
     hide2 = true;
 
@@ -53,11 +63,37 @@ export class SignupFormComponent {
         password2: new FormControl('', [Validators.required]),
     });
 
-    constructor() {
+    constructor(private readonly store: Store) {
         this.form
             .get('password2')
             ?.setValidators(
                 CustomValidators.passwordsNotEqualValidator(() => this.form),
             );
+    }
+
+    ngOnInit(): void {
+        this.signUpDisabled$
+            .pipe(untilDestroyed(this))
+            .subscribe((disabled) => {
+                if (disabled) {
+                    this.form.disable();
+                } else {
+                    this.form.enable();
+                }
+            });
+    }
+
+    public onSubmit(): void {
+        if (!this.form.valid) {
+            return;
+        }
+
+        this.store.dispatch(
+            new UserActions.SignUp({
+                email: this.form.get('email')!.value!,
+                name: this.form.get('username')!.value!,
+                password: this.form.get('password1')!.value!,
+            }),
+        );
     }
 }

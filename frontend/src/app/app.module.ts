@@ -4,10 +4,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
+import { NgxsModule } from '@ngxs/store';
 import { ApiModule, Configuration } from './api';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './common/header/header.component';
+import { UserState } from './state/user/user.state';
 import { TranslocoRootModule } from './transloco-root.module';
 
 @NgModule({
@@ -20,6 +24,9 @@ import { TranslocoRootModule } from './transloco-root.module';
         HttpClientModule,
         HeaderComponent,
         TranslocoRootModule,
+        NgxsModule.forRoot([UserState]),
+        NgxsReduxDevtoolsPluginModule.forRoot(),
+        NgxsLoggerPluginModule.forRoot(),
     ],
     providers: [
         {

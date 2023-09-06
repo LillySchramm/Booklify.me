@@ -56,7 +56,8 @@
             mat-flat-button
             color="accent"
             class="mb-2"
-            [disabled]="form.invalid"
+            [disabled]="form.invalid || form.pristine || $signUpDisabled()"
+            (click)="onSubmit()"
         >
             {{ t('login.signup') }}
         </button>
