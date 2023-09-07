@@ -17,7 +17,12 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+    ApiBearerAuth,
+    ApiOkResponse,
+    ApiQuery,
+    ApiTags,
+} from '@nestjs/swagger';
 import { UserDto } from 'src/users/dto/user.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { UsersService } from 'src/users/users.service';
@@ -146,8 +151,23 @@ export class AuthController {
         await this.userService.createUserVerification(user);
     }
 
-    @ApiOkResponse()
     @Get('verify')
+    @ApiOkResponse()
+    @ApiQuery({
+        name: 'user_id',
+        type: String,
+        required: true,
+    })
+    @ApiQuery({
+        name: 'key',
+        type: String,
+        required: true,
+    })
+    @ApiQuery({
+        name: 'id',
+        type: String,
+        required: true,
+    })
     async verify(
         @Query('user_id', new ParseUUIDPipe()) userId: string,
         @Query('key') key: string,

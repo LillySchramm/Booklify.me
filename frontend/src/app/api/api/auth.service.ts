@@ -1028,29 +1028,83 @@ export class AuthService {
     }
 
     /**
+     * @param userId
+     * @param key
+     * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
     public authControllerVerify(
+        userId: string,
+        key: string,
+        id: string,
         observe?: 'body',
         reportProgress?: boolean,
         options?: { httpHeaderAccept?: undefined; context?: HttpContext },
     ): Observable<any>;
     public authControllerVerify(
+        userId: string,
+        key: string,
+        id: string,
         observe?: 'response',
         reportProgress?: boolean,
         options?: { httpHeaderAccept?: undefined; context?: HttpContext },
     ): Observable<HttpResponse<any>>;
     public authControllerVerify(
+        userId: string,
+        key: string,
+        id: string,
         observe?: 'events',
         reportProgress?: boolean,
         options?: { httpHeaderAccept?: undefined; context?: HttpContext },
     ): Observable<HttpEvent<any>>;
     public authControllerVerify(
+        userId: string,
+        key: string,
+        id: string,
         observe: any = 'body',
         reportProgress: boolean = false,
         options?: { httpHeaderAccept?: undefined; context?: HttpContext },
     ): Observable<any> {
+        if (userId === null || userId === undefined) {
+            throw new Error(
+                'Required parameter userId was null or undefined when calling authControllerVerify.',
+            );
+        }
+        if (key === null || key === undefined) {
+            throw new Error(
+                'Required parameter key was null or undefined when calling authControllerVerify.',
+            );
+        }
+        if (id === null || id === undefined) {
+            throw new Error(
+                'Required parameter id was null or undefined when calling authControllerVerify.',
+            );
+        }
+
+        let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
+        if (userId !== undefined && userId !== null) {
+            localVarQueryParameters = this.addToHttpParams(
+                localVarQueryParameters,
+                <any>userId,
+                'user_id',
+            );
+        }
+        if (key !== undefined && key !== null) {
+            localVarQueryParameters = this.addToHttpParams(
+                localVarQueryParameters,
+                <any>key,
+                'key',
+            );
+        }
+        if (id !== undefined && id !== null) {
+            localVarQueryParameters = this.addToHttpParams(
+                localVarQueryParameters,
+                <any>id,
+                'id',
+            );
+        }
+
         let localVarHeaders = this.defaultHeaders;
 
         let localVarHttpHeaderAcceptSelected: string | undefined =
@@ -1093,6 +1147,7 @@ export class AuthService {
             `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
