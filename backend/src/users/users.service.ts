@@ -11,7 +11,7 @@ const VERIFICATION_EMAIL_CONTENT = `
 <h1>Verify your Booklify Account</h1>
 <p>Hey $username, thank you for creating your account.</p>
 <p>To complete your signup, please verify your E-Mail by clicking on the link below.</p>
-<a href="$host/auth/verify?id=$id&user_id=$userId&key=$key">$host/auth/verify?id=$id&user_id=$userId&key=$key</a>
+<a href="$host/verify?id=$id&user_id=$userId&key=$key">$host/verify?id=$id&user_id=$userId&key=$key</a>
 <p>- Booklify.me</p>
 `;
 

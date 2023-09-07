@@ -1,5 +1,5 @@
 {
-    "url": "http://localhost:3000",
+    "url": "http://localhost:4200",
     "disable_registration": false,
     "db": {
         "url": "postgresql://uwu:owo@localhost:5432/mangalist?schema=public"
