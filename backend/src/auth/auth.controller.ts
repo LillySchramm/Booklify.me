@@ -13,6 +13,7 @@ import {
     Logger,
     NotFoundException,
     UnauthorizedException,
+    ParseUUIDPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
@@ -147,20 +148,19 @@ export class AuthController {
 
     @ApiOkResponse()
     @Get('verify')
-    async verify(@Query() query: any) {
-        if (!query.user_id || !query.key || !query.id)
-            throw new BadRequestException();
+    async verify(
+        @Query('user_id', new ParseUUIDPipe()) userId: string,
+        @Query('key') key: string,
+        @Query('id', new ParseUUIDPipe()) id: string,
+    ) {
+        if (!userId || !key || !id) throw new BadRequestException();
 
-        const user = await this.userService.findById(query.user_id);
+        const user = await this.userService.findById(userId);
         if (!user) throw new NotFoundException('User not found');
         if (user.activated)
             throw new BadRequestException('User already activated');
 
-        const ok = await this.userService.validateVerification(
-            query.id,
-            query.user_id,
-            query.key,
-        );
+        const ok = await this.userService.validateVerification(id, userId, key);
 
         if (!ok) throw new UnauthorizedException();
 
