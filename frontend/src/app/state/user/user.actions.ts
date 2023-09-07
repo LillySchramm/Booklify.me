@@ -23,4 +23,21 @@ export namespace UserActions {
     export class ResendConfirmationSuccess {
         static readonly type = '[User] Resend Confirmation Success';
     }
+
+    export class VerifyEmail {
+        static readonly type = '[User] Verify Email';
+        constructor(
+            public userId: string,
+            public key: string,
+            public id: string,
+        ) {}
+    }
+
+    export class VerifyEmailSuccess {
+        static readonly type = '[User] Verify Email Success';
+    }
+
+    export class VerifyEmailError {
+        static readonly type = '[User] Verify Email Error';
+    }
 }

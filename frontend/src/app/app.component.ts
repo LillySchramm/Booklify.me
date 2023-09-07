@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackBarService } from './common/services/snack-bar.service';
 
 @Component({
     selector: 'app-root',
@@ -6,5 +8,16 @@ import { Component } from '@angular/core';
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-    title = 'frontend';
+    constructor(
+        private snackBar: SnackBarService,
+        private _snackBar: MatSnackBar,
+    ) {
+        this.snackBar.message$.subscribe((message) => {
+            this._snackBar.open(
+                message.message,
+                message.action,
+                message.config,
+            );
+        });
+    }
 }

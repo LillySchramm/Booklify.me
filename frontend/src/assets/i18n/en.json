@@ -29,5 +29,9 @@
     "text": "The SignUp was successful! Please verify your email. We have send a confirmation E-Mail to '<b>{{ email }}</b>'. ",
     "resend-text": "If you haven't received the E-Mail after a few minutes you can click the button below to resend it. Please also check your junk folder. ",
     "resend": "Resend E-Mail"
+  },
+  "verifyEmail": {
+    "success": "Your E-Mail has been verified! Login to begin your cozy adventure.",
+    "error": "There was an error during the verification"
   }
 }

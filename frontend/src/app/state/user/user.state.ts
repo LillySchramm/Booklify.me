@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslocoService } from '@ngneat/transloco';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs';
 import { AuthService, UserDto } from 'src/app/api';
+import { SnackBarService } from 'src/app/common/services/snack-bar.service';
 import { UserActions } from './user.actions';
 
 interface UserStateModel {
@@ -29,6 +31,8 @@ export class UserState {
     constructor(
         private authApi: AuthService,
         private router: Router,
+        private snack: SnackBarService,
+        private transloco: TranslocoService,
     ) {}
 
     @Action(UserActions.SignUp)
@@ -111,6 +115,30 @@ export class UserState {
                 error: action.error,
             },
         });
+    }
+
+    @Action(UserActions.VerifyEmail)
+    verify(ctx: StateContext<UserStateModel>, action: UserActions.VerifyEmail) {
+        return this.authApi
+            .authControllerVerify(action.userId, action.key, action.id)
+            .pipe(
+                tap(() => ctx.dispatch(new UserActions.VerifyEmailSuccess())),
+                catchError(() =>
+                    ctx.dispatch(new UserActions.VerifyEmailError()),
+                ),
+            );
+    }
+
+    @Action(UserActions.VerifyEmailSuccess)
+    verifySuccess() {
+        this.snack.show(this.transloco.translate('verifyEmail.success'));
+        this.router.navigate(['login']);
+    }
+
+    @Action(UserActions.VerifyEmailError)
+    verifyError() {
+        this.snack.show(this.transloco.translate('verifyEmail.error'));
+        this.router.navigate(['login']);
     }
 
     @Selector()
