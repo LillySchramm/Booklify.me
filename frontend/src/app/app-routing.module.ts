@@ -9,6 +9,20 @@ const routes: Routes = [
                 (m) => m.LoginComponent,
             ),
     },
+    {
+        path: 'signup-success',
+        loadComponent: () =>
+            import('./pages/signup-success/signup-success.component').then(
+                (m) => m.SignupSuccessComponent,
+            ),
+    },
+    {
+        path: 'verify-email',
+        loadComponent: () =>
+            import('./pages/verify-email/verify-email.component').then(
+                (m) => m.VerifyEmailComponent,
+            ),
+    },
 ];
 
 @NgModule({

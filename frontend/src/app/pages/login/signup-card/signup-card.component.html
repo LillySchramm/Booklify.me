@@ -5,4 +5,12 @@
     <mat-card-content>
         <app-signup-form></app-signup-form>
     </mat-card-content>
+    <mat-card-footer>
+        <mat-progress-bar
+            mode="indeterminate"
+            class="rounded-xl"
+            *ngIf="$signUpInProgress(); else filler"
+        ></mat-progress-bar>
+        <ng-template #filler><div class="mb-1"></div></ng-template>
+    </mat-card-footer>
 </mat-card>

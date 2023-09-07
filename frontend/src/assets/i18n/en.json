@@ -23,5 +23,11 @@
     "passwordContainsUppercase": "At least one uppercase character",
     "passwordContainsNumber": "At least one number",
     "passwordContainsSpecialCharacter": "At least one special character"
+  },
+  "signup-success": {
+    "title": "Verify your E-Mail",
+    "text": "The SignUp was successful! Please verify your email. We have send a confirmation E-Mail to '<b>{{ email }}</b>'. ",
+    "resend-text": "If you haven't received the E-Mail after a few minutes you can click the button below to resend it. Please also check your junk folder. ",
+    "resend": "Resend E-Mail"
   }
 }

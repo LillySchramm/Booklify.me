@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { catchError, tap } from 'rxjs';
 import { AuthService, UserDto } from 'src/app/api';
@@ -8,6 +9,7 @@ interface UserStateModel {
     currentUser?: UserDto;
     signup: {
         loading: boolean;
+        resending: boolean;
         success?: boolean;
         error?: string;
     };
@@ -18,17 +20,22 @@ interface UserStateModel {
     defaults: {
         signup: {
             loading: false,
+            resending: false,
         },
     },
 })
 @Injectable()
 export class UserState {
-    constructor(private authApi: AuthService) {}
+    constructor(
+        private authApi: AuthService,
+        private router: Router,
+    ) {}
 
     @Action(UserActions.SignUp)
     loadUser(ctx: StateContext<UserStateModel>, action: UserActions.SignUp) {
         ctx.patchState({
             signup: {
+                ...ctx.getState().signup,
                 loading: true,
             },
         });
@@ -41,20 +48,57 @@ export class UserState {
         );
     }
 
+    @Action(UserActions.ResendConfirmation)
+    resend(ctx: StateContext<UserStateModel>) {
+        const userId = ctx.getState().currentUser?.id;
+        if (!userId) return;
+
+        ctx.patchState({
+            signup: {
+                ...ctx.getState().signup,
+                resending: true,
+            },
+        });
+
+        return this.authApi
+            .authControllerResend(userId)
+            .pipe(
+                tap(() =>
+                    ctx.dispatch(new UserActions.ResendConfirmationSuccess()),
+                ),
+            );
+    }
+
+    @Action(UserActions.ResendConfirmationSuccess)
+    resendSuccess(ctx: StateContext<UserStateModel>) {
+        const userId = ctx.getState().currentUser?.id;
+        if (!userId) return;
+
+        ctx.patchState({
+            signup: {
+                ...ctx.getState().signup,
+                resending: false,
+            },
+        });
+    }
+
     @Action(UserActions.SignUpSuccess)
-    loadedUser(
+    signUpSuccess(
         ctx: StateContext<UserStateModel>,
         action: UserActions.SignUpSuccess,
     ) {
         ctx.patchState({
             signup: {
+                ...ctx.getState().signup,
                 loading: false,
                 success: true,
+                error: undefined,
             },
             currentUser: action.user,
         });
-    }
 
+        this.router.navigate(['signup-success']);
+    }
     @Action(UserActions.SignUpError)
     loadedUserError(
         ctx: StateContext<UserStateModel>,
@@ -62,6 +106,7 @@ export class UserState {
     ) {
         ctx.patchState({
             signup: {
+                ...ctx.getState().signup,
                 loading: false,
                 error: action.error,
             },
@@ -71,6 +116,16 @@ export class UserState {
     @Selector()
     static currentUser(state: UserStateModel) {
         return state.currentUser;
+    }
+
+    @Selector()
+    static currentUserEmail(state: UserStateModel) {
+        return state.currentUser?.email;
+    }
+
+    @Selector()
+    static resending(state: UserStateModel) {
+        return state.signup.resending;
     }
 
     @Selector()

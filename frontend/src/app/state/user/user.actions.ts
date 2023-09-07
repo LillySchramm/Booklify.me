@@ -15,4 +15,12 @@ export namespace UserActions {
         static readonly type = '[User] Sign Up Error';
         constructor(public error: string) {}
     }
+
+    export class ResendConfirmation {
+        static readonly type = '[User] Resend Confirmation';
+    }
+
+    export class ResendConfirmationSuccess {
+        static readonly type = '[User] Resend Confirmation Success';
+    }
 }
