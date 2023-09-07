@@ -13,7 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { TranslocoModule } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { Select, Store } from '@ngxs/store';
+import { Actions, Select, Store, ofActionDispatched } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { CustomValidators } from 'src/app/common/validators/validators';
 import { FormErrorPipe } from 'src/app/pipes/form-error.pipe';
@@ -63,12 +63,18 @@ export class SignupFormComponent implements OnInit {
         password2: new FormControl('', [Validators.required]),
     });
 
-    constructor(private readonly store: Store) {
+    constructor(
+        private readonly store: Store,
+        private actions$: Actions,
+    ) {
         this.form
             .get('password2')
             ?.setValidators(
                 CustomValidators.passwordsNotEqualValidator(() => this.form),
             );
+        this.actions$
+            .pipe(ofActionDispatched(UserActions.VerifyEmailSuccess))
+            .subscribe(() => this.form.reset(undefined, { emitEvent: false }));
     }
 
     ngOnInit(): void {

@@ -45,7 +45,18 @@ export class UserState {
         });
 
         return this.authApi.authControllerSignUp(action.user).pipe(
-            tap((user) => ctx.dispatch(new UserActions.SignUpSuccess(user))),
+            tap((user) => {
+                if (user.activated) {
+                    ctx.dispatch(new UserActions.VerifyEmailSuccess());
+                    ctx.setState({
+                        signup: {
+                            loading: false,
+                            resending: false,
+                        },
+                        currentUser: undefined,
+                    });
+                } else ctx.dispatch(new UserActions.SignUpSuccess(user));
+            }),
             catchError((error) =>
                 ctx.dispatch(new UserActions.SignUpError(error)),
             ),
