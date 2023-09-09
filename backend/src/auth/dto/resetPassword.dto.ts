@@ -15,7 +15,7 @@ export class ResetPasswordDto implements PasswordResetRequest {
     updatedAt: Date;
     @ApiProperty()
     userId: string;
-    @ApiProperty()
+    @Exclude()
     token: string;
 
     constructor(partial: Partial<ResetPasswordDto>) {
