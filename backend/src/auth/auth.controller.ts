@@ -110,7 +110,7 @@ export class AuthController {
     async requestResetPassword(@Body() body: ResetPasswordRequestDto) {
         const user = await this.userService.findByEmail(body.email);
         if (!user) {
-            return new NotFoundException('User not found.');
+            throw new NotFoundException('User not found.');
         }
 
         const resetRequest = await this.userService.createPasswordResetRequest(
