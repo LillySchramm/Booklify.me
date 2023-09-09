@@ -15,6 +15,10 @@ interface UserStateModel {
         success?: boolean;
         error?: string;
     };
+    signin: {
+        loading: boolean;
+        error?: string;
+    };
 }
 
 @State<UserStateModel>({
@@ -23,6 +27,9 @@ interface UserStateModel {
         signup: {
             loading: false,
             resending: false,
+        },
+        signin: {
+            loading: false,
         },
     },
 })
@@ -36,7 +43,7 @@ export class UserState {
     ) {}
 
     @Action(UserActions.SignUp)
-    loadUser(ctx: StateContext<UserStateModel>, action: UserActions.SignUp) {
+    signUp(ctx: StateContext<UserStateModel>, action: UserActions.SignUp) {
         ctx.patchState({
             signup: {
                 ...ctx.getState().signup,
@@ -53,6 +60,7 @@ export class UserState {
                             loading: false,
                             resending: false,
                         },
+                        signin: { loading: false },
                         currentUser: undefined,
                     });
                 } else ctx.dispatch(new UserActions.SignUpSuccess(user));
@@ -61,6 +69,43 @@ export class UserState {
                 ctx.dispatch(new UserActions.SignUpError(error.error.message)),
             ),
         );
+    }
+
+    @Action(UserActions.SignIn)
+    signIn(ctx: StateContext<UserStateModel>, action: UserActions.SignIn) {
+        ctx.patchState({
+            signin: {
+                ...ctx.getState().signin,
+                loading: true,
+            },
+        });
+
+        return this.authApi.authControllerSignIn(action.user).pipe(
+            tap((user) => ctx.dispatch(new UserActions.SignInSuccess(user))),
+            catchError((error) =>
+                ctx.dispatch(new UserActions.SignInError(error.error.message)),
+            ),
+        );
+    }
+
+    @Action(UserActions.SignInSuccess)
+    signInSuccess(
+        ctx: StateContext<UserStateModel>,
+        action: UserActions.SignInSuccess,
+    ) {
+        ctx.patchState({
+            signin: {
+                ...ctx.getState().signin,
+                loading: false,
+                error: undefined,
+            },
+        });
+
+        localStorage.setItem('accessToken', action.response.accessToken);
+        this.snack.show('Login successful. Welcome back!');
+
+        // TODO: navigate to home page
+        // this.router.navigate(['']);
     }
 
     @Action(UserActions.ResendConfirmation)
@@ -114,6 +159,7 @@ export class UserState {
 
         this.router.navigate(['signup-success']);
     }
+
     @Action(UserActions.SignUpError)
     signUpError(
         ctx: StateContext<UserStateModel>,
@@ -123,6 +169,21 @@ export class UserState {
         ctx.patchState({
             signup: {
                 ...ctx.getState().signup,
+                loading: false,
+                error: action.error,
+            },
+        });
+    }
+
+    @Action(UserActions.SignInError)
+    signInError(
+        ctx: StateContext<UserStateModel>,
+        action: UserActions.SignInError,
+    ) {
+        this.snack.show('Wrong credentials please try again.');
+        ctx.patchState({
+            signin: {
+                ...ctx.getState().signin,
                 loading: false,
                 error: action.error,
             },
@@ -171,6 +232,11 @@ export class UserState {
     @Selector()
     static signUpInProgress(state: UserStateModel): boolean {
         return state.signup.loading;
+    }
+
+    @Selector()
+    static signInInProgress(state: UserStateModel): boolean {
+        return state.signin.loading;
     }
 
     @Selector()

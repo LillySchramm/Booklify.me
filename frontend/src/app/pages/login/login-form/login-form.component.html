@@ -3,19 +3,36 @@
         <mat-form-field color="accent">
             <mat-label>{{ t('login.email') }}</mat-label>
             <input matInput type="email" formControlName="email" required />
+            <mat-error *ngIf="form.get('email')?.invalid">{{
+                form.get('email')?.errors | formError
+            }}</mat-error>
         </mat-form-field>
 
         <mat-form-field color="accent">
             <mat-label>{{ t('login.password') }}</mat-label>
             <input
                 matInput
-                type="password"
+                [type]="hide ? 'password' : 'text'"
                 formControlName="password"
                 required
             />
+            <button mat-icon-button matSuffix (click)="hide = !hide">
+                <mat-icon>{{
+                    hide ? 'visibility_off' : 'visibility'
+                }}</mat-icon>
+            </button>
+            <mat-error *ngIf="form.get('password')?.invalid">{{
+                form.get('password')?.errors | formError
+            }}</mat-error>
         </mat-form-field>
         <span class="flex-grow"></span>
-        <button mat-flat-button color="accent" class="mb-2">
+        <button
+            mat-flat-button
+            color="accent"
+            class="mb-2"
+            (click)="submit()"
+            [disabled]="$signInDisabled() || form.invalid || form.pristine"
+        >
             {{ t('login.login') }}
         </button>
         <button mat-flat-button>{{ t('login.forgot') }}</button>
