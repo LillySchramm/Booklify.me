@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './common/guards/auth.guard';
 const routes: Routes = [
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
+    { path: '', redirectTo: '/home', pathMatch: 'full' },
     {
         path: 'login',
         loadComponent: () =>
@@ -22,6 +23,12 @@ const routes: Routes = [
             import('./pages/verify-email/verify-email.component').then(
                 (m) => m.VerifyEmailComponent,
             ),
+    },
+    {
+        path: 'home',
+        canActivate: [AuthGuard],
+        loadComponent: () =>
+            import('./pages/home/home.component').then((m) => m.HomeComponent),
     },
 ];
 

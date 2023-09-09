@@ -104,8 +104,7 @@ export class UserState {
         localStorage.setItem('accessToken', action.response.accessToken);
         this.snack.show('Login successful. Welcome back!');
 
-        // TODO: navigate to home page
-        // this.router.navigate(['']);
+        this.router.navigate(['']);
     }
 
     @Action(UserActions.ResendConfirmation)
