@@ -57,6 +57,7 @@ export class AuthController {
             signInDto.email,
             signInDto.password,
             request.headers['user-agent'] || '',
+            signInDto.permanent,
         );
     }
 
@@ -78,6 +79,26 @@ export class AuthController {
             request.user,
             request.session,
         );
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ type: UserTokenDto })
+    @Get('refresh')
+    async refreshToken(
+        @Request() request: any,
+        @Query('token') token: string,
+        @Query('session_id') sessionId: string,
+    ): Promise<UserTokenDto> {
+        if (!token || !sessionId) throw new BadRequestException();
+
+        const session = await this.authService.verifyRefreshToken(
+            sessionId,
+            token,
+        );
+        const user = await this.userService.findById(session.userId);
+        if (!user) throw new NotFoundException('User not found');
+
+        return await this.authService.createNewToken(user, session);
     }
 
     @ApiOkResponse({ type: UserDto })

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail } from 'class-validator';
+import { IsBoolean, IsEmail } from 'class-validator';
 
 export class SignInDto {
     @ApiProperty({ example: 'me@example.com', maxLength: 50 })
@@ -11,6 +11,13 @@ export class SignInDto {
         maxLength: 50,
     })
     password: string;
+
+    @ApiProperty({
+        example: true,
+        description: 'Whether to create a permanent session',
+    })
+    @IsBoolean()
+    permanent: boolean;
 
     constructor(partial: Partial<SignInDto>) {
         Object.assign(this, partial);

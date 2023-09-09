@@ -9,6 +9,8 @@ import * as bcrypt from 'bcrypt';
 import { Session, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SecretsService } from 'src/secrets/secrets.service';
+import { randomBytes } from 'node:crypto';
+import { saltRounds } from './constants';
 
 export interface UserToken {
     accessToken: string;
@@ -27,6 +29,7 @@ export class AuthService {
         email: string,
         password: string,
         clientName: string,
+        permanent: boolean,
     ): Promise<UserToken> {
         const user = await this.usersService.findByEmail(email);
 
@@ -36,19 +39,58 @@ export class AuthService {
         const passwordOk = await bcrypt.compare(password, user.password);
         if (!passwordOk) throw new UnauthorizedException();
 
-        const session = await this.createSession(user.id, clientName);
+        const session = await this.createSession(
+            user.id,
+            clientName,
+            permanent,
+        );
 
         return await this.createNewToken(user, session);
     }
 
+    async setRefreshToken(sessionId: string): Promise<string> {
+        const refreshToken = randomBytes(40).toString('hex');
+        const refreshTokenHash = await bcrypt.hash(refreshToken, saltRounds);
+
+        await this.prisma.session.update({
+            data: { refreshToken: refreshTokenHash },
+            where: { id: sessionId },
+        });
+
+        return refreshToken;
+    }
+
+    async verifyRefreshToken(
+        sessionId: string,
+        refreshToken: string,
+    ): Promise<Session> {
+        const session = await this.findValidSession(sessionId);
+        if (!session || !session.permanent || !session.refreshToken)
+            throw new UnauthorizedException();
+
+        const refreshTokenOk = await bcrypt.compare(
+            refreshToken,
+            session.refreshToken,
+        );
+        if (!refreshTokenOk) throw new UnauthorizedException();
+
+        return session;
+    }
+
     async createNewToken(user: User, session: Session): Promise<UserToken> {
         const privateKey = await this.secretService.getSecret('JWT_PRIVATE');
+
+        let refreshToken = null;
+        if (session.permanent) {
+            refreshToken = await this.setRefreshToken(session.id);
+        }
 
         const payload = {
             sub: user.id,
             name: user.name,
             email: user.email,
             jti: session.id,
+            refreshToken,
         };
         return {
             accessToken: await this.jwtService.signAsync(payload, {
@@ -58,8 +100,14 @@ export class AuthService {
         };
     }
 
-    async createSession(userId: string, name: string): Promise<Session> {
-        return await this.prisma.session.create({ data: { userId, name } });
+    async createSession(
+        userId: string,
+        name: string,
+        permanent: boolean,
+    ): Promise<Session> {
+        return await this.prisma.session.create({
+            data: { userId, name, permanent },
+        });
     }
 
     async invalidateSession(sessionId: string): Promise<void> {
