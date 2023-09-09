@@ -4,6 +4,7 @@ stages:
     - container-build
     - deploy
     - linting
+    - audit
 
 .cache0: &npm-cache
     key: $CI_COMMIT_REF_SLUG-npm
@@ -23,6 +24,25 @@ install_npm_dependencies:
         - yarn
         - cd ../frontend
         - npm i
+
+check_licenses:
+    image: ${DOCKER_CACHE}/node:18-alpine
+    stage: audit
+    artifacts:
+        untracked: false
+        expire_in: 1 day
+        paths:
+            - frontend/licenses.json
+            - backend/licenses.json
+    needs:
+        - install_npm_dependencies
+    cache:
+        <<: *npm-cache
+    script:
+        - cd backend
+        - yarn run licenses
+        - cd ../frontend
+        - npm run licenses
 
 build_backend:
     image: ${DOCKER_CACHE}/node:18

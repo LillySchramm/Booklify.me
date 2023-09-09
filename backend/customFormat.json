@@ -1,0 +1,11 @@
+{
+    "name": true,
+    "version": true,
+    "repository": true,
+    "path": false,
+    "licenseFile": false,
+    "licenseText": true,
+    "copyright": true,
+    "licenses": true,
+    "publisher": true
+}

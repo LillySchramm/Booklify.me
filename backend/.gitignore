@@ -7,3 +7,4 @@ dist
 config/local*.json5
 data
 *.traineddata
+licenses.json

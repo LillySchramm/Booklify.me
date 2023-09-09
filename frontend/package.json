@@ -11,7 +11,8 @@
     "format:check": "prettier --check \"src/**/*.{ts,html,scss}\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "lint:check": "eslint \"{src,apps,libs,test}/**/*.ts\"",
-    "api": "openapi-generator-cli generate -g typescript-angular -i ../backend/swagger-spec.json -o ./src/app/api && npm run format"
+    "api": "openapi-generator-cli generate -g typescript-angular -i ../backend/swagger-spec.json -o ./src/app/api && npm run format",
+    "licenses": "license-checker-rseidelsohn --production --onlyAllow=\"BlueOak-1.0.0;MIT;BSD-3-Clause;Apache-2.0;ISC;Python-2.0;UNLICENSED;CC-BY-4.0;BSD-2-Clause;Apache*;0BSD\" --json --out=\"./licenses.json\" --customPath customFormat.json"
   },
   "private": true,
   "dependencies": {
@@ -53,6 +54,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "license-checker-rseidelsohn": "^4.2.6",
     "postcss": "^8.4.29",
     "prettier": "^3.0.3",
     "prettier-plugin-organize-imports": "^3.2.3",
