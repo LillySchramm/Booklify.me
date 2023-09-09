@@ -9,6 +9,7 @@ export interface TokenInfo {
     iat: number;
     exp: number;
     iss: string;
+    refreshToken: string;
 }
 
 let tokenService: TokenService;
@@ -23,53 +24,71 @@ export function getToken(): string | null {
 export class TokenService {
     private readonly tokenTimeout = 0.5;
 
+    private refreshInProgress = false;
+    private accessToken: string | null = null;
+
     constructor() {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         tokenService = this;
+        this.accessToken = localStorage.getItem('accessToken');
     }
 
     public getToken(): string | null {
-        const accessToken = localStorage.getItem('accessToken');
-        if (accessToken === null) return null;
+        if (this.accessToken === null) return null;
 
-        this.refresh(accessToken).then(() => {});
+        this.refresh().then(() => {});
 
-        return localStorage.getItem('accessToken');
+        return this.accessToken;
     }
 
-    private async refresh(accessToken: string): Promise<void> {
-        const tokenInfo = this.getTokenInfo(accessToken);
+    public setToken(token: string): void {
+        this.accessToken = token;
+        localStorage.setItem('accessToken', token);
+    }
+
+    public async refresh(): Promise<void> {
+        if (this.refreshInProgress || this.accessToken === null) {
+            return;
+        }
+        this.refreshInProgress = true;
+
+        const tokenInfo = this.getTokenInfo(this.accessToken);
         const now = new Date().getTime() / 1000;
         const tokenLife = tokenInfo.exp - tokenInfo.iat;
         const tokenLifeLeft = tokenInfo.exp - now;
 
-        if (tokenInfo.exp < now) {
-            this.deleteToken();
-        }
-
         if (tokenLifeLeft < tokenLife * (1 - this.tokenTimeout)) {
-            const newTokenResponse = await fetch(
-                `${environment.apiUrl}/auth/token`,
-                {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${accessToken}`,
+            let newTokenResponse: Response;
+            if (tokenInfo.refreshToken) {
+                newTokenResponse = await fetch(
+                    `${environment.apiUrl}/auth/refresh?token=${tokenInfo.refreshToken}&session_id=${tokenInfo.jti}`,
+                );
+            } else {
+                newTokenResponse = await fetch(
+                    `${environment.apiUrl}/auth/token`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${this.accessToken}`,
+                        },
                     },
-                },
-            );
+                );
+            }
 
             if (newTokenResponse.ok) {
                 const newToken = await newTokenResponse.json();
-                localStorage.setItem('accessToken', newToken.accessToken);
+                this.setToken(newToken.accessToken);
             } else {
                 this.deleteToken();
             }
         }
+        this.refreshInProgress = false;
     }
 
     public deleteToken(): void {
         localStorage.removeItem('accessToken');
+        this.accessToken = null;
     }
 
     public getTokenInfo(accessToken: string): TokenInfo {

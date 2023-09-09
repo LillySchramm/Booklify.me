@@ -15,4 +15,5 @@ export interface SessionDto {
     userId: string;
     name: string;
     createdAt: string;
+    permanent: boolean;
 }

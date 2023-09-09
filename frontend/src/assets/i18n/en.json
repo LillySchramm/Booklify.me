@@ -9,7 +9,8 @@
     "forgot": "Forgot Password",
     "signup": "Signup",
     "repeat-password": "Repeat Password",
-    "username": "Username"
+    "username": "Username",
+    "rememberMe": "Remember Me"
   },
   "form-errors": {
     "required": "This field is required",

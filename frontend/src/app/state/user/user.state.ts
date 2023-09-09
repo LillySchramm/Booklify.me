@@ -126,7 +126,7 @@ export class UserState {
             },
         });
 
-        localStorage.setItem('accessToken', action.response.accessToken);
+        this.token.setToken(action.response.accessToken);
         this.snack.show('Login successful. Welcome back!');
 
         this.router.navigate(['']);

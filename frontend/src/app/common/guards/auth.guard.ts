@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { Observable, catchError, map, of, take } from 'rxjs';
+import { Observable, Subject, catchError, map, of, take } from 'rxjs';
 import { AuthService } from 'src/app/api';
 import { UserActions } from 'src/app/state/user/user.actions';
+import { TokenService } from '../services/token.service';
 
 @Injectable({
     providedIn: 'root',
@@ -13,19 +14,31 @@ export class AuthGuard implements CanActivate {
         private auth: AuthService,
         private router: Router,
         private store: Store,
+        private tokenService: TokenService,
     ) {}
 
     canActivate(): Observable<boolean> {
-        return this.auth.authControllerGetSession().pipe(
-            take(1),
-            map((session) => {
-                this.store.dispatch(new UserActions.NewSession(session));
-                return !!session;
-            }),
-            catchError(() => {
-                this.router.navigate(['login']);
-                return of(false);
-            }),
-        );
+        const success$ = new Subject<boolean>();
+        this.tokenService.refresh().then(() => {
+            this.auth
+                .authControllerGetSession()
+                .pipe(
+                    take(1),
+                    map((session) => {
+                        this.store.dispatch(
+                            new UserActions.NewSession(session),
+                        );
+                        success$.next(!!session);
+                    }),
+                    catchError(() => {
+                        this.router.navigate(['login']);
+                        success$.next(false);
+                        return of(false);
+                    }),
+                )
+                .subscribe();
+        });
+
+        return success$;
     }
 }

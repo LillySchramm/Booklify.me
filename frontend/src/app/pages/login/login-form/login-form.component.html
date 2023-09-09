@@ -25,6 +25,9 @@
                 form.get('password')?.errors | formError
             }}</mat-error>
         </mat-form-field>
+        <mat-checkbox formControlName="rememberMe">{{
+            t('login.rememberMe')
+        }}</mat-checkbox>
         <span class="flex-grow"></span>
         <button
             mat-flat-button

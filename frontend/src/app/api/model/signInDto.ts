@@ -13,4 +13,8 @@
 export interface SignInDto {
     email: string;
     password: string;
+    /**
+     * Whether to create a permanent session
+     */
+    permanent: boolean;
 }
