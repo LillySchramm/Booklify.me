@@ -58,7 +58,7 @@ export class UserState {
                 } else ctx.dispatch(new UserActions.SignUpSuccess(user));
             }),
             catchError((error) =>
-                ctx.dispatch(new UserActions.SignUpError(error)),
+                ctx.dispatch(new UserActions.SignUpError(error.error.message)),
             ),
         );
     }
@@ -115,10 +115,11 @@ export class UserState {
         this.router.navigate(['signup-success']);
     }
     @Action(UserActions.SignUpError)
-    loadedUserError(
+    signUpError(
         ctx: StateContext<UserStateModel>,
         action: UserActions.SignUpError,
     ) {
+        this.snack.show('Could not create account: ' + action.error);
         ctx.patchState({
             signup: {
                 ...ctx.getState().signup,
@@ -175,5 +176,10 @@ export class UserState {
     @Selector()
     static signUpDisabled(state: UserStateModel): boolean {
         return state.signup.loading || !!state.currentUser;
+    }
+
+    @Selector()
+    static signUpError(state: UserStateModel): string | undefined {
+        return state.signup.error;
     }
 }
