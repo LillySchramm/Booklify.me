@@ -19,7 +19,7 @@ const PASSWORD_RESET_EMAIL_CONTENT = `
 <h1>Password Reset</h1>
 <p>Hey $username, we have received a password reset request for your account.</p>
 <p>To complete reset your password, please click on the link below and follow the instructions shown on the page.</p>
-<a>Placeholder</a>
+<a href="$host/reset-password?reset_id=$id&user_id=$userId&token=$token">$host/reset-password?reset_id=$id&user_id=$userId&token=$token</a>
 <p>If you haven't requested a reset, you should ignore this E-Mail!</p>
 <p>- Booklify.me</p>
 `;
@@ -166,7 +166,11 @@ export class UsersService {
         const emailContent = PASSWORD_RESET_EMAIL_CONTENT.replaceAll(
             '$username',
             user.name,
-        );
+        )
+            .replaceAll('$host', config.get<string>('url'))
+            .replaceAll('$id', resetRequest.id)
+            .replaceAll('$userId', resetRequest.userId)
+            .replaceAll('$token', key);
 
         await this.mail.sendMail(
             `${user.name} <${user.email}>`,
