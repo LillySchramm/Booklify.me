@@ -22,5 +22,9 @@
   "disable_registration": {
       "__name": "DISABLE_REGISTRATION",
       "__format": "boolean"
+  },
+  "security": {
+      "key": "SECRUITY_KEY",
+      "access_token_expiration": "ACCESS_TOKEN_EXPIRATION",
   }
 }

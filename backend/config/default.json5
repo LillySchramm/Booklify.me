@@ -18,6 +18,7 @@
         "bucket_name": "mangalist"
     },
     "security": {
-        "key": "AVerySecurePassword"
+        "key": "AVerySecurePassword",
+        "access_token_expiration": "1h",
     }
 }
