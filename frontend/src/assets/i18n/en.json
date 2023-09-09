@@ -33,5 +33,14 @@
   "verifyEmail": {
     "success": "Your E-Mail has been verified! Login to begin your cozy adventure.",
     "error": "There was an error during the verification"
+  },
+  "user-display": {
+    "welcome": "Hi, "
+  },
+  "loggedOut": {
+    "success": "Successfully logged out. Bye!"
+  },
+  "account-menu": {
+    "logout": "Logout"
   }
 }

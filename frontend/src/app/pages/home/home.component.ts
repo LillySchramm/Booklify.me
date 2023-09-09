@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { UserActions } from 'src/app/state/user/user.actions';
 
 @Component({
     selector: 'app-home',
@@ -8,4 +10,8 @@ import { Component } from '@angular/core';
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent {}
+export class HomeComponent {
+    constructor(private store: Store) {
+        this.store.dispatch(new UserActions.LoadUser());
+    }
+}

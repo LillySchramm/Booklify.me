@@ -1,0 +1,22 @@
+<ng-container *transloco="let t">
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>{{ t('account-menu.logout') }}</span>
+        </button>
+    </mat-menu>
+
+    <ng-container *ngIf="$user() as user">
+        <div>
+            <button
+                class="text-lg"
+                [disableRipple]="true"
+                [matMenuTriggerFor]="menu"
+                mat-button
+            >
+                <mat-icon class="l !mr-4">account_circle</mat-icon>
+                <span>{{ user.name }}</span>
+            </button>
+        </div>
+    </ng-container>
+</ng-container>

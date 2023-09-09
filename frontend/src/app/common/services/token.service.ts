@@ -68,7 +68,7 @@ export class TokenService {
         }
     }
 
-    private deleteToken(): void {
+    public deleteToken(): void {
         localStorage.removeItem('accessToken');
     }
 

@@ -1,4 +1,10 @@
-import { SignInDto, SignInSuccessDto, SignUpDto, UserDto } from 'src/app/api';
+import {
+    SessionDto,
+    SignInDto,
+    SignInSuccessDto,
+    SignUpDto,
+    UserDto,
+} from 'src/app/api';
 
 export namespace UserActions {
     export class SignUp {
@@ -54,5 +60,27 @@ export namespace UserActions {
 
     export class VerifyEmailError {
         static readonly type = '[User] Verify Email Error';
+    }
+
+    export class NewSession {
+        static readonly type = '[User] Session';
+        constructor(public session: SessionDto) {}
+    }
+
+    export class LoadUser {
+        static readonly type = '[User] Load User';
+    }
+
+    export class LoadUserSuccess {
+        static readonly type = '[User] Load User Success';
+        constructor(public user: UserDto) {}
+    }
+
+    export class LogOut {
+        static readonly type = '[User] Log Out';
+    }
+
+    export class LogOutSuccess {
+        static readonly type = '[User] Log Out Success';
     }
 }

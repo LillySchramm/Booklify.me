@@ -1,7 +1,7 @@
 <header *transloco="let t">
-    <p>
-        <mat-toolbar color="primary">
-            <a routerLink="/" class="select-none">{{ t('app.name') }}</a>
-        </mat-toolbar>
-    </p>
+    <mat-toolbar color="primary">
+        <a routerLink="/" class="select-none">{{ t('app.name') }}</a>
+        <span class="flex-grow"></span>
+        <app-user-display *ngIf="$user()"></app-user-display>
+    </mat-toolbar>
 </header>

@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { catchError, tap } from 'rxjs';
-import { AuthService, UserDto } from 'src/app/api';
+import { catchError, map, take, tap } from 'rxjs';
+import { AuthService, SessionDto, UserDto } from 'src/app/api';
 import { SnackBarService } from 'src/app/common/services/snack-bar.service';
+import { TokenService } from 'src/app/common/services/token.service';
 import { UserActions } from './user.actions';
 
 interface UserStateModel {
     currentUser?: UserDto;
+    session?: SessionDto;
     signup: {
         loading: boolean;
         resending: boolean;
@@ -40,6 +42,7 @@ export class UserState {
         private router: Router,
         private snack: SnackBarService,
         private transloco: TranslocoService,
+        private token: TokenService,
     ) {}
 
     @Action(UserActions.SignUp)
@@ -199,6 +202,54 @@ export class UserState {
                     ctx.dispatch(new UserActions.VerifyEmailError()),
                 ),
             );
+    }
+
+    @Action(UserActions.NewSession)
+    newSession(
+        ctx: StateContext<UserStateModel>,
+        action: UserActions.NewSession,
+    ) {
+        ctx.patchState({
+            session: action.session,
+        });
+    }
+
+    @Action(UserActions.LoadUser)
+    loadUser(ctx: StateContext<UserStateModel>) {
+        return this.authApi.authControllerGetProfile().pipe(
+            take(1),
+            map((user) => ctx.dispatch(new UserActions.LoadUserSuccess(user))),
+        );
+    }
+
+    @Action(UserActions.LoadUserSuccess)
+    loadUserSuccess(
+        ctx: StateContext<UserStateModel>,
+        action: UserActions.LoadUserSuccess,
+    ) {
+        ctx.patchState({
+            currentUser: action.user,
+        });
+    }
+
+    @Action(UserActions.LogOut)
+    logOut(ctx: StateContext<UserStateModel>) {
+        return this.authApi.authControllerSignOut().pipe(
+            tap(() => {
+                this.token.deleteToken();
+                ctx.dispatch(new UserActions.LogOutSuccess());
+            }),
+        );
+    }
+
+    @Action(UserActions.LogOutSuccess)
+    logOutSuccess(ctx: StateContext<UserStateModel>) {
+        ctx.patchState({
+            currentUser: undefined,
+            session: undefined,
+        });
+        this.snack.show(this.transloco.translate('loggedOut.success'));
+        this.router.navigate(['login']);
     }
 
     @Action(UserActions.VerifyEmailSuccess)

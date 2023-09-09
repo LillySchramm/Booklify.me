@@ -2,30 +2,35 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { TranslocoModule } from '@ngneat/transloco';
-import { Select } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { UserDto } from 'src/app/api';
+import { UserActions } from 'src/app/state/user/user.actions';
 import { UserState } from 'src/app/state/user/user.state';
-import { UserDisplayComponent } from './user-display/user-display.component';
 
 @Component({
-    selector: 'app-header',
+    selector: 'app-user-display',
     standalone: true,
     imports: [
         CommonModule,
-        MatToolbarModule,
         MatButtonModule,
         TranslocoModule,
-        RouterModule,
-        UserDisplayComponent,
+        MatIconModule,
+        MatMenuModule,
     ],
-    templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss'],
+    templateUrl: './user-display.component.html',
+    styleUrls: ['./user-display.component.scss'],
 })
-export class HeaderComponent {
+export class UserDisplayComponent {
     @Select(UserState.currentUser) user$!: Observable<UserDto | undefined>;
     $user = toSignal(this.user$);
+
+    constructor(private store: Store) {}
+
+    logout(): void {
+        this.store.dispatch(new UserActions.LogOut());
+    }
 }
