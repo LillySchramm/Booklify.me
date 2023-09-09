@@ -21,6 +21,16 @@ interface UserStateModel {
         loading: boolean;
         error?: string;
     };
+    requestPasswordReset: {
+        loading: boolean;
+        success?: boolean;
+        error?: string;
+    };
+    resetPassword: {
+        loading: boolean;
+        success?: boolean;
+        error?: string;
+    };
 }
 
 @State<UserStateModel>({
@@ -31,6 +41,12 @@ interface UserStateModel {
             resending: false,
         },
         signin: {
+            loading: false,
+        },
+        requestPasswordReset: {
+            loading: false,
+        },
+        resetPassword: {
             loading: false,
         },
     },
@@ -65,6 +81,12 @@ export class UserState {
                         },
                         signin: { loading: false },
                         currentUser: undefined,
+                        requestPasswordReset: {
+                            loading: false,
+                        },
+                        resetPassword: {
+                            loading: false,
+                        },
                     });
                 } else ctx.dispatch(new UserActions.SignUpSuccess(user));
             }),
@@ -264,6 +286,126 @@ export class UserState {
         this.router.navigate(['login']);
     }
 
+    @Action(UserActions.RequestReset)
+    requestReset(
+        ctx: StateContext<UserStateModel>,
+        action: UserActions.RequestReset,
+    ) {
+        ctx.patchState({
+            requestPasswordReset: {
+                ...ctx.getState().requestPasswordReset,
+                loading: true,
+            },
+        });
+
+        return this.authApi
+            .authControllerRequestResetPassword({ email: action.email })
+            .pipe(
+                tap(() => ctx.dispatch(new UserActions.RequestResetSuccess())),
+                catchError((error) =>
+                    ctx.dispatch(
+                        new UserActions.RequestResetError(error.error.message),
+                    ),
+                ),
+            );
+    }
+
+    @Action(UserActions.RequestResetSuccess)
+    requestResetSuccess(ctx: StateContext<UserStateModel>) {
+        ctx.patchState({
+            requestPasswordReset: {
+                ...ctx.getState().requestPasswordReset,
+                loading: false,
+                success: true,
+                error: undefined,
+            },
+        });
+    }
+
+    @Action(UserActions.RequestResetError)
+    requestResetError(
+        ctx: StateContext<UserStateModel>,
+        action: UserActions.RequestResetError,
+    ) {
+        ctx.patchState({
+            requestPasswordReset: {
+                ...ctx.getState().requestPasswordReset,
+                loading: false,
+                error: action.error,
+            },
+        });
+
+        this.snack.show('Could not request password reset: ' + action.error);
+    }
+
+    @Action(UserActions.ClearResetRequest)
+    clearResetRequest(ctx: StateContext<UserStateModel>) {
+        ctx.patchState({
+            requestPasswordReset: {
+                ...ctx.getState().requestPasswordReset,
+                loading: false,
+                success: undefined,
+                error: undefined,
+            },
+            resetPassword: {
+                ...ctx.getState().resetPassword,
+                loading: false,
+                success: undefined,
+                error: undefined,
+            },
+        });
+    }
+
+    @Action(UserActions.ResetPassword)
+    resetPassword(
+        ctx: StateContext<UserStateModel>,
+        action: UserActions.ResetPassword,
+    ) {
+        ctx.patchState({
+            resetPassword: {
+                ...ctx.getState().resetPassword,
+                loading: true,
+            },
+        });
+
+        return this.authApi.authControllerResetPassword(action.reset).pipe(
+            tap(() => ctx.dispatch(new UserActions.ResetPasswordSuccess())),
+            catchError((error) =>
+                ctx.dispatch(
+                    new UserActions.ResetPasswordError(error.error.message),
+                ),
+            ),
+        );
+    }
+
+    @Action(UserActions.ResetPasswordSuccess)
+    resetPasswordSuccess(ctx: StateContext<UserStateModel>) {
+        ctx.patchState({
+            resetPassword: {
+                ...ctx.getState().resetPassword,
+                loading: false,
+                success: true,
+                error: undefined,
+            },
+        });
+    }
+
+    @Action(UserActions.ResetPasswordError)
+    resetPasswordError(
+        ctx: StateContext<UserStateModel>,
+        action: UserActions.ResetPasswordError,
+    ) {
+        ctx.patchState({
+            resetPassword: {
+                ...ctx.getState().resetPassword,
+                loading: false,
+                error: action.error,
+            },
+        });
+
+        this.snack.show('Could not reset password: ' + action.error);
+    }
+
     @Selector()
     static currentUser(state: UserStateModel) {
         return state.currentUser;
@@ -297,5 +439,44 @@ export class UserState {
     @Selector()
     static signUpError(state: UserStateModel): string | undefined {
         return state.signup.error;
+    }
+
+    @Selector()
+    static signInError(state: UserStateModel): string | undefined {
+        return state.signin.error;
+    }
+
+    @Selector()
+    static requestPasswordResetInProgress(state: UserStateModel): boolean {
+        return state.requestPasswordReset.loading;
+    }
+
+    @Selector()
+    static requestPasswordResetSuccess(
+        state: UserStateModel,
+    ): boolean | undefined {
+        return state.requestPasswordReset.success;
+    }
+
+    @Selector()
+    static requestPasswordResetError(
+        state: UserStateModel,
+    ): string | undefined {
+        return state.requestPasswordReset.error;
+    }
+
+    @Selector()
+    static resetPasswordInProgress(state: UserStateModel): boolean {
+        return state.resetPassword.loading;
+    }
+
+    @Selector()
+    static resetPasswordSuccess(state: UserStateModel): boolean | undefined {
+        return state.resetPassword.success;
+    }
+
+    @Selector()
+    static resetPasswordError(state: UserStateModel): string | undefined {
+        return state.resetPassword.error;
     }
 }

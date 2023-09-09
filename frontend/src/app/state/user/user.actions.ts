@@ -1,4 +1,5 @@
 import {
+    NewPasswordDto,
     SessionDto,
     SignInDto,
     SignInSuccessDto,
@@ -82,5 +83,37 @@ export namespace UserActions {
 
     export class LogOutSuccess {
         static readonly type = '[User] Log Out Success';
+    }
+
+    export class RequestReset {
+        static readonly type = '[User] Request Reset';
+        constructor(public email: string) {}
+    }
+
+    export class RequestResetSuccess {
+        static readonly type = '[User] Request Reset Success';
+    }
+
+    export class RequestResetError {
+        static readonly type = '[User] Request Reset Error';
+        constructor(public error: string) {}
+    }
+
+    export class ClearResetRequest {
+        static readonly type = '[User] Clear Reset Request';
+    }
+
+    export class ResetPassword {
+        static readonly type = '[User] Reset Password';
+        constructor(public reset: NewPasswordDto) {}
+    }
+
+    export class ResetPasswordSuccess {
+        static readonly type = '[User] Reset Password Success';
+    }
+
+    export class ResetPasswordError {
+        static readonly type = '[User] Reset Password Error';
+        constructor(public error: string) {}
     }
 }

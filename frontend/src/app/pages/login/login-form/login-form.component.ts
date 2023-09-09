@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { RouterModule } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -30,6 +31,7 @@ import { UserState } from 'src/app/state/user/user.state';
         TranslocoModule,
         FormErrorPipe,
         MatIconModule,
+        RouterModule,
     ],
     templateUrl: './login-form.component.html',
     styleUrls: ['./login-form.component.scss'],

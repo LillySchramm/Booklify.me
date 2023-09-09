@@ -30,6 +30,13 @@ const routes: Routes = [
         loadComponent: () =>
             import('./pages/home/home.component').then((m) => m.HomeComponent),
     },
+    {
+        path: 'reset-password',
+        loadComponent: () =>
+            import('./pages/reset-password/reset-password.component').then(
+                (m) => m.ResetPasswordComponent,
+            ),
+    },
 ];
 
 @NgModule({
