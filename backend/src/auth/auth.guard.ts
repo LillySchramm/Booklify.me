@@ -39,7 +39,7 @@ export class AuthGuard implements CanActivate {
             request['authToken'] = payload;
             request['session'] = session;
             request['user'] = await this.userService.findByIdOrThrow(
-                payload.id,
+                payload.sub,
             );
         } catch {
             throw new UnauthorizedException();
