@@ -11,6 +11,7 @@ export * from './resetPasswordRequestDto';
 export * from './sessionDto';
 export * from './setOwnershipStatusDto';
 export * from './signInDto';
+export * from './signInSuccessDto';
 export * from './signUpDto';
 export * from './userDto';
 export * from './userTokenDto';

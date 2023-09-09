@@ -23,6 +23,7 @@ model/resetPasswordRequestDto.ts
 model/sessionDto.ts
 model/setOwnershipStatusDto.ts
 model/signInDto.ts
+model/signInSuccessDto.ts
 model/signUpDto.ts
 model/userDto.ts
 model/userTokenDto.ts

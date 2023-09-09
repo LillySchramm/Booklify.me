@@ -34,6 +34,7 @@ import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { NewPasswordDto } from './dto/newPassword.dto';
 import { SignInDto } from './dto/signIn.dto';
 import * as config from 'config';
+import { SignInSuccessDto } from './dto/signInSuccess.dto';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -46,6 +47,7 @@ export class AuthController {
     ) {}
 
     @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ type: SignInSuccessDto })
     @Post('login')
     async signIn(
         @Body() signInDto: SignInDto,

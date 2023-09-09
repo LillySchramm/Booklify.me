@@ -35,6 +35,8 @@ import { SessionDto } from '../model/sessionDto';
 // @ts-ignore
 import { SignInDto } from '../model/signInDto';
 // @ts-ignore
+import { SignInSuccessDto } from '../model/signInSuccessDto';
+// @ts-ignore
 import { SignUpDto } from '../model/signUpDto';
 // @ts-ignore
 import { UserDto } from '../model/userDto';
@@ -743,25 +745,37 @@ export class AuthService {
         signInDto: SignInDto,
         observe?: 'body',
         reportProgress?: boolean,
-        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
-    ): Observable<any>;
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<SignInSuccessDto>;
     public authControllerSignIn(
         signInDto: SignInDto,
         observe?: 'response',
         reportProgress?: boolean,
-        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
-    ): Observable<HttpResponse<any>>;
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<HttpResponse<SignInSuccessDto>>;
     public authControllerSignIn(
         signInDto: SignInDto,
         observe?: 'events',
         reportProgress?: boolean,
-        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
-    ): Observable<HttpEvent<any>>;
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<HttpEvent<SignInSuccessDto>>;
     public authControllerSignIn(
         signInDto: SignInDto,
         observe: any = 'body',
         reportProgress: boolean = false,
-        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
     ): Observable<any> {
         if (signInDto === null || signInDto === undefined) {
             throw new Error(
@@ -775,7 +789,7 @@ export class AuthService {
             options && options.httpHeaderAccept;
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
-            const httpHeaderAccepts: string[] = [];
+            const httpHeaderAccepts: string[] = ['application/json'];
             localVarHttpHeaderAcceptSelected =
                 this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
@@ -817,7 +831,7 @@ export class AuthService {
         }
 
         let localVarPath = `/auth/login`;
-        return this.httpClient.request<any>(
+        return this.httpClient.request<SignInSuccessDto>(
             'post',
             `${this.configuration.basePath}${localVarPath}`,
             {
