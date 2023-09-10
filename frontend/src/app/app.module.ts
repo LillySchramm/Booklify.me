@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { HttpClientModule } from '@angular/common/http';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
@@ -14,6 +15,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './common/header/header.component';
 import { getToken } from './common/services/token.service';
+import { SidenavComponent } from './common/sidenav/sidenav.component';
+import { UiState } from './state/ui/ui.state';
 import { UserState } from './state/user/user.state';
 import { TranslocoRootModule } from './transloco-root.module';
 
@@ -27,10 +30,12 @@ import { TranslocoRootModule } from './transloco-root.module';
         HttpClientModule,
         HeaderComponent,
         TranslocoRootModule,
-        NgxsModule.forRoot([UserState]),
+        NgxsModule.forRoot([UserState, UiState]),
         NgxsReduxDevtoolsPluginModule.forRoot(),
         NgxsLoggerPluginModule.forRoot(),
         MatSnackBarModule,
+        MatSidenavModule,
+        SidenavComponent,
     ],
     providers: [
         {

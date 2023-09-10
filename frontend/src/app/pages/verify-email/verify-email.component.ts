@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
+import { UiActions } from 'src/app/state/ui/ui.actions';
 import { UserActions } from 'src/app/state/user/user.actions';
 
 @Component({
@@ -16,6 +17,9 @@ export class VerifyEmailComponent {
         private store: Store,
         private router: Router,
     ) {
+        this.store.dispatch(new UiActions.ChangeSidenavVisibility(false));
+        this.store.dispatch(new UiActions.ChangePageTitle(undefined));
+
         const urlParams = new URLSearchParams(window.location.search);
         const key = urlParams.get('key');
         const id = urlParams.get('id');

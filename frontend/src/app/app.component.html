@@ -1,9 +1,17 @@
 <app-header class="fixed z-50 w-full"></app-header>
 
-<div class="flex min-h-screen w-full flex-col">
-    <div class="mb-4 h-16"></div>
-    <div class="flex flex-grow pl-4 pr-4">
-        <router-outlet></router-outlet>
-    </div>
-    <div class="mb-4 h-8"></div>
-</div>
+<mat-drawer-container class="min-h-screen">
+    <mat-drawer mode="side" [opened]="$isSidenavVisible()" class="h-full w-80">
+        <div class="flex h-full flex-col">
+            <div class="mb-4 h-16"></div>
+            <app-sidenav class="flex-grow"></app-sidenav>
+        </div>
+    </mat-drawer>
+    <mat-drawer-content class="!flex min-h-screen w-full flex-col">
+        <div class="mb-4 h-16"></div>
+        <div class="flex flex-grow pl-4 pr-4">
+            <router-outlet></router-outlet>
+        </div>
+        <div class="mb-4 h-8"></div>
+    </mat-drawer-content>
+</mat-drawer-container>

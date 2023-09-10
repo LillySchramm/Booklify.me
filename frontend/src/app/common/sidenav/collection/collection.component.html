@@ -1,0 +1,19 @@
+<div class="flex h-full flex-grow flex-col" *transloco="let t">
+    <form [formGroup]="form" class="flex flex-col p-4">
+        <mat-form-field color="accent">
+            <mat-label>{{ t('collection.filter') }}</mat-label>
+            <input matInput type="text" formControlName="searchText" />
+            <mat-error *ngIf="form.get('searchText')?.invalid">{{
+                form.get('searchText')?.errors | formError
+            }}</mat-error>
+        </mat-form-field>
+    </form>
+    <div class="flex-grow"></div>
+    <mat-divider></mat-divider>
+    <div class="p-4">
+        <button mat-fab extended color="primary" class="!w-full">
+            <mat-icon>add</mat-icon>
+            {{ t('collection.add-book') }}
+        </button>
+    </div>
+</div>

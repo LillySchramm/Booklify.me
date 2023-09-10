@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { UiActions } from 'src/app/state/ui/ui.actions';
 import { ResetPasswordCardComponent } from './reset-password-card/reset-password-card.component';
 
 @Component({
@@ -9,4 +11,9 @@ import { ResetPasswordCardComponent } from './reset-password-card/reset-password
     templateUrl: './reset-password.component.html',
     styleUrls: ['./reset-password.component.scss'],
 })
-export class ResetPasswordComponent {}
+export class ResetPasswordComponent {
+    constructor(private store: Store) {
+        this.store.dispatch(new UiActions.ChangeSidenavVisibility(false));
+        this.store.dispatch(new UiActions.ChangePageTitle(undefined));
+    }
+}

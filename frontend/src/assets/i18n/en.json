@@ -2,6 +2,9 @@
   "app": {
     "name": "Booklify"
   },
+  "titles": {
+    "collection": "Your Collection"
+  },
   "login": {
     "email": "E-Mail",
     "password": "Password",
@@ -51,5 +54,10 @@
     "request-success": "We have send an E-Mail containing the reset instructions to {{ email }}. The message may need a few minutes to be delivered. Please also check your junk folder.",
     "reset": "Reset Password",
     "reset-success": "Password reset was successful. You can now login!"
+  },
+  "collection": {
+    "search": "Search",
+    "filter": "Filter",
+    "add-book": "Add Book"
   }
 }

@@ -7,6 +7,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TranslocoModule } from '@ngneat/transloco';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { UiActions } from 'src/app/state/ui/ui.actions';
 import { UserActions } from 'src/app/state/user/user.actions';
 import { UserState } from 'src/app/state/user/user.state';
 
@@ -30,7 +31,10 @@ export class SignupSuccessComponent {
     @Select(UserState.resending) resending$!: Observable<boolean>;
     $resending = toSignal(this.resending$);
 
-    constructor(private store: Store) {}
+    constructor(private store: Store) {
+        this.store.dispatch(new UiActions.ChangeSidenavVisibility(false));
+        this.store.dispatch(new UiActions.ChangePageTitle(undefined));
+    }
 
     resend(): void {
         if (this.$resending()) {

@@ -1,0 +1,9 @@
+<ng-container *transloco="let t">
+    <div class="flex h-full flex-col">
+        <h1 *ngIf="$pageTitle() as pageTitle" class="p-4">
+            {{ t(pageTitle) }}
+        </h1>
+        <mat-divider></mat-divider>
+        <app-collection class="flex-grow"></app-collection>
+    </div>
+</ng-container>
