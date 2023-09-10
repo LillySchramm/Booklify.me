@@ -1,0 +1,18 @@
+<ng-container *ngIf="group$ && group$ | async as group">
+    <div *transloco="let t" class="m-0 mb-4 w-full">
+        <mat-expansion-panel [expanded]="true" class="w-full">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{ group.name }}
+                </mat-panel-title>
+                <mat-panel-description>
+                    {{ t('book-groups.group') }}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <app-book-card
+                *ngFor="let book of books; index as i; trackBy: trackById"
+                [book]="book"
+            ></app-book-card>
+        </mat-expansion-panel>
+    </div>
+</ng-container>

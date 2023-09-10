@@ -9,12 +9,13 @@ import { BookActions } from 'src/app/state/books/books.actions';
 import { UiActions } from 'src/app/state/ui/ui.actions';
 import { UserActions } from 'src/app/state/user/user.actions';
 import { UserState } from 'src/app/state/user/user.state';
+import { CollectionDisplayComponent } from './collection-display/collection-display.component';
 
 @UntilDestroy()
 @Component({
     selector: 'app-home',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, CollectionDisplayComponent],
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss'],
 })

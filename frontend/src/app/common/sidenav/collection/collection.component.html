@@ -11,7 +11,23 @@
     <div class="flex-grow"></div>
     <mat-divider></mat-divider>
     <div class="p-4">
-        <button mat-fab extended color="primary" class="!w-full">
+        <button
+            mat-fab
+            extended
+            color="accent"
+            class="mb-4 !w-full"
+            [disabled]="true"
+        >
+            <mat-icon>add</mat-icon>
+            {{ t('collection.add-group') }}
+        </button>
+        <button
+            mat-fab
+            extended
+            color="primary"
+            class="!w-full"
+            [disabled]="true"
+        >
             <mat-icon>add</mat-icon>
             {{ t('collection.add-book') }}
         </button>

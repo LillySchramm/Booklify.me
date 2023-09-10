@@ -16,11 +16,11 @@ import {
 } from 'src/app/api';
 import { BookActions } from './books.actions';
 
-interface BookMap {
+export interface BookMap {
     [key: string]: BookDto;
 }
 
-interface BookGroupMap {
+export interface BookGroupMap {
     [key: string]: BookGroupDto;
 }
 
@@ -87,6 +87,10 @@ export class BooksState {
         { books }: BookActions.LoadBooksOfUserSuccess,
     ) {
         const bookMap: BookMap = {};
+        books.books = books.books.sort((a, b) => {
+            if (!a.title || !b.title) return a.isbn.localeCompare(b.isbn);
+            return a.title.localeCompare(b.title);
+        });
         books.books.forEach((book) => (bookMap[book.isbn] = book));
 
         patchState({

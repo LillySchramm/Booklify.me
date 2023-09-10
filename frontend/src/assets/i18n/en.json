@@ -58,6 +58,11 @@
   "collection": {
     "search": "Search",
     "filter": "Filter",
-    "add-book": "Add Book"
+    "add-book": "Add Book",
+    "add-group": "Add Group"
+  },
+  "book-groups": {
+    "unknown": "Unassigned",
+    "group": "Book Group"
   }
 }

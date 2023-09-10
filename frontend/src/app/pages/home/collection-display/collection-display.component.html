@@ -1,0 +1,8 @@
+<ng-container *ngIf="$groupedBooks() as groupedBooks">
+    <app-book-group
+        *ngFor="let group of groupedBooks; index as i; trackBy: trackById"
+        [groupId]="group.key"
+        [books]="group.value"
+        class="w-full"
+    />
+</ng-container>
