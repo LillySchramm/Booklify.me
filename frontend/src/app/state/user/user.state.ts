@@ -479,4 +479,9 @@ export class UserState {
     static resetPasswordError(state: UserStateModel): string | undefined {
         return state.resetPassword.error;
     }
+
+    @Selector()
+    static session(state: UserStateModel): SessionDto | undefined {
+        return state.session;
+    }
 }
