@@ -378,16 +378,6 @@ export class BooksService {
 
         let localVarHeaders = this.defaultHeaders;
 
-        let localVarCredential: string | undefined;
-        // authentication (bearer) required
-        localVarCredential = this.configuration.lookupCredential('bearer');
-        if (localVarCredential) {
-            localVarHeaders = localVarHeaders.set(
-                'authorization',
-                localVarCredential,
-            );
-        }
-
         let localVarHttpHeaderAcceptSelected: string | undefined =
             options && options.httpHeaderAccept;
         if (localVarHttpHeaderAcceptSelected === undefined) {

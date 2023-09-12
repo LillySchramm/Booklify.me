@@ -117,8 +117,6 @@ export class BooksController {
     }
 
     @Get('cover/:id.png')
-    @UseGuards(AuthGuard)
-    @ApiBearerAuth()
     async getBookCover(
         @Param('id', new ParseUUIDPipe()) id: string,
         @Res() res: Response,
