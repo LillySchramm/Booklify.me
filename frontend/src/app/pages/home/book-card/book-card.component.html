@@ -1,1 +1,18 @@
-<p>{{ book.title }}: {{ book.isbn }}</p>
+<div
+    class="m-2 flex h-64 w-40 cursor-pointer flex-col rounded-md bg-tertiary p-2 pb-0.5"
+    *transloco="let t"
+>
+    <img
+        *ngIf="coverUrl !== null; else noimage"
+        [src]="coverUrl"
+        loading="lazy"
+        alt="cover-image"
+        class="h-full flex-grow object-contain"
+    />
+    <ng-template #noimage>
+        <app-no-image-placeholder class="h-full flex-grow object-contain">{{
+            t('books.no-cover')
+        }}</app-no-image-placeholder>
+    </ng-template>
+    <p class="!m-0 text-xs">{{ book.title }}</p>
+</div>

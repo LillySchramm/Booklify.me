@@ -5,7 +5,10 @@ module.exports = {
         extend: {},
         colors: {
             accent: '#607d8b',
+            primary: '#303030',
             secondary: '#424242',
+            tertiary: '#505050',
+            warn: '#f44336',
         },
     },
     plugins: [],

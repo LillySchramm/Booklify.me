@@ -9,10 +9,12 @@
                     {{ t('book-groups.group') }}
                 </mat-panel-description>
             </mat-expansion-panel-header>
-            <app-book-card
-                *ngFor="let book of books; index as i; trackBy: trackById"
-                [book]="book"
-            ></app-book-card>
+            <div class="flex flex-wrap">
+                <app-book-card
+                    *ngFor="let book of books; index as i; trackBy: trackById"
+                    [book]="book"
+                ></app-book-card>
+            </div>
         </mat-expansion-panel>
     </div>
 </ng-container>
