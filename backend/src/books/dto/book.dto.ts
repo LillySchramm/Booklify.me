@@ -2,13 +2,16 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Book } from '@prisma/client';
 import { Exclude, Expose } from 'class-transformer';
 
-export type BookWithGroupId = Book & {
+export type BookWithGroupIdAndAuthors = Book & {
     OwnershipStatus: {
         bookGroupId: string | null;
     }[];
+    authors: {
+        id: string;
+    }[];
 };
 
-export class BookDto implements BookWithGroupId {
+export class BookDto implements BookWithGroupIdAndAuthors {
     @ApiProperty()
     isbn: string;
     @ApiProperty({ nullable: true, type: String })
@@ -35,6 +38,8 @@ export class BookDto implements BookWithGroupId {
     bookCoverId: string | null;
     @Exclude()
     OwnershipStatus: { bookGroupId: string | null }[];
+    @ApiProperty({ type: String, isArray: true })
+    authors: { id: string }[];
 
     @ApiProperty({ type: String, nullable: true })
     @Expose()

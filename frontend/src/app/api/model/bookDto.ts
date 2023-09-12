@@ -23,5 +23,6 @@ export interface BookDto {
     updatedAt: string;
     publisherId: string | null;
     bookCoverId: string | null;
+    authors: Array<string>;
     groupId: string | null;
 }

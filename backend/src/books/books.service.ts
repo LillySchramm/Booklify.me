@@ -23,7 +23,7 @@ import {
 import { Retryable } from 'typescript-retry-decorator';
 import { TesseractService } from 'src/tesseract/tesseract.service';
 import { Magic } from 'mmmagic';
-import { BookWithGroupId } from './dto/book.dto';
+import { BookWithGroupIdAndAuthors } from './dto/book.dto';
 import { AuthorsService } from 'src/authors/authors.service';
 
 interface CoverCrawlResult {
@@ -108,13 +108,16 @@ export class BooksService {
     async getBookByIsbn(
         isbn: string,
         userId: string,
-    ): Promise<BookWithGroupId | null> {
+    ): Promise<BookWithGroupIdAndAuthors | null> {
         return await this.prisma.book.findFirst({
             where: { isbn },
             include: {
                 OwnershipStatus: {
                     where: { userId },
                     select: { bookGroupId: true },
+                },
+                authors: {
+                    select: { id: true },
                 },
             },
         });
@@ -145,7 +148,7 @@ export class BooksService {
     async getBook(
         isbn: string,
         userId: string,
-    ): Promise<BookWithGroupId | null> {
+    ): Promise<BookWithGroupIdAndAuthors | null> {
         const existingBook = await this.getBookByIsbn(isbn, userId);
         if (existingBook !== null) return existingBook;
 
@@ -332,7 +335,9 @@ export class BooksService {
         return await this.setBookOwnership(user, book, BookStatus.NONE);
     }
 
-    async getAllOwnedBooksOfUser(userId: string): Promise<BookWithGroupId[]> {
+    async getAllOwnedBooksOfUser(
+        userId: string,
+    ): Promise<BookWithGroupIdAndAuthors[]> {
         return await this.prisma.book.findMany({
             where: {
                 OwnershipStatus: { some: { userId, status: BookStatus.OWNED } },
@@ -341,6 +346,9 @@ export class BooksService {
                 OwnershipStatus: {
                     where: { userId },
                     select: { bookGroupId: true },
+                },
+                authors: {
+                    select: { id: true },
                 },
             },
         });
