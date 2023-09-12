@@ -26,6 +26,7 @@ export class LoginComponent {
     ) {
         tokenService.deleteToken();
         this.store.dispatch(new UiActions.ChangeSidenavVisibility(false));
+        this.store.dispatch(new UiActions.ChangeInfoVisibility(false));
         this.store.dispatch(new UiActions.ChangePageTitle(undefined));
     }
 }

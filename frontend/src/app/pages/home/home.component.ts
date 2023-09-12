@@ -27,6 +27,7 @@ export class HomeComponent {
         this.store.dispatch(new UserActions.LoadUser());
         this.store.dispatch(new UiActions.ChangeSidenavVisibility(true));
         this.store.dispatch(new UiActions.ChangePageTitle('titles.collection'));
+        this.store.dispatch(new UiActions.ChangeInfoVisibility(false));
 
         this.session$.pipe(untilDestroyed(this)).subscribe((session) => {
             if (!session) return;

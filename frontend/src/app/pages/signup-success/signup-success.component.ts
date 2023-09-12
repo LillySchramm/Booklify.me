@@ -34,6 +34,7 @@ export class SignupSuccessComponent {
     constructor(private store: Store) {
         this.store.dispatch(new UiActions.ChangeSidenavVisibility(false));
         this.store.dispatch(new UiActions.ChangePageTitle(undefined));
+        this.store.dispatch(new UiActions.ChangeInfoVisibility(false));
     }
 
     resend(): void {

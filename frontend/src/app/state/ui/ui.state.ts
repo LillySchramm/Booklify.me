@@ -4,12 +4,14 @@ import { UiActions } from './ui.actions';
 
 interface UiStateModel {
     isSidenavVisible: boolean;
+    isInfoVisible: boolean;
     pageTitle?: string;
 }
 
 @State<UiStateModel>({
     name: 'ui',
     defaults: {
+        isInfoVisible: false,
         isSidenavVisible: false,
     },
 })
@@ -39,6 +41,18 @@ export class UiState {
         });
     }
 
+    @Action(UiActions.ChangeInfoVisibility)
+    changeInfoVisibility(
+        { getState, setState }: StateContext<UiStateModel>,
+        { payload }: UiActions.ChangeInfoVisibility,
+    ) {
+        const state = getState();
+        setState({
+            ...state,
+            isInfoVisible: payload,
+        });
+    }
+
     @Selector()
     static isSidenavVisible(state: UiStateModel) {
         return state.isSidenavVisible;
@@ -47,5 +61,10 @@ export class UiState {
     @Selector()
     static pageTitle(state: UiStateModel) {
         return state.pageTitle;
+    }
+
+    @Selector()
+    static isInfoVisible(state: UiStateModel) {
+        return state.isInfoVisible;
     }
 }

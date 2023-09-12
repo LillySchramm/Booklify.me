@@ -4,6 +4,11 @@ export namespace UiActions {
         constructor(public payload: boolean) {}
     }
 
+    export class ChangeInfoVisibility {
+        static readonly type = '[UI] Change Info Visibility';
+        constructor(public payload: boolean) {}
+    }
+
     export class ChangePageTitle {
         static readonly type = '[UI] Change Page Title';
         constructor(public payload: string | undefined) {}

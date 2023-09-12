@@ -14,6 +14,7 @@ import { ResetPasswordCardComponent } from './reset-password-card/reset-password
 export class ResetPasswordComponent {
     constructor(private store: Store) {
         this.store.dispatch(new UiActions.ChangeSidenavVisibility(false));
+        this.store.dispatch(new UiActions.ChangeInfoVisibility(false));
         this.store.dispatch(new UiActions.ChangePageTitle(undefined));
     }
 }

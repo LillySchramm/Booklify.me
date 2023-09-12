@@ -30,4 +30,9 @@ export namespace BookActions {
         static readonly type = '[Books] Load Book Groups of User Fail';
         constructor(public error: string) {}
     }
+
+    export class SelectBook {
+        static readonly type = '[Books] Select Book';
+        constructor(public id: string | undefined) {}
+    }
 }

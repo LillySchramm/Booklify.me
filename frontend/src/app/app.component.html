@@ -11,6 +11,19 @@
             <app-sidenav class="flex-grow"></app-sidenav>
         </div>
     </mat-drawer>
+
+    <mat-drawer
+        mode="side"
+        [opened]="$isInfoVisible()"
+        class="!fixed max-h-screen w-[29rem]"
+        position="end"
+    >
+        <div class="flex h-full flex-col">
+            <div class="mb-4 h-12"></div>
+            <app-book-details-side class="flex-grow"></app-book-details-side>>
+        </div>
+    </mat-drawer>
+
     <mat-drawer-content class="!flex min-h-screen w-full flex-col">
         <div class="mb-4 h-16"></div>
         <div class="flex flex-grow pl-4 pr-4">

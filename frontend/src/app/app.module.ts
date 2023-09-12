@@ -13,6 +13,7 @@ import { environment } from 'src/environments/environment';
 import { ApiModule, Configuration } from './api';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { BookDetailsSideComponent } from './common/components/book-details-side/book-details-side.component';
 import { HeaderComponent } from './common/header/header.component';
 import { getToken } from './common/services/token.service';
 import { SidenavComponent } from './common/sidenav/sidenav.component';
@@ -37,6 +38,7 @@ import { TranslocoRootModule } from './transloco-root.module';
         MatSnackBarModule,
         MatSidenavModule,
         SidenavComponent,
+        BookDetailsSideComponent,
     ],
     providers: [
         {

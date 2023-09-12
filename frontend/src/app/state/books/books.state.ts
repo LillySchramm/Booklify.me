@@ -171,6 +171,16 @@ export class BooksState {
         });
     }
 
+    @Action(BookActions.SelectBook)
+    selectBook(
+        { patchState }: StateContext<BookStateModel>,
+        { id }: BookActions.SelectBook,
+    ) {
+        patchState({
+            selectedBook: id,
+        });
+    }
+
     @Selector()
     static currentCollection(state: BookStateModel) {
         return state.currentCollection;

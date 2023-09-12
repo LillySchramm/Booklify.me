@@ -16,6 +16,9 @@ export class AppComponent {
     @Select(UiState.isSidenavVisible) isSidenavVisible$!: Observable<boolean>;
     $isSidenavVisible = toSignal(this.isSidenavVisible$);
 
+    @Select(UiState.isInfoVisible) isInfoVisible$!: Observable<boolean>;
+    $isInfoVisible = toSignal(this.isInfoVisible$);
+
     constructor(
         private snackBar: SnackBarService,
         private _snackBar: MatSnackBar,
