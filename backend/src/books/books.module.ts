@@ -8,6 +8,7 @@ import { UsersModule } from 'src/users/users.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { SecretsModule } from 'src/secrets/secrets.module';
 import { BookGroupsModule } from 'src/book-groups/bookGroups.module';
+import { AuthorsModule } from 'src/authors/authors.module';
 @Module({
     providers: [BooksService],
     controllers: [BooksController],
@@ -19,6 +20,7 @@ import { BookGroupsModule } from 'src/book-groups/bookGroups.module';
         AuthModule,
         SecretsModule,
         BookGroupsModule,
+        AuthorsModule,
     ],
 })
 export class BooksModule {}

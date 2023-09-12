@@ -13,7 +13,6 @@ import {
 import { S3Service } from 'src/s3/s3.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
-    Author,
     Book,
     BookCover,
     BookStatus,
@@ -25,6 +24,7 @@ import { Retryable } from 'typescript-retry-decorator';
 import { TesseractService } from 'src/tesseract/tesseract.service';
 import { Magic } from 'mmmagic';
 import { BookWithGroupId } from './dto/book.dto';
+import { AuthorsService } from 'src/authors/authors.service';
 
 interface CoverCrawlResult {
     buffer: Buffer | null;
@@ -46,19 +46,8 @@ export class BooksService {
         private s3: S3Service,
         private prisma: PrismaService,
         private tesseract: TesseractService,
+        private authorService: AuthorsService,
     ) {}
-
-    async upsertAuthor(name: string): Promise<Author> {
-        return await this.prisma.author.upsert({
-            where: {
-                name,
-            },
-            create: {
-                name,
-            },
-            update: {},
-        });
-    }
 
     async upsertPublisher(name: string): Promise<Publisher> {
         return await this.prisma.publisher.upsert({
@@ -87,7 +76,7 @@ export class BooksService {
 
         book.authors = book.authors ? book.authors : [];
         for (const name of book.authors) {
-            await this.upsertAuthor(name);
+            await this.authorService.upsertAuthor(name);
         }
 
         if (book.publisher) {

@@ -10,6 +10,7 @@ import { S3Module } from './s3/s3.module';
 import { TesseractModule } from './tesseract/tesseract.module';
 import { SecretsModule } from './secrets/secrets.module';
 import { BookGroupsModule } from './book-groups/bookGroups.module';
+import { AuthorsModule } from './authors/authors.module';
 
 @Module({
     imports: [
@@ -22,6 +23,7 @@ import { BookGroupsModule } from './book-groups/bookGroups.module';
         TesseractModule,
         SecretsModule,
         BookGroupsModule,
+        AuthorsModule,
     ],
     controllers: [AppController],
     providers: [AppService],

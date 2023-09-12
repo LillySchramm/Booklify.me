@@ -134,9 +134,8 @@ export class AuthController {
             throw new NotFoundException('User not found.');
         }
 
-        const resetRequest = await this.userService.createPasswordResetRequest(
-            user,
-        );
+        const resetRequest =
+            await this.userService.createPasswordResetRequest(user);
 
         return new ResetPasswordDto({
             ...resetRequest.request,
