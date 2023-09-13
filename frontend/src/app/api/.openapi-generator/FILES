@@ -20,6 +20,7 @@ model/bookGroupPatchDto.ts
 model/bookGroupPostDto.ts
 model/bookListDto.ts
 model/getIdListDto.ts
+model/identifierDto.ts
 model/models.ts
 model/newPasswordDto.ts
 model/ownershipStatusDto.ts

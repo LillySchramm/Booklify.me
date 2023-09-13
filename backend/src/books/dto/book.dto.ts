@@ -11,6 +11,11 @@ export type BookWithGroupIdAndAuthors = Book & {
     }[];
 };
 
+class IdentifierDto {
+    @ApiProperty()
+    id: string;
+}
+
 export class BookDto implements BookWithGroupIdAndAuthors {
     @ApiProperty()
     isbn: string;
@@ -38,8 +43,8 @@ export class BookDto implements BookWithGroupIdAndAuthors {
     bookCoverId: string | null;
     @Exclude()
     OwnershipStatus: { bookGroupId: string | null }[];
-    @ApiProperty({ type: String, isArray: true })
-    authors: { id: string }[];
+    @ApiProperty({ type: () => IdentifierDto, isArray: true })
+    authors: IdentifierDto[];
 
     @ApiProperty({ type: String, nullable: true })
     @Expose()

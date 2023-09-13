@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { IdentifierDto } from './identifierDto';
 
 export interface BookDto {
     isbn: string;
@@ -23,6 +24,6 @@ export interface BookDto {
     updatedAt: string;
     publisherId: string | null;
     bookCoverId: string | null;
-    authors: Array<string>;
+    authors: Array<IdentifierDto>;
     groupId: string | null;
 }
