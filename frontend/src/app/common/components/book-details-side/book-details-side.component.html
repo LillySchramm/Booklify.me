@@ -1,7 +1,11 @@
-<div class="p-0.5">
-    <button mat-icon-button (click)="close()">
-        <i class="fa-solid fa-xmark"></i>
-    </button>
-
-    <app-book-details></app-book-details>
+<div class="flex max-h-full flex-col p-0.5">
+    <div class="fixed mt-12 flex w-full items-center bg-secondary pt-4">
+        <button mat-icon-button (click)="close()" class="mr-2">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <span *ngIf="$title() as title" class="text-xl">{{ title }}</span>
+    </div>
+    <div class="mt-28">
+        <app-book-details class="overflow-scroll"></app-book-details>
+    </div>
 </div>

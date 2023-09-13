@@ -10,7 +10,7 @@ import { tap } from 'rxjs';
 import { AuthorDto, AuthorsService } from 'src/app/api';
 import { AuthorActions } from './author.actions';
 
-interface AuthorMap {
+export interface AuthorMap {
     [key: string]: AuthorDto;
 }
 

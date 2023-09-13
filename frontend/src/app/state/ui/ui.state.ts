@@ -6,6 +6,7 @@ interface UiStateModel {
     isSidenavVisible: boolean;
     isInfoVisible: boolean;
     pageTitle?: string;
+    infoTitle?: string;
 }
 
 @State<UiStateModel>({
@@ -53,6 +54,18 @@ export class UiState {
         });
     }
 
+    @Action(UiActions.ChangeInfoTitle)
+    changeInfoTitle(
+        { getState, setState }: StateContext<UiStateModel>,
+        { payload }: UiActions.ChangeInfoTitle,
+    ) {
+        const state = getState();
+        setState({
+            ...state,
+            infoTitle: payload,
+        });
+    }
+
     @Selector()
     static isSidenavVisible(state: UiStateModel) {
         return state.isSidenavVisible;
@@ -66,5 +79,10 @@ export class UiState {
     @Selector()
     static isInfoVisible(state: UiStateModel) {
         return state.isInfoVisible;
+    }
+
+    @Selector()
+    static infoTitle(state: UiStateModel) {
+        return state.infoTitle;
     }
 }

@@ -10,7 +10,7 @@ import { tap } from 'rxjs';
 import { PublisherDto, PublishersService } from 'src/app/api';
 import { PublisherActions } from './publisher.actions';
 
-interface PublisherMap {
+export interface PublisherMap {
     [key: string]: PublisherDto;
 }
 

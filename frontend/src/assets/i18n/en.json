@@ -67,5 +67,16 @@
   },
   "books": {
     "no-cover": "No Cover Found"
+  },
+  "book-details": {
+    "publisher": "Publisher:",
+    "authors": "Author(s):",
+    "noPublisher": "No Publisher Found",
+    "publisherLoading": "Publisher Loading",
+    "noAuthors": "No Authors Found",
+    "authorsLoading": "Authors Loading",
+    "published": "Published: ",
+    "pages": "Pages:",
+    "language": "Language:"
   }
 }

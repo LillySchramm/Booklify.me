@@ -1,9 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
-import { Store } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { BookActions } from 'src/app/state/books/books.actions';
 import { UiActions } from 'src/app/state/ui/ui.actions';
+import { UiState } from 'src/app/state/ui/ui.state';
 import { BookDetailsComponent } from '../book-details/book-details.component';
 
 @Component({
@@ -14,6 +17,9 @@ import { BookDetailsComponent } from '../book-details/book-details.component';
     styleUrls: ['./book-details-side.component.scss'],
 })
 export class BookDetailsSideComponent {
+    @Select(UiState.infoTitle) title$!: Observable<string | undefined>;
+    $title = toSignal(this.title$);
+
     constructor(private store: Store) {}
 
     close(): void {

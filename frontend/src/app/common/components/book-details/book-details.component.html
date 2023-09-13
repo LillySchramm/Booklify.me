@@ -1,1 +1,47 @@
-<p>book-details works!</p>
+<ng-container *ngIf="book$ | async as book">
+    <div *transloco="let t">
+        <div class="flex flex-col">
+            <img
+                *ngIf="coverUrl !== null"
+                [src]="coverUrl"
+                loading="lazy"
+                alt="cover-image"
+                class="h-[24rem] object-contain"
+            />
+
+            <mat-divider class="!mt-4"></mat-divider>
+        </div>
+
+        <div *ngIf="book.description" class="mt-4">
+            <div [innerHTML]="book.description" class="p-4"></div>
+            <mat-divider class="!mb-4 !mt-4"></mat-divider>
+        </div>
+
+        <div class="p-4">
+            <p *ngIf="$authorNames() as authorNames">
+                {{ t('book-details.authors') }}
+                <span *ngFor="let author of authorNames; index as i">
+                    <span>{{ author }}</span>
+                    <span *ngIf="i !== authorNames.length - 1">, </span>
+                </span>
+            </p>
+            <p>
+                {{ t('book-details.publisher') }}
+                <span>{{ $publisherName() }}</span>
+            </p>
+            <p *ngIf="book.publishedDate as publishedDate">
+                {{ t('book-details.published') }}
+                <span>{{ publishedDate | date }}</span>
+            </p>
+            <p *ngIf="book.pageCount || book.printedPageCount">
+                {{ t('book-details.pages') }}
+                <span>{{ book.pageCount || book.printedPageCount }}</span>
+            </p>
+
+            <p *ngIf="book.language">
+                {{ t('book-details.language') }}
+                <span>{{ book.language }}</span>
+            </p>
+        </div>
+    </div>
+</ng-container>
