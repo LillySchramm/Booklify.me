@@ -7,6 +7,7 @@ export * from './bookGroupPatchDto';
 export * from './bookGroupPostDto';
 export * from './bookListDto';
 export * from './getIdListDto';
+export * from './identifierDto';
 export * from './newPasswordDto';
 export * from './ownershipStatusDto';
 export * from './publisherDto';

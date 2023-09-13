@@ -1,10 +1,9 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
 import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
@@ -17,7 +16,9 @@ import { BookDetailsSideComponent } from './common/components/book-details-side/
 import { HeaderComponent } from './common/header/header.component';
 import { getToken } from './common/services/token.service';
 import { SidenavComponent } from './common/sidenav/sidenav.component';
+import { AuthorState } from './state/authors/author.state';
 import { BooksState } from './state/books/books.state';
+import { PublisherState } from './state/publisher/publisher.state';
 import { UiState } from './state/ui/ui.state';
 import { UserState } from './state/user/user.state';
 import { TranslocoRootModule } from './transloco-root.module';
@@ -32,7 +33,13 @@ import { TranslocoRootModule } from './transloco-root.module';
         HttpClientModule,
         HeaderComponent,
         TranslocoRootModule,
-        NgxsModule.forRoot([UserState, UiState, BooksState]),
+        NgxsModule.forRoot([
+            UserState,
+            UiState,
+            BooksState,
+            PublisherState,
+            AuthorState,
+        ]),
         NgxsReduxDevtoolsPluginModule.forRoot(),
         NgxsLoggerPluginModule.forRoot(),
         MatSnackBarModule,

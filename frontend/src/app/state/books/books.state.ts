@@ -14,6 +14,8 @@ import {
     BookListDto,
     BooksService,
 } from 'src/app/api';
+import { AuthorActions } from '../authors/author.actions';
+import { PublisherActions } from '../publisher/publisher.actions';
 import { BookActions } from './books.actions';
 
 export interface BookMap {
@@ -83,7 +85,7 @@ export class BooksState {
 
     @Action(BookActions.LoadBooksOfUserSuccess)
     loadBooksOfUserSuccess(
-        { patchState }: StateContext<BookStateModel>,
+        { patchState, dispatch }: StateContext<BookStateModel>,
         { books }: BookActions.LoadBooksOfUserSuccess,
     ) {
         const bookMap: BookMap = {};
@@ -92,6 +94,22 @@ export class BooksState {
             return a.title.localeCompare(b.title);
         });
         books.books.forEach((book) => (bookMap[book.isbn] = book));
+
+        const publisherIds = books.books.map((book) => book.publisherId || '');
+        dispatch(
+            new PublisherActions.LoadPublishers(
+                Array.from(new Set(publisherIds).values()),
+            ),
+        );
+
+        const authorIds = books.books.flatMap((book) =>
+            book.authors.map((author) => author.id),
+        );
+        dispatch(
+            new AuthorActions.LoadAuthors(
+                Array.from(new Set(authorIds).values()),
+            ),
+        );
 
         patchState({
             currentCollectionMap: bookMap,
