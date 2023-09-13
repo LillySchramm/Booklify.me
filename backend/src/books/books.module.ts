@@ -9,6 +9,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { SecretsModule } from 'src/secrets/secrets.module';
 import { BookGroupsModule } from 'src/book-groups/bookGroups.module';
 import { AuthorsModule } from 'src/authors/authors.module';
+import { PublishersModule } from 'src/publishers/publishers.module';
 @Module({
     providers: [BooksService],
     controllers: [BooksController],
@@ -21,6 +22,7 @@ import { AuthorsModule } from 'src/authors/authors.module';
         SecretsModule,
         BookGroupsModule,
         AuthorsModule,
+        PublishersModule,
     ],
 })
 export class BooksModule {}

@@ -17,7 +17,6 @@ import {
     BookCover,
     BookStatus,
     OwnershipStatus,
-    Publisher,
     User,
 } from '@prisma/client';
 import { Retryable } from 'typescript-retry-decorator';
@@ -25,6 +24,7 @@ import { TesseractService } from 'src/tesseract/tesseract.service';
 import { Magic } from 'mmmagic';
 import { BookWithGroupIdAndAuthors } from './dto/book.dto';
 import { AuthorsService } from 'src/authors/authors.service';
+import { PublishersService } from 'src/publishers/publishers.service';
 
 interface CoverCrawlResult {
     buffer: Buffer | null;
@@ -47,19 +47,8 @@ export class BooksService {
         private prisma: PrismaService,
         private tesseract: TesseractService,
         private authorService: AuthorsService,
+        private publisherService: PublishersService,
     ) {}
-
-    async upsertPublisher(name: string): Promise<Publisher> {
-        return await this.prisma.publisher.upsert({
-            where: {
-                name,
-            },
-            create: {
-                name,
-            },
-            update: {},
-        });
-    }
 
     async doesBookExist(isbn: string) {
         const book = await this.prisma.book.findFirst({
@@ -80,7 +69,7 @@ export class BooksService {
         }
 
         if (book.publisher) {
-            await this.upsertPublisher(book.publisher);
+            await this.publisherService.upsertPublisher(book.publisher);
         }
 
         await this.prisma.book.create({

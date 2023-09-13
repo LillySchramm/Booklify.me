@@ -6,6 +6,7 @@ api/auth.service.ts
 api/authors.service.ts
 api/bookGroups.service.ts
 api/books.service.ts
+api/publishers.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -22,6 +23,8 @@ model/getIdListDto.ts
 model/models.ts
 model/newPasswordDto.ts
 model/ownershipStatusDto.ts
+model/publisherDto.ts
+model/publisherListDto.ts
 model/resetPasswordDto.ts
 model/resetPasswordRequestDto.ts
 model/sessionDto.ts

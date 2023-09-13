@@ -9,6 +9,8 @@ export * from './bookListDto';
 export * from './getIdListDto';
 export * from './newPasswordDto';
 export * from './ownershipStatusDto';
+export * from './publisherDto';
+export * from './publisherListDto';
 export * from './resetPasswordDto';
 export * from './resetPasswordRequestDto';
 export * from './sessionDto';
