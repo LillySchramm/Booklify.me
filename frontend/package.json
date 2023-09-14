@@ -30,6 +30,7 @@
     "@ngneat/until-destroy": "^10.0.0",
     "@ngxs/logger-plugin": "^3.8.1",
     "@ngxs/store": "^3.8.1",
+    "isbn3": "^1.1.41",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "wrap-ansi": "^8.1.0",

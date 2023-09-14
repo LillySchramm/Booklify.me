@@ -8,6 +8,7 @@ import {
     ValidationErrors,
     ValidatorFn,
 } from '@angular/forms';
+import { parse } from 'isbn3';
 
 function usernameMinLengthValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -110,6 +111,20 @@ function passwordContainsSpecialCharacterValidator(): ValidatorFn {
     };
 }
 
+function isbnValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+        if (!control.value) {
+            return null;
+        }
+
+        const parsed = parse(control.value);
+
+        return parsed === null || !parsed.isValid
+            ? { isbn: { value: control.value } }
+            : null;
+    };
+}
+
 function passwordsNotEqualValidator(form: () => FormGroup): ValidatorFn {
     return (): ValidationErrors | null => {
         const password1Field = form().get('password1');
@@ -142,4 +157,6 @@ export class CustomValidators {
     static passwordContainsSpecialCharacterValidator =
         passwordContainsSpecialCharacterValidator;
     static passwordsNotEqualValidator = passwordsNotEqualValidator;
+
+    static isbnValidator = isbnValidator;
 }

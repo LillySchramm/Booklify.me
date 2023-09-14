@@ -1,4 +1,9 @@
-import { BookGroupListDto, BookListDto } from 'src/app/api';
+import {
+    BookDto,
+    BookGroupListDto,
+    BookListDto,
+    SetOwnershipStatusDto,
+} from 'src/app/api';
 
 export namespace BookActions {
     export class LoadBooksOfUser {
@@ -34,5 +39,32 @@ export namespace BookActions {
     export class SelectBook {
         static readonly type = '[Books] Select Book';
         constructor(public id: string | undefined) {}
+    }
+
+    export class SearchBooks {
+        static readonly type = '[Books] Search Book';
+        constructor(public isbn: string) {}
+    }
+
+    export class SearchBooksSuccess {
+        static readonly type = '[Books] Search Book Success';
+        constructor(public book: BookDto) {}
+    }
+
+    export class SearchBooksFail {
+        static readonly type = '[Books] Search Book Fail';
+        constructor(public error: string) {}
+    }
+
+    export class ChangeOwnership {
+        static readonly type = '[Books] Change Ownership';
+        constructor(
+            public bookId: string,
+            public payload: SetOwnershipStatusDto,
+        ) {}
+    }
+
+    export class ChangeOwnershipSuccess {
+        static readonly type = '[Books] Change Ownership Success';
     }
 }

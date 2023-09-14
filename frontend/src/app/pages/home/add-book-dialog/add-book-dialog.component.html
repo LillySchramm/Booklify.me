@@ -1,0 +1,66 @@
+<ng-container *transloco="let t">
+    <h2 mat-dialog-title>{{ t('add-book-dialog.title') }}</h2>
+
+    <mat-dialog-content class="mat-typography w-[40rem] !overflow-hidden">
+        <form
+            [formGroup]="form"
+            class="flex w-full flex-row items-baseline gap-4 p-4 pb-0"
+        >
+            <mat-form-field color="accent" class="grow">
+                <mat-label>{{ t('add-book-dialog.isbn') }}</mat-label>
+                <input matInput type="text" formControlName="isbn" />
+                <mat-error *ngIf="form.get('isbn')?.invalid">{{
+                    form.get('isbn')?.errors | formError
+                }}</mat-error>
+            </mat-form-field>
+            <button
+                mat-flat-button
+                color="primary"
+                [disabled]="form.pristine || form.invalid || $searchLoading()"
+                (click)="search()"
+            >
+                {{ t('add-book-dialog.search') }}
+            </button>
+        </form>
+        <app-book-details
+            [compact]="true"
+            class="inline-block max-h-[45vh] w-full overflow-scroll"
+            *ngIf="$searchResult() as book"
+            [displayBook]="book"
+        ></app-book-details>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <div
+            [matTooltip]="
+                $currentCollection()?.includes($searchResult()?.isbn ?? '')
+                    ? t('add-book-dialog.already-in-collection')
+                    : ''
+            "
+        >
+            <button
+                mat-flat-button
+                color="primary"
+                class="mr-4"
+                [disabled]="
+                    $searchLoading() ||
+                    !$searchResult() ||
+                    $ownershipChangeLoading() ||
+                    $currentCollection()?.includes($searchResult()?.isbn ?? '')
+                "
+                (click)="addBook()"
+            >
+                {{ t('add-book-dialog.add') }}
+            </button>
+        </div>
+        <button mat-button mat-dialog-close>
+            {{ t('add-book-dialog.close') }}
+        </button>
+    </mat-dialog-actions>
+    <mat-progress-bar
+        mode="indeterminate"
+        class="rounded-xl"
+        *ngIf="$searchLoading(); else filler"
+    ></mat-progress-bar>
+    <ng-template #filler><div class="mb-1"></div></ng-template>
+</ng-container>

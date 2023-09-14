@@ -6,6 +6,9 @@
         <span *ngIf="$title() as title" class="text-xl">{{ title }}</span>
     </div>
     <div class="mt-28">
-        <app-book-details class="overflow-scroll"></app-book-details>
+        <app-book-details
+            class="overflow-scroll"
+            [displayBook]="$selectedBook()"
+        ></app-book-details>
     </div>
 </div>

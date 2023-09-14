@@ -66,6 +66,10 @@ export class FormErrorPipe implements PipeTransform {
             );
         }
 
+        if (value['isbn']) {
+            return this.transloco.translate('form-errors.isbn');
+        }
+
         return '';
     }
 }

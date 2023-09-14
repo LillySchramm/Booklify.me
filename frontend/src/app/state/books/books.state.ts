@@ -11,9 +11,9 @@ import {
     BookDto,
     BookGroupDto,
     BookGroupsService,
-    BookListDto,
     BooksService,
 } from 'src/app/api';
+import { SnackBarService } from 'src/app/common/services/snack-bar.service';
 import { AuthorActions } from '../authors/author.actions';
 import { PublisherActions } from '../publisher/publisher.actions';
 import { BookActions } from './books.actions';
@@ -28,14 +28,18 @@ export interface BookGroupMap {
 
 interface BookStateModel {
     selectedBook?: string;
-    currentCollectionMap?: BookMap;
-    currentCollection?: BookListDto;
+    currentCollection?: string[];
+    bookMap: BookMap;
     currentOwnerId?: string;
     loadingCollection: boolean;
     loadingCollectionError?: string;
     currentGroupMap?: BookGroupMap;
     loadingGroups: boolean;
     loadingGroupsError?: string;
+    searchResult?: string;
+    searchError?: string;
+    searchLoading: boolean;
+    ownershipChangeLoading: boolean;
 }
 
 @State<BookStateModel>({
@@ -43,6 +47,9 @@ interface BookStateModel {
     defaults: {
         loadingCollection: false,
         loadingGroups: false,
+        searchLoading: false,
+        ownershipChangeLoading: false,
+        bookMap: {},
     },
 })
 @Injectable()
@@ -50,6 +57,7 @@ export class BooksState {
     constructor(
         private bookApi: BooksService,
         private bookGroupApi: BookGroupsService,
+        private snack: SnackBarService,
     ) {}
 
     @Action(BookActions.LoadBooksOfUser)
@@ -62,7 +70,6 @@ export class BooksState {
         if (state.currentOwnerId !== id) {
             patchState({
                 selectedBook: undefined,
-                currentCollectionMap: undefined,
                 currentCollection: undefined,
                 currentOwnerId: id,
             });
@@ -85,10 +92,12 @@ export class BooksState {
 
     @Action(BookActions.LoadBooksOfUserSuccess)
     loadBooksOfUserSuccess(
-        { patchState, dispatch }: StateContext<BookStateModel>,
+        { patchState, dispatch, getState }: StateContext<BookStateModel>,
         { books }: BookActions.LoadBooksOfUserSuccess,
     ) {
-        const bookMap: BookMap = {};
+        const state = getState();
+        const bookMap = state.bookMap;
+
         books.books = books.books.sort((a, b) => {
             if (!a.title || !b.title) return a.isbn.localeCompare(b.isbn);
             return a.title.localeCompare(b.title);
@@ -112,10 +121,10 @@ export class BooksState {
         );
 
         patchState({
-            currentCollectionMap: bookMap,
-            currentCollection: books,
+            currentCollection: books.books.map((book) => book.isbn),
             loadingCollectionError: undefined,
             loadingCollection: false,
+            bookMap: bookMap,
         });
     }
 
@@ -125,7 +134,6 @@ export class BooksState {
         { error }: BookActions.LoadBooksOfUserFail,
     ) {
         patchState({
-            currentCollectionMap: undefined,
             currentCollection: undefined,
             loadingCollectionError: error,
             loadingCollection: false,
@@ -199,22 +207,118 @@ export class BooksState {
         });
     }
 
+    @Action(BookActions.SearchBooks)
+    searchBooks(
+        { patchState, dispatch }: StateContext<BookStateModel>,
+        { isbn }: BookActions.SearchBooks,
+    ) {
+        patchState({
+            searchLoading: true,
+            searchError: undefined,
+            searchResult: undefined,
+        });
+
+        return this.bookApi.booksControllerGetBook(isbn).pipe(
+            tap((book) => dispatch(new BookActions.SearchBooksSuccess(book))),
+            catchError((error) =>
+                dispatch(new BookActions.SearchBooksFail(error.error)),
+            ),
+        );
+    }
+
+    @Action(BookActions.SearchBooksSuccess)
+    searchBooksSuccess(
+        { patchState, getState, dispatch }: StateContext<BookStateModel>,
+        { book }: BookActions.SearchBooksSuccess,
+    ) {
+        patchState({
+            searchLoading: false,
+            bookMap: {
+                ...getState().bookMap,
+                [book.isbn]: book,
+            },
+            searchResult: book.isbn,
+        });
+
+        if (book.publisherId) {
+            dispatch(new PublisherActions.LoadPublishers([book.publisherId]));
+        }
+
+        const authorIds = book.authors.map((author) => author.id);
+        dispatch(new AuthorActions.LoadAuthors(authorIds));
+    }
+
+    @Action(BookActions.SearchBooksFail)
+    searchBooksFail(
+        { patchState }: StateContext<BookStateModel>,
+        { error }: BookActions.SearchBooksFail,
+    ) {
+        patchState({
+            searchLoading: false,
+            searchError: error,
+        });
+
+        this.snack.show('No book found with this ISBN', 'error');
+    }
+
+    @Action(BookActions.ChangeOwnership)
+    changeOwnership(
+        { patchState, getState, dispatch }: StateContext<BookStateModel>,
+        { bookId, payload }: BookActions.ChangeOwnership,
+    ) {
+        const state = getState();
+        const ownedBooks = state.currentCollection || [];
+
+        if (payload.status === 'NONE' && ownedBooks.includes(bookId)) {
+            ownedBooks.splice(ownedBooks.indexOf(bookId), 1);
+        }
+
+        if (payload.status !== 'NONE' && !ownedBooks.includes(bookId)) {
+            ownedBooks.push(bookId);
+        }
+
+        patchState({
+            ownershipChangeLoading: true,
+            currentCollection: ownedBooks,
+        });
+
+        return this.bookApi
+            .booksControllerSetBookOwnershipStatus(bookId, payload)
+            .pipe(
+                tap(() => {
+                    dispatch(
+                        new BookActions.LoadBooksOfUser(
+                            state.currentOwnerId || '',
+                        ),
+                    );
+                    dispatch(new BookActions.ChangeOwnershipSuccess());
+                }),
+            );
+    }
+
+    @Action(BookActions.ChangeOwnershipSuccess)
+    changeOwnershipSuccess({ patchState }: StateContext<BookStateModel>) {
+        patchState({
+            ownershipChangeLoading: false,
+        });
+    }
+
     @Selector()
-    static currentCollection(state: BookStateModel) {
+    static currentCollection(state: BookStateModel): string[] | undefined {
         return state.currentCollection;
     }
 
     @Selector()
-    static currentCollectionMap(state: BookStateModel) {
-        return state.currentCollectionMap;
+    static bookMap(state: BookStateModel) {
+        return state.bookMap;
     }
 
     @Selector()
     static selectedBook(state: BookStateModel) {
-        if (!state.selectedBook || !state.currentCollectionMap) {
+        if (!state.selectedBook) {
             return undefined;
         }
-        return state.currentCollectionMap[state.selectedBook];
+        return state.bookMap[state.selectedBook];
     }
 
     @Selector()
@@ -228,12 +332,12 @@ export class BooksState {
     }
 
     static book(id: string) {
-        return createSelector([BooksState], (state: BookStateModel) => {
-            if (!state.currentCollectionMap) {
-                return undefined;
-            }
-            return state.currentCollectionMap[id];
-        });
+        return createSelector(
+            [BooksState],
+            (state: BookStateModel): BookDto | undefined => {
+                return state.bookMap[id];
+            },
+        );
     }
 
     @Selector()
@@ -249,6 +353,53 @@ export class BooksState {
     @Selector()
     static loadingGroupsError(state: BookStateModel) {
         return state.loadingGroupsError;
+    }
+
+    @Selector()
+    static searchResult(state: BookStateModel) {
+        return state.searchResult;
+    }
+
+    @Selector()
+    static searchLoading(state: BookStateModel) {
+        return state.searchLoading;
+    }
+
+    @Selector()
+    static searchError(state: BookStateModel) {
+        return state.searchError;
+    }
+
+    @Selector()
+    static ownsSelectedBook(state: BookStateModel): boolean {
+        if (!state.selectedBook || !state.currentCollection) {
+            return false;
+        }
+
+        return state.currentCollection.includes(state.selectedBook);
+    }
+
+    @Selector()
+    static ownershipChangeLoading(state: BookStateModel) {
+        return state.ownershipChangeLoading;
+    }
+
+    @Selector()
+    static currentBookList(state: BookStateModel): BookDto[] | undefined {
+        if (!state.currentCollection) {
+            return undefined;
+        }
+
+        return state.currentCollection.map((isbn) => state.bookMap[isbn]);
+    }
+
+    @Selector()
+    static searchedBook(state: BookStateModel) {
+        if (!state.searchResult) {
+            return undefined;
+        }
+
+        return state.bookMap[state.searchResult];
     }
 
     static group(id: string) {

@@ -4,7 +4,9 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { BookDto } from 'src/app/api';
 import { BookActions } from 'src/app/state/books/books.actions';
+import { BooksState } from 'src/app/state/books/books.state';
 import { UiActions } from 'src/app/state/ui/ui.actions';
 import { UiState } from 'src/app/state/ui/ui.state';
 import { BookDetailsComponent } from '../book-details/book-details.component';
@@ -19,6 +21,11 @@ import { BookDetailsComponent } from '../book-details/book-details.component';
 export class BookDetailsSideComponent {
     @Select(UiState.infoTitle) title$!: Observable<string | undefined>;
     $title = toSignal(this.title$);
+
+    @Select(BooksState.selectedBook) selectedBook$!: Observable<
+        BookDto | undefined
+    >;
+    $selectedBook = toSignal(this.selectedBook$);
 
     constructor(private store: Store) {}
 

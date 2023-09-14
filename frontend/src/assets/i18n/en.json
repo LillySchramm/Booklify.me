@@ -26,7 +26,8 @@
     "passwordContainsLowercase": "At least one lowercase character",
     "passwordContainsUppercase": "At least one uppercase character",
     "passwordContainsNumber": "At least one number",
-    "passwordContainsSpecialCharacter": "At least one special character"
+    "passwordContainsSpecialCharacter": "At least one special character",
+    "isbn": "Not A Valid ISBN"
   },
   "signup-success": {
     "title": "Verify your E-Mail",
@@ -59,7 +60,9 @@
     "search": "Search",
     "filter": "Filter",
     "add-book": "Add Book",
-    "add-group": "Add Group"
+    "add-group": "Add Group",
+    "add-book-text": "Add book to your collection",
+    "remove-book-text": "Remove book from your collection"
   },
   "book-groups": {
     "unknown": "Unassigned",
@@ -78,6 +81,15 @@
     "published": "Published: ",
     "pages": "Pages: ",
     "language": "Language: ",
-    "isbn": "ISBN: "
+    "isbn": "ISBN: ",
+    "title": "Title"
+  },
+  "add-book-dialog": {
+    "title": "Add Book",
+    "close": "Close",
+    "isbn": "ISBN",
+    "search": "Search",
+    "add": "Add To Collection",
+    "already-in-collection": "You Already Have This Book In Your Collection"
   }
 }

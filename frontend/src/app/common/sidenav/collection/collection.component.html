@@ -26,7 +26,7 @@
             extended
             color="primary"
             class="!w-full"
-            [disabled]="true"
+            (click)="openAddBookDialog()"
         >
             <mat-icon>add</mat-icon>
             {{ t('collection.add-book') }}

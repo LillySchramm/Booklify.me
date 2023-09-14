@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Select, Store } from '@ngxs/store';
 import { Observable, map } from 'rxjs';
-import { BookDto, BookListDto } from 'src/app/api';
+import { BookDto } from 'src/app/api';
 import { BooksState } from 'src/app/state/books/books.state';
 import { BookGroupComponent } from '../book-group/book-group.component';
 
@@ -19,8 +19,8 @@ export interface BookGrouping {
     styleUrls: ['./collection-display.component.scss'],
 })
 export class CollectionDisplayComponent {
-    @Select(BooksState.currentCollection) currentCollection$!: Observable<
-        BookListDto | undefined
+    @Select(BooksState.currentBookList) currentCollection$!: Observable<
+        BookDto[] | undefined
     >;
     $currentCollection = toSignal(this.currentCollection$);
 
@@ -30,7 +30,7 @@ export class CollectionDisplayComponent {
 
             const map = {} as BookGrouping;
 
-            for (const book of collection.books) {
+            for (const book of collection) {
                 const groupId = book.groupId || 'unknown';
                 if (!map[groupId]) {
                     map[groupId] = [];

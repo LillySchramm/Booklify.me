@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatDividerModule } from '@angular/material/divider';
 import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Select, Store } from '@ngxs/store';
-import { Observable, combineLatest, map } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, map } from 'rxjs';
 import { BookDto } from 'src/app/api';
+import { UpdateBookOwnershipButtonComponent } from 'src/app/pages/home/update-book-ownership-button/update-book-ownership-button.component';
 import { AuthorMap, AuthorState } from 'src/app/state/authors/author.state';
-import { BooksState } from 'src/app/state/books/books.state';
 import {
     PublisherMap,
     PublisherState,
@@ -30,12 +30,20 @@ import { NoImagePlaceholderComponent } from '../no-image-placeholder/no-image-pl
         MatDividerModule,
         LanguagePipe,
         IsbnPipe,
+        UpdateBookOwnershipButtonComponent,
     ],
     templateUrl: './book-details.component.html',
     styleUrls: ['./book-details.component.scss'],
 })
 export class BookDetailsComponent {
-    @Select(BooksState.selectedBook) book$!: Observable<BookDto | undefined>;
+    @Input()
+    set displayBook(book: BookDto | undefined) {
+        this.book$.next(book);
+    }
+
+    @Input() compact = false;
+
+    book$ = new BehaviorSubject<BookDto | undefined>(undefined);
     $book = toSignal(this.book$);
 
     @Select(PublisherState.publishers) publishers$!: Observable<PublisherMap>;
