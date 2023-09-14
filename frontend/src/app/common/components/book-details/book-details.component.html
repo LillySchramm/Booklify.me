@@ -21,26 +21,30 @@
             <p *ngIf="$authorNames() as authorNames">
                 {{ t('book-details.authors') }}
                 <span *ngFor="let author of authorNames; index as i">
-                    <span>{{ author }}</span>
+                    <span class="text-highlight">{{ author }}</span>
                     <span *ngIf="i !== authorNames.length - 1">, </span>
                 </span>
             </p>
             <p>
                 {{ t('book-details.publisher') }}
-                <span>{{ $publisherName() }}</span>
+                <span class="text-highlight">{{ $publisherName() }}</span>
             </p>
             <p *ngIf="book.publishedDate as publishedDate">
                 {{ t('book-details.published') }}
-                <span>{{ publishedDate | date }}</span>
+                <span class="text-highlight">{{ publishedDate | date }}</span>
             </p>
             <p *ngIf="book.pageCount || book.printedPageCount">
                 {{ t('book-details.pages') }}
-                <span>{{ book.pageCount || book.printedPageCount }}</span>
+                <span class="text-highlight">{{
+                    book.pageCount || book.printedPageCount
+                }}</span>
             </p>
 
             <p *ngIf="book.language">
                 {{ t('book-details.language') }}
-                <span>{{ book.language }}</span>
+                <span class="text-highlight">{{
+                    book.language | language
+                }}</span>
             </p>
         </div>
     </div>

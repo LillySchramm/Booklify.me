@@ -16,7 +16,7 @@ import { RouterModule } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { FormErrorPipe } from 'src/app/pipes/form-error.pipe';
+import { FormErrorPipe } from 'src/app/common/pipes/form-error.pipe';
 import { UserActions } from 'src/app/state/user/user.actions';
 import { UserState } from 'src/app/state/user/user.state';
 

@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { TranslocoModule } from '@ngneat/transloco';
-import { FormErrorPipe } from 'src/app/pipes/form-error.pipe';
+import { FormErrorPipe } from 'src/app/common/pipes/form-error.pipe';
 
 @Component({
     selector: 'app-collection',
