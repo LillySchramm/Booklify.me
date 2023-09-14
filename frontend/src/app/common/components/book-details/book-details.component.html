@@ -46,6 +46,11 @@
                     book.language | language
                 }}</span>
             </p>
+
+            <p *ngIf="book.language">
+                {{ t('book-details.isbn') }}
+                <span class="text-highlight">{{ book.isbn | isbn }}</span>
+            </p>
         </div>
     </div>
 </ng-container>

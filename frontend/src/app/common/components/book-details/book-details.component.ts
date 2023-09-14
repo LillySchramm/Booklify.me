@@ -14,6 +14,7 @@ import {
     PublisherState,
 } from 'src/app/state/publisher/publisher.state';
 import { UiActions } from 'src/app/state/ui/ui.actions';
+import { IsbnPipe } from '../../pipes/isbn.pipe';
 import { LanguagePipe } from '../../pipes/language.pipe';
 import { CoverService } from '../../services/cover.service';
 import { NoImagePlaceholderComponent } from '../no-image-placeholder/no-image-placeholder.component';
@@ -28,6 +29,7 @@ import { NoImagePlaceholderComponent } from '../no-image-placeholder/no-image-pl
         TranslocoModule,
         MatDividerModule,
         LanguagePipe,
+        IsbnPipe,
     ],
     templateUrl: './book-details.component.html',
     styleUrls: ['./book-details.component.scss'],
