@@ -56,6 +56,8 @@ export class BooksController {
         const isIsbn = isISBN(isbn);
         if (!isIsbn) throw new BadRequestException();
 
+        isbn = isbn.replaceAll('-', '');
+
         const book = await this.bookService.getBook(isbn, req.user.id);
         if (!book) throw new NotFoundException();
 
