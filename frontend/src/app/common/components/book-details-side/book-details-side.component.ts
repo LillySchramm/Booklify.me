@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { BookDto } from 'src/app/api';
@@ -14,7 +15,12 @@ import { BookDetailsComponent } from '../book-details/book-details.component';
 @Component({
     selector: 'app-book-details-side',
     standalone: true,
-    imports: [CommonModule, MatButtonModule, BookDetailsComponent],
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        BookDetailsComponent,
+        MatIconModule,
+    ],
     templateUrl: './book-details-side.component.html',
     styleUrls: ['./book-details-side.component.scss'],
 })
