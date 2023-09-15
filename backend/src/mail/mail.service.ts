@@ -3,7 +3,6 @@ import { Transporter, createTransport } from 'nodemailer';
 import * as config from 'config';
 import { htmlToText } from 'nodemailer-html-to-text';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Agent } from 'https';
 
 @Injectable()
 export class MailService implements OnModuleInit {
