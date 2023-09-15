@@ -1,7 +1,7 @@
 {
   "url": "URL",
   "cors": "CORS",
-  "database": {
+  "db": {
     "url": "DATABASE_URL"
   },
   "mail": {
