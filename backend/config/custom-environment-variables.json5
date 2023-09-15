@@ -1,5 +1,6 @@
 {
   "url": "URL",
+  "cors": "CORS",
   "database": {
     "url": "DATABASE_URL"
   },
