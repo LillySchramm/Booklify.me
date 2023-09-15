@@ -1,6 +1,7 @@
 {
     "url": "http://localhost:4200",
     "disable_registration": false,
+    "cors": "*",
     "db": {
         "url": "postgresql://uwu:owo@localhost:5432/mangalist?schema=public"
     },
