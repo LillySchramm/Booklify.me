@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "booklify.fullname" . }}-frontend
+  labels:
+    {{- include "booklify.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.frontend.service.type }}
+  ports:
+    - port: {{ .Values.frontend.service.port }}
+      targetPort: http-frontend
+      protocol: TCP
+      name: http-frontend
+  selector:
+    {{- include "booklify.selectorLabels" . | nindent 4 }}

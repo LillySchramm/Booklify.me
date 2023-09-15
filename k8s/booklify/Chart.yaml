@@ -1,0 +1,6 @@
+apiVersion: v2
+name: booklify
+description: A Helm chart a full booklify instance
+type: application
+version: 0.1.0
+appVersion: "1.16.0"

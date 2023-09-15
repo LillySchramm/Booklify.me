@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "booklify.fullname" . }}-backend
+  labels:
+    {{- include "booklify.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.backend.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "booklify.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "booklify.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "booklify.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.backend.image }}:{{ .Values.backend.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.backend.pullPolicy }}
+          env:
+          - name: DATABASE_URL
+            value: {{ .Values.backend.config.db.url | quote }}
+
+          - name: S3_ENDPOINT
+            value: {{ .Values.backend.config.s3.endpoint | quote }}
+          - name: S3_PORT
+            value: {{ .Values.backend.config.s3.port | quote }}
+          - name: S3_USE_SSL
+            value: {{ .Values.backend.config.s3.use_ssl | quote }}
+          - name: S3_ACCESS_KEY
+            value: {{ .Values.backend.config.s3.access_key | quote }}
+          - name: S3_SECRET_KEY
+            value: {{ .Values.backend.config.s3.secret_key | quote }}
+          - name: S3_BUCKET_NAME
+            value: {{ .Values.backend.config.s3.bucket_name | quote }}
+
+          - name: CORS
+            value: {{ .Values.backend.config.cors | quote }}
+          - name: URL
+            value: {{ .Values.backend.config.url | quote }}
+
+          - name: SECURITY_KEY
+            value: {{ .Values.backend.config.security.key | quote}}
+          - name: ACCESS_TOKEN_EXPIRATION
+            value: {{ .Values.backend.config.security.access_token_expiration | quote }}
+
+          - name: DISABLE_REGISTRATION
+            value: {{ .Values.backend.config.disable_registration | quote }}
+
+          - name: MAIL_ENABLED
+            value: {{ .Values.backend.config.mail.enabled | quote }}
+          - name: MAIL_SMTP
+            value: {{ .Values.backend.config.mail.smtp | quote }}
+          - name: MAIL_FROM
+            value: {{ .Values.backend.config.mail.from | quote }}
+          - name: MAIL_IGNORE_TLS
+            value: {{ .Values.backend.config.mail.ignore_tls | quote }}
+          ports:
+            - name: http-backend
+              containerPort: 3000
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /system/health
+              port: http-backend
+          readinessProbe:
+            httpGet:
+              path: /system/health
+              port: http-backend
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,103 @@
+# Default values for booklify.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+frontend:
+    replicaCount: 1
+    image: registry.cdev.nexus/booklify-ce/frontend
+    tag: v2
+    pullPolicy: Always
+
+    ingress:
+        enabled: true
+        className: ""
+        annotations: {}
+        hosts:
+            - host: a.host
+              paths:
+                  - path: /
+                    pathType: ImplementationSpecific
+        tls:
+            - secretName: a.host-tls
+              hosts:
+                  - a.host
+
+    service:
+        type: ClusterIP
+        port: 80
+
+backend:
+    replicaCount: 1
+    image: registry.cdev.nexus/booklify-ce/backend
+    tag: v2
+    pullPolicy: Always
+
+    config:
+        url: "https://a.host"
+        cors: "*"
+        db:
+            url: ""
+        s3:
+            endpoint: ""
+            bucket_name: ""
+            access_key: ""
+            secret_key: ""
+            use_ssl: ""
+            port: 443
+        security:
+            key: "ASecureKey"
+            access_token_expiration: "1h"
+        disable_registration: "false"
+        mail:
+            enabled: "false"
+            smtp: ""
+            from: "Booklify <no-reply@a.host>"
+            ignore_tls: "true"
+
+    ingress:
+        enabled: true
+        className: ""
+        annotations: {}
+
+        hosts:
+            - host: api.a.host
+              paths:
+                  - path: /
+                    pathType: ImplementationSpecific
+        tls:
+            - secretName: api.a.host-tls
+              hosts:
+                  - api.a.host
+
+    service:
+        type: ClusterIP
+        port: 80
+
+serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+resources: {}
+
+autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
