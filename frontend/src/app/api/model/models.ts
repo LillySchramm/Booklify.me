@@ -19,5 +19,7 @@ export * from './setOwnershipStatusDto';
 export * from './signInDto';
 export * from './signInSuccessDto';
 export * from './signUpDto';
+export * from './systemHealthDto';
+export * from './systemInfoDto';
 export * from './userDto';
 export * from './userTokenDto';
