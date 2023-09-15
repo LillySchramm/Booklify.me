@@ -3,6 +3,7 @@ import { Transporter, createTransport } from 'nodemailer';
 import * as config from 'config';
 import { htmlToText } from 'nodemailer-html-to-text';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Agent } from 'https';
 
 @Injectable()
 export class MailService implements OnModuleInit {
@@ -20,12 +21,18 @@ export class MailService implements OnModuleInit {
     }
 
     async onModuleInit() {
-        if (!config.get<boolean>('mail.enabled')) return;
+        this.logger.log('Checking mail config...');
+        if (!config.get<boolean>('mail.enabled')) {
+            this.logger.log('Mail disabled. Skipping...');
+            return;
+        }
 
         const configValid = await this.transporter.verify();
         if (!configValid) {
             throw new Error('Mail config invalid.');
         }
+
+        this.logger.log('Mail config valid!');
     }
 
     async sendMail(to: string, subject: string, html: string) {

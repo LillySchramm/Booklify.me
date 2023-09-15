@@ -9,6 +9,7 @@ export class TesseractService implements OnModuleInit {
     private deWorker: TWorker;
 
     async onModuleInit() {
+        this.logger.log('Initializing workers...');
         this.enWorker = await createWorker({ errorHandler: () => 0 });
         await this.enWorker.loadLanguage('eng');
         await this.enWorker.initialize('eng');

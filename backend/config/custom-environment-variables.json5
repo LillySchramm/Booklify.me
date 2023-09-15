@@ -5,27 +5,33 @@
     "url": "DATABASE_URL"
   },
   "mail": {
-      "enabled": "MAIL_ENABLED",
-      "smtp": "MAIL_SMTP",
-      "from": "MAIL_FROM"
+    "enabled": {
+      "__name": "MAIL_ENABLED",
+      "__format": "boolean"
+    },
+    "smtp": "MAIL_SMTP",
+    "from": "MAIL_FROM"
   },
   "s3": {
-      "endpoint": "S3_ENDPOINT",
-      "port": {
-          "__name": "S3_PORT",
-          "__format": "number"
-      },
-      "access_key": "S3_ACCESS_KEY",
-      "secret_key": "S3_SECRET_KEY",
-      "use_ssl": "S3_USE_SSL",
-      "bucket_name": "S3_BUCKET_NAME"
+    "endpoint": "S3_ENDPOINT",
+    "port": {
+      "__name": "S3_PORT",
+      "__format": "number"
+    },
+    "access_key": "S3_ACCESS_KEY",
+    "secret_key": "S3_SECRET_KEY",
+    "use_ssl": {
+      "__name": "S3_USE_SSL",
+      "__format": "boolean"
+    },
+    "bucket_name": "S3_BUCKET_NAME"
   },
   "disable_registration": {
-      "__name": "DISABLE_REGISTRATION",
-      "__format": "boolean"
+    "__name": "DISABLE_REGISTRATION",
+    "__format": "boolean"
   },
   "security": {
-      "key": "SECRUITY_KEY",
-      "access_token_expiration": "ACCESS_TOKEN_EXPIRATION",
+    "key": "SECRUITY_KEY",
+    "access_token_expiration": "ACCESS_TOKEN_EXPIRATION",
   }
 }

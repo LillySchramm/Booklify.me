@@ -16,6 +16,8 @@ export class SystemService {
         try {
             await this.prismaService.user.findMany({ take: 1 });
         } catch (error) {
+            // eslint-disable-next-line no-console
+            console.log(error);
             return false;
         }
 
@@ -26,6 +28,8 @@ export class SystemService {
         try {
             await this.s3.listBuckets();
         } catch (error) {
+            // eslint-disable-next-line no-console
+            console.log(error);
             return false;
         }
 
