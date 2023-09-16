@@ -1,3 +1,4 @@
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -168,6 +169,28 @@ class GeneratorPage extends StatelessWidget {
                   appState.getNext();
                 },
                 child: Text('Next'),
+              ),
+              SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: () async {
+                    var options = ScanOptions(
+                      restrictFormat: [BarcodeFormat.ean13, BarcodeFormat.ean8],
+                      useCamera: -1,
+                      autoEnableFlash: false,
+                      android: AndroidOptions(
+                        aspectTolerance: 0.00,
+                        useAutoFocus: true,
+                      ),
+                    );
+
+                  var result = await BarcodeScanner.scan(options: options);
+
+                  print(result.type); // The result type (barcode, cancelled, failed)
+                  print(result.rawContent); // The barcode content
+                  print(result.format); // The barcode format (as enum)
+                  print(result.formatNote); // If a unknown format was scanned this field contains a note
+                },
+                child: Text('Scan'),
               ),
             ],
           ),
