@@ -1,0 +1,120 @@
+import 'package:checkbox_formfield/checkbox_formfield.dart';
+import 'package:companion_app/api/auth.api.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:flutter/material.dart';
+
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      return Scaffold(
+          body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: LoginForm(),
+      ));
+    });
+  }
+}
+
+class LoginForm extends StatefulWidget {
+  const LoginForm({super.key});
+
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final emailController =
+      TextEditingController();
+  final passwordController = TextEditingController();
+  var rememberMe = false;
+
+  void onLoginPressed() {
+    var valid = _formKey.currentState!.validate();
+    if (!valid) return;
+
+    login(emailController.text, passwordController.text, rememberMe)
+        .then((value) => {
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(value.accessToken)))
+            })
+        .onError((error, stackTrace) => {
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text('Invalid credentials')))
+            });
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          TextFormField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'E-Mail',
+              ),
+              validator: emailValidator(),
+              controller: emailController),
+          SizedBox(height: 10),
+          TextFormField(
+            obscureText: true,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Password',
+            ),
+            validator: passwordValidator(),
+            controller: passwordController,
+          ),
+          SizedBox(height: 10),
+          CheckboxListTileFormField(
+            title: Text('Remember me'),
+            onSaved: (bool? value) {},
+            onChanged: (value) => rememberMe = value,
+          ),
+          SizedBox(height: 10),
+          FilledButton.tonalIcon(
+              onPressed: onLoginPressed,
+              label: const Text('Login'),
+              icon: Icon(Icons.login)),
+        ],
+      ),
+    );
+  }
+}
+
+String? Function(String?)? emailValidator() {
+  return (String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your e-mail address';
+    }
+
+    if (EmailValidator.validate(value) == false) {
+      return 'Please enter a valid e-mail address';
+    }
+
+    return null;
+  };
+}
+
+String? Function(String?)? passwordValidator() {
+  return (String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your password';
+    }
+
+    return null;
+  };
+}
