@@ -1,7 +1,11 @@
 import 'package:checkbox_formfield/checkbox_formfield.dart';
 import 'package:companion_app/api/auth.api.dart';
+import 'package:companion_app/pages/main.page.dart';
+import 'package:companion_app/state/auth.state.dart';
+import 'package:companion_app/state/main.state.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -33,19 +37,31 @@ class _LoginFormState extends State<LoginForm> {
   final passwordController = TextEditingController();
   var rememberMe = false;
 
-  void onLoginPressed() {
+  void onLoginPressed() async {
     var valid = _formKey.currentState!.validate();
     if (!valid) return;
 
-    login(emailController.text, passwordController.text, rememberMe)
-        .then((value) => {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(value.accessToken)))
-            })
-        .onError((error, stackTrace) => {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text('Invalid credentials')))
-            });
+    TokenDto? tokenDto = null;
+    try {
+      tokenDto = await login(
+          emailController.text, passwordController.text, rememberMe);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Invalid credentials'),
+        duration: Duration(seconds: 2),
+      ));
+    }
+
+    var authState = context.read<AuthState>();
+    authState.processToken(tokenDto!.accessToken);
+
+    var mainState = context.read<MainState>();
+    mainState.setContext(Context.home);
+
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('Login successful'),
+      duration: Duration(seconds: 2),
+    ));
   }
 
   @override
@@ -57,6 +73,8 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    var authState = context.watch<AuthState>();
+
     return Form(
       key: _formKey,
       child: Column(

@@ -18,6 +18,7 @@ dependencies:
   email_validator: ^2.1.17
   checkdigit: ^0.3.1
   http: ^1.1.0
+  shared_preferences: ^2.2.1
 
 dev_dependencies:
   flutter_test:

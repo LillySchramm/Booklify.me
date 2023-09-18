@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:companion_app/pages/main.page.dart';
+import 'package:companion_app/state/auth.state.dart';
 import 'package:companion_app/state/main.state.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:flutter/material.dart';
@@ -17,13 +18,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => MainState(),
-      child: MaterialApp(
-        title: 'Booklify Companion',
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),
+      child: ChangeNotifierProvider(
+        create: (context) => AuthState(),
+        child: MaterialApp(
+          title: 'Booklify Companion',
+          theme: ThemeData(
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),
+          ),
+          home: MainPage(),
         ),
-        home: MainPage(),
       ),
     );
   }

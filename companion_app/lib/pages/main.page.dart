@@ -1,9 +1,11 @@
+import 'package:companion_app/pages/home.page.dart';
+import 'package:companion_app/pages/init.page.dart';
 import 'package:companion_app/pages/login.page.dart';
 import 'package:companion_app/state/main.state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-enum Context { login, scan, home }
+enum Context { login, scan, home, init }
 
 class MainPage extends StatelessWidget {
   @override
@@ -14,6 +16,12 @@ class MainPage extends StatelessWidget {
     switch (mainState.currentContext) {
       case Context.login:
         page = LoginPage();
+        break;
+      case Context.init:
+        page = InitPage();
+        break;
+      case Context.home:
+        page = const HomePage();
         break;
       default:
         throw UnimplementedError('no widget for ${mainState.currentContext}');
