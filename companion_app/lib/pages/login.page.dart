@@ -32,8 +32,7 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final emailController =
-      TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
   var rememberMe = false;
 
