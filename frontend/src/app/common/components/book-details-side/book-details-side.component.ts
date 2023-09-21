@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -33,7 +33,12 @@ export class BookDetailsSideComponent {
     >;
     $selectedBook = toSignal(this.selectedBook$);
 
-    constructor(private store: Store) {}
+    constructor(
+        private store: Store,
+        private cdref: ChangeDetectorRef,
+    ) {
+        this.title$.subscribe(() => this.cdref.detectChanges());
+    }
 
     close(): void {
         this.store.dispatch(new UiActions.ChangeInfoVisibility(false));
