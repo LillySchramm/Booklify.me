@@ -103,6 +103,8 @@ export class BookDetailsComponent {
 
             if (book.bookCoverId) {
                 this.coverUrl = this.cover.getCoverUrl(book.bookCoverId);
+            } else {
+                this.coverUrl = null;
             }
 
             this.store.dispatch(
