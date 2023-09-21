@@ -24,7 +24,7 @@
         </form>
         <app-book-details
             [compact]="true"
-            class="inline-block max-h-[45vh] w-full overflow-scroll"
+            class="inline-block max-h-[45vh] w-full overflow-scroll overflow-x-hidden"
             *ngIf="$searchResult() as book"
             [displayBook]="book"
         ></app-book-details>

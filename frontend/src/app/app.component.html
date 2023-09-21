@@ -15,17 +15,15 @@
     <mat-drawer
         mode="side"
         [opened]="$isInfoVisible()"
-        class="!fixed max-h-screen w-[29rem]"
+        class="!fixed max-h-screen w-[29rem] overflow-x-hidden"
         position="end"
     >
-        <div class="flex h-full flex-col">
+        <div class="flex h-full flex-col overflow-x-hidden">
             <app-book-details-side class="flex-grow"></app-book-details-side>
         </div>
     </mat-drawer>
 
-    <mat-drawer-content
-        class="!flex max-h-screen min-h-screen w-full flex-col !overflow-scroll"
-    >
+    <mat-drawer-content class="!flex max-h-screen min-h-screen w-full flex-col">
         <div class="mb-20"></div>
         <div class="flex flex-grow pl-4 pr-4">
             <router-outlet></router-outlet>

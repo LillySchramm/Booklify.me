@@ -4,6 +4,10 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+* {
+    scrollbar-color: #424242 #2f2f2f !important;
+}
+
 html,
 body {
     height: 100%;
