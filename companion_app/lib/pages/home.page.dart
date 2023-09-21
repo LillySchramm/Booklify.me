@@ -146,6 +146,18 @@ class BookCover extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (scannerState.book!.cover == null) {
+      return const Center(
+          child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.search_off_rounded),
+          SizedBox(width: 10),
+          Text("No Book cover found"),
+        ],
+      ));
+    }
+
     return CachedNetworkImage(
       imageUrl:
           "https://api.booklify.me/books/cover/${scannerState.book!.cover}.png",

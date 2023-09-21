@@ -40,7 +40,7 @@ class BookDto {
   final String? subtitle;
   final String? description;
   final String publisher;
-  final String cover;
+  final String? cover;
   final List<AuthorIdDto> authors;
   final String? groupId;
 
