@@ -4,17 +4,20 @@
     *transloco="let t"
     (click)="openInfo()"
 >
-    <img
+    <div
+        class="mb-2 flex-grow bg-contain bg-center bg-no-repeat"
+        [style.background-image]="'URL(\'' + coverUrl + '\')'"
         *ngIf="coverUrl !== null; else noimage"
-        [src]="coverUrl"
-        loading="lazy"
-        alt="cover-image"
-        class="h-full flex-grow object-contain"
-    />
+    ></div>
+
     <ng-template #noimage>
         <app-no-image-placeholder class="h-full flex-grow object-contain">{{
             t('books.no-cover')
         }}</app-no-image-placeholder>
     </ng-template>
-    <p class="!m-0 text-xs">{{ book.title }}</p>
+    <div class="flex-grow-0">
+        <p class="!m-0 text-xs">
+            {{ book.title }}
+        </p>
+    </div>
 </div>
