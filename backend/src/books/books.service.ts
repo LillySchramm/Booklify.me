@@ -3,15 +3,15 @@ import {
     Logger,
     NotFoundException,
     OnModuleInit,
-    ServiceUnavailableException,
 } from '@nestjs/common';
 
 import { gotScraping } from 'got-scraping';
 import {
     GoogleBookResponse,
     GoogleVolume,
-    GoogleVolumeInfo,
-} from './models/googleVolume.model';
+    OpenLibraryBookVolume,
+    VolumeInfo,
+} from './models/volume.model';
 import { S3Service } from 'src/s3/s3.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
@@ -38,8 +38,11 @@ interface CoverCrawlResult {
 export class BooksService implements OnModuleInit {
     private readonly logger = new Logger(S3Service.name);
 
-    private bookApiBase = 'https://www.googleapis.com/books/v1/volumes';
-    private bookCoverBase = 'https://images.isbndb.com/covers';
+    private googleBooksApiBase = 'https://www.googleapis.com/books/v1/volumes';
+    private openLibraryApiBase = 'https://openlibrary.org/isbn';
+
+    private isbndbCoverBase = 'https://images.isbndb.com/covers';
+    private openLibraryCoverBase = 'https://covers.openlibrary.org/b/isbn';
 
     private coverTextBlacklist: string[] = [
         'No Image Available',
@@ -84,7 +87,7 @@ export class BooksService implements OnModuleInit {
         return book !== null;
     }
 
-    async upsertBook(book: GoogleVolumeInfo, isbn: string, update = false) {
+    async upsertBook(book: VolumeInfo, isbn: string, update = false) {
         const data = {
             isbn,
             title: book.title,
@@ -100,22 +103,12 @@ export class BooksService implements OnModuleInit {
             printedPageCount: book.printedPageCount,
             publishedDate: book.publishedDate,
             authors: {
-                connect: book.authors.map((name) => ({ name })),
+                connect: (book.authors || []).map((name) => ({ name })),
             },
             BookFlags: {
                 create: {},
             },
         };
-
-        const bookExists = await this.doesBookExist(isbn);
-        if (bookExists) {
-            if (!update) return;
-
-            return await this.prisma.book.update({
-                where: { isbn },
-                data: { ...data, BookFlags: undefined },
-            });
-        }
 
         book.authors = book.authors ? book.authors : [];
         for (const name of book.authors) {
@@ -125,6 +118,20 @@ export class BooksService implements OnModuleInit {
         if (book.publisher) {
             await this.publisherService.upsertPublisher(book.publisher);
         }
+
+        const bookExists = await this.doesBookExist(isbn);
+        if (bookExists) {
+            if (!update) return;
+
+            this.logger.log('Updating book ' + isbn);
+
+            return await this.prisma.book.update({
+                where: { isbn },
+                data: { ...data, BookFlags: undefined },
+            });
+        }
+
+        this.logger.log('Creating book ' + isbn);
 
         return await this.prisma.book.create({
             data,
@@ -184,41 +191,86 @@ export class BooksService implements OnModuleInit {
         return await this.getBookByIsbn(isbn, userId);
     }
 
-    @Retryable({ maxAttempts: 3, backOff: 1000 })
-    async scrapeBookMetaData(
-        isbn: string,
-        update = false,
-    ): Promise<GoogleVolumeInfo> {
+    async scrapeBookMetaDataFromGoogle(isbn: string): Promise<VolumeInfo> {
         const googleBookResponse = await gotScraping.get(
-            this.bookApiBase + '?q=isbn:' + isbn,
+            this.googleBooksApiBase + '?q=isbn:' + isbn,
         );
 
         const googleBookData: GoogleBookResponse = JSON.parse(
             googleBookResponse.body,
         );
 
-        if (googleBookResponse.statusCode === 429) {
-            throw new ServiceUnavailableException();
-        }
-
         if (
             googleBookResponse.statusCode !== 200 ||
             googleBookData.totalItems === 0
         ) {
-            throw new NotFoundException();
+            this.logger.error(
+                `Google Books API returned ${googleBookResponse.statusCode} and ${googleBookData.totalItems} Items for ISBN ${isbn}.`,
+            );
+
+            return {};
         }
 
         const book: GoogleVolume = await gotScraping
             .get(googleBookData.items[0].selfLink)
             .json();
 
-        await this.upsertBook(book.volumeInfo, isbn, update);
+        return book.volumeInfo;
+    }
 
-        return googleBookData.items[0].volumeInfo;
+    async scrapeBookMetaDataFromOpenLibrary(isbn: string): Promise<VolumeInfo> {
+        const openLibraryBookResponse = await gotScraping.get(
+            `${this.openLibraryApiBase}/${isbn}.json`,
+        );
+
+        if (openLibraryBookResponse.statusCode !== 200) {
+            this.logger.error(
+                `Open Library API returned ${openLibraryBookResponse.statusCode} for ISBN ${isbn}.`,
+            );
+
+            return {};
+        }
+
+        const openLibraryBookData = JSON.parse(
+            openLibraryBookResponse.body,
+        ) as OpenLibraryBookVolume;
+
+        const book: VolumeInfo = {
+            title: openLibraryBookData.title,
+            subtitle: openLibraryBookData.subtitle,
+            description: openLibraryBookData.description,
+            publisher: openLibraryBookData.publishers?.[0],
+            pageCount: openLibraryBookData.number_of_pages,
+            printedPageCount: openLibraryBookData.number_of_pages,
+            publishedDate: openLibraryBookData.publish_date,
+        };
+
+        return book;
+    }
+
+    @Retryable({ maxAttempts: 3, backOff: 1000 })
+    async scrapeBookMetaData(
+        isbn: string,
+        update = false,
+    ): Promise<VolumeInfo> {
+        const googleBookData = await this.scrapeBookMetaDataFromGoogle(isbn);
+        const openLibraryBookData =
+            await this.scrapeBookMetaDataFromOpenLibrary(isbn);
+
+        const book = this.merge(googleBookData, openLibraryBookData);
+
+        if (book.title === undefined) {
+            throw new NotFoundException(
+                'Could not find book with ISBN ' + isbn,
+            );
+        }
+        await this.upsertBook(book, isbn, update);
+
+        return book;
     }
 
     async scrapeBookCoverFromIsbnDb(isbn: string): Promise<CoverCrawlResult> {
-        const isbndbUrl = `${this.bookCoverBase}/${isbn.substring(
+        const isbndbUrl = `${this.isbndbCoverBase}/${isbn.substring(
             isbn.length - 4,
             isbn.length - 2,
         )}/${isbn.substring(isbn.length - 2, isbn.length)}/${isbn}.jpg`;
@@ -231,17 +283,41 @@ export class BooksService implements OnModuleInit {
         return { buffer: null, url: isbndbUrl };
     }
 
+    async scrapeBookCoverFromOpenLibrary(
+        isbn: string,
+    ): Promise<CoverCrawlResult> {
+        const url = `${this.openLibraryCoverBase}/${isbn}-L.jpg?default=false`;
+        const openLibraryBookResponse = await gotScraping.get(url, {
+            timeout: {
+                request: 5000,
+            },
+        });
+
+        if (openLibraryBookResponse.statusCode !== 200) {
+            this.logger.error(
+                `Open Library Cover API returned ${openLibraryBookResponse.statusCode} for ISBN ${isbn}.`,
+            );
+
+            return { buffer: null, url: '' };
+        }
+
+        return {
+            buffer: openLibraryBookResponse.rawBody,
+            url,
+        };
+    }
+
     async scrapeBookCoverFromGoogle(
-        metadata: GoogleVolumeInfo,
+        metadata: VolumeInfo,
     ): Promise<CoverCrawlResult> {
         if (!metadata.imageLinks || !metadata.imageLinks.thumbnail) {
             const googleBookResponseFromTitle: GoogleBookResponse =
                 await gotScraping
-                    .get(this.bookApiBase + '?q=title:' + metadata.title)
+                    .get(this.googleBooksApiBase + '?q=title:' + metadata.title)
                     .json();
 
             const bookWithSameTitle = googleBookResponseFromTitle.items.find(
-                (book) => book.volumeInfo.title.startsWith(metadata.title),
+                (book) => book.volumeInfo.title!.startsWith(metadata.title!),
             );
 
             if (
@@ -303,7 +379,7 @@ export class BooksService implements OnModuleInit {
         return true;
     }
 
-    async scrapeBookCover(isbn: string, metadata?: GoogleVolumeInfo) {
+    async scrapeBookCover(isbn: string, metadata?: VolumeInfo) {
         const isbnDbImage = await this.scrapeBookCoverFromIsbnDb(isbn);
 
         if (!metadata) {
@@ -311,7 +387,11 @@ export class BooksService implements OnModuleInit {
         }
         const googleImage = await this.scrapeBookCoverFromGoogle(metadata);
 
-        for await (const blob of [isbnDbImage, googleImage]) {
+        const openLibraryImage = await this.scrapeBookCoverFromOpenLibrary(
+            isbn,
+        );
+
+        for await (const blob of [openLibraryImage, isbnDbImage, googleImage]) {
             const success = await this.trySettingCover(
                 isbn,
                 blob.url,
@@ -425,5 +505,16 @@ export class BooksService implements OnModuleInit {
             where: { bookIsbn: isbn },
             data: { recrawlInfo: value },
         });
+    }
+
+    merge<T extends object>(obj1: T, obj2: T): T {
+        return Object.assign(obj1, this.definedProps<T>(obj2));
+    }
+
+    definedProps<T extends object>(obj: T): T {
+        return Object.fromEntries(
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            Object.entries(obj).filter(([_, v]) => v !== undefined),
+        ) as T;
     }
 }
