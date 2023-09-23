@@ -51,4 +51,11 @@ export class BookCardComponent implements OnInit {
         this.store.dispatch(new UiActions.ChangeInfoVisibility(true));
         this.store.dispatch(new BookActions.SelectBook(this.book.isbn));
     }
+
+    scroll(el: HTMLElement) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 150);
+    }
 }
