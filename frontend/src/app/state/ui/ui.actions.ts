@@ -18,4 +18,9 @@ export namespace UiActions {
         static readonly type = '[UI] Change Info Title';
         constructor(public payload: string | undefined) {}
     }
+
+    export class ChangePageSubtitle {
+        static readonly type = '[UI] Change Page Subtitle';
+        constructor(public payload: string | undefined) {}
+    }
 }

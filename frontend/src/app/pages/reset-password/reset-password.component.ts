@@ -16,5 +16,6 @@ export class ResetPasswordComponent {
         this.store.dispatch(new UiActions.ChangeSidenavVisibility(false));
         this.store.dispatch(new UiActions.ChangeInfoVisibility(false));
         this.store.dispatch(new UiActions.ChangePageTitle(undefined));
+        this.store.dispatch(new UiActions.ChangePageSubtitle(undefined));
     }
 }

@@ -24,5 +24,10 @@ export class SidenavComponent {
     @Select(UiState.pageTitle) pageTitle$!: Observable<string | undefined>;
     $pageTitle = toSignal(this.pageTitle$);
 
+    @Select(UiState.pageSubtitle) pageSubtitle$!: Observable<
+        string | undefined
+    >;
+    $pageSubtitle = toSignal(this.pageSubtitle$);
+
     constructor() {}
 }

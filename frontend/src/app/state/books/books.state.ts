@@ -375,6 +375,11 @@ export class BooksState {
     }
 
     @Selector()
+    static totalBookCount(state: BookStateModel) {
+        return state.currentCollection?.length || 0;
+    }
+
+    @Selector()
     static ownsSelectedBook(state: BookStateModel): boolean {
         if (!state.selectedBook || !state.currentCollection) {
             return false;

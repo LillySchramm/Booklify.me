@@ -20,6 +20,7 @@ export class VerifyEmailComponent {
         this.store.dispatch(new UiActions.ChangeSidenavVisibility(false));
         this.store.dispatch(new UiActions.ChangePageTitle(undefined));
         this.store.dispatch(new UiActions.ChangeInfoVisibility(false));
+        this.store.dispatch(new UiActions.ChangePageSubtitle(undefined));
 
         const urlParams = new URLSearchParams(window.location.search);
         const key = urlParams.get('key');
