@@ -84,9 +84,38 @@ export class BooksService implements OnModuleInit {
         return book !== null;
     }
 
-    async upsertBook(book: GoogleVolumeInfo, isbn: string) {
+    async upsertBook(book: GoogleVolumeInfo, isbn: string, update = false) {
+        const data = {
+            isbn,
+            title: book.title,
+            subtitle: book.subtitle,
+            description: book.description,
+            publisher: {
+                connect: {
+                    name: book.publisher,
+                },
+            },
+            language: book.language,
+            pageCount: book.pageCount,
+            printedPageCount: book.printedPageCount,
+            publishedDate: book.publishedDate,
+            authors: {
+                connect: book.authors.map((name) => ({ name })),
+            },
+            BookFlags: {
+                create: {},
+            },
+        };
+
         const bookExists = await this.doesBookExist(isbn);
-        if (bookExists) return;
+        if (bookExists) {
+            if (!update) return;
+
+            return await this.prisma.book.update({
+                where: { isbn },
+                data: { ...data, BookFlags: undefined },
+            });
+        }
 
         book.authors = book.authors ? book.authors : [];
         for (const name of book.authors) {
@@ -97,28 +126,8 @@ export class BooksService implements OnModuleInit {
             await this.publisherService.upsertPublisher(book.publisher);
         }
 
-        await this.prisma.book.create({
-            data: {
-                isbn,
-                title: book.title,
-                subtitle: book.subtitle,
-                description: book.description,
-                publisher: {
-                    connect: {
-                        name: book.publisher,
-                    },
-                },
-                language: book.language,
-                pageCount: book.pageCount,
-                printedPageCount: book.printedPageCount,
-                publishedDate: book.publishedDate,
-                authors: {
-                    connect: book.authors.map((name) => ({ name })),
-                },
-                BookFlags: {
-                    create: {},
-                },
-            },
+        return await this.prisma.book.create({
+            data,
         });
     }
 
@@ -176,7 +185,10 @@ export class BooksService implements OnModuleInit {
     }
 
     @Retryable({ maxAttempts: 3, backOff: 1000 })
-    async scrapeBookMetaData(isbn: string): Promise<GoogleVolumeInfo> {
+    async scrapeBookMetaData(
+        isbn: string,
+        update = false,
+    ): Promise<GoogleVolumeInfo> {
         const googleBookResponse = await gotScraping.get(
             this.bookApiBase + '?q=isbn:' + isbn,
         );
@@ -200,7 +212,7 @@ export class BooksService implements OnModuleInit {
             .get(googleBookData.items[0].selfLink)
             .json();
 
-        await this.upsertBook(book.volumeInfo, isbn);
+        await this.upsertBook(book.volumeInfo, isbn, update);
 
         return googleBookData.items[0].volumeInfo;
     }
@@ -398,6 +410,20 @@ export class BooksService implements OnModuleInit {
         await this.prisma.bookFlags.update({
             where: { bookIsbn: isbn },
             data: { recrawlCover: value },
+        });
+    }
+
+    async getOneWithRecrawlInfoFlag(): Promise<{ isbn: string } | null> {
+        return await this.prisma.book.findFirst({
+            select: { isbn: true },
+            where: { BookFlags: { recrawlInfo: true } },
+        });
+    }
+
+    async setRecrawlInfoFlag(isbn: string, value: boolean) {
+        await this.prisma.bookFlags.update({
+            where: { bookIsbn: isbn },
+            data: { recrawlInfo: value },
         });
     }
 }

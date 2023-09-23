@@ -23,6 +23,7 @@ export class BookTasksService {
 
         await this.bookService.scrapeBookCover(book.isbn);
         await this.bookService.setRecrawlCoverFlag(book.isbn, false);
+
         this.logger.log(`Recrawled cover for book ${book.isbn}!`);
     }
 
@@ -36,5 +37,18 @@ export class BookTasksService {
         await this.bookGrouping.groupBooksOfUser(user.id);
 
         this.logger.log(`Updated grouping for user ${user.id}!`);
+    }
+
+    @Cron('*/5 * * * * *')
+    async recrawlInfo() {
+        const book = await this.bookService.getOneWithRecrawlInfoFlag();
+        if (!book) return;
+
+        this.logger.log(`Recrawling info for book ${book.isbn}...`);
+
+        await this.bookService.scrapeBookMetaData(book.isbn, true);
+        await this.bookService.setRecrawlInfoFlag(book.isbn, false);
+
+        this.logger.log(`Recrawled info for book ${book.isbn}!`);
     }
 }
