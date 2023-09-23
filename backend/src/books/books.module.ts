@@ -10,8 +10,9 @@ import { SecretsModule } from 'src/secrets/secrets.module';
 import { BookGroupsModule } from 'src/book-groups/bookGroups.module';
 import { AuthorsModule } from 'src/authors/authors.module';
 import { PublishersModule } from 'src/publishers/publishers.module';
+import { BookTasksService } from './book-tasks.service';
 @Module({
-    providers: [BooksService],
+    providers: [BooksService, BookTasksService],
     controllers: [BooksController],
     imports: [
         S3Module,

@@ -78,6 +78,17 @@ model Book {
   publisherId      String?
   bookCoverId      String?
   OwnershipStatus  OwnershipStatus[]
+  BookFlags        BookFlags?
+}
+
+model BookFlags {
+  bookIsbn String @id @unique
+  Book     Book   @relation(fields: [bookIsbn], references: [isbn])
+
+  recrawlCover Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model BookCover {

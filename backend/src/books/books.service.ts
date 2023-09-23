@@ -1,6 +1,8 @@
 import {
     Injectable,
+    Logger,
     NotFoundException,
+    OnModuleInit,
     ServiceUnavailableException,
 } from '@nestjs/common';
 
@@ -32,7 +34,9 @@ interface CoverCrawlResult {
 }
 
 @Injectable()
-export class BooksService {
+export class BooksService implements OnModuleInit {
+    private readonly logger = new Logger(S3Service.name);
+
     private bookApiBase = 'https://www.googleapis.com/books/v1/volumes';
     private bookCoverBase = 'https://images.isbndb.com/covers';
 
@@ -49,6 +53,25 @@ export class BooksService {
         private authorService: AuthorsService,
         private publisherService: PublishersService,
     ) {}
+
+    async onModuleInit() {
+        await this.addFlagsToAllBooks();
+    }
+
+    async addFlagsToAllBooks() {
+        const books = await this.prisma.book.findMany({
+            select: { isbn: true },
+            where: { BookFlags: { is: null } },
+        });
+
+        for await (const book of books) {
+            await this.prisma.bookFlags.create({
+                data: { bookIsbn: book.isbn },
+            });
+
+            this.logger.log('Added flags to book ' + book.isbn);
+        }
+    }
 
     async doesBookExist(isbn: string) {
         const book = await this.prisma.book.findFirst({
@@ -89,6 +112,9 @@ export class BooksService {
                 publishedDate: book.publishedDate,
                 authors: {
                     connect: book.authors.map((name) => ({ name })),
+                },
+                BookFlags: {
+                    create: {},
                 },
             },
         });
@@ -263,8 +289,12 @@ export class BooksService {
         return true;
     }
 
-    async scrapeBookCover(isbn: string, metadata: GoogleVolumeInfo) {
+    async scrapeBookCover(isbn: string, metadata?: GoogleVolumeInfo) {
         const isbnDbImage = await this.scrapeBookCoverFromIsbnDb(isbn);
+
+        if (!metadata) {
+            metadata = await this.scrapeBookMetaData(isbn);
+        }
         const googleImage = await this.scrapeBookCoverFromGoogle(metadata);
 
         for await (const blob of [isbnDbImage, googleImage]) {
@@ -340,6 +370,20 @@ export class BooksService {
                     select: { id: true },
                 },
             },
+        });
+    }
+
+    async getOneWithRecrawlCoverFlag(): Promise<{ isbn: string } | null> {
+        return await this.prisma.book.findFirst({
+            select: { isbn: true },
+            where: { BookFlags: { recrawlCover: true } },
+        });
+    }
+
+    async setRecrawlCoverFlag(isbn: string, value: boolean) {
+        await this.prisma.bookFlags.update({
+            where: { bookIsbn: isbn },
+            data: { recrawlCover: value },
         });
     }
 }

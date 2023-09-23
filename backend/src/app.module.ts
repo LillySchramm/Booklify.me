@@ -13,6 +13,7 @@ import { BookGroupsModule } from './book-groups/bookGroups.module';
 import { AuthorsModule } from './authors/authors.module';
 import { PublishersModule } from './publishers/publishers.module';
 import { SystemModule } from './system/system.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
     imports: [
@@ -28,6 +29,7 @@ import { SystemModule } from './system/system.module';
         AuthorsModule,
         PublishersModule,
         SystemModule,
+        ScheduleModule.forRoot(),
     ],
     controllers: [AppController],
     providers: [AppService],
