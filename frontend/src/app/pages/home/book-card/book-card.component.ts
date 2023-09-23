@@ -4,6 +4,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { MatDividerModule } from '@angular/material/divider';
 import { TranslocoModule } from '@ngneat/transloco';
 import { Select, Store } from '@ngxs/store';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
 import { Observable } from 'rxjs';
 import { BookDto } from 'src/app/api';
 import { NoImagePlaceholderComponent } from 'src/app/common/components/no-image-placeholder/no-image-placeholder.component';
@@ -20,6 +21,7 @@ import { UiActions } from 'src/app/state/ui/ui.actions';
         MatDividerModule,
         NoImagePlaceholderComponent,
         TranslocoModule,
+        LazyLoadImageModule,
     ],
     templateUrl: './book-card.component.html',
     styleUrls: ['./book-card.component.scss'],

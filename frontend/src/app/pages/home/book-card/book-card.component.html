@@ -3,10 +3,11 @@
     [ngClass]="{ '!bg-accent': $selectedBook()?.isbn === book.isbn }"
     *transloco="let t"
     (click)="openInfo()"
+    [attr.id]="'book-' + book.isbn"
 >
     <div
         class="mb-2 flex-grow bg-contain bg-center bg-no-repeat"
-        [style.background-image]="'URL(\'' + coverUrl + '\')'"
+        [lazyLoad]="coverUrl!"
         *ngIf="coverUrl !== null; else noimage"
     ></div>
 

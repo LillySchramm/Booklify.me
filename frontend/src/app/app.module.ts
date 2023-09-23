@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
 import { environment } from 'src/environments/environment';
 import { ApiModule, Configuration } from './api';
 import { AppRoutingModule } from './app-routing.module';
@@ -28,6 +29,7 @@ import { TranslocoRootModule } from './transloco-root.module';
     declarations: [AppComponent],
     imports: [
         BrowserModule,
+        LazyLoadImageModule,
         AppRoutingModule,
         BrowserAnimationsModule,
         ApiModule,
