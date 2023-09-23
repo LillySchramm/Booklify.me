@@ -217,6 +217,7 @@ export class UsersService implements OnModuleInit {
                 email,
                 password: passwordHash,
                 activated: !mailEnabled,
+                UserFlags: { create: {} },
             },
         });
 
