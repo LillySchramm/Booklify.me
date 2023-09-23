@@ -9,6 +9,7 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { BookGroupsService } from './bookGroups.service';
 import * as isbn from 'isbn3';
+import * as config from 'config';
 import { UsersService } from 'src/users/users.service';
 
 type BookWithPublisherAndAuthors = Book & {
@@ -86,7 +87,8 @@ export class BookGroupingService {
 
         if (
             !force &&
-            user.UserFlags.lastAppliedGrouperVersion >= GROUPING_VERSION
+            user.UserFlags.lastAppliedGrouperVersion >= GROUPING_VERSION &&
+            !config.get<boolean>('debug.always_regroup')
         )
             return;
 

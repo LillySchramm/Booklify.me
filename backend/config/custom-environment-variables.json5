@@ -33,5 +33,15 @@
   "security": {
     "key": "SECRUITY_KEY",
     "access_token_expiration": "ACCESS_TOKEN_EXPIRATION",
+  },
+  "debug": {
+    "show_query": {
+      "__name": "DEBUG_SHOW_QUERY",
+      "__format": "boolean"
+    },
+    "always_regroup": {
+      "__name": "DEBUG_SHOW_ERRORS",
+      "__format": "boolean"
+    }
   }
 }

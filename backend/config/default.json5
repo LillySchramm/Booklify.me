@@ -21,5 +21,9 @@
     "security": {
         "key": "AVerySecurePassword",
         "access_token_expiration": "1h",
+    },
+    "debug": {
+        "show_query": false,
+        "always_regroup": false
     }
 }
