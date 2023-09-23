@@ -3,7 +3,11 @@
         <button mat-icon-button (click)="close()" class="mr-2">
             <mat-icon>close</mat-icon>
         </button>
-        <span *ngIf="$title() as title" class="text-xl">{{ title }}</span>
+        <span
+            *ngIf="$title() as title"
+            class="w-96 whitespace-pre-wrap text-xl"
+            >{{ title }}</span
+        >
     </div>
     <div class="mt-28">
         <app-book-details [displayBook]="$selectedBook()"></app-book-details>
