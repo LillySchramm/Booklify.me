@@ -120,6 +120,10 @@ export class BooksState {
             ),
         );
 
+        dispatch(
+            new BookActions.LoadBookGroupsOfUser(state.currentOwnerId || ''),
+        );
+
         patchState({
             currentCollection: books.books.map((book) => book.isbn),
             loadingCollectionError: undefined,
