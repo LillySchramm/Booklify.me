@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BookGroup } from '@prisma/client';
+import { BookGroup, OwnershipStatus } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -52,6 +52,31 @@ export class BookGroupsService {
     async getAllBookGroupsOfUser(userId: string): Promise<BookGroup[]> {
         return await this.prisma.bookGroup.findMany({
             where: { userId },
+        });
+    }
+
+    async getAllBookGroupsOfUserWithOwnershipStatus(
+        userId: string,
+    ): Promise<(BookGroup & { OwnershipStatus: OwnershipStatus[] })[]> {
+        return await this.prisma.bookGroup.findMany({
+            where: { userId },
+            include: {
+                OwnershipStatus: { where: { userId } },
+            },
+        });
+    }
+
+    async getAllUnassignedBooksOfUser(
+        userId: string,
+    ): Promise<OwnershipStatus[]> {
+        return await this.prisma.ownershipStatus.findMany({
+            where: { userId, bookGroupId: null },
+        });
+    }
+
+    async deleteEmptyBookGroupsOfUser(userId: string): Promise<void> {
+        await this.prisma.bookGroup.deleteMany({
+            where: { userId, OwnershipStatus: { none: {} } },
         });
     }
 }

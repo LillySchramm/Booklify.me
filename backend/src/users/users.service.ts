@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { PasswordResetRequest, User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { saltRounds } from 'src/auth/constants';
@@ -6,6 +6,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import * as config from 'config';
 import { randomBytes } from 'crypto';
 import { MailService } from 'src/mail/mail.service';
+import { GROUPING_VERSION } from 'src/book-groups/bookGrouping.service';
 
 const VERIFICATION_EMAIL_CONTENT = `
 <h1>Verify your Booklify Account</h1>
@@ -25,11 +26,32 @@ const PASSWORD_RESET_EMAIL_CONTENT = `
 `;
 
 @Injectable()
-export class UsersService {
+export class UsersService implements OnModuleInit {
+    private readonly logger = new Logger(UsersService.name);
+
     constructor(
         private readonly prisma: PrismaService,
         private readonly mail: MailService,
     ) {}
+
+    async onModuleInit() {
+        await this.addFlagsToAllUsers();
+    }
+
+    async addFlagsToAllUsers() {
+        const users = await this.prisma.user.findMany({
+            select: { id: true },
+            where: { UserFlags: { is: null } },
+        });
+
+        for await (const user of users) {
+            await this.prisma.userFlags.create({
+                data: { userId: user.id },
+            });
+
+            this.logger.log('Added flags to user ' + user.id);
+        }
+    }
 
     async findByEmail(email: string): Promise<User | null> {
         return await this.prisma.user.findFirst({
@@ -203,5 +225,25 @@ export class UsersService {
         }
 
         return user;
+    }
+
+    async getUserWithOutdatedGroupingFlag(): Promise<User | null> {
+        return await this.prisma.user.findFirst({
+            where: {
+                UserFlags: {
+                    lastAppliedGrouperVersion: { lt: GROUPING_VERSION },
+                },
+            },
+        });
+    }
+
+    async updateUserGroupingVersionFlag(
+        userId: string,
+        version: number,
+    ): Promise<void> {
+        await this.prisma.userFlags.update({
+            data: { lastAppliedGrouperVersion: version },
+            where: { userId },
+        });
     }
 }

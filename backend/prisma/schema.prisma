@@ -30,6 +30,17 @@ model User {
   PasswordResetRequest PasswordResetRequest[]
   OwnershipStatus      OwnershipStatus[]
   BookGroup            BookGroup[]
+  UserFlags            UserFlags?
+}
+
+model UserFlags {
+  userId String @id @unique
+  User   User   @relation(fields: [userId], references: [id])
+
+  lastAppliedGrouperVersion Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model VerificationEmail {
@@ -177,48 +188,3 @@ model PasswordResetRequest {
   updatedAt DateTime @default(now()) @updatedAt
   userId    String
 }
-
-// model OwnershipStatus {
-//   user   User       @relation(fields: [userId], references: [id])
-//   book   Book       @relation(fields: [bookIsbn], references: [isbn])
-//   status BookStatus
-
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-//   userId    String
-//   bookIsbn  String
-
-//   @@id([userId, bookIsbn])
-// }
-
-// model Snapshot {
-//   id          String              @id @default(uuid())
-//   user        User                @relation(fields: [userId], references: [id])
-//   bookGroups  SnapshotBookGroup[]
-//   ttl         BigInt?
-//   invalidated Boolean             @default(false)
-
-//   createdAt DateTime @default(now())
-//   userId    String
-// }
-
-// model SnapshotBookGroup {
-//   id         String    @id @default(uuid())
-//   books      Book[]
-//   name       String
-//   Snapshot   Snapshot? @relation(fields: [snapshotId], references: [id])
-//   snapshotId String?
-// }
-
-// model BookGroup {
-//   id    String @id @default(uuid())
-//   user  User   @relation(fields: [userId], references: [id])
-//   books Book[]
-//   name  String
-
-//   canBeDeleted Boolean @default(true)
-
-//   userId String
-
-//   createdAt DateTime @default(now())
-// }

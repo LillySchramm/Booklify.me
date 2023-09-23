@@ -24,6 +24,7 @@ import { BookTasksService } from './book-tasks.service';
         BookGroupsModule,
         AuthorsModule,
         PublishersModule,
+        BookGroupsModule,
     ],
 })
 export class BooksModule {}

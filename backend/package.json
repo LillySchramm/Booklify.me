@@ -41,6 +41,7 @@
     "file-type-cjs": "^1.0.7",
     "got": "^13.0.0",
     "got-scraping": "^3.2.15",
+    "isbn3": "^1.1.41",
     "jpeg-js": "^0.4.4",
     "minio": "^7.1.1",
     "mmmagic": "^0.5.3",

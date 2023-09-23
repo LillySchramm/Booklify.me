@@ -27,6 +27,7 @@ import { Magic } from 'mmmagic';
 import { BookWithGroupIdAndAuthors } from './dto/book.dto';
 import { AuthorsService } from 'src/authors/authors.service';
 import { PublishersService } from 'src/publishers/publishers.service';
+import { BookGroupingService } from 'src/book-groups/bookGrouping.service';
 
 interface CoverCrawlResult {
     buffer: Buffer | null;
@@ -52,6 +53,7 @@ export class BooksService implements OnModuleInit {
         private tesseract: TesseractService,
         private authorService: AuthorsService,
         private publisherService: PublishersService,
+        private bookGroupingService: BookGroupingService,
     ) {}
 
     async onModuleInit() {
@@ -330,7 +332,11 @@ export class BooksService implements OnModuleInit {
         status: BookStatus,
         bookGroupId: string | null = null,
     ): Promise<OwnershipStatus> {
-        return await this.prisma.ownershipStatus.upsert({
+        if (status === BookStatus.NONE) {
+            bookGroupId = null;
+        }
+
+        const ownership = await this.prisma.ownershipStatus.upsert({
             where: {
                 // eslint-disable-next-line camelcase
                 userId_bookIsbn: { bookIsbn: book.isbn, userId: user.id },
@@ -343,6 +349,12 @@ export class BooksService implements OnModuleInit {
             },
             update: { status, bookGroupId },
         });
+
+        if (status === BookStatus.OWNED) {
+            await this.bookGroupingService.groupBooksOfUser(user.id, true);
+        }
+
+        return ownership;
     }
 
     async getBookOwnership(user: User, book: Book): Promise<OwnershipStatus> {
@@ -357,6 +369,8 @@ export class BooksService implements OnModuleInit {
     async getAllOwnedBooksOfUser(
         userId: string,
     ): Promise<BookWithGroupIdAndAuthors[]> {
+        await this.bookGroupingService.groupBooksOfUser(userId);
+
         return await this.prisma.book.findMany({
             where: {
                 OwnershipStatus: { some: { userId, status: BookStatus.OWNED } },
