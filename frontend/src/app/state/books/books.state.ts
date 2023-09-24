@@ -98,10 +98,6 @@ export class BooksState {
         const state = getState();
         const bookMap = state.bookMap;
 
-        books.books = books.books.sort((a, b) => {
-            if (!a.title || !b.title) return a.isbn.localeCompare(b.isbn);
-            return a.title.localeCompare(b.title);
-        });
         books.books.forEach((book) => (bookMap[book.isbn] = book));
 
         const publisherIds = books.books.map((book) => book.publisherId || '');

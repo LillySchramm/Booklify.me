@@ -77,6 +77,30 @@ export class CollectionDisplayComponent {
                 return aGroup.name.localeCompare(bGroup.name);
             });
         }),
+        map((entries) => {
+            return entries.map((entry) => {
+                return {
+                    key: entry.key,
+                    value: entry.value.sort((a, b) => {
+                        if (a.title && b.title) {
+                            const aNumber = this.getBookNumberFromTitle(
+                                a.title,
+                            );
+                            const bNumber = this.getBookNumberFromTitle(
+                                b.title,
+                            );
+
+                            if (aNumber && bNumber) {
+                                return aNumber > bNumber ? 1 : -1;
+                            }
+                        }
+
+                        return a.isbn.localeCompare(b.isbn);
+                        // return a.title.localeCompare(b.title);
+                    }),
+                };
+            });
+        }),
     );
     $groupedBooks = toSignal(this.groupedBooks$);
 
@@ -87,5 +111,14 @@ export class CollectionDisplayComponent {
 
     trackById(index: number, element: any): number {
         return element.key;
+    }
+
+    getBookNumberFromTitle(title: string): number | null {
+        const regex = /\d+/g;
+        const found = title.match(regex);
+        if (found) {
+            return Number.parseInt(found[found.length - 1]);
+        }
+        return null;
     }
 }
