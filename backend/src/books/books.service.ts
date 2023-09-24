@@ -4,14 +4,7 @@ import {
     NotFoundException,
     OnModuleInit,
 } from '@nestjs/common';
-
-import { gotScraping } from 'got-scraping';
-import {
-    GoogleBookResponse,
-    GoogleVolume,
-    OpenLibraryBookVolume,
-    VolumeInfo,
-} from './models/volume.model';
+import { VolumeInfo } from './models/volume.model';
 import { S3Service } from 'src/s3/s3.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
@@ -28,21 +21,11 @@ import { BookWithGroupIdAndAuthors } from './dto/book.dto';
 import { AuthorsService } from 'src/authors/authors.service';
 import { PublishersService } from 'src/publishers/publishers.service';
 import { BookGroupingService } from 'src/book-groups/bookGrouping.service';
-
-interface CoverCrawlResult {
-    buffer: Buffer | null;
-    url: string;
-}
+import { Scraper } from './scraper/scraper';
 
 @Injectable()
 export class BooksService implements OnModuleInit {
     private readonly logger = new Logger(S3Service.name);
-
-    private googleBooksApiBase = 'https://www.googleapis.com/books/v1/volumes';
-    private openLibraryApiBase = 'https://openlibrary.org/isbn';
-
-    private isbndbCoverBase = 'https://images.isbndb.com/covers';
-    private openLibraryCoverBase = 'https://covers.openlibrary.org/b/isbn';
 
     private coverTextBlacklist: string[] = [
         'No Image Available',
@@ -57,6 +40,7 @@ export class BooksService implements OnModuleInit {
         private authorService: AuthorsService,
         private publisherService: PublishersService,
         private bookGroupingService: BookGroupingService,
+        private scraper: Scraper,
     ) {}
 
     async onModuleInit() {
@@ -191,73 +175,12 @@ export class BooksService implements OnModuleInit {
         return await this.getBookByIsbn(isbn, userId);
     }
 
-    async scrapeBookMetaDataFromGoogle(isbn: string): Promise<VolumeInfo> {
-        const googleBookResponse = await gotScraping.get(
-            this.googleBooksApiBase + '?q=isbn:' + isbn,
-        );
-
-        const googleBookData: GoogleBookResponse = JSON.parse(
-            googleBookResponse.body,
-        );
-
-        if (
-            googleBookResponse.statusCode !== 200 ||
-            googleBookData.totalItems === 0
-        ) {
-            this.logger.error(
-                `Google Books API returned ${googleBookResponse.statusCode} and ${googleBookData.totalItems} Items for ISBN ${isbn}.`,
-            );
-
-            return {};
-        }
-
-        const book: GoogleVolume = await gotScraping
-            .get(googleBookData.items[0].selfLink)
-            .json();
-
-        return book.volumeInfo;
-    }
-
-    async scrapeBookMetaDataFromOpenLibrary(isbn: string): Promise<VolumeInfo> {
-        const openLibraryBookResponse = await gotScraping.get(
-            `${this.openLibraryApiBase}/${isbn}.json`,
-        );
-
-        if (openLibraryBookResponse.statusCode !== 200) {
-            this.logger.error(
-                `Open Library API returned ${openLibraryBookResponse.statusCode} for ISBN ${isbn}.`,
-            );
-
-            return {};
-        }
-
-        const openLibraryBookData = JSON.parse(
-            openLibraryBookResponse.body,
-        ) as OpenLibraryBookVolume;
-
-        const book: VolumeInfo = {
-            title: openLibraryBookData.title,
-            subtitle: openLibraryBookData.subtitle,
-            description: openLibraryBookData.description,
-            publisher: openLibraryBookData.publishers?.[0],
-            pageCount: openLibraryBookData.number_of_pages,
-            printedPageCount: openLibraryBookData.number_of_pages,
-            publishedDate: openLibraryBookData.publish_date,
-        };
-
-        return book;
-    }
-
     @Retryable({ maxAttempts: 3, backOff: 1000 })
     async scrapeBookMetaData(
         isbn: string,
         update = false,
     ): Promise<VolumeInfo> {
-        const googleBookData = await this.scrapeBookMetaDataFromGoogle(isbn);
-        const openLibraryBookData =
-            await this.scrapeBookMetaDataFromOpenLibrary(isbn);
-
-        const book = this.merge(googleBookData, openLibraryBookData);
+        const book = await this.scraper.scrapeBookMetaData(isbn);
 
         if (book.title === undefined) {
             throw new NotFoundException(
@@ -267,81 +190,6 @@ export class BooksService implements OnModuleInit {
         await this.upsertBook(book, isbn, update);
 
         return book;
-    }
-
-    async scrapeBookCoverFromIsbnDb(isbn: string): Promise<CoverCrawlResult> {
-        const isbndbUrl = `${this.isbndbCoverBase}/${isbn.substring(
-            isbn.length - 4,
-            isbn.length - 2,
-        )}/${isbn.substring(isbn.length - 2, isbn.length)}/${isbn}.jpg`;
-
-        const isbndbImage = await gotScraping.get(isbndbUrl);
-        if (isbndbImage.statusCode === 200) {
-            return { buffer: isbndbImage.rawBody, url: isbndbUrl };
-        }
-
-        return { buffer: null, url: isbndbUrl };
-    }
-
-    async scrapeBookCoverFromOpenLibrary(
-        isbn: string,
-    ): Promise<CoverCrawlResult> {
-        const url = `${this.openLibraryCoverBase}/${isbn}-L.jpg?default=false`;
-        const openLibraryBookResponse = await gotScraping.get(url, {
-            timeout: {
-                request: 5000,
-            },
-        });
-
-        if (openLibraryBookResponse.statusCode !== 200) {
-            this.logger.error(
-                `Open Library Cover API returned ${openLibraryBookResponse.statusCode} for ISBN ${isbn}.`,
-            );
-
-            return { buffer: null, url: '' };
-        }
-
-        return {
-            buffer: openLibraryBookResponse.rawBody,
-            url,
-        };
-    }
-
-    async scrapeBookCoverFromGoogle(
-        metadata: VolumeInfo,
-    ): Promise<CoverCrawlResult> {
-        if (!metadata.imageLinks || !metadata.imageLinks.thumbnail) {
-            const googleBookResponseFromTitle: GoogleBookResponse =
-                await gotScraping
-                    .get(this.googleBooksApiBase + '?q=title:' + metadata.title)
-                    .json();
-
-            const bookWithSameTitle = googleBookResponseFromTitle.items.find(
-                (book) => book.volumeInfo.title!.startsWith(metadata.title!),
-            );
-
-            if (
-                !bookWithSameTitle ||
-                !bookWithSameTitle.volumeInfo.imageLinks ||
-                !bookWithSameTitle.volumeInfo.imageLinks.thumbnail
-            ) {
-                return { buffer: null, url: '' };
-            }
-
-            metadata.imageLinks = bookWithSameTitle.volumeInfo.imageLinks;
-        }
-
-        const googleImage = await gotScraping.get(
-            metadata.imageLinks.thumbnail!,
-        );
-        if (googleImage.statusCode === 200) {
-            return {
-                buffer: googleImage.rawBody,
-                url: metadata.imageLinks.thumbnail!,
-            };
-        }
-
-        return { buffer: null, url: metadata.imageLinks.thumbnail! };
     }
 
     async trySettingCover(
@@ -380,18 +228,16 @@ export class BooksService implements OnModuleInit {
     }
 
     async scrapeBookCover(isbn: string, metadata?: VolumeInfo) {
-        const isbnDbImage = await this.scrapeBookCoverFromIsbnDb(isbn);
-
         if (!metadata) {
             metadata = await this.scrapeBookMetaData(isbn);
         }
-        const googleImage = await this.scrapeBookCoverFromGoogle(metadata);
 
-        const openLibraryImage = await this.scrapeBookCoverFromOpenLibrary(
+        const imageCandidates = await this.scraper.scrapeBookCover(
             isbn,
+            metadata,
         );
 
-        for await (const blob of [openLibraryImage, isbnDbImage, googleImage]) {
+        for await (const blob of imageCandidates) {
             const success = await this.trySettingCover(
                 isbn,
                 blob.url,
@@ -505,16 +351,5 @@ export class BooksService implements OnModuleInit {
             where: { bookIsbn: isbn },
             data: { recrawlInfo: value },
         });
-    }
-
-    merge<T extends object>(obj1: T, obj2: T): T {
-        return Object.assign(obj1, this.definedProps<T>(obj2));
-    }
-
-    definedProps<T extends object>(obj: T): T {
-        return Object.fromEntries(
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            Object.entries(obj).filter(([_, v]) => v !== undefined),
-        ) as T;
     }
 }
