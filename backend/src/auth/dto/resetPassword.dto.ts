@@ -9,11 +9,11 @@ export class ResetPasswordDto implements PasswordResetRequest {
     invalidated: boolean;
     @Exclude()
     keyHash: string;
-    @ApiProperty()
+    @Exclude()
     createdAt: Date;
     @Exclude()
     updatedAt: Date;
-    @ApiProperty()
+    @Exclude()
     userId: string;
     @Exclude()
     token: string;

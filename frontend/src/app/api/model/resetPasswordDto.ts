@@ -12,6 +12,4 @@
 
 export interface ResetPasswordDto {
     id: string;
-    createdAt: string;
-    userId: string;
 }

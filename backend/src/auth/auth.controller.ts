@@ -35,6 +35,7 @@ import { NewPasswordDto } from './dto/newPassword.dto';
 import { SignInDto } from './dto/signIn.dto';
 import * as config from 'config';
 import { SignInSuccessDto } from './dto/signInSuccess.dto';
+import { randomUUID } from 'node:crypto';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -131,7 +132,9 @@ export class AuthController {
     async requestResetPassword(@Body() body: ResetPasswordRequestDto) {
         const user = await this.userService.findByEmail(body.email);
         if (!user) {
-            throw new NotFoundException('User not found.');
+            return new ResetPasswordDto({
+                id: randomUUID(),
+            });
         }
 
         const resetRequest = await this.userService.createPasswordResetRequest(
