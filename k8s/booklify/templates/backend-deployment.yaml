@@ -71,6 +71,9 @@ spec:
             value: {{ .Values.backend.config.mail.from | quote }}
           - name: MAIL_IGNORE_TLS
             value: {{ .Values.backend.config.mail.ignore_tls | quote }}
+
+          - name: ISBNDB_KEY
+            value: {{ .Values.backend.config.isbndb.key | quote }}
           ports:
             - name: http-backend
               containerPort: 3000

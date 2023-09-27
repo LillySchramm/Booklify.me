@@ -57,6 +57,8 @@ backend:
             smtp: ""
             from: "Booklify <no-reply@a.host>"
             ignore_tls: "true"
+        isbndb:
+            key: ""
 
     ingress:
         enabled: true
