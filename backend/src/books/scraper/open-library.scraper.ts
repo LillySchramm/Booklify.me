@@ -46,7 +46,7 @@ export class OpenLibraryBookScraper implements BookScraper {
             publisher: openLibraryBookData.publishers?.[0],
             pageCount: openLibraryBookData.number_of_pages,
             printedPageCount: openLibraryBookData.number_of_pages,
-            publishedDate: openLibraryBookData.publish_date,
+            publishedDate: String(openLibraryBookData.publish_date),
         };
 
         return book;
