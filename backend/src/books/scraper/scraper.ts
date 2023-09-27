@@ -5,6 +5,7 @@ import { IsbndbBookScraper } from './isbndb.scraper';
 import { OpenLibraryBookScraper } from './open-library.scraper';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 export interface CoverScrapeResult {
     buffer: Buffer | null;
@@ -28,10 +29,13 @@ export class Scraper implements BookScraper {
     private metadataScrapers: BookScraper[] = [];
     private coverScrapers: BookScraper[] = [];
 
-    constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {
-        const googleBookScraper = new GoogleBookScraper();
-        const isbndbBookScraper = new IsbndbBookScraper(cacheManager);
-        const openLibraryBookScraper = new OpenLibraryBookScraper();
+    constructor(
+        @Inject(CACHE_MANAGER) private cacheManager: Cache,
+        private readonly prisma: PrismaService,
+    ) {
+        const googleBookScraper = new GoogleBookScraper(prisma);
+        const isbndbBookScraper = new IsbndbBookScraper(cacheManager, prisma);
+        const openLibraryBookScraper = new OpenLibraryBookScraper(prisma);
 
         this.coverScrapers.push(openLibraryBookScraper);
         this.coverScrapers.push(isbndbBookScraper);

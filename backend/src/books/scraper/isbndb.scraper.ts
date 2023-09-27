@@ -5,36 +5,48 @@ import {
     VolumeInfo,
 } from '../models/volume.model';
 import { BookScraper, CoverScrapeResult } from './scraper';
-import { Inject, Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import * as config from 'config';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { MetadataProvider } from '@prisma/client';
 
 export class IsbndbBookScraper implements BookScraper {
     private readonly logger = new Logger(IsbndbBookScraper.name);
 
     private isbndbApiBase = 'https://api2.isbndb.com/book/';
 
-    constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
+    constructor(
+        private cacheManager: Cache,
+        private readonly prisma: PrismaService,
+    ) {}
 
     async scrapeBookMetaData(isbn: string): Promise<VolumeInfo> {
+        const url = `${this.isbndbApiBase}${isbn}`;
         let book = await this.cacheManager.get<IsbndbBook | null>(
             `isbndb.${isbn}`,
         );
 
         if (book === undefined) {
-            const isbndbBookResponse = await gotScraping.get(
-                this.isbndbApiBase + isbn,
-                {
-                    headers: {
-                        Authorization: this.getApiKey(),
-                    },
-
-                    timeout: {
-                        request: 5000,
-                    },
+            const isbndbBookResponse = await gotScraping.get(url, {
+                headers: {
+                    Authorization: this.getApiKey(),
                 },
-            );
+
+                timeout: {
+                    request: 5000,
+                },
+            });
+
+            await this.prisma.metadataResponse.create({
+                data: {
+                    isbn,
+                    provider: MetadataProvider.ISBNDB,
+                    url,
+                    body: isbndbBookResponse.body,
+                    responseCode: isbndbBookResponse.statusCode,
+                },
+            });
 
             if (isbndbBookResponse.statusCode !== 200) {
                 this.logger.error(

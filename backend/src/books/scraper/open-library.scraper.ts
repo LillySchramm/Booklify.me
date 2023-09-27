@@ -2,6 +2,8 @@ import { gotScraping } from 'got-scraping';
 import { OpenLibraryBookVolume, VolumeInfo } from '../models/volume.model';
 import { BookScraper, CoverScrapeResult } from './scraper';
 import { Logger } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { MetadataProvider } from '@prisma/client';
 
 export class OpenLibraryBookScraper implements BookScraper {
     private readonly logger = new Logger(OpenLibraryBookScraper.name);
@@ -9,10 +11,21 @@ export class OpenLibraryBookScraper implements BookScraper {
     private openLibraryApiBase = 'https://openlibrary.org/isbn';
     private openLibraryCoverBase = 'https://covers.openlibrary.org/b/isbn';
 
+    constructor(private readonly prisma: PrismaService) {}
+
     async scrapeBookMetaData(isbn: string): Promise<VolumeInfo> {
-        const openLibraryBookResponse = await gotScraping.get(
-            `${this.openLibraryApiBase}/${isbn}.json`,
-        );
+        const url = `${this.openLibraryApiBase}/${isbn}.json`;
+        const openLibraryBookResponse = await gotScraping.get(url);
+
+        await this.prisma.metadataResponse.create({
+            data: {
+                isbn,
+                provider: MetadataProvider.OPEN_LIBRARY,
+                url,
+                body: openLibraryBookResponse.body,
+                responseCode: openLibraryBookResponse.statusCode,
+            },
+        });
 
         if (openLibraryBookResponse.statusCode !== 200) {
             this.logger.error(

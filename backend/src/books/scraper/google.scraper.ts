@@ -6,16 +6,29 @@ import {
 } from '../models/volume.model';
 import { BookScraper, CoverScrapeResult } from './scraper';
 import { Logger } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { MetadataProvider } from '@prisma/client';
 
 export class GoogleBookScraper implements BookScraper {
     private readonly logger = new Logger(GoogleBookScraper.name);
 
     private googleBooksApiBase = 'https://www.googleapis.com/books/v1/volumes';
 
+    constructor(private readonly prisma: PrismaService) {}
+
     async scrapeBookMetaData(isbn: string): Promise<VolumeInfo> {
-        const googleBookResponse = await gotScraping.get(
-            this.googleBooksApiBase + '?q=isbn:' + isbn,
-        );
+        const url = `${this.googleBooksApiBase}?q=isbn:${isbn}`;
+        const googleBookResponse = await gotScraping.get(url);
+
+        await this.prisma.metadataResponse.create({
+            data: {
+                isbn,
+                provider: MetadataProvider.GOOGLE_BOOKS,
+                url,
+                body: googleBookResponse.body,
+                responseCode: googleBookResponse.statusCode,
+            },
+        });
 
         const googleBookData: GoogleBookResponse = JSON.parse(
             googleBookResponse.body,

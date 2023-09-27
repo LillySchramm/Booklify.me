@@ -189,3 +189,19 @@ model PasswordResetRequest {
   updatedAt DateTime @default(now()) @updatedAt
   userId    String
 }
+
+enum MetadataProvider {
+  GOOGLE_BOOKS
+  OPEN_LIBRARY
+  ISBNDB
+}
+
+model MetadataResponse {
+  id           Int              @id @default(autoincrement())
+  provider     MetadataProvider
+  isbn         String
+  url          String
+  responseCode Int
+  body         String?
+  createdAt    DateTime         @default(now())
+}

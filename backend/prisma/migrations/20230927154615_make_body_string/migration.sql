@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "MetadataResponse" ALTER COLUMN "body" DROP NOT NULL,
+ALTER COLUMN "body" SET DATA TYPE TEXT;
