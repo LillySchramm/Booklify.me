@@ -43,5 +43,8 @@
       "__name": "DEBUG_SHOW_ERRORS",
       "__format": "boolean"
     }
-  }
+  },
+  "isbndb": {
+      "key": "ISNBDB_KEY"
+  },
 }

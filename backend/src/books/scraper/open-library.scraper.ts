@@ -62,4 +62,8 @@ export class OpenLibraryBookScraper implements BookScraper {
             },
         ];
     }
+
+    checkConfig(): boolean {
+        return true;
+    }
 }

@@ -76,4 +76,8 @@ export class GoogleBookScraper implements BookScraper {
 
         return [{ buffer: null, url: volume.imageLinks.thumbnail! }];
     }
+
+    checkConfig(): boolean {
+        return true;
+    }
 }

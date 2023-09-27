@@ -1,8 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { VolumeInfo } from '../models/volume.model';
 import { GoogleBookScraper } from './google.scraper';
 import { IsbndbBookScraper } from './isbndb.scraper';
 import { OpenLibraryBookScraper } from './open-library.scraper';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 export interface CoverScrapeResult {
     buffer: Buffer | null;
@@ -15,18 +17,20 @@ export interface BookScraper {
         isbn: string,
         volume?: VolumeInfo,
     ): Promise<CoverScrapeResult[]>;
+
+    checkConfig(): boolean;
 }
 
 @Injectable()
 export class Scraper implements BookScraper {
     private readonly logger = new Logger(Scraper.name);
 
-    private readonly metadataScrapers: BookScraper[] = [];
-    private readonly coverScrapers: BookScraper[] = [];
+    private metadataScrapers: BookScraper[] = [];
+    private coverScrapers: BookScraper[] = [];
 
-    constructor() {
+    constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {
         const googleBookScraper = new GoogleBookScraper();
-        const isbndbBookScraper = new IsbndbBookScraper();
+        const isbndbBookScraper = new IsbndbBookScraper(cacheManager);
         const openLibraryBookScraper = new OpenLibraryBookScraper();
 
         this.coverScrapers.push(openLibraryBookScraper);
@@ -35,6 +39,14 @@ export class Scraper implements BookScraper {
 
         this.metadataScrapers.push(googleBookScraper);
         this.metadataScrapers.push(openLibraryBookScraper);
+        this.metadataScrapers.push(isbndbBookScraper);
+
+        this.metadataScrapers = this.metadataScrapers.filter((scraper) =>
+            scraper.checkConfig(),
+        );
+        this.coverScrapers = this.coverScrapers.filter((scraper) =>
+            scraper.checkConfig(),
+        );
 
         this.logger.debug(
             `Initialized ${this.metadataScrapers.length} metadata scrapers and ${this.coverScrapers.length} cover scrapers.`,
@@ -86,8 +98,20 @@ export class Scraper implements BookScraper {
 
     private definedProps<T extends object>(obj: T): T {
         return Object.fromEntries(
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            Object.entries(obj).filter(([_, v]) => v !== undefined),
+            Object.entries(obj).filter(
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                ([_, v]) =>
+                    v !== undefined &&
+                    v !== null &&
+                    v !== '' &&
+                    v !== 0 &&
+                    v !== false &&
+                    v.length !== 0,
+            ),
         ) as T;
+    }
+
+    checkConfig(): boolean {
+        return true;
     }
 }

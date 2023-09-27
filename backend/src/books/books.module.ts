@@ -12,6 +12,7 @@ import { AuthorsModule } from 'src/authors/authors.module';
 import { PublishersModule } from 'src/publishers/publishers.module';
 import { BookTasksService } from './book-tasks.service';
 import { Scraper } from './scraper/scraper';
+import { CacheModule } from '@nestjs/cache-manager';
 @Module({
     providers: [BooksService, BookTasksService, Scraper],
     controllers: [BooksController],
@@ -26,6 +27,7 @@ import { Scraper } from './scraper/scraper';
         AuthorsModule,
         PublishersModule,
         BookGroupsModule,
+        CacheModule.register(),
     ],
 })
 export class BooksModule {}

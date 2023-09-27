@@ -10,6 +10,7 @@ export interface VolumeInfo {
     publishedDate?: string;
     imageLinks?: {
         thumbnail?: string;
+        isbndb?: string;
     };
 }
 
@@ -31,4 +32,19 @@ export interface OpenLibraryBookVolume {
     subtitle?: string;
     covers?: number[];
     description?: string;
+}
+
+export interface IsbndbBookResponse {
+    book: IsbndbBook;
+}
+
+export interface IsbndbBook {
+    title: string;
+    title_long: string;
+    publisher: string;
+    pages: number;
+    image: string;
+    authors: string[];
+    date_published: string;
+    synopsis: string;
 }
