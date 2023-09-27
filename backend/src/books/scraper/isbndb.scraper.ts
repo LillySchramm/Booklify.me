@@ -81,7 +81,7 @@ export class IsbndbBookScraper implements BookScraper {
             publisher: book.publisher,
             pageCount: book.pages,
             printedPageCount: book.pages,
-            publishedDate: book.date_published,
+            publishedDate: String(book.date_published),
             authors: book.authors,
             description: book.synopsis,
             imageLinks: {
