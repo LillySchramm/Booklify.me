@@ -51,4 +51,20 @@ export class BookTasksService {
 
         this.logger.log(`Recrawled info for book ${book.isbn}!`);
     }
+
+    @Cron('0 0 * * * *')
+    async tryFindCover() {
+        const books = await this.bookService.getAllWithoutCover();
+        if (!books) return;
+
+        const book = books[Math.floor(Math.random() * books.length)];
+
+        this.logger.log(
+            `Recrawling cover for book ${book.isbn} because it does not have a cover...`,
+        );
+
+        await this.bookService.scrapeBookCover(book.isbn);
+
+        this.logger.log(`Recrawled cover for book ${book.isbn}!`);
+    }
 }

@@ -346,6 +346,13 @@ export class BooksService implements OnModuleInit {
         });
     }
 
+    async getAllWithoutCover(): Promise<{ isbn: string }[]> {
+        return await this.prisma.book.findMany({
+            select: { isbn: true },
+            where: { bookCoverId: null },
+        });
+    }
+
     async setRecrawlInfoFlag(isbn: string, value: boolean) {
         await this.prisma.bookFlags.update({
             where: { bookIsbn: isbn },

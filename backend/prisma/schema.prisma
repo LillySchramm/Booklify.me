@@ -90,6 +90,8 @@ model Book {
   bookCoverId      String?
   OwnershipStatus  OwnershipStatus[]
   BookFlags        BookFlags?
+
+  @@index([bookCoverId])
 }
 
 model BookFlags {
