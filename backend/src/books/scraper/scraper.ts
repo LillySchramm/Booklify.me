@@ -96,8 +96,23 @@ export class Scraper implements BookScraper {
         return coverScrapeResults;
     }
 
-    private merge<T extends object>(obj1: T, obj2: T): T {
-        return Object.assign(obj1, this.definedProps<T>(obj2));
+    private numbersInString(str: string): number {
+        return (str.match(/[\d\.]{1,}/g) || []).length;
+    }
+
+    private merge(obj1: VolumeInfo, obj2: VolumeInfo): VolumeInfo {
+        if (obj1.title && obj2.title) {
+            // Number of digits in title is a good indicator of which title is more complete
+            // Also very useful for grouping.
+            const title1Count = this.numbersInString(obj1.title);
+            const title2Count = this.numbersInString(obj2.title);
+
+            if (title1Count > title2Count) {
+                obj2.title = obj1.title;
+            }
+        }
+
+        return Object.assign(obj1, this.definedProps<VolumeInfo>(obj2));
     }
 
     private definedProps<T extends object>(obj: T): T {
