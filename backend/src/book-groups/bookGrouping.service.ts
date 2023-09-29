@@ -11,6 +11,7 @@ import { BookGroupsService } from './bookGroups.service';
 import * as isbn from 'isbn3';
 import * as config from 'config';
 import { UsersService } from 'src/users/users.service';
+import { cloneDeep, isEqual } from 'lodash';
 
 type BookWithPublisherAndAuthors = Book & {
     publisher: Publisher | null;
@@ -18,7 +19,12 @@ type BookWithPublisherAndAuthors = Book & {
     OwnershipStatus: OwnershipStatus[];
 };
 
-export const GROUPING_VERSION = 1;
+export const GROUPING_VERSION = 2;
+export const MAX_REGULAR_GROUPING_TRIES = 10;
+
+// If the name of a book is shorter than this, it will not be used for grouping.
+// The Lower the number, the more likely are false positives.
+export const MIN_NAME_LENGTH_FOR_COMPARISON = 5;
 
 @Injectable()
 export class BookGroupingService {
@@ -30,6 +36,7 @@ export class BookGroupingService {
         '-',
         '(finale)',
         'part',
+        'bd.',
     ];
     private readonly BLACKLISTED_ENDING_CHARACTERS = [','];
 
@@ -78,27 +85,9 @@ export class BookGroupingService {
         return groupedBooks;
     }
 
-    async groupBooksOfUser(userId: string, force: boolean = false) {
-        const user = await this.prisma.user.findFirst({
-            where: { id: userId },
-            include: { UserFlags: true },
-        });
-        if (!user || !user.UserFlags) return;
-
-        if (
-            !force &&
-            user.UserFlags.lastAppliedGrouperVersion >= GROUPING_VERSION &&
-            !config.get<boolean>('debug.always_regroup')
-        )
-            return;
-
-        this.logger.log(`Grouping books of user ${userId}... Forced: ${force}`);
-
-        const books = await this.getAllRelevantBooksOfUser(userId);
-
-        let groupedBooks = new Map<string, BookWithPublisherAndAuthors[]>();
-        groupedBooks.set('', books);
-
+    groupBooks(
+        groupedBooks: Map<string, BookWithPublisherAndAuthors[]>,
+    ): Map<string, BookWithPublisherAndAuthors[]> {
         groupedBooks = this.processMapper(
             groupedBooks,
             this.getSeriesNameOfBookByVolumeNumber.bind(this),
@@ -126,8 +115,171 @@ export class BookGroupingService {
             this.getSeriesNameOfBookByContainsFoundSeries(
                 book,
                 Array.from(groupedBooks.keys()),
-                groupedBooks,
             ),
+        );
+
+        groupedBooks = this.deduplicateGroups(groupedBooks);
+
+        groupedBooks = this.removeSoloGroupsWithOutNumber(groupedBooks);
+
+        return groupedBooks;
+    }
+
+    private findSimilarGroupNames(
+        groupName: string,
+        groupedBooks: Map<string, BookWithPublisherAndAuthors[]>,
+    ): string[] {
+        const cleanGroupName = this.cleanUpString(groupName);
+        return Array.from(groupedBooks.keys()).filter((otherGroupName) => {
+            const cleanOtherGroupName = this.cleanUpString(otherGroupName);
+
+            if (
+                cleanGroupName.length < MIN_NAME_LENGTH_FOR_COMPARISON ||
+                cleanOtherGroupName.length < MIN_NAME_LENGTH_FOR_COMPARISON
+            )
+                return false;
+
+            return (
+                cleanOtherGroupName.includes(cleanGroupName) ||
+                cleanGroupName.includes(cleanOtherGroupName)
+            );
+        });
+    }
+
+    private findMostLikelyGroupName(
+        similarGroupNames: string[],
+        groupedBooks: Map<string, BookWithPublisherAndAuthors[]>,
+    ): string {
+        const similarGroupMapArray = similarGroupNames.map(
+            (similarGroupName) => {
+                return {
+                    name: similarGroupName,
+                    books: groupedBooks.get(similarGroupName) || [],
+                };
+            },
+        );
+        const sortedSimilarGroupMapArray = similarGroupMapArray.sort((a, b) => {
+            if (a.books.length === b.books.length) {
+                return a.name.length - b.name.length;
+            }
+
+            return b.books.length - a.books.length;
+        });
+
+        return sortedSimilarGroupMapArray[0].name;
+    }
+
+    // If a book is the only book in a group and the title does not end with a number,
+    // it is most likely not part of a series and/or a false positive.
+    private removeSoloGroupsWithOutNumber(
+        groupedBooks: Map<string, BookWithPublisherAndAuthors[]>,
+    ): Map<string, BookWithPublisherAndAuthors[]> {
+        const soloGroups = Array.from(groupedBooks.keys()).filter(
+            (groupName) => {
+                const books = groupedBooks.get(groupName) || [];
+                return books.length === 1 && !/.*\d$/g.test(books[0].title!);
+            },
+        );
+
+        for (const soloGroup of soloGroups) {
+            const books = groupedBooks.get(soloGroup) || [];
+            groupedBooks.get('')!.push(...books);
+            groupedBooks.delete(soloGroup);
+        }
+
+        return groupedBooks;
+    }
+
+    private deduplicateGroups(
+        groupedBooks: Map<string, BookWithPublisherAndAuthors[]>,
+    ): Map<string, BookWithPublisherAndAuthors[]> {
+        const deduplicatedGroups = new Map<
+            string,
+            BookWithPublisherAndAuthors[]
+        >();
+
+        for (const [groupName] of groupedBooks) {
+            if (groupName === '') {
+                deduplicatedGroups.set('', groupedBooks.get('') || []);
+                continue;
+            }
+
+            const similarGroupNames = this.findSimilarGroupNames(
+                groupName,
+                groupedBooks,
+            );
+
+            if (similarGroupNames.length === 0) {
+                deduplicatedGroups.set(groupName, groupedBooks.get(groupName)!);
+                continue;
+            }
+
+            const mostLikelyGroupName = this.findMostLikelyGroupName(
+                similarGroupNames,
+                groupedBooks,
+            );
+
+            if (deduplicatedGroups.has(mostLikelyGroupName)) continue;
+
+            const allBooks: BookWithPublisherAndAuthors[] = [];
+            for (const similarGroupMap of similarGroupNames) {
+                const allBooksOfSimilarGroup =
+                    groupedBooks.get(similarGroupMap) || [];
+
+                allBooks.push(...allBooksOfSimilarGroup);
+            }
+
+            deduplicatedGroups.set(mostLikelyGroupName, allBooks);
+        }
+
+        return deduplicatedGroups;
+    }
+
+    async groupBooksOfUser(userId: string, force: boolean = false) {
+        const user = await this.prisma.user.findFirst({
+            where: { id: userId },
+            include: { UserFlags: true },
+        });
+        if (!user || !user.UserFlags) return;
+
+        if (
+            !force &&
+            user.UserFlags.lastAppliedGrouperVersion >= GROUPING_VERSION &&
+            !config.get<boolean>('debug.always_regroup')
+        )
+            return;
+
+        this.logger.log(`Grouping books of user ${userId}... Forced: ${force}`);
+
+        const books = await this.getAllRelevantBooksOfUser(userId);
+
+        let groupedBooks = new Map<string, BookWithPublisherAndAuthors[]>();
+        groupedBooks.set('', books);
+
+        for (let i = 0; i < MAX_REGULAR_GROUPING_TRIES; i++) {
+            const newGrouping = this.groupBooks(cloneDeep(groupedBooks));
+
+            const newGroupingKeys = Array.from(newGrouping.keys()).sort();
+            const oldGroupingKeys = Array.from(groupedBooks.keys()).sort();
+            const newUngroupedBooks = newGrouping.get('') || [];
+            const oldUngroupedBooks = groupedBooks.get('') || [];
+
+            if (
+                isEqual(oldGroupingKeys, newGroupingKeys) &&
+                newUngroupedBooks.length === oldUngroupedBooks.length
+            ) {
+                groupedBooks = newGrouping;
+                this.logger.debug(
+                    `Grouping of user ${userId} converged after ${i} iterations.`,
+                );
+                break;
+            }
+            groupedBooks = newGrouping;
+        }
+
+        this.logger.debug(
+            `Grouping of user ${userId} finished with ${groupedBooks.get('')
+                ?.length} unassigned.`,
         );
 
         await this.saveBookGroupMap(groupedBooks, userId);
@@ -234,7 +386,7 @@ export class BookGroupingService {
 
         if (
             titleChunks.length &&
-            titleEndsWithNumber &&
+            (titleEndsWithNumber || numbers.length === 1) &&
             !titleEndsWithBlacklistedCharacter
         )
             return titleChunks.join(' ');
@@ -252,22 +404,28 @@ export class BookGroupingService {
     ): string {
         if (book.title === null) return '';
 
+        const cleanedBookTitle = this.cleanUpString(book.title);
+
         return (
             currentSeriesNames.find(
                 (seriesName) =>
-                    seriesName.toLowerCase() === book.title!.toLowerCase(),
+                    this.cleanUpString(seriesName) === cleanedBookTitle ||
+                    (this.cleanUpString(seriesName).includes(
+                        cleanedBookTitle,
+                    ) &&
+                        cleanedBookTitle.length >
+                            MIN_NAME_LENGTH_FOR_COMPARISON),
             ) || ''
         );
     }
 
     /**
      * Tries to determine the series name by looking for an found series name
-     * which contains the book title and has the same publisher.
+     * which contains the book title.
      */
     private getSeriesNameOfBookByContainsFoundSeries(
         book: Book,
         currentSeriesNames: string[],
-        groupedBooks: Map<string, BookWithPublisherAndAuthors[]>,
     ): string {
         const parsedIsbn = isbn.parse(book.isbn);
 
@@ -275,23 +433,24 @@ export class BookGroupingService {
 
         return (
             currentSeriesNames.find((seriesName) => {
-                const booksOfSeries = groupedBooks.get(seriesName) || [];
-                const publishers = booksOfSeries.map(
-                    (bookOfSeries) =>
-                        isbn.parse(bookOfSeries.isbn)?.publisher || '',
-                );
+                const cleanedSeriesName = this.cleanUpString(seriesName);
+                const cleanedBookTitle = this.cleanUpString(book.title!);
 
                 const contained =
-                    seriesName
-                        .toLowerCase()
-                        .includes(book.title!.toLowerCase()) ||
-                    book
-                        .title!.toLowerCase()
-                        .includes(seriesName.toLowerCase());
+                    cleanedSeriesName.includes(cleanedBookTitle) ||
+                    cleanedBookTitle.includes(cleanedSeriesName);
 
-                return contained && publishers.includes(parsedIsbn.publisher);
+                return contained;
             }) || ''
         );
+    }
+
+    private cleanUpString(str: string): string {
+        return str
+            .toLowerCase()
+            .replaceAll(/\([^\)]+\)/g, '')
+            .replaceAll(/[^a-z0-9]/g, '')
+            .replaceAll(' ', '');
     }
 
     /**
@@ -303,9 +462,9 @@ export class BookGroupingService {
     ): string {
         if (book.title === null) return '';
 
-        const bookTitle = book.title.toLowerCase();
+        const bookTitle = this.cleanUpString(book.title);
         const otherBooksWithSameName = allUnassignedBookNames.filter(
-            (otherBookName) => otherBookName.toLowerCase() === bookTitle,
+            (otherBookName) => this.cleanUpString(otherBookName) === bookTitle,
         );
 
         if (otherBooksWithSameName.length > 1) return book.title;
@@ -314,6 +473,14 @@ export class BookGroupingService {
     }
 
     private isStringNumeric(str: string): boolean {
+        str = str.toLowerCase();
+        for (const blacklistedChunk of this.BLACKLISTED_CHUNKS) {
+            str = str.replaceAll(blacklistedChunk, '');
+        }
+        // Removing all colons and commas because they are often used to indicate a sub-title
+        // eg. "Vol. 1: The Beginning"
+        str = str.replaceAll(':', '').replaceAll(',', '');
+
         return /^\d*$/.test(str);
     }
 }
