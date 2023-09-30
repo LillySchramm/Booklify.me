@@ -228,4 +228,11 @@ export class AuthController {
     getSession(@Request() req: any) {
         return new SessionDto(req.session);
     }
+
+    @UseGuards(AuthGuard)
+    @ApiBearerAuth()
+    @Get('export')
+    async getExport(@Request() req: any) {
+        return await this.userService.exportUserData(req.user.id);
+    }
 }

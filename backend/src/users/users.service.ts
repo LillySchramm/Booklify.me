@@ -268,4 +268,58 @@ export class UsersService implements OnModuleInit {
             where: { userId },
         });
     }
+
+    async exportUserData(userId: string): Promise<any> {
+        const user = await this.prisma.user.findFirst({
+            where: { id: userId },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                createdAt: true,
+                updatedAt: true,
+                UserFlags: {
+                    select: {
+                        public: true,
+                        lastAppliedGrouperVersion: true,
+                    },
+                },
+                BookGroup: {
+                    select: {
+                        id: true,
+                        name: true,
+                        createdAt: true,
+                        updatedAt: true,
+                    },
+                },
+                OwnershipStatus: {
+                    select: {
+                        bookIsbn: true,
+                        bookGroupId: true,
+                        status: true,
+                        createdAt: true,
+                        updatedAt: true,
+                    },
+                },
+                VerificationEmail: {
+                    select: {
+                        createdAt: true,
+                        updatedAt: true,
+                        id: true,
+                    },
+                },
+                Session: {
+                    select: {
+                        createdAt: true,
+                        updatedAt: true,
+                        id: true,
+                        name: true,
+                        invalidated: true,
+                    },
+                },
+            },
+        });
+
+        return user;
+    }
 }
