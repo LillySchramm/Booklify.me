@@ -32,3 +32,17 @@ i {
 mat-form-field {
     margin-bottom: 1.5rem;
 }
+
+.mat-expansion-panel-body {
+    padding: 0 !important;
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+}
+
+.mat-expansion-panel-header {
+    height: var(--mat-expansion-header-collapsed-state-height) !important;
+    padding: 0 !important;
+    padding-left: 0.75rem !important;
+    padding-right: 1rem !important;
+}
