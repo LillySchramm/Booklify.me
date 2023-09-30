@@ -56,6 +56,6 @@ export class BookCardComponent implements OnInit {
         el.scrollIntoView({ behavior: 'smooth', block: 'center' });
         setTimeout(() => {
             el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 150);
+        }, 200);
     }
 }
