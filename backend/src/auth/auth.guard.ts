@@ -2,6 +2,7 @@ import {
     CanActivate,
     ExecutionContext,
     Injectable,
+    SetMetadata,
     UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -9,6 +10,10 @@ import { Request } from 'express';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
 import { SecretsService } from 'src/secrets/secrets.service';
+import { Reflector } from '@nestjs/core';
+
+export const AUTH_IS_OPTIONAL_KEY = 'isOptional';
+export const AuthOptional = () => SetMetadata(AUTH_IS_OPTIONAL_KEY, true);
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -17,12 +22,19 @@ export class AuthGuard implements CanActivate {
         private userService: UsersService,
         private authService: AuthService,
         private secretService: SecretsService,
+        private reflector: Reflector,
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
+        const isOptional = this.reflector.getAllAndOverride<boolean>(
+            AUTH_IS_OPTIONAL_KEY,
+            [context.getHandler(), context.getClass()],
+        );
+
         const request = context.switchToHttp().getRequest();
         const token = this.extractTokenFromHeader(request);
         if (!token) {
+            if (isOptional) return true;
             throw new UnauthorizedException();
         }
         try {
@@ -42,6 +54,7 @@ export class AuthGuard implements CanActivate {
                 payload.sub,
             );
         } catch {
+            if (isOptional) return true;
             throw new UnauthorizedException();
         }
         return true;

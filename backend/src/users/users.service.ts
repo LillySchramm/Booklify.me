@@ -1,5 +1,5 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { PasswordResetRequest, User } from '@prisma/client';
+import { PasswordResetRequest, User, UserFlags } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { saltRounds } from 'src/auth/constants';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -24,6 +24,10 @@ const PASSWORD_RESET_EMAIL_CONTENT = `
 <p>If you haven't requested a reset, you should ignore this E-Mail!</p>
 <p>- Booklify.me</p>
 `;
+
+export type UserWithFlags = {
+    UserFlags: UserFlags | null;
+} & User;
 
 @Injectable()
 export class UsersService implements OnModuleInit {
@@ -68,6 +72,23 @@ export class UsersService implements OnModuleInit {
     async findById(id: string): Promise<User | null> {
         return await this.prisma.user.findFirst({
             where: { id },
+        });
+    }
+
+    async findByIdWithFlags(id: string): Promise<UserWithFlags | null> {
+        return await this.prisma.user.findFirst({
+            where: { id, activated: true },
+            include: { UserFlags: true },
+        });
+    }
+
+    async findByNameWithFlags(name: string): Promise<UserWithFlags | null> {
+        return await this.prisma.user.findFirst({
+            where: {
+                name: { equals: name, mode: 'insensitive' },
+                activated: true,
+            },
+            include: { UserFlags: true },
         });
     }
 

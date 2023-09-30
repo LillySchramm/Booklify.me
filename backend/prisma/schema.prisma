@@ -37,7 +37,8 @@ model UserFlags {
   userId String @id @unique
   User   User   @relation(fields: [userId], references: [id])
 
-  lastAppliedGrouperVersion Int @default(0)
+  lastAppliedGrouperVersion Int     @default(0)
+  public                    Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt

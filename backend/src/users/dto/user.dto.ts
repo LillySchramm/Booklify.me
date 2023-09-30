@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '@prisma/client';
 import { Exclude } from 'class-transformer';
+import { User } from '@prisma/client';
 
 export class UserDto implements User {
     @ApiProperty()
