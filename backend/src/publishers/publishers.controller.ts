@@ -7,7 +7,6 @@ import {
     Param,
     ParseUUIDPipe,
     Post,
-    UseGuards,
 } from '@nestjs/common';
 import {
     ApiBearerAuth,
@@ -19,7 +18,6 @@ import { PublishersService } from './publishers.service';
 import { PublisherListDto } from './dto/publisherList.dto';
 import { GetIdListDto } from 'src/authors/dto/getIdList.dto';
 import { PublisherDto } from './dto/publisher.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('publishers')
 @ApiTags('Publishers')
@@ -29,7 +27,6 @@ export class PublishersController {
     @Post()
     @HttpCode(200)
     @ApiOkResponse({ type: PublisherListDto })
-    @UseGuards(AuthGuard)
     @ApiBearerAuth()
     async getPublishers(
         @Body() getDto: GetIdListDto,
@@ -48,7 +45,6 @@ export class PublishersController {
     @Get(':id')
     @ApiOkResponse({ type: PublisherDto })
     @ApiNotFoundResponse()
-    @UseGuards(AuthGuard)
     @ApiBearerAuth()
     async getPublisher(
         @Param('id', ParseUUIDPipe) id: string,

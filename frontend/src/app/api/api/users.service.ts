@@ -25,6 +25,9 @@ import { Observable } from 'rxjs';
 import { CustomHttpParameterCodec } from '../encoder';
 
 // @ts-ignore
+import { BasicUserDto } from '../model/basicUserDto';
+
+// @ts-ignore
 import { Configuration } from '../configuration';
 import { BASE_PATH } from '../variables';
 
@@ -130,28 +133,40 @@ export class UsersService {
         name: string,
         observe?: 'body',
         reportProgress?: boolean,
-        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
-    ): Observable<any>;
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<BasicUserDto>;
     public usersControllerGetUser(
         id: string,
         name: string,
         observe?: 'response',
         reportProgress?: boolean,
-        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
-    ): Observable<HttpResponse<any>>;
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<HttpResponse<BasicUserDto>>;
     public usersControllerGetUser(
         id: string,
         name: string,
         observe?: 'events',
         reportProgress?: boolean,
-        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
-    ): Observable<HttpEvent<any>>;
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<HttpEvent<BasicUserDto>>;
     public usersControllerGetUser(
         id: string,
         name: string,
         observe: any = 'body',
         reportProgress: boolean = false,
-        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
     ): Observable<any> {
         if (id === null || id === undefined) {
             throw new Error(
@@ -196,7 +211,7 @@ export class UsersService {
             options && options.httpHeaderAccept;
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
-            const httpHeaderAccepts: string[] = [];
+            const httpHeaderAccepts: string[] = ['application/json'];
             localVarHttpHeaderAcceptSelected =
                 this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
@@ -227,7 +242,7 @@ export class UsersService {
         }
 
         let localVarPath = `/users`;
-        return this.httpClient.request<any>(
+        return this.httpClient.request<BasicUserDto>(
             'get',
             `${this.configuration.basePath}${localVarPath}`,
             {

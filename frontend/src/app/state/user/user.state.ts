@@ -1,15 +1,28 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
-import { Action, Selector, State, StateContext } from '@ngxs/store';
+import {
+    Action,
+    Selector,
+    State,
+    StateContext,
+    createSelector,
+} from '@ngxs/store';
 import { catchError, map, take, tap } from 'rxjs';
-import { AuthService, SessionDto, UserDto } from 'src/app/api';
+import {
+    AuthService,
+    BasicUserDto,
+    SessionDto,
+    UserDto,
+    UsersService,
+} from 'src/app/api';
 import { SnackBarService } from 'src/app/common/services/snack-bar.service';
 import { TokenService } from 'src/app/common/services/token.service';
 import { UserActions } from './user.actions';
 
 interface UserStateModel {
     currentUser?: UserDto;
+    otherUsersMap: { [key: string]: BasicUserDto };
     session?: SessionDto;
     signup: {
         loading: boolean;
@@ -49,12 +62,14 @@ interface UserStateModel {
         resetPassword: {
             loading: false,
         },
+        otherUsersMap: {},
     },
 })
 @Injectable()
 export class UserState {
     constructor(
         private authApi: AuthService,
+        private userApi: UsersService,
         private router: Router,
         private snack: SnackBarService,
         private transloco: TranslocoService,
@@ -87,6 +102,7 @@ export class UserState {
                         resetPassword: {
                             loading: false,
                         },
+                        otherUsersMap: {},
                     });
                 } else ctx.dispatch(new UserActions.SignUpSuccess(user));
             }),
@@ -406,6 +422,43 @@ export class UserState {
         this.snack.show('Could not reset password: ' + action.error);
     }
 
+    @Action(UserActions.LoadUserByNickname)
+    loadUserByNickname(
+        ctx: StateContext<UserStateModel>,
+        action: UserActions.LoadUserByNickname,
+    ) {
+        return this.userApi.usersControllerGetUser('', action.nickname).pipe(
+            tap((user) =>
+                ctx.dispatch(new UserActions.LoadUserByNicknameSuccess(user)),
+            ),
+            catchError((error) =>
+                ctx.dispatch(
+                    new UserActions.LoadUserByNicknameError(
+                        error.error.message,
+                    ),
+                ),
+            ),
+        );
+    }
+
+    @Action(UserActions.LoadUserByNicknameSuccess)
+    loadUserByNicknameSuccess(
+        ctx: StateContext<UserStateModel>,
+        action: UserActions.LoadUserByNicknameSuccess,
+    ) {
+        ctx.patchState({
+            otherUsersMap: {
+                ...ctx.getState().otherUsersMap,
+                [action.user.name.toLowerCase()]: action.user,
+            },
+        });
+    }
+
+    @Action(UserActions.LoadUserByNicknameError)
+    loadUserByNicknameError() {
+        this.router.navigate(['']);
+    }
+
     @Selector()
     static currentUser(state: UserStateModel) {
         return state.currentUser;
@@ -483,5 +536,14 @@ export class UserState {
     @Selector()
     static session(state: UserStateModel): SessionDto | undefined {
         return state.session;
+    }
+
+    static user(name: string) {
+        return createSelector(
+            [UserState],
+            (state: UserStateModel): BasicUserDto | undefined => {
+                return state.otherUsersMap[name.toLowerCase()];
+            },
+        );
     }
 }

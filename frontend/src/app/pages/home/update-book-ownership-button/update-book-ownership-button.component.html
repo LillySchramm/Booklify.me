@@ -2,6 +2,7 @@
     <button
         mat-fab
         extended
+        *ngIf="$currentUser()?.id === $currentOwnerId()"
         [disabled]="$ownershipChangeLoading()"
         [color]="$ownsSelectedBook() ? 'warn' : 'primary'"
         class="mat-elevation-z1 !w-full"

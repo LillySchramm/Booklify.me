@@ -3,7 +3,8 @@
     "name": "Booklify"
   },
   "titles": {
-    "collection": "Your Collection"
+    "collection": "Your Collection",
+    "user-collection": "{{ name }}'s Collection"
   },
   "subtitles": {
     "collection": "Total Book Count: {{ count }}"

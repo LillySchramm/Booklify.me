@@ -6,9 +6,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@ngneat/transloco';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { BookDto } from 'src/app/api';
+import { BookDto, UserDto } from 'src/app/api';
 import { BookActions } from 'src/app/state/books/books.actions';
 import { BooksState } from 'src/app/state/books/books.state';
+import { UserState } from 'src/app/state/user/user.state';
 
 @Component({
     selector: 'app-update-book-ownership-button',
@@ -30,6 +31,16 @@ export class UpdateBookOwnershipButtonComponent {
         BookDto | undefined
     >;
     $selectedBook = toSignal(this.selectedBook$);
+
+    @Select(UserState.currentUser) currentUser$!: Observable<
+        UserDto | undefined
+    >;
+    $currentUser = toSignal(this.currentUser$);
+
+    @Select(BooksState.currentOwnerId) currentOwnerId$!: Observable<
+        string | undefined
+    >;
+    $currentOwnerId = toSignal(this.currentOwnerId$);
 
     constructor(private store: Store) {}
 

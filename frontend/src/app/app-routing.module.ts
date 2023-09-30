@@ -31,6 +31,13 @@ const routes: Routes = [
             import('./pages/home/home.component').then((m) => m.HomeComponent),
     },
     {
+        path: 'u/:name',
+        loadComponent: () =>
+            import('./pages/user-collection/user-collection.component').then(
+                (m) => m.UserCollectionComponent,
+            ),
+    },
+    {
         path: 'reset-password',
         loadComponent: () =>
             import('./pages/reset-password/reset-password.component').then(

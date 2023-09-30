@@ -11,6 +11,7 @@ import {
     ApiBadRequestResponse,
     ApiBearerAuth,
     ApiNotFoundResponse,
+    ApiOkResponse,
     ApiTags,
 } from '@nestjs/swagger';
 import { UserWithFlags, UsersService } from './users.service';
@@ -38,6 +39,7 @@ export class UsersController {
     @ApiBadRequestResponse()
     @ApiBearerAuth()
     @AuthOptional()
+    @ApiOkResponse({ type: BasicUserDto })
     @UseGuards(AuthGuard)
     async getUser(
         @Query('id') id: string,

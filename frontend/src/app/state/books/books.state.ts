@@ -304,6 +304,11 @@ export class BooksState {
     }
 
     @Selector()
+    static currentOwnerId(state: BookStateModel): string | undefined {
+        return state.currentOwnerId;
+    }
+
+    @Selector()
     static currentCollection(state: BookStateModel): string[] | undefined {
         return state.currentCollection;
     }

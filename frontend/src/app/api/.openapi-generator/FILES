@@ -15,6 +15,7 @@ git_push.sh
 index.ts
 model/authorDto.ts
 model/authorListDto.ts
+model/basicUserDto.ts
 model/bookDto.ts
 model/bookGroupDto.ts
 model/bookGroupListDto.ts

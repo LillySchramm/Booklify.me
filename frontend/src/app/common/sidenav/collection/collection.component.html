@@ -9,17 +9,19 @@
         </mat-form-field>
     </form>
     <div class="flex-grow"></div>
-    <mat-divider></mat-divider>
-    <div class="p-4">
-        <button
-            mat-fab
-            extended
-            color="primary"
-            class="!w-full"
-            (click)="openAddBookDialog()"
-        >
-            <mat-icon>add</mat-icon>
-            {{ t('collection.add-book') }}
-        </button>
-    </div>
+    <ng-container *ngIf="$currentUser()?.id === $currentOwnerId()">
+        <mat-divider></mat-divider>
+        <div class="p-4">
+            <button
+                mat-fab
+                extended
+                color="primary"
+                class="!w-full"
+                (click)="openAddBookDialog()"
+            >
+                <mat-icon>add</mat-icon>
+                {{ t('collection.add-book') }}
+            </button>
+        </div></ng-container
+    >
 </div>

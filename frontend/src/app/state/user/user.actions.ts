@@ -1,4 +1,5 @@
 import {
+    BasicUserDto,
     NewPasswordDto,
     SessionDto,
     SignInDto,
@@ -70,6 +71,21 @@ export namespace UserActions {
 
     export class LoadUser {
         static readonly type = '[User] Load User';
+    }
+
+    export class LoadUserByNickname {
+        static readonly type = '[User] Load User By Nickname';
+        constructor(public nickname: string) {}
+    }
+
+    export class LoadUserByNicknameSuccess {
+        static readonly type = '[User] Load User By Nickname Success';
+        constructor(public user: BasicUserDto) {}
+    }
+
+    export class LoadUserByNicknameError {
+        static readonly type = '[User] Load User By Nickname Error';
+        constructor(public error: string) {}
     }
 
     export class LoadUserSuccess {

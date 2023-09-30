@@ -1,5 +1,6 @@
 export * from './authorDto';
 export * from './authorListDto';
+export * from './basicUserDto';
 export * from './bookDto';
 export * from './bookGroupDto';
 export * from './bookGroupListDto';
