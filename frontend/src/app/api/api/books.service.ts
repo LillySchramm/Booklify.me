@@ -129,10 +129,12 @@ export class BooksService {
     }
 
     /**
+     * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
     public booksControllerGetAllOwnedBooks(
+        id: string,
         observe?: 'body',
         reportProgress?: boolean,
         options?: {
@@ -141,6 +143,7 @@ export class BooksService {
         },
     ): Observable<BookListDto>;
     public booksControllerGetAllOwnedBooks(
+        id: string,
         observe?: 'response',
         reportProgress?: boolean,
         options?: {
@@ -149,6 +152,7 @@ export class BooksService {
         },
     ): Observable<HttpResponse<BookListDto>>;
     public booksControllerGetAllOwnedBooks(
+        id: string,
         observe?: 'events',
         reportProgress?: boolean,
         options?: {
@@ -157,6 +161,7 @@ export class BooksService {
         },
     ): Observable<HttpEvent<BookListDto>>;
     public booksControllerGetAllOwnedBooks(
+        id: string,
         observe: any = 'body',
         reportProgress: boolean = false,
         options?: {
@@ -164,6 +169,21 @@ export class BooksService {
             context?: HttpContext;
         },
     ): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error(
+                'Required parameter id was null or undefined when calling booksControllerGetAllOwnedBooks.',
+            );
+        }
+
+        let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
+        if (id !== undefined && id !== null) {
+            localVarQueryParameters = this.addToHttpParams(
+                localVarQueryParameters,
+                <any>id,
+                'id',
+            );
+        }
+
         let localVarHeaders = this.defaultHeaders;
 
         let localVarCredential: string | undefined;
@@ -216,6 +236,7 @@ export class BooksService {
             `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

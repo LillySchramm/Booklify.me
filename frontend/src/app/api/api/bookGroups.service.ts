@@ -353,10 +353,12 @@ export class BookGroupsService {
     }
 
     /**
+     * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
     public bookGroupsControllerGetAllBookGroups(
+        id: string,
         observe?: 'body',
         reportProgress?: boolean,
         options?: {
@@ -365,6 +367,7 @@ export class BookGroupsService {
         },
     ): Observable<BookGroupListDto>;
     public bookGroupsControllerGetAllBookGroups(
+        id: string,
         observe?: 'response',
         reportProgress?: boolean,
         options?: {
@@ -373,6 +376,7 @@ export class BookGroupsService {
         },
     ): Observable<HttpResponse<BookGroupListDto>>;
     public bookGroupsControllerGetAllBookGroups(
+        id: string,
         observe?: 'events',
         reportProgress?: boolean,
         options?: {
@@ -381,6 +385,7 @@ export class BookGroupsService {
         },
     ): Observable<HttpEvent<BookGroupListDto>>;
     public bookGroupsControllerGetAllBookGroups(
+        id: string,
         observe: any = 'body',
         reportProgress: boolean = false,
         options?: {
@@ -388,6 +393,21 @@ export class BookGroupsService {
             context?: HttpContext;
         },
     ): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error(
+                'Required parameter id was null or undefined when calling bookGroupsControllerGetAllBookGroups.',
+            );
+        }
+
+        let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
+        if (id !== undefined && id !== null) {
+            localVarQueryParameters = this.addToHttpParams(
+                localVarQueryParameters,
+                <any>id,
+                'id',
+            );
+        }
+
         let localVarHeaders = this.defaultHeaders;
 
         let localVarCredential: string | undefined;
@@ -440,6 +460,7 @@ export class BookGroupsService {
             `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

@@ -3,37 +3,40 @@ import {
     Controller,
     Get,
     NotFoundException,
-    ParseUUIDPipe,
     Query,
     Request,
     UseGuards,
 } from '@nestjs/common';
 import {
     ApiBadRequestResponse,
+    ApiBearerAuth,
     ApiNotFoundResponse,
     ApiTags,
 } from '@nestjs/swagger';
 import { UserWithFlags, UsersService } from './users.service';
-import { UserDto } from './dto/user.dto';
 import { isUUID } from 'class-validator';
 import { BasicUserDto } from './dto/basicUser.dto';
 import { AuthGuard, AuthOptional } from 'src/auth/auth.guard';
+
+/**
+ * Ensure that data of a user can only be accessed by the user itself or if
+ * the user has the public flag set.
+ */
+export function userCanBeAccessed(user: UserWithFlags, request: any): boolean {
+    return (
+        user.UserFlags?.public || (request.user && user.id === request.user.id)
+    );
+}
 
 @Controller('users')
 @ApiTags('Users')
 export class UsersController {
     constructor(private readonly userService: UsersService) {}
 
-    private userCanBeAccessed(user: UserWithFlags, request: any): boolean {
-        return (
-            user.UserFlags?.public ||
-            (request.user && user.id === request.user.id)
-        );
-    }
-
     @Get()
     @ApiNotFoundResponse({ description: 'User not found' })
     @ApiBadRequestResponse()
+    @ApiBearerAuth()
     @AuthOptional()
     @UseGuards(AuthGuard)
     async getUser(
@@ -59,7 +62,7 @@ export class UsersController {
             user = await this.userService.findByNameWithFlags(name);
         }
 
-        if (!user || !this.userCanBeAccessed(user, request))
+        if (!user || !userCanBeAccessed(user, request))
             throw new NotFoundException('User not found');
 
         return new BasicUserDto(user);

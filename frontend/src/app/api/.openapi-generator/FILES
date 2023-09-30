@@ -8,6 +8,7 @@ api/bookGroups.service.ts
 api/books.service.ts
 api/publishers.service.ts
 api/system.service.ts
+api/users.service.ts
 configuration.ts
 encoder.ts
 git_push.sh

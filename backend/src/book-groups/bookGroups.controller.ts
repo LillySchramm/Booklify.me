@@ -8,29 +8,49 @@ import {
     ParseUUIDPipe,
     Patch,
     Post,
+    Query,
     Request,
     UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from 'src/auth/auth.guard';
+import {
+    ApiBearerAuth,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiTags,
+} from '@nestjs/swagger';
+import { AuthGuard, AuthOptional } from 'src/auth/auth.guard';
 import { BookGroupsService } from './bookGroups.service';
 import { BookGroupDto } from './dto/bookGroupDto.dto';
 import { BookGroupListDto } from './dto/bookGroupListDto.dto';
 import { BookGroupPostDto } from './dto/bookGroupPostDto.dto';
 import { BookGroupPatchDto } from './dto/bookGroupPatchDto.dto';
+import { UsersService } from 'src/users/users.service';
+import { userCanBeAccessed } from 'src/users/users.controller';
 
 @ApiTags('book-groups')
 @Controller('book-groups')
 export class BookGroupsController {
-    constructor(private readonly bookGroupsService: BookGroupsService) {}
+    constructor(
+        private readonly bookGroupsService: BookGroupsService,
+        private readonly usersService: UsersService,
+    ) {}
 
     @UseGuards(AuthGuard)
+    @AuthOptional()
     @ApiBearerAuth()
     @ApiOkResponse({ type: BookGroupListDto })
+    @ApiNotFoundResponse()
     @Get()
-    async getAllBookGroups(@Request() req: any) {
+    async getAllBookGroups(
+        @Request() req: any,
+        @Query('id', ParseUUIDPipe) id: string,
+    ) {
+        const user = await this.usersService.findByIdWithFlags(id);
+        if (!user || !userCanBeAccessed(user, req))
+            throw new NotFoundException();
+
         const bookGroups = await this.bookGroupsService.getAllBookGroupsOfUser(
-            req.user.id,
+            user.id,
         );
         const bookGroupDtos = bookGroups.map((bookGroup) => {
             return new BookGroupDto(bookGroup);

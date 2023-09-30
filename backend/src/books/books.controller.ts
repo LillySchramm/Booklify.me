@@ -8,21 +8,29 @@ import {
     Param,
     ParseUUIDPipe,
     Post,
+    Query,
     Request,
     Res,
     UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+    ApiBearerAuth,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiTags,
+} from '@nestjs/swagger';
 import { BookDto } from './dto/book.dto';
 import { BooksService } from './books.service';
 import { S3Service } from 'src/s3/s3.service';
 import { Response } from 'express';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard, AuthOptional } from 'src/auth/auth.guard';
 import { SetOwnershipStatusDto } from './dto/setOwnershipStatus.dto';
 import { isISBN } from 'class-validator';
 import { OwnershipStatusDto } from './dto/ownershipStatus.dto';
 import { BookListDto } from './dto/bookList.dto';
 import { BookGroupsService } from 'src/book-groups/bookGroups.service';
+import { UsersService } from 'src/users/users.service';
+import { userCanBeAccessed } from 'src/users/users.controller';
 
 @Controller('books')
 @ApiTags('books')
@@ -33,16 +41,24 @@ export class BooksController {
         private readonly bookService: BooksService,
         private readonly s3: S3Service,
         private readonly bookGroupService: BookGroupsService,
+        private readonly usersService: UsersService,
     ) {}
 
     @Get('owned')
     @UseGuards(AuthGuard)
+    @AuthOptional()
     @ApiBearerAuth()
     @ApiOkResponse({ type: BookListDto })
-    async getAllOwnedBooks(@Request() req: any) {
-        const books = await this.bookService.getAllOwnedBooksOfUser(
-            req.user.id,
-        );
+    @ApiNotFoundResponse()
+    async getAllOwnedBooks(
+        @Request() req: any,
+        @Query('id', ParseUUIDPipe) id: string,
+    ) {
+        const user = await this.usersService.findByIdWithFlags(id);
+        if (!user || !userCanBeAccessed(user, req))
+            throw new NotFoundException();
+
+        const books = await this.bookService.getAllOwnedBooksOfUser(user.id);
         const bookDtos = books.map((book) => new BookDto(book));
 
         return new BookListDto({ books: bookDtos });

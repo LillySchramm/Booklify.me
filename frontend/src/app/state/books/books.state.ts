@@ -80,7 +80,7 @@ export class BooksState {
             loadingCollectionError: undefined,
         });
 
-        return this.bookApi.booksControllerGetAllOwnedBooks().pipe(
+        return this.bookApi.booksControllerGetAllOwnedBooks(id).pipe(
             tap((books) =>
                 dispatch(new BookActions.LoadBooksOfUserSuccess(books)),
             ),
@@ -160,7 +160,7 @@ export class BooksState {
             loadingGroupsError: undefined,
         });
 
-        return this.bookGroupApi.bookGroupsControllerGetAllBookGroups().pipe(
+        return this.bookGroupApi.bookGroupsControllerGetAllBookGroups(id).pipe(
             tap((groups) =>
                 dispatch(new BookActions.LoadBookGroupsOfUserSuccess(groups)),
             ),
