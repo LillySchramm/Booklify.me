@@ -50,7 +50,8 @@
     "success": "Successfully logged out. Bye!"
   },
   "account-menu": {
-    "logout": "Logout"
+    "logout": "Logout",
+    "account": "Account"
   },
   "reset-password": {
     "title": "Reset Password",

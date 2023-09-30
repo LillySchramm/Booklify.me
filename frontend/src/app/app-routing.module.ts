@@ -31,6 +31,14 @@ const routes: Routes = [
             import('./pages/home/home.component').then((m) => m.HomeComponent),
     },
     {
+        path: 'account',
+        canActivate: [AuthGuard],
+        loadComponent: () =>
+            import('./pages/account/account.component').then(
+                (m) => m.AccountComponent,
+            ),
+    },
+    {
         path: 'u/:name',
         loadComponent: () =>
             import('./pages/user-collection/user-collection.component').then(
