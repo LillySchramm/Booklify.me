@@ -269,6 +269,10 @@ export class UsersService implements OnModuleInit {
         });
     }
 
+    async deleteUser(userId: string): Promise<void> {
+        await this.prisma.user.delete({ where: { id: userId } });
+    }
+
     async exportUserData(userId: string): Promise<any> {
         const user = await this.prisma.user.findFirst({
             where: { id: userId },

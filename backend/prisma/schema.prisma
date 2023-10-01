@@ -35,7 +35,7 @@ model User {
 
 model UserFlags {
   userId String @id @unique
-  User   User   @relation(fields: [userId], references: [id])
+  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   lastAppliedGrouperVersion Int     @default(0)
   public                    Boolean @default(true)
@@ -46,7 +46,7 @@ model UserFlags {
 
 model VerificationEmail {
   id          String  @id @default(uuid())
-  user        User    @relation(fields: [userId], references: [id])
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   invalidated Boolean @default(false)
   keyHash     String
 
@@ -58,7 +58,7 @@ model VerificationEmail {
 
 model Session {
   id           String  @id @default(uuid())
-  user         User    @relation(fields: [userId], references: [id])
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       String
   permanent    Boolean @default(false)
   refreshToken String?
@@ -135,8 +135,8 @@ model Publisher {
 }
 
 model OwnershipStatus {
-  user   User       @relation(fields: [userId], references: [id])
-  book   Book       @relation(fields: [bookIsbn], references: [isbn])
+  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  book   Book       @relation(fields: [bookIsbn], references: [isbn], onDelete: Cascade)
   status BookStatus
   group  BookGroup? @relation(fields: [bookGroupId], references: [id])
 
@@ -162,7 +162,7 @@ model Secret {
 model BookGroup {
   id              String            @id @default(uuid())
   name            String
-  user            User              @relation(fields: [userId], references: [id])
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   OwnershipStatus OwnershipStatus[]
   userId          String
 
@@ -184,7 +184,7 @@ model MailLog {
 
 model PasswordResetRequest {
   id          String  @id @default(uuid())
-  user        User    @relation(fields: [userId], references: [id])
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   invalidated Boolean @default(false)
   keyHash     String
 

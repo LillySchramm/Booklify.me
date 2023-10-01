@@ -14,6 +14,7 @@ import {
     NotFoundException,
     UnauthorizedException,
     ParseUUIDPipe,
+    Delete,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
@@ -219,6 +220,13 @@ export class AuthController {
     @ApiBearerAuth()
     getProfile(@Request() req: any) {
         return new UserDto(req.user);
+    }
+
+    @UseGuards(AuthGuard)
+    @Delete('profile')
+    @ApiBearerAuth()
+    deleteProfile(@Request() req: any) {
+        return this.userService.deleteUser(req.user.id);
     }
 
     @UseGuards(AuthGuard)
