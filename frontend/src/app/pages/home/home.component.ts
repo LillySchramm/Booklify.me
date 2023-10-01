@@ -48,7 +48,7 @@ export class HomeComponent {
         });
 
         this.totalBookCount$.pipe(untilDestroyed(this)).subscribe((count) => {
-            if (!count) return;
+            if (count === undefined) return;
 
             this.store.dispatch(
                 new UiActions.ChangePageSubtitle(

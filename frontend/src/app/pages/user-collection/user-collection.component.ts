@@ -62,11 +62,13 @@ export class UserCollectionComponent implements OnInit {
             });
 
         this.totalBookCount$.pipe(untilDestroyed(this)).subscribe((count) => {
-            if (!count) return;
+            if (count === undefined) return;
 
             this.store.dispatch(
                 new UiActions.ChangePageSubtitle(
-                    this.transloco.translate('subtitles.collection', { count }),
+                    this.transloco.translate('subtitles.collection', {
+                        count: count,
+                    }),
                 ),
             );
         });

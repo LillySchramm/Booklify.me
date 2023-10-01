@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslocoModule } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Select, Store } from '@ngxs/store';
 import { Observable, map, withLatestFrom } from 'rxjs';
@@ -16,7 +17,7 @@ export interface BookGrouping {
 @Component({
     selector: 'app-collection-display',
     standalone: true,
-    imports: [CommonModule, BookGroupComponent],
+    imports: [CommonModule, BookGroupComponent, TranslocoModule],
     templateUrl: './collection-display.component.html',
     styleUrls: ['./collection-display.component.scss'],
 })

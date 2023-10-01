@@ -1,8 +1,20 @@
 <ng-container *ngIf="$groupedBooks() as groupedBooks">
-    <app-book-group
-        *ngFor="let group of groupedBooks; index as i; trackBy: trackById"
-        [groupId]="group.key"
-        [books]="group.value"
-        class="w-full"
-    />
+    <ng-container *ngIf="groupedBooks.length; else noBooks">
+        <app-book-group
+            *ngFor="let group of groupedBooks; index as i; trackBy: trackById"
+            [groupId]="group.key"
+            [books]="group.value"
+            class="w-full"
+        />
+    </ng-container>
 </ng-container>
+<ng-template #noBooks>
+    <div
+        *transloco="let t"
+        class="flex h-full w-full items-center justify-center"
+    >
+        <span class="text-4xl">
+            {{ t('home.noBooks') }}
+        </span>
+    </div>
+</ng-template>

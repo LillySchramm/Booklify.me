@@ -96,5 +96,8 @@
     "search": "Search",
     "add": "Add To Collection",
     "already-in-collection": "You Already Have This Book In Your Collection"
+  },
+  "home": {
+    "noBooks": "There aren't any books in this collection yet"
   }
 }
