@@ -1,10 +1,11 @@
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TranslocoService } from '@ngneat/transloco';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
@@ -67,8 +68,25 @@ import { TranslocoRootModule } from './transloco-root.module';
             provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
             useValue: { appearance: 'outline' },
         },
+
+        {
+            provide: APP_INITIALIZER,
+            useFactory: initApp,
+            deps: [TranslocoService],
+            multi: true,
+        },
     ],
 
     bootstrap: [AppComponent],
 })
 export class AppModule {}
+
+export function initApp(translocoService: TranslocoService) {
+    return () => {
+        return new Promise((resolve) => {
+            translocoService.load('en').subscribe(() => {
+                resolve(true);
+            });
+        });
+    };
+}
