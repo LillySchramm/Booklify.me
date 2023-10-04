@@ -40,6 +40,7 @@ export class UserCollectionComponent implements OnInit {
         this.store.dispatch(new UiActions.ChangePageTitle(undefined));
         this.store.dispatch(new UiActions.ChangePageSubtitle(''));
         this.store.dispatch(new UiActions.ChangeInfoVisibility(false));
+        this.store.dispatch(new UiActions.ChangeSidenavMode('collection'));
 
         this.store
             .select(UserState.user(name))

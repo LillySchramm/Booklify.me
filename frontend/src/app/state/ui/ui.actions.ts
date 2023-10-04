@@ -23,4 +23,9 @@ export namespace UiActions {
         static readonly type = '[UI] Change Page Subtitle';
         constructor(public payload: string | undefined) {}
     }
+
+    export class ChangeSidenavMode {
+        static readonly type = '[UI] Change Sidenav Mode';
+        constructor(public payload: string) {}
+    }
 }

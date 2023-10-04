@@ -6,6 +6,7 @@ import { TranslocoModule } from '@ngneat/transloco';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { UiState } from 'src/app/state/ui/ui.state';
+import { AccountComponent } from './account/account.component';
 import { CollectionComponent } from './collection/collection.component';
 
 @Component({
@@ -16,6 +17,7 @@ import { CollectionComponent } from './collection/collection.component';
         CollectionComponent,
         MatDividerModule,
         TranslocoModule,
+        AccountComponent,
     ],
     templateUrl: './sidenav.component.html',
     styleUrls: ['./sidenav.component.scss'],
@@ -28,6 +30,9 @@ export class SidenavComponent {
         string | undefined
     >;
     $pageSubtitle = toSignal(this.pageSubtitle$);
+
+    @Select(UiState.sideNavMode) sideNavMode$!: Observable<string | undefined>;
+    $sideNavMode = toSignal(this.sideNavMode$);
 
     constructor() {}
 }

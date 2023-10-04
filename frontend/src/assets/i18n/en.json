@@ -4,7 +4,8 @@
   },
   "titles": {
     "collection": "Your Collection",
-    "user-collection": "{{ name }}'s Collection"
+    "user-collection": "{{ name }}'s Collection",
+    "account": "Your Account"
   },
   "subtitles": {
     "collection": "Total Book Count: {{ count }}"
@@ -99,5 +100,17 @@
   },
   "home": {
     "noBooks": "There aren't any books in this collection yet"
+  },
+  "account": {
+    "return-to-home": "Return To Your Collection",
+    "titles": {
+      "export": "Export"
+    },
+    "subtitles": {
+      "export": "Request a full export of the data we hold about your account in compliance with GDRP."
+    },
+    "buttons": {
+      "export": "Request Export"
+    }
   }
 }

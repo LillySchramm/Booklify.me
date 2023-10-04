@@ -36,6 +36,7 @@ export class HomeComponent {
         this.store.dispatch(new UiActions.ChangeSidenavVisibility(true));
         this.store.dispatch(new UiActions.ChangePageTitle('titles.collection'));
         this.store.dispatch(new UiActions.ChangePageSubtitle(''));
+        this.store.dispatch(new UiActions.ChangeSidenavMode('collection'));
         this.store.dispatch(new UiActions.ChangeInfoVisibility(false));
 
         this.session$.pipe(untilDestroyed(this)).subscribe((session) => {

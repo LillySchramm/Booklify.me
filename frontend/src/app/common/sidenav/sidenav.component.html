@@ -4,12 +4,22 @@
             {{ t(pageTitle) }}
         </h1>
         <h2
-            *ngIf="$pageSubtitle() as pageSubtitle"
+            *ngIf="$pageSubtitle() as pageSubtitle; else filler"
             class="pb-4 pl-8 pt-0 !text-sm"
         >
             {{ t(pageSubtitle) }}
         </h2>
+        <ng-template #filler>
+            <h2 class="pb-4 pl-8 pt-0"></h2>
+        </ng-template>
         <mat-divider></mat-divider>
-        <app-collection class="flex-grow"></app-collection>
+        <app-collection
+            class="flex-grow"
+            *ngIf="$sideNavMode() === 'collection'"
+        ></app-collection>
+        <app-account
+            class="flex-grow"
+            *ngIf="$sideNavMode() === 'account'"
+        ></app-account>
     </div>
 </ng-container>

@@ -1,1 +1,11 @@
-<p>account works!</p>
+<div *transloco="let t" class="w-full">
+    <div class="mb-8" id="export">
+        <h1>{{ t('account.titles.export') }}</h1>
+        <h3>{{ t('account.subtitles.export') }}</h3>
+        <button mat-fab extended class="mat-elevation-z0" (click)="export()">
+            <mat-icon>ios_share</mat-icon>
+            {{ t('account.buttons.export') }}
+        </button>
+    </div>
+    <mat-divider class="w-full"></mat-divider>
+</div>

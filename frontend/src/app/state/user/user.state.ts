@@ -459,6 +459,38 @@ export class UserState {
         this.router.navigate(['']);
     }
 
+    @Action(UserActions.ExportUser)
+    exportUser(ctx: StateContext<UserStateModel>) {
+        return this.authApi.authControllerGetExport().pipe(
+            tap((blob) =>
+                ctx.dispatch(new UserActions.ExportUserSuccess(blob)),
+            ),
+            catchError((error) => {
+                this.snack.show('Could not export user: ' + error.error);
+                return [];
+            }),
+        );
+    }
+
+    @Action(UserActions.ExportUserSuccess)
+    exportUserSuccess(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        _ctx: StateContext<UserStateModel>,
+        action: UserActions.ExportUserSuccess,
+    ) {
+        const element = document.createElement('a');
+        element.setAttribute(
+            'href',
+            'data:text/plain;charset=utf-8,' +
+                encodeURIComponent(JSON.stringify(action.data, undefined, 2)),
+        );
+        element.setAttribute('download', action.data['name'] + '.json');
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    }
+
     @Selector()
     static currentUser(state: UserStateModel) {
         return state.currentUser;

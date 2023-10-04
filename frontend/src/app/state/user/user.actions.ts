@@ -132,4 +132,13 @@ export namespace UserActions {
         static readonly type = '[User] Reset Password Error';
         constructor(public error: string) {}
     }
+
+    export class ExportUser {
+        static readonly type = '[User] Export User';
+    }
+
+    export class ExportUserSuccess {
+        static readonly type = '[User] Export User Success';
+        constructor(public data: any) {}
+    }
 }

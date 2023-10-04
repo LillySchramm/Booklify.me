@@ -4,6 +4,7 @@ import { UiActions } from './ui.actions';
 
 interface UiStateModel {
     isSidenavVisible: boolean;
+    sideNavMode?: string;
     isInfoVisible: boolean;
     pageTitle?: string;
     pageSubtitle?: string;
@@ -79,6 +80,18 @@ export class UiState {
         });
     }
 
+    @Action(UiActions.ChangeSidenavMode)
+    changeSidenavMode(
+        { getState, setState }: StateContext<UiStateModel>,
+        { payload }: UiActions.ChangeSidenavMode,
+    ) {
+        const state = getState();
+        setState({
+            ...state,
+            sideNavMode: payload,
+        });
+    }
+
     @Selector()
     static pageSubtitle(state: UiStateModel) {
         return state.pageSubtitle;
@@ -102,5 +115,10 @@ export class UiState {
     @Selector()
     static infoTitle(state: UiStateModel) {
         return state.infoTitle;
+    }
+
+    @Selector()
+    static sideNavMode(state: UiStateModel) {
+        return state.sideNavMode;
     }
 }
