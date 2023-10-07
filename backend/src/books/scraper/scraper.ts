@@ -6,6 +6,7 @@ import { OpenLibraryBookScraper } from './open-library.scraper';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { AmazonBookScraper } from './amazon.scraper';
 
 export interface CoverScrapeResult {
     buffer: Buffer | null;
@@ -36,6 +37,7 @@ export class Scraper implements BookScraper {
         const googleBookScraper = new GoogleBookScraper(prisma);
         const isbndbBookScraper = new IsbndbBookScraper(cacheManager, prisma);
         const openLibraryBookScraper = new OpenLibraryBookScraper(prisma);
+        const amazonBookScraper = new AmazonBookScraper(prisma);
 
         this.coverScrapers.push(openLibraryBookScraper);
         this.coverScrapers.push(isbndbBookScraper);
@@ -44,6 +46,7 @@ export class Scraper implements BookScraper {
         this.metadataScrapers.push(googleBookScraper);
         this.metadataScrapers.push(openLibraryBookScraper);
         this.metadataScrapers.push(isbndbBookScraper);
+        this.metadataScrapers.push(amazonBookScraper);
 
         this.metadataScrapers = this.metadataScrapers.filter((scraper) =>
             scraper.checkConfig(),
@@ -107,9 +110,18 @@ export class Scraper implements BookScraper {
             const title1Count = this.numbersInString(obj1.title);
             const title2Count = this.numbersInString(obj2.title);
 
-            if (title1Count > title2Count) {
+            if (title2Count === 0) {
+                obj2.title = obj1.title;
+            } else if (
+                title1Count &&
+                obj2.title.length > obj1.title.length * 2
+            ) {
                 obj2.title = obj1.title;
             }
+        }
+
+        if (obj1.authors && obj2.authors) {
+            obj1.authors = obj2.authors;
         }
 
         return Object.assign(obj1, this.definedProps<VolumeInfo>(obj2));

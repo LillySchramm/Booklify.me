@@ -8,6 +8,8 @@ import { UsersService } from 'src/users/users.service';
 export class BookTasksService {
     private readonly logger = new Logger(BookTasksService.name);
 
+    private infoCrawlInProgress = false;
+
     constructor(
         private bookService: BooksService,
         private bookGrouping: BookGroupingService,
@@ -41,8 +43,12 @@ export class BookTasksService {
 
     @Cron('*/5 * * * * *')
     async recrawlInfo() {
+        if (this.infoCrawlInProgress) return;
+
         const book = await this.bookService.getOneWithRecrawlInfoFlag();
         if (!book) return;
+
+        this.infoCrawlInProgress = true;
 
         this.logger.log(`Recrawling info for book ${book.isbn}...`);
 
@@ -50,6 +56,7 @@ export class BookTasksService {
         await this.bookService.setRecrawlInfoFlag(book.isbn, false);
 
         this.logger.log(`Recrawled info for book ${book.isbn}!`);
+        this.infoCrawlInProgress = false;
     }
 
     @Cron('0 0 * * * *')

@@ -197,6 +197,7 @@ enum MetadataProvider {
   GOOGLE_BOOKS
   OPEN_LIBRARY
   ISBNDB
+  AMAZON
 }
 
 model MetadataResponse {
