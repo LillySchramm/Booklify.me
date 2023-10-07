@@ -82,6 +82,7 @@ model Book {
   publishedDate    String?
   description      String?
   pageCount        Int?
+  series           String?
   printedPageCount Int?
   language         String?
   cover            BookCover?        @relation(fields: [bookCoverId], references: [id])

@@ -19,7 +19,7 @@ type BookWithPublisherAndAuthors = Book & {
     OwnershipStatus: OwnershipStatus[];
 };
 
-export const GROUPING_VERSION = 2;
+export const GROUPING_VERSION = 3;
 export const MAX_REGULAR_GROUPING_TRIES = 10;
 
 // If the name of a book is shorter than this, it will not be used for grouping.
@@ -90,6 +90,11 @@ export class BookGroupingService {
     ): Map<string, BookWithPublisherAndAuthors[]> {
         groupedBooks = this.processMapper(
             groupedBooks,
+            this.getSeriesName.bind(this),
+        );
+
+        groupedBooks = this.processMapper(
+            groupedBooks,
             this.getSeriesNameOfBookByVolumeNumber.bind(this),
         );
 
@@ -123,6 +128,10 @@ export class BookGroupingService {
         groupedBooks = this.removeSoloGroupsWithOutNumber(groupedBooks);
 
         return groupedBooks;
+    }
+
+    private getSeriesName(book: BookWithPublisherAndAuthors): string {
+        return book.series || '';
     }
 
     private findSimilarGroupNames(

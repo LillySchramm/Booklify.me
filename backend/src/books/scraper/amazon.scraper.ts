@@ -160,6 +160,7 @@ export class AmazonBookScraper implements BookScraper {
             publisher,
             publishedDate,
             title,
+            series,
         };
     }
 

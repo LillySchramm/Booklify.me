@@ -114,7 +114,7 @@ export class Scraper implements BookScraper {
                 obj2.title = obj1.title;
             } else if (
                 title1Count &&
-                obj2.title.length > obj1.title.length * 2
+                obj2.title.length > obj1.title.length * 1.5
             ) {
                 obj2.title = obj1.title;
             }

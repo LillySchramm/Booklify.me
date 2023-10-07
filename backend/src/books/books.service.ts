@@ -82,6 +82,7 @@ export class BooksService implements OnModuleInit {
                     name: book.publisher,
                 },
             },
+            series: book.series,
             language: book.language,
             pageCount: book.pageCount,
             printedPageCount: book.printedPageCount,

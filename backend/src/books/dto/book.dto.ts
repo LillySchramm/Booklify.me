@@ -45,6 +45,8 @@ export class BookDto implements BookWithGroupIdAndAuthors {
     OwnershipStatus: { bookGroupId: string | null }[];
     @ApiProperty({ type: () => IdentifierDto, isArray: true })
     authors: IdentifierDto[];
+    @Exclude()
+    series: string | null;
 
     @ApiProperty({ type: String, nullable: true })
     @Expose()

@@ -12,6 +12,7 @@ export interface VolumeInfo {
         thumbnail?: string;
         isbndb?: string;
     };
+    series?: string;
 }
 
 export interface GoogleBookResponse {
