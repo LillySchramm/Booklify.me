@@ -109,6 +109,11 @@ export class BooksService implements OnModuleInit {
 
             this.logger.log('Updating book ' + isbn);
 
+            await this.prisma.book.update({
+                where: { isbn },
+                data: { authors: { set: [] } },
+            });
+
             return await this.prisma.book.update({
                 where: { isbn },
                 data: { ...data, BookFlags: undefined },
