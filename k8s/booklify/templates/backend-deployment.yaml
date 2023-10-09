@@ -74,6 +74,11 @@ spec:
 
           - name: ISBNDB_KEY
             value: {{ .Values.backend.config.isbndb.key | quote }}
+
+          - name: GEONODE_USERNAME
+            value: {{ .Values.backend.config.geonode.username | quote }}
+          - name: GEONODE_PASSWORD
+            value: {{ .Values.backend.config.geonode.password | quote }}
           ports:
             - name: http-backend
               containerPort: 3000

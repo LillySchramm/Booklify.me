@@ -59,6 +59,9 @@ backend:
             ignore_tls: "true"
         isbndb:
             key: ""
+        geonode:
+            username: ""
+            password: ""
 
     ingress:
         enabled: true
