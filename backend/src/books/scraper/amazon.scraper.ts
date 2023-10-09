@@ -1,11 +1,29 @@
+/* eslint-disable camelcase */
 import { VolumeInfo } from '../models/volume.model';
 import { BookScraper, CoverScrapeResult } from './scraper';
 import { Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Got, gotScraping } from 'got-scraping';
+import { gotScraping } from 'got-scraping';
 import * as cheerio from 'cheerio';
 import { MetadataProvider } from '@prisma/client';
 import * as dateParser from 'any-date-parser';
+import * as config from 'config';
+
+const GEONODE_CONFIG = {
+    js_render: false,
+    is_json_response: false,
+    block_resources: true,
+    response_format: 'json',
+    mode: 'documentLoaded',
+    device_type: 'desktop',
+    country_code: 'de',
+    HTMLMinifier: { useMinifier: true },
+    proxy: {
+        useOnlyResidential: true,
+    },
+};
+
+const MAX_ATTEMPTS = 3;
 
 export class AmazonBookScraper implements BookScraper {
     private readonly logger = new Logger(AmazonBookScraper.name);
@@ -13,35 +31,71 @@ export class AmazonBookScraper implements BookScraper {
     private readonly amazonBaseUrl = 'https://www.amazon.de';
     private readonly amazonSearchUrl = 'https://www.amazon.de/s?k=';
 
-    private readonly got = this.prepareGot();
+    private readonly geoNodeUrl =
+        'https://scraper.geonode.com/api/scraper/scrape/realtime';
 
-    constructor(private readonly prisma: PrismaService) {}
+    private geoNodeUsername: string;
+    private geoNodePassword: string;
 
-    private prepareGot(): Got {
-        const got = gotScraping.extend({
-            headers: {
-                'user-agent':
-                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
-                    '(KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36',
-                'Accept-Language': 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7',
-                'Accept-Encoding': 'gzip, deflate, br',
-                Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+    constructor(private readonly prisma: PrismaService) {
+        this.geoNodeUsername = config.get('geonode.username');
+        this.geoNodePassword = config.get('geonode.password');
+    }
+
+    private async _get(
+        url: string,
+    ): Promise<{ statusCode: number; body: string; rawResponse: string }> {
+        const result = await gotScraping.post(this.geoNodeUrl, {
+            username: this.geoNodeUsername,
+            password: this.geoNodePassword,
+            json: {
+                url,
+                configurations: GEONODE_CONFIG,
             },
         });
 
-        return got;
+        const body = JSON.parse(result.body);
+
+        return {
+            statusCode: body.statusCode || 200,
+            body: body.html,
+            rawResponse: result.body,
+        };
+    }
+
+    private async get(
+        url: string,
+    ): Promise<{ statusCode: number; body: string; rawResponse: string }> {
+        this.logger.debug(`Scraping ${url}...`);
+
+        for (let i = 0; i < MAX_ATTEMPTS; i++) {
+            const result = await this._get(url);
+            if (result.statusCode === 200) {
+                this.logger.debug(
+                    `Scraped ${url}! Status code: ${result.statusCode}.`,
+                );
+                return result;
+            }
+        }
+
+        this.logger.error(`Failed to scrape ${url}!`);
+        return {
+            statusCode: 503,
+            body: '-_-',
+            rawResponse: '-_-',
+        };
     }
 
     async searchBook(isbn: string): Promise<string | null> {
         const searchUrl = this.amazonSearchUrl + isbn;
-        const response = await this.got.get(searchUrl);
+        const response = await this.get(searchUrl);
 
         await this.prisma.metadataResponse.create({
             data: {
                 isbn,
                 provider: MetadataProvider.AMAZON,
                 url: searchUrl,
-                body: response.body,
+                body: response.rawResponse,
                 responseCode: response.statusCode,
             },
         });
@@ -71,13 +125,13 @@ export class AmazonBookScraper implements BookScraper {
         return url;
     }
 
-    async scrapeBookMetaData(isbn: string): Promise<VolumeInfo> {
+    async scrapeBookMetaData(isbn: string, retry = false): Promise<VolumeInfo> {
         const url = await this.searchBook(isbn);
         if (!url) {
             return {};
         }
 
-        const response = await this.got.get(url);
+        const response = await this.get(url);
 
         await this.prisma.metadataResponse.create({
             data: {
@@ -85,7 +139,7 @@ export class AmazonBookScraper implements BookScraper {
                 provider: MetadataProvider.AMAZON,
                 url,
                 body: response.body,
-                responseCode: response.statusCode,
+                responseCode: response.statusCode || 0,
             },
         });
 
@@ -150,7 +204,9 @@ export class AmazonBookScraper implements BookScraper {
                 `Amazon did not return the a book with the same ISBN.`,
             );
 
-            return {};
+            // Often, this is caused by amazon being stupid. Most of the time,
+            // fetching the metadata again fixes it.
+            return retry ? {} : await this.scrapeBookMetaData(isbn13, true);
         }
 
         return {
@@ -170,6 +226,13 @@ export class AmazonBookScraper implements BookScraper {
     }
 
     checkConfig(): boolean {
+        if (!this.geoNodeUsername || !this.geoNodePassword) {
+            this.logger.error(
+                'Geonode credentials are not set. Please set them in the config. (https://geonode.com/)',
+            );
+
+            return false;
+        }
         return true;
     }
 }

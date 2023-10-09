@@ -29,4 +29,8 @@
     "isbndb": {
         "key": ""
     },
+    "geonode": {
+        "username": "",
+        "password": ""
+    }
 }

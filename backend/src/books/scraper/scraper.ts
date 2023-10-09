@@ -75,7 +75,9 @@ export class Scraper implements BookScraper {
 
         for await (const scraper of this.metadataScrapers) {
             const volumeFromScraper = await scraper.scrapeBookMetaData(isbn);
-            volume = this.merge(volume, volumeFromScraper);
+            if (volumeFromScraper) {
+                volume = this.merge(volume, volumeFromScraper);
+            }
         }
 
         return volume;

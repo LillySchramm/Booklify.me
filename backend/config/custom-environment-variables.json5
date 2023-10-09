@@ -47,4 +47,8 @@
   "isbndb": {
       "key": "ISBNDB_KEY"
   },
+  "geonode": {
+      "username": "GEONODE_USERNAME",
+      "password": "GEONODE_PASSWORD",
+  }
 }

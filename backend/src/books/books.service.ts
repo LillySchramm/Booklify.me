@@ -187,7 +187,6 @@ export class BooksService implements OnModuleInit {
         update = false,
     ): Promise<VolumeInfo> {
         const book = await this.scraper.scrapeBookMetaData(isbn);
-
         if (book.title === undefined) {
             throw new NotFoundException(
                 'Could not find book with ISBN ' + isbn,
