@@ -206,7 +206,7 @@ export class AmazonBookScraper implements BookScraper {
 
             // Often, this is caused by amazon being stupid. Most of the time,
             // fetching the metadata again fixes it.
-            return retry ? {} : await this.scrapeBookMetaData(isbn13, true);
+            return retry ? {} : await this.scrapeBookMetaData(isbn, true);
         }
 
         return {
