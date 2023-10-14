@@ -491,6 +491,22 @@ export class UserState {
         document.body.removeChild(element);
     }
 
+    @Action(UserActions.DeleteUser)
+    deleteUser(ctx: StateContext<UserStateModel>) {
+        return this.authApi
+            .authControllerDeleteProfile()
+            .pipe(tap(() => ctx.dispatch(new UserActions.DeleteUserSuccess())));
+    }
+
+    @Action(UserActions.DeleteUserSuccess)
+    deleteUserSuccess(ctx: StateContext<UserStateModel>) {
+        ctx.patchState({
+            currentUser: undefined,
+        });
+        this.snack.show('Account deleted successfully.');
+        this.router.navigate(['']);
+    }
+
     @Selector()
     static currentUser(state: UserStateModel) {
         return state.currentUser;

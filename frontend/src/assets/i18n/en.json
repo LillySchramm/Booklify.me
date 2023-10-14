@@ -104,13 +104,23 @@
   "account": {
     "return-to-home": "Return To Your Collection",
     "titles": {
-      "export": "Export"
+      "export": "Export",
+      "danger-zone": "Danger Zone"
     },
     "subtitles": {
-      "export": "Request a full export of the data we hold about your account in compliance with GDRP."
+      "export": "Request a full export of the data we hold about your account in compliance with GDRP.",
+      "danger-zone": "Permanently delete your account and all data relating to it. Your account can not be recovered once it has been deleted!"
     },
     "buttons": {
-      "export": "Request Export"
+      "export": "Request Export",
+      "delete": "Delete Account"
     }
+  },
+  "deletedialog": {
+    "title": "Are you sure?",
+    "text": "Deleting your account will result in all data being instantly deleted from your account. There is no way to recover it once it has been deleted. Your account name and e-mail can instantly be used to create a new account.",
+    "cancel": "Cancel",
+    "confirm": "Confirm Account Deletion",
+    "confirm-text": "Yes, I do understand the consequences that occur when deleting my account."
   }
 }

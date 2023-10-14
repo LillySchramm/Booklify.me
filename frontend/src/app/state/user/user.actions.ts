@@ -141,4 +141,12 @@ export namespace UserActions {
         static readonly type = '[User] Export User Success';
         constructor(public data: any) {}
     }
+
+    export class DeleteUser {
+        static readonly type = '[User] Delete User';
+    }
+
+    export class DeleteUserSuccess {
+        static readonly type = '[User] Delete User Success';
+    }
 }

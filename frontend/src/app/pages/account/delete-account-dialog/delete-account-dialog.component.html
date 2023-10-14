@@ -1,0 +1,27 @@
+<div *transloco="let t" class="max-w-[90vw] md:max-w-[40vw]">
+    <h1 mat-dialog-title>{{ t('deletedialog.title') }}</h1>
+    <div mat-dialog-content>
+        <p>{{ t('deletedialog.text') }}</p>
+        <form [formGroup]="form">
+            <mat-checkbox formControlName="confirm" color="warn">{{
+                t('deletedialog.confirm-text')
+            }}</mat-checkbox>
+        </form>
+    </div>
+    <div mat-dialog-actions>
+        <div class="flex w-full flex-row justify-end">
+            <button
+                mat-button
+                mat-flat-button
+                color="warn"
+                [mat-dialog-close]="true"
+                [disabled]="form.invalid"
+            >
+                {{ t('deletedialog.confirm') }}
+            </button>
+            <button mat-button mat-flat-button color="primary" mat-dialog-close>
+                {{ t('deletedialog.cancel') }}
+            </button>
+        </div>
+    </div>
+</div>
