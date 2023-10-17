@@ -53,9 +53,13 @@ export class GoogleBookScraper implements BookScraper {
     }
 
     async scrapeBookCover(
-        _isbn: string,
-        volume: VolumeInfo,
+        isbn: string,
+        volume?: VolumeInfo,
     ): Promise<CoverScrapeResult[]> {
+        if (!volume) {
+            volume = await this.scrapeBookMetaData(isbn);
+        }
+
         if (!volume.imageLinks || !volume.imageLinks.thumbnail) {
             const googleBookResponseFromTitle: GoogleBookResponse =
                 await gotScraping
@@ -63,7 +67,7 @@ export class GoogleBookScraper implements BookScraper {
                     .json();
 
             const bookWithSameTitle = googleBookResponseFromTitle.items.find(
-                (book) => book.volumeInfo.title!.startsWith(volume.title!),
+                (book) => book.volumeInfo.title!.startsWith(volume!.title!),
             );
 
             if (

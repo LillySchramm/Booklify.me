@@ -233,10 +233,6 @@ export class BooksService implements OnModuleInit {
     }
 
     async scrapeBookCover(isbn: string, metadata?: VolumeInfo) {
-        if (!metadata) {
-            metadata = await this.scrapeBookMetaData(isbn);
-        }
-
         const imageCandidates = await this.scraper.scrapeBookCover(
             isbn,
             metadata,

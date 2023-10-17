@@ -85,7 +85,7 @@ export class Scraper implements BookScraper {
 
     async scrapeBookCover(
         isbn: string,
-        volume: VolumeInfo,
+        volume?: VolumeInfo,
     ): Promise<CoverScrapeResult[]> {
         const coverScrapeResults: CoverScrapeResult[] = [];
 
