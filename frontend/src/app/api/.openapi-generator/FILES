@@ -22,6 +22,7 @@ model/bookGroupListDto.ts
 model/bookGroupPatchDto.ts
 model/bookGroupPostDto.ts
 model/bookListDto.ts
+model/changePasswordDto.ts
 model/getIdListDto.ts
 model/identifierDto.ts
 model/models.ts
@@ -32,6 +33,7 @@ model/publisherListDto.ts
 model/resetPasswordDto.ts
 model/resetPasswordRequestDto.ts
 model/sessionDto.ts
+model/sessionListDto.ts
 model/setOwnershipStatusDto.ts
 model/signInDto.ts
 model/signInSuccessDto.ts

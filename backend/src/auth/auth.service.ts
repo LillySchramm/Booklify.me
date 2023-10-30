@@ -151,10 +151,13 @@ export class AuthService {
         return result.count;
     }
 
-    async invalidateAllSessionsOfUser(userId: string): Promise<number> {
+    async invalidateAllSessionsOfUserExcept(
+        userId: string,
+        sessionId: string,
+    ): Promise<number> {
         const result = await this.prisma.session.updateMany({
             data: { invalidated: true },
-            where: { userId },
+            where: { userId, id: { not: sessionId } },
         });
 
         return result.count;

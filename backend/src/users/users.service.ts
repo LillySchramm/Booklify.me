@@ -326,4 +326,22 @@ export class UsersService implements OnModuleInit {
 
         return user;
     }
+
+    async changePassword(
+        userId: string,
+        oldPassword: string,
+        newPassword: string,
+    ): Promise<boolean> {
+        const user = await this.findByIdOrThrow(userId);
+        const passwordOk = await bcrypt.compare(oldPassword, user.password);
+        if (!passwordOk) return false;
+
+        const passwordHash = await bcrypt.hash(newPassword, saltRounds);
+        await this.prisma.user.update({
+            data: { password: passwordHash },
+            where: { id: userId },
+        });
+
+        return true;
+    }
 }

@@ -10,11 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface SessionDto {
-    id: string;
-    userId: string;
-    name: string;
-    createdAt: string;
-    permanent: boolean;
-    lastUsed: string | null;
+export interface ChangePasswordDto {
+    oldPassword: string;
+    newPassword: string;
 }

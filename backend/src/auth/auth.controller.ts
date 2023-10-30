@@ -40,6 +40,7 @@ import * as config from 'config';
 import { SignInSuccessDto } from './dto/signInSuccess.dto';
 import { randomUUID } from 'node:crypto';
 import { SessionListDto } from './dto/sessionList.dto';
+import { ChangePasswordDto } from './dto/changePassword.dto';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -267,6 +268,26 @@ export class AuthController {
         return new SessionListDto({
             sessions: sessions.map((s) => new SessionDto(s)),
         });
+    }
+
+    @UseGuards(AuthGuard)
+    @ApiBearerAuth()
+    @Post('password')
+    @ApiOkResponse()
+    async changePassword(@Request() req: any, @Body() body: ChangePasswordDto) {
+        const ok = await this.userService.changePassword(
+            req.user.id,
+            body.oldPassword,
+            body.newPassword,
+        );
+        if (!ok) throw new UnauthorizedException();
+
+        await this.authService.invalidateAllSessionsOfUserExcept(
+            req.user.id,
+            req.session.id,
+        );
+
+        return { ok: true };
     }
 
     @UseGuards(AuthGuard)

@@ -25,6 +25,8 @@ import { Observable } from 'rxjs';
 import { CustomHttpParameterCodec } from '../encoder';
 
 // @ts-ignore
+import { ChangePasswordDto } from '../model/changePasswordDto';
+// @ts-ignore
 import { NewPasswordDto } from '../model/newPasswordDto';
 // @ts-ignore
 import { ResetPasswordDto } from '../model/resetPasswordDto';
@@ -32,6 +34,8 @@ import { ResetPasswordDto } from '../model/resetPasswordDto';
 import { ResetPasswordRequestDto } from '../model/resetPasswordRequestDto';
 // @ts-ignore
 import { SessionDto } from '../model/sessionDto';
+// @ts-ignore
+import { SessionListDto } from '../model/sessionListDto';
 // @ts-ignore
 import { SignInDto } from '../model/signInDto';
 // @ts-ignore
@@ -136,6 +140,114 @@ export class AuthService {
             throw Error('key may not be null if value is not object or array');
         }
         return httpParams;
+    }
+
+    /**
+     * @param changePasswordDto
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public authControllerChangePassword(
+        changePasswordDto: ChangePasswordDto,
+        observe?: 'body',
+        reportProgress?: boolean,
+        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
+    ): Observable<any>;
+    public authControllerChangePassword(
+        changePasswordDto: ChangePasswordDto,
+        observe?: 'response',
+        reportProgress?: boolean,
+        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
+    ): Observable<HttpResponse<any>>;
+    public authControllerChangePassword(
+        changePasswordDto: ChangePasswordDto,
+        observe?: 'events',
+        reportProgress?: boolean,
+        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
+    ): Observable<HttpEvent<any>>;
+    public authControllerChangePassword(
+        changePasswordDto: ChangePasswordDto,
+        observe: any = 'body',
+        reportProgress: boolean = false,
+        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
+    ): Observable<any> {
+        if (changePasswordDto === null || changePasswordDto === undefined) {
+            throw new Error(
+                'Required parameter changePasswordDto was null or undefined when calling authControllerChangePassword.',
+            );
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (bearer) required
+        localVarCredential = this.configuration.lookupCredential('bearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set(
+                'authorization',
+                localVarCredential,
+            );
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined =
+            options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [];
+            localVarHttpHeaderAcceptSelected =
+                this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set(
+                'Accept',
+                localVarHttpHeaderAcceptSelected,
+            );
+        }
+
+        let localVarHttpContext: HttpContext | undefined =
+            options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = ['application/json'];
+        const httpContentTypeSelected: string | undefined =
+            this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set(
+                'Content-Type',
+                httpContentTypeSelected,
+            );
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (
+                this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
+            ) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/auth/password`;
+        return this.httpClient.request<any>(
+            'post',
+            `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: changePasswordDto,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress,
+            },
+        );
     }
 
     /**
@@ -587,6 +699,219 @@ export class AuthService {
         let localVarPath = `/auth/session`;
         return this.httpClient.request<SessionDto>(
             'get',
+            `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress,
+            },
+        );
+    }
+
+    /**
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public authControllerGetSessions(
+        observe?: 'body',
+        reportProgress?: boolean,
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<SessionListDto>;
+    public authControllerGetSessions(
+        observe?: 'response',
+        reportProgress?: boolean,
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<HttpResponse<SessionListDto>>;
+    public authControllerGetSessions(
+        observe?: 'events',
+        reportProgress?: boolean,
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<HttpEvent<SessionListDto>>;
+    public authControllerGetSessions(
+        observe: any = 'body',
+        reportProgress: boolean = false,
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<any> {
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (bearer) required
+        localVarCredential = this.configuration.lookupCredential('bearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set(
+                'authorization',
+                localVarCredential,
+            );
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined =
+            options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = ['application/json'];
+            localVarHttpHeaderAcceptSelected =
+                this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set(
+                'Accept',
+                localVarHttpHeaderAcceptSelected,
+            );
+        }
+
+        let localVarHttpContext: HttpContext | undefined =
+            options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (
+                this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
+            ) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/auth/sessions`;
+        return this.httpClient.request<SessionListDto>(
+            'get',
+            `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress,
+            },
+        );
+    }
+
+    /**
+     * @param id
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public authControllerInvalidateSession(
+        id: string,
+        observe?: 'body',
+        reportProgress?: boolean,
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<SessionDto>;
+    public authControllerInvalidateSession(
+        id: string,
+        observe?: 'response',
+        reportProgress?: boolean,
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<HttpResponse<SessionDto>>;
+    public authControllerInvalidateSession(
+        id: string,
+        observe?: 'events',
+        reportProgress?: boolean,
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<HttpEvent<SessionDto>>;
+    public authControllerInvalidateSession(
+        id: string,
+        observe: any = 'body',
+        reportProgress: boolean = false,
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<any> {
+        if (id === null || id === undefined) {
+            throw new Error(
+                'Required parameter id was null or undefined when calling authControllerInvalidateSession.',
+            );
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (bearer) required
+        localVarCredential = this.configuration.lookupCredential('bearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set(
+                'authorization',
+                localVarCredential,
+            );
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined =
+            options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = ['application/json'];
+            localVarHttpHeaderAcceptSelected =
+                this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set(
+                'Accept',
+                localVarHttpHeaderAcceptSelected,
+            );
+        }
+
+        let localVarHttpContext: HttpContext | undefined =
+            options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (
+                this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
+            ) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/auth/session/${this.configuration.encodeParam({
+            name: 'id',
+            value: id,
+            in: 'path',
+            style: 'simple',
+            explode: false,
+            dataType: 'string',
+            dataFormat: undefined,
+        })}`;
+        return this.httpClient.request<SessionDto>(
+            'delete',
             `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
