@@ -19,7 +19,7 @@ export class SessionDto implements Session {
     permanent: boolean;
     @Exclude()
     refreshToken: string | null;
-    @ApiProperty({ nullable: true })
+    @ApiProperty({ nullable: true, type: Date })
     lastUsed: Date | null;
 
     constructor(partial: Partial<SessionDto>) {

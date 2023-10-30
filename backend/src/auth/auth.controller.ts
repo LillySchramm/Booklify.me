@@ -15,11 +15,13 @@ import {
     UnauthorizedException,
     ParseUUIDPipe,
     Delete,
+    Param,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import {
     ApiBearerAuth,
+    ApiNotFoundResponse,
     ApiOkResponse,
     ApiQuery,
     ApiTags,
@@ -236,6 +238,24 @@ export class AuthController {
     @ApiOkResponse({ type: SessionDto })
     getSession(@Request() req: any) {
         return new SessionDto(req.session);
+    }
+
+    @UseGuards(AuthGuard)
+    @ApiBearerAuth()
+    @Delete('session/:id')
+    @ApiOkResponse({ type: SessionDto })
+    @ApiNotFoundResponse()
+    async invalidateSession(
+        @Request() req: any,
+        @Param('id', ParseUUIDPipe) id: string,
+    ) {
+        const session = await this.authService.findValidSession(id);
+        if (!session || session.userId !== req.user.id)
+            throw new NotFoundException();
+
+        await this.authService.invalidateSession(session.id);
+
+        return new SessionDto(session);
     }
 
     @UseGuards(AuthGuard)
