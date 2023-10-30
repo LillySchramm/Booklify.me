@@ -37,6 +37,7 @@ import { SignInDto } from './dto/signIn.dto';
 import * as config from 'config';
 import { SignInSuccessDto } from './dto/signInSuccess.dto';
 import { randomUUID } from 'node:crypto';
+import { SessionListDto } from './dto/sessionList.dto';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -235,6 +236,17 @@ export class AuthController {
     @ApiOkResponse({ type: SessionDto })
     getSession(@Request() req: any) {
         return new SessionDto(req.session);
+    }
+
+    @UseGuards(AuthGuard)
+    @ApiBearerAuth()
+    @Get('sessions')
+    @ApiOkResponse({ type: SessionListDto })
+    async getSessions(@Request() req: any): Promise<SessionListDto> {
+        const sessions = await this.authService.getSessionsOfUser(req.user.id);
+        return new SessionListDto({
+            sessions: sessions.map((s) => new SessionDto(s)),
+        });
     }
 
     @UseGuards(AuthGuard)

@@ -179,4 +179,11 @@ export class AuthService {
 
         return result.count;
     }
+
+    async getSessionsOfUser(userId: string): Promise<Session[]> {
+        return await this.prisma.session.findMany({
+            where: { userId, invalidated: false },
+            orderBy: { createdAt: 'desc' },
+        });
+    }
 }
