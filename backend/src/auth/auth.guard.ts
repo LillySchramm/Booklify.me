@@ -48,6 +48,8 @@ export class AuthGuard implements CanActivate {
             );
             if (session === null) throw new UnauthorizedException();
 
+            await this.authService.setLastUsed(session.id);
+
             request['authToken'] = payload;
             request['session'] = session;
             request['user'] = await this.userService.findByIdOrThrow(

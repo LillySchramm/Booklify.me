@@ -33,6 +33,14 @@
   "security": {
     "key": "SECRUITY_KEY",
     "access_token_expiration": "ACCESS_TOKEN_EXPIRATION",
+    "max_session_idle_days": {
+      "__name": "SECRUITY_MAX_SESSION_IDLE_DAYS",
+      "__format": "number"
+    },
+    "max_temp_session_age_days": {
+      "__name": "SECRUITY_MAX_TEMP_SESSION_AGE_DAYS",
+      "__format": "number"
+    },
   },
   "debug": {
     "show_query": {

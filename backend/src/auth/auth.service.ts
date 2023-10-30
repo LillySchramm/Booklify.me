@@ -6,6 +6,7 @@ import {
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import * as config from 'config';
 import { Session, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { SecretsService } from 'src/secrets/secrets.service';
@@ -121,5 +122,61 @@ export class AuthService {
         return await this.prisma.session.findFirst({
             where: { id: sessionId, invalidated: false },
         });
+    }
+
+    async setLastUsed(sessionId: string): Promise<void> {
+        await this.prisma.session.update({
+            data: { lastUsed: new Date() },
+            where: { id: sessionId },
+        });
+    }
+
+    async invalidateExpiredSessions(): Promise<number> {
+        const expirationTime = config.get<number>(
+            'security.max_session_idle_days',
+        );
+        const expirationDate = new Date(
+            Date.now() - 24 * 60 * 60 * 1000 * expirationTime,
+        );
+
+        const result = await this.prisma.session.updateMany({
+            data: { invalidated: true },
+            where: {
+                lastUsed: { lte: expirationDate },
+                invalidated: false,
+                permanent: true,
+            },
+        });
+
+        return result.count;
+    }
+
+    async invalidateAllSessionsOfUser(userId: string): Promise<number> {
+        const result = await this.prisma.session.updateMany({
+            data: { invalidated: true },
+            where: { userId },
+        });
+
+        return result.count;
+    }
+
+    async invalidateOldNonPermanentSessions(): Promise<number> {
+        const expirationTime = config.get<number>(
+            'security.max_temp_session_age_days',
+        );
+        const expirationDate = new Date(
+            Date.now() - 24 * 60 * 60 * 1000 * expirationTime,
+        );
+
+        const result = await this.prisma.session.updateMany({
+            data: { invalidated: true },
+            where: {
+                lastUsed: { lte: expirationDate },
+                permanent: false,
+                invalidated: false,
+            },
+        });
+
+        return result.count;
     }
 }

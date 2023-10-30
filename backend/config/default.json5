@@ -21,6 +21,8 @@
     "security": {
         "key": "AVerySecurePassword",
         "access_token_expiration": "1h",
+        "max_session_idle_days": 90,
+        "max_temp_session_age_days": 1,
     },
     "debug": {
         "show_query": false,
