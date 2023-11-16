@@ -41,6 +41,8 @@ model/signUpDto.ts
 model/systemHealthDto.ts
 model/systemInfoDto.ts
 model/userDto.ts
+model/userFlagsDto.ts
+model/userFlagsPatchDto.ts
 model/userTokenDto.ts
 param.ts
 variables.ts

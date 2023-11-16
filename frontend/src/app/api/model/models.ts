@@ -25,4 +25,6 @@ export * from './signUpDto';
 export * from './systemHealthDto';
 export * from './systemInfoDto';
 export * from './userDto';
+export * from './userFlagsDto';
+export * from './userFlagsPatchDto';
 export * from './userTokenDto';

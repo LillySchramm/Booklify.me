@@ -26,6 +26,10 @@ import { CustomHttpParameterCodec } from '../encoder';
 
 // @ts-ignore
 import { BasicUserDto } from '../model/basicUserDto';
+// @ts-ignore
+import { UserFlagsDto } from '../model/userFlagsDto';
+// @ts-ignore
+import { UserFlagsPatchDto } from '../model/userFlagsPatchDto';
 
 // @ts-ignore
 import { Configuration } from '../configuration';
@@ -248,6 +252,223 @@ export class UsersService {
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress,
+            },
+        );
+    }
+
+    /**
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public usersControllerGetUserFlags(
+        observe?: 'body',
+        reportProgress?: boolean,
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<UserFlagsDto>;
+    public usersControllerGetUserFlags(
+        observe?: 'response',
+        reportProgress?: boolean,
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<HttpResponse<UserFlagsDto>>;
+    public usersControllerGetUserFlags(
+        observe?: 'events',
+        reportProgress?: boolean,
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<HttpEvent<UserFlagsDto>>;
+    public usersControllerGetUserFlags(
+        observe: any = 'body',
+        reportProgress: boolean = false,
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<any> {
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (bearer) required
+        localVarCredential = this.configuration.lookupCredential('bearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set(
+                'authorization',
+                localVarCredential,
+            );
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined =
+            options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = ['application/json'];
+            localVarHttpHeaderAcceptSelected =
+                this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set(
+                'Accept',
+                localVarHttpHeaderAcceptSelected,
+            );
+        }
+
+        let localVarHttpContext: HttpContext | undefined =
+            options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (
+                this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
+            ) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/users/flags`;
+        return this.httpClient.request<UserFlagsDto>(
+            'get',
+            `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress,
+            },
+        );
+    }
+
+    /**
+     * @param userFlagsPatchDto
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public usersControllerPatchUserFlags(
+        userFlagsPatchDto: UserFlagsPatchDto,
+        observe?: 'body',
+        reportProgress?: boolean,
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<UserFlagsDto>;
+    public usersControllerPatchUserFlags(
+        userFlagsPatchDto: UserFlagsPatchDto,
+        observe?: 'response',
+        reportProgress?: boolean,
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<HttpResponse<UserFlagsDto>>;
+    public usersControllerPatchUserFlags(
+        userFlagsPatchDto: UserFlagsPatchDto,
+        observe?: 'events',
+        reportProgress?: boolean,
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<HttpEvent<UserFlagsDto>>;
+    public usersControllerPatchUserFlags(
+        userFlagsPatchDto: UserFlagsPatchDto,
+        observe: any = 'body',
+        reportProgress: boolean = false,
+        options?: {
+            httpHeaderAccept?: 'application/json';
+            context?: HttpContext;
+        },
+    ): Observable<any> {
+        if (userFlagsPatchDto === null || userFlagsPatchDto === undefined) {
+            throw new Error(
+                'Required parameter userFlagsPatchDto was null or undefined when calling usersControllerPatchUserFlags.',
+            );
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (bearer) required
+        localVarCredential = this.configuration.lookupCredential('bearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set(
+                'authorization',
+                localVarCredential,
+            );
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined =
+            options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = ['application/json'];
+            localVarHttpHeaderAcceptSelected =
+                this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set(
+                'Accept',
+                localVarHttpHeaderAcceptSelected,
+            );
+        }
+
+        let localVarHttpContext: HttpContext | undefined =
+            options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = ['application/json'];
+        const httpContentTypeSelected: string | undefined =
+            this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set(
+                'Content-Type',
+                httpContentTypeSelected,
+            );
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (
+                this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
+            ) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/users/flags`;
+        return this.httpClient.request<UserFlagsDto>(
+            'patch',
+            `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: userFlagsPatchDto,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
