@@ -14,6 +14,8 @@ import {
     BasicUserDto,
     SessionDto,
     UserDto,
+    UserFlagsDto,
+    UserFlagsPatchDto,
     UsersService,
 } from 'src/app/api';
 import { SnackBarService } from 'src/app/common/services/snack-bar.service';
@@ -44,6 +46,7 @@ interface UserStateModel {
         success?: boolean;
         error?: string;
     };
+    flags?: UserFlagsDto;
 }
 
 @State<UserStateModel>({
@@ -507,6 +510,56 @@ export class UserState {
         this.router.navigate(['']);
     }
 
+    @Action(UserActions.LoadUserFlags)
+    loadUserFlags(ctx: StateContext<UserStateModel>) {
+        return this.userApi
+            .usersControllerGetUserFlags()
+            .pipe(
+                tap((flags) =>
+                    ctx.dispatch(new UserActions.LoadUserFlagsSuccess(flags)),
+                ),
+            );
+    }
+
+    @Action(UserActions.LoadUserFlagsSuccess)
+    loadUserFlagsSuccess(
+        ctx: StateContext<UserStateModel>,
+        action: UserActions.LoadUserFlagsSuccess,
+    ) {
+        ctx.patchState({
+            flags: action.flags,
+        });
+    }
+
+    @Action(UserActions.ChangeVisibility)
+    changeVisibility(
+        ctx: StateContext<UserStateModel>,
+        action: UserActions.ChangeVisibility,
+    ) {
+        return this.userApi
+            .usersControllerPatchUserFlags({
+                public: action.visibility,
+            } as UserFlagsPatchDto)
+            .pipe(
+                tap((flags) =>
+                    ctx.dispatch(
+                        new UserActions.ChangeInfoVisibilitySuccess(flags),
+                    ),
+                ),
+            );
+    }
+
+    @Action(UserActions.ChangeInfoVisibilitySuccess)
+    changeVisibilitySuccess(
+        ctx: StateContext<UserStateModel>,
+        action: UserActions.ChangeInfoVisibilitySuccess,
+    ) {
+        this.snack.show('Visibility changed successfully');
+        ctx.patchState({
+            flags: action.flags,
+        });
+    }
+
     @Selector()
     static currentUser(state: UserStateModel) {
         return state.currentUser;
@@ -579,6 +632,11 @@ export class UserState {
     @Selector()
     static resetPasswordError(state: UserStateModel): string | undefined {
         return state.resetPassword.error;
+    }
+
+    @Selector()
+    static selectUserFlags(state: UserStateModel): UserFlagsDto | undefined {
+        return state.flags;
     }
 
     @Selector()

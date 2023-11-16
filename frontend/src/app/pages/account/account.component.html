@@ -1,5 +1,21 @@
 <div *transloco="let t" class="w-full">
     <div class="mb-4" id="export">
+        <h1 class="!m-0">{{ t('account.titles.visibility') }}</h1>
+        <h3>{{ t('account.subtitles.visibility') }}</h3>
+        <div *ngIf="$userFlags() as userFlags">
+            <mat-slide-toggle
+                [checked]="userFlags.public"
+                (change)="changePublic($event)"
+                ><span>{{
+                    userFlags.public
+                        ? t('account.labels.public')
+                        : t('account.labels.private')
+                }}</span></mat-slide-toggle
+            >
+        </div>
+    </div>
+    <mat-divider class="w-full"></mat-divider>
+    <div class="mb-4 mt-4" id="export">
         <h1 class="!m-0">{{ t('account.titles.export') }}</h1>
         <h3>{{ t('account.subtitles.export') }}</h3>
         <button mat-fab extended class="mat-elevation-z0" (click)="export()">

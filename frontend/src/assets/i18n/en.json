@@ -105,15 +105,21 @@
     "return-to-home": "Return To Your Collection",
     "titles": {
       "export": "Export",
-      "danger-zone": "Danger Zone"
+      "danger-zone": "Danger Zone",
+      "visibility": "Visibility"
     },
     "subtitles": {
       "export": "Request a full export of the data we hold about your account in compliance with GDRP.",
-      "danger-zone": "Permanently delete your account and all data relating to it. Your account can not be recovered once it has been deleted!"
+      "danger-zone": "Permanently delete your account and all data relating to it. Your account can not be recovered once it has been deleted!",
+      "visibility": "Decide if other users should be able to see your collection or if you want to keep it for yourself."
     },
     "buttons": {
       "export": "Request Export",
       "delete": "Delete Account"
+    },
+    "labels": {
+      "private": "Your account is hidden! Click the toggle to make it visible to other users.",
+      "public": "Your account is currently visible. Click the toggle to make it hidden from other users."
     }
   },
   "deletedialog": {

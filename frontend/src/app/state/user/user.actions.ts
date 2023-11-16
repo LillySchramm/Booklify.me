@@ -6,6 +6,7 @@ import {
     SignInSuccessDto,
     SignUpDto,
     UserDto,
+    UserFlagsDto,
 } from 'src/app/api';
 
 export namespace UserActions {
@@ -148,5 +149,24 @@ export namespace UserActions {
 
     export class DeleteUserSuccess {
         static readonly type = '[User] Delete User Success';
+    }
+
+    export class LoadUserFlags {
+        static readonly type = '[User] Load Flags';
+    }
+
+    export class LoadUserFlagsSuccess {
+        static readonly type = '[User] Load Flags Success';
+        constructor(public flags: UserFlagsDto) {}
+    }
+
+    export class ChangeVisibility {
+        static readonly type = '[User] Change Visibility';
+        constructor(public visibility: boolean) {}
+    }
+
+    export class ChangeInfoVisibilitySuccess {
+        static readonly type = '[User] Change Visibility Success';
+        constructor(public flags: UserFlagsDto) {}
     }
 }
