@@ -1,8 +1,10 @@
 import {
     BadRequestException,
+    Body,
     Controller,
     Get,
     NotFoundException,
+    Patch,
     Query,
     Request,
     UseGuards,
@@ -18,6 +20,8 @@ import { UserWithFlags, UsersService } from './users.service';
 import { isUUID } from 'class-validator';
 import { BasicUserDto } from './dto/basicUser.dto';
 import { AuthGuard, AuthOptional } from 'src/auth/auth.guard';
+import { UserFlagsDto } from './dto/userFlags.dto';
+import { UserFlagsPatchDto } from './dto/userFlagsPatch.dto';
 
 /**
  * Ensure that data of a user can only be accessed by the user itself or if
@@ -33,6 +37,40 @@ export function userCanBeAccessed(user: UserWithFlags, request: any): boolean {
 @ApiTags('Users')
 export class UsersController {
     constructor(private readonly userService: UsersService) {}
+
+    @Patch('flags')
+    @ApiBearerAuth()
+    @ApiOkResponse({ type: UserFlagsDto })
+    @ApiBadRequestResponse()
+    @UseGuards(AuthGuard)
+    async patchUserFlags(
+        @Request() request: any,
+        @Body() body: UserFlagsPatchDto,
+    ): Promise<UserFlagsDto> {
+        const flags = await this.userService.setUserFlags(
+            request.user.id,
+            body,
+        );
+
+        // This case should not happen
+        if (!flags) throw new NotFoundException('User not found');
+
+        return new UserFlagsDto(flags);
+    }
+
+    @Get('flags')
+    @ApiBearerAuth()
+    @ApiOkResponse({ type: UserFlagsDto })
+    @ApiNotFoundResponse({ description: 'User not found' })
+    @UseGuards(AuthGuard)
+    async getUserFlags(@Request() request: any): Promise<UserFlagsDto> {
+        const flags = await this.userService.getUserFlags(request.user.id);
+
+        // This case should not happen
+        if (!flags) throw new NotFoundException('User not found');
+
+        return new UserFlagsDto(flags);
+    }
 
     @Get()
     @ApiNotFoundResponse({ description: 'User not found' })

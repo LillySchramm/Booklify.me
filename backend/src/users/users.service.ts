@@ -327,6 +327,22 @@ export class UsersService implements OnModuleInit {
         return user;
     }
 
+    async getUserFlags(userId: string): Promise<UserFlags | null> {
+        return await this.prisma.userFlags.findFirst({
+            where: { userId },
+        });
+    }
+
+    async setUserFlags(
+        userId: string,
+        flags: Partial<UserFlags>,
+    ): Promise<UserFlags | null> {
+        return await this.prisma.userFlags.update({
+            data: flags,
+            where: { userId },
+        });
+    }
+
     async changePassword(
         userId: string,
         oldPassword: string,
