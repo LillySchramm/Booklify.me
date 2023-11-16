@@ -459,6 +459,7 @@ export class UserState {
 
     @Action(UserActions.LoadUserByNicknameError)
     loadUserByNicknameError() {
+        this.snack.show('User was not found');
         this.router.navigate(['']);
     }
 
