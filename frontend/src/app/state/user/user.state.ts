@@ -47,6 +47,7 @@ interface UserStateModel {
         error?: string;
     };
     flags?: UserFlagsDto;
+    sessions?: SessionDto[];
 }
 
 @State<UserStateModel>({
@@ -588,6 +589,31 @@ export class UserState {
         );
     }
 
+    @Action(UserActions.LoadAllSessions)
+    loadAllSessions(ctx: StateContext<UserStateModel>) {
+        return this.authApi
+            .authControllerGetSessions()
+            .pipe(
+                tap((sessions) =>
+                    ctx.dispatch(
+                        new UserActions.LoadAllSessionsSuccess(
+                            sessions.sessions,
+                        ),
+                    ),
+                ),
+            );
+    }
+
+    @Action(UserActions.LoadAllSessionsSuccess)
+    loadAllSessionsSuccess(
+        ctx: StateContext<UserStateModel>,
+        action: UserActions.LoadAllSessionsSuccess,
+    ) {
+        ctx.patchState({
+            sessions: action.sessions,
+        });
+    }
+
     @Selector()
     static currentUser(state: UserStateModel) {
         return state.currentUser;
@@ -670,6 +696,11 @@ export class UserState {
     @Selector()
     static session(state: UserStateModel): SessionDto | undefined {
         return state.session;
+    }
+
+    @Selector()
+    static sessions(state: UserStateModel): SessionDto[] | undefined {
+        return state.sessions;
     }
 
     static user(name: string) {

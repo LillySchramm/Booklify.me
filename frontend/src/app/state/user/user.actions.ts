@@ -184,4 +184,13 @@ export namespace UserActions {
         static readonly type = '[User] Change Password Error';
         constructor(public error: string) {}
     }
+
+    export class LoadAllSessions {
+        static readonly type = '[User] Load All Sessions';
+    }
+
+    export class LoadAllSessionsSuccess {
+        static readonly type = '[User] Load All Sessions Success';
+        constructor(public sessions: SessionDto[]) {}
+    }
 }

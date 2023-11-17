@@ -9,7 +9,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { SessionDto } from './sessionDto';
 
 export interface SessionListDto {
-    sessions: Array<SessionListDto>;
+    sessions: Array<SessionDto>;
 }

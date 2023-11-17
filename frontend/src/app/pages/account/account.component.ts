@@ -45,6 +45,7 @@ export class AccountComponent {
     ) {
         this.store.dispatch(new UserActions.LoadUser());
         this.store.dispatch(new UserActions.LoadUserFlags());
+        this.store.dispatch(new UserActions.LoadAllSessions());
         this.store.dispatch(new UiActions.ChangeSidenavVisibility(true));
         this.store.dispatch(new UiActions.ChangePageTitle('titles.account'));
         this.store.dispatch(new UiActions.ChangePageSubtitle(undefined));
