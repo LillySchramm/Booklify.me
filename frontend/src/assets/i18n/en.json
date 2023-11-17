@@ -106,12 +106,14 @@
     "titles": {
       "export": "Export",
       "danger-zone": "Danger Zone",
-      "visibility": "Visibility"
+      "visibility": "Visibility",
+      "password": "Password"
     },
     "subtitles": {
       "export": "Request a full export of the data we hold about your account in compliance with GDRP.",
       "danger-zone": "Permanently delete your account and all data relating to it. Your account can not be recovered once it has been deleted!",
-      "visibility": "Decide if other users should be able to see your collection or if you want to keep it for yourself."
+      "visibility": "Decide if other users should be able to see your collection or if you want to keep it for yourself.",
+      "password": "Changing your password will sign you out on all devices you are currently logged in on!"
     },
     "buttons": {
       "export": "Request Export",
@@ -128,5 +130,13 @@
     "cancel": "Cancel",
     "confirm": "Confirm Account Deletion",
     "confirm-text": "Yes, I do understand the consequences that occur when deleting my account."
+  },
+  "new-password": {
+    "submit": "Change Password",
+    "form": {
+      "current": "Current Password",
+      "new": "New Password",
+      "new-repeat": "Repeat new password"
+    }
   }
 }

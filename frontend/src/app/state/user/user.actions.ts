@@ -1,5 +1,6 @@
 import {
     BasicUserDto,
+    ChangePasswordDto,
     NewPasswordDto,
     SessionDto,
     SignInDto,
@@ -168,5 +169,19 @@ export namespace UserActions {
     export class ChangeInfoVisibilitySuccess {
         static readonly type = '[User] Change Visibility Success';
         constructor(public flags: UserFlagsDto) {}
+    }
+
+    export class ChangePassword {
+        static readonly type = '[User] Change Password';
+        constructor(public password: ChangePasswordDto) {}
+    }
+
+    export class ChangePasswordSuccess {
+        static readonly type = '[User] Change Password Success';
+    }
+
+    export class ChangePasswordError {
+        static readonly type = '[User] Change Password Error';
+        constructor(public error: string) {}
     }
 }

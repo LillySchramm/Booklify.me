@@ -561,6 +561,33 @@ export class UserState {
         });
     }
 
+    @Action(UserActions.ChangePassword)
+    changePassword(
+        ctx: StateContext<UserStateModel>,
+        action: UserActions.ChangePassword,
+    ) {
+        return this.authApi.authControllerChangePassword(action.password).pipe(
+            tap(() => ctx.dispatch(new UserActions.ChangePasswordSuccess())),
+            catchError((error) =>
+                ctx.dispatch(
+                    new UserActions.ChangePasswordError(error.error.message),
+                ),
+            ),
+        );
+    }
+
+    @Action(UserActions.ChangePasswordSuccess)
+    changePasswordSuccess() {
+        this.snack.show('Password changed successfully');
+    }
+
+    @Action(UserActions.ChangePasswordError)
+    changePasswordError() {
+        this.snack.show(
+            'Could not change password, please check your input and try again.',
+        );
+    }
+
     @Selector()
     static currentUser(state: UserStateModel) {
         return state.currentUser;
