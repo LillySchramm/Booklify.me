@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { SessionDto } from './session.dto';
 
 export class SessionListDto {
-    @ApiProperty({ type: [SessionListDto] })
+    @ApiProperty({ type: [SessionDto] })
     sessions: SessionDto[];
 
     constructor(partial: Partial<SessionListDto>) {
