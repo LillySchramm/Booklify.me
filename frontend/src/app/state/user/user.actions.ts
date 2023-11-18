@@ -193,4 +193,13 @@ export namespace UserActions {
         static readonly type = '[User] Load All Sessions Success';
         constructor(public sessions: SessionDto[]) {}
     }
+
+    export class InvalidateSession {
+        static readonly type = '[User] Invalidate Session';
+        constructor(public sessionId: string) {}
+    }
+
+    export class InvalidateSessionSuccess {
+        static readonly type = '[User] Invalidate Session Success';
+    }
 }

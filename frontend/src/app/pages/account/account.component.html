@@ -22,6 +22,12 @@
     </div>
     <mat-divider class="w-full"></mat-divider>
     <div class="mb-4 mt-4" id="export">
+        <h1 class="!m-0">{{ t('account.titles.sessions') }}</h1>
+        <h3>{{ t('account.subtitles.sessions') }}</h3>
+        <app-session-table></app-session-table>
+    </div>
+    <mat-divider class="w-full"></mat-divider>
+    <div class="mb-4 mt-4" id="export">
         <h1 class="!m-0">{{ t('account.titles.export') }}</h1>
         <h3>{{ t('account.subtitles.export') }}</h3>
         <button mat-fab extended class="mat-elevation-z0" (click)="export()">

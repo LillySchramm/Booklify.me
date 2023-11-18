@@ -17,6 +17,7 @@ import { UserActions } from 'src/app/state/user/user.actions';
 import { UserState } from 'src/app/state/user/user.state';
 import { DeleteAccountDialogComponent } from './delete-account-dialog/delete-account-dialog.component';
 import { NewPasswordFormComponent } from './new-password-form/new-password-form.component';
+import { SessionTableComponent } from './session-table/session-table.component';
 
 @Component({
     selector: 'app-account',
@@ -30,6 +31,7 @@ import { NewPasswordFormComponent } from './new-password-form/new-password-form.
         MatDialogModule,
         MatSlideToggleModule,
         NewPasswordFormComponent,
+        SessionTableComponent,
     ],
     templateUrl: './account.component.html',
     styleUrls: ['./account.component.scss'],

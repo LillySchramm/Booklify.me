@@ -1,0 +1,49 @@
+<table
+    mat-table
+    [dataSource]="dataSource"
+    class="mat-elevation-z0"
+    *transloco="let t"
+>
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>{{ t('session-table.name') }}</th>
+        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="created">
+        <th mat-header-cell *matHeaderCellDef>
+            {{ t('session-table.created') }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{ element.createdAt | date: 'medium' }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="lastUsed">
+        <th mat-header-cell *matHeaderCellDef>
+            {{ t('session-table.lastUsed') }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+            {{ element.lastUsed | timeago: false }}
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+            <button
+                color="warn"
+                (click)="invalidate(element.id)"
+                *ngIf="element.id !== $session()?.id"
+                mat-flat-button
+            >
+                {{ t('session-table.invalidate') }}
+            </button>
+            <span *ngIf="element.id === $session()?.id"
+                >({{ t('session-table.current') }})</span
+            >
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>

@@ -614,6 +614,26 @@ export class UserState {
         });
     }
 
+    @Action(UserActions.InvalidateSession)
+    invalidateSession(
+        ctx: StateContext<UserStateModel>,
+        action: UserActions.InvalidateSession,
+    ) {
+        return this.authApi
+            .authControllerInvalidateSession(action.sessionId)
+            .pipe(
+                tap(() =>
+                    ctx.dispatch(new UserActions.InvalidateSessionSuccess()),
+                ),
+            );
+    }
+
+    @Action(UserActions.InvalidateSessionSuccess)
+    invalidateSessionSuccess(ctx: StateContext<UserStateModel>) {
+        this.snack.show('Session has been invalidated');
+        ctx.dispatch(new UserActions.LoadAllSessions());
+    }
+
     @Selector()
     static currentUser(state: UserStateModel) {
         return state.currentUser;

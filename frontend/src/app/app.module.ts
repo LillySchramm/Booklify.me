@@ -10,6 +10,7 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { LazyLoadImageModule } from 'ng-lazyload-image';
+import { TimeagoModule } from 'ngx-timeago';
 import { environment } from 'src/environments/environment';
 import { ApiModule, Configuration } from './api';
 import { AppRoutingModule } from './app-routing.module';
@@ -51,6 +52,7 @@ import { TranslocoRootModule } from './transloco-root.module';
         MatSidenavModule,
         SidenavComponent,
         BookDetailsSideComponent,
+        TimeagoModule.forRoot(),
     ],
     providers: [
         {
