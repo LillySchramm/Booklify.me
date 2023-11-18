@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { BookDto } from 'src/app/api';
 import { NoImagePlaceholderComponent } from 'src/app/common/components/no-image-placeholder/no-image-placeholder.component';
 import { CoverService } from 'src/app/common/services/cover.service';
+import { UiService } from 'src/app/common/services/ui.service';
 import { BookActions } from 'src/app/state/books/books.actions';
 import { BooksState } from 'src/app/state/books/books.state';
 import { UiActions } from 'src/app/state/ui/ui.actions';
@@ -39,6 +40,7 @@ export class BookCardComponent implements OnInit {
     constructor(
         private cover: CoverService,
         private store: Store,
+        public ui: UiService,
     ) {}
 
     ngOnInit(): void {

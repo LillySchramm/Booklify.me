@@ -1,5 +1,12 @@
 <header *transloco="let t">
     <mat-toolbar color="primary">
+        <button
+            *ngIf="$isSidenavVisible()"
+            mat-icon-button
+            (click)="toggleSidenav.emit()"
+        >
+            <mat-icon>menu</mat-icon>
+        </button>
         <a routerLink="/" class="select-none">{{ t('app.name') }}</a>
         <span class="flex-grow"></span>
         <app-user-display *ngIf="$user()"></app-user-display>

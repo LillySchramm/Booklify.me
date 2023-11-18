@@ -1,6 +1,9 @@
 <div
     class="m-1 flex h-52 w-36 cursor-pointer flex-col rounded-md bg-tertiary p-2 pb-0.5 transition duration-100"
-    [ngClass]="{ '!bg-accent': $selectedBook()?.isbn === book.isbn }"
+    [ngClass]="{
+        '!bg-accent': $selectedBook()?.isbn === book.isbn,
+        'h-40 w-20': ui.smallScreen
+    }"
     *transloco="let t"
     (click)="openInfo(); scroll(card)"
     [attr.id]="'book-' + book.isbn"

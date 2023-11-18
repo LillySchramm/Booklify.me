@@ -1,5 +1,6 @@
 <div
     class="flex h-full items-center justify-center bg-secondary p-4 text-center text-2xl font-bold"
+    [ngClass]="{ 'text-xl': ui.smallScreen }"
 >
     <div>
         <ng-content></ng-content>

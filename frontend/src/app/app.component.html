@@ -1,9 +1,13 @@
-<app-header class="fixed z-50 w-full"></app-header>
+<app-header
+    class="fixed z-50 w-full"
+    (toggleSidenav)="toggleSidenav()"
+></app-header>
 
 <mat-drawer-container class="!flex min-h-screen w-full">
     <mat-drawer
-        mode="side"
-        [opened]="$isSidenavVisible()"
+        [mode]="ui.smallScreen ? 'over' : 'side'"
+        #sideNav
+        [opened]="!ui.smallScreen"
         class="!fixed max-h-screen w-80"
     >
         <div class="flex h-full flex-col">
