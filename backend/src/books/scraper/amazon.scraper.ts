@@ -119,8 +119,14 @@ export class AmazonBookScraper implements BookScraper {
             `Amazon returned ${items.length} results for ISBN ${isbn}.`,
         );
 
-        const firstResult = items.first();
-        const url = this.amazonBaseUrl + firstResult.find('a').attr('href');
+        const firstNotSponsoredResult = items
+            .filter(
+                (_, element) =>
+                    !$(element).find('.puis-sponsored-label-text').length,
+            )
+            .first();
+        const url =
+            this.amazonBaseUrl + firstNotSponsoredResult.find('a').attr('href');
 
         return url;
     }
