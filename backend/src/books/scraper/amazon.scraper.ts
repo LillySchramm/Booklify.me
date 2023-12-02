@@ -160,11 +160,12 @@ export class AmazonBookScraper implements BookScraper {
         const $ = cheerio.load(response.body);
 
         const title = $('#productTitle').text().trim();
-        const authors = $('#bylineInfo a')
+        const authors = $('#bylineInfo a:not(.showMoreLink)')
             .map((_, element) => {
                 return $(element).text().trim();
             })
             .get();
+
         const isbn13 = $(
             '#rpi-attribute-book_details-isbn13 .rpi-attribute-value',
         )
