@@ -8,6 +8,7 @@
         [mode]="ui.smallScreen ? 'over' : 'side'"
         #sideNav
         [opened]="!ui.smallScreen"
+        *ngIf="$isSidenavVisible()"
         class="!fixed max-h-screen w-80"
     >
         <div class="flex h-full flex-col">
