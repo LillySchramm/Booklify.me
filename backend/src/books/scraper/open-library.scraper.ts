@@ -12,6 +12,9 @@ export class OpenLibraryBookScraper implements BookScraper {
     private openLibraryCoverBase = 'https://covers.openlibrary.org/b/isbn';
 
     constructor(private readonly prisma: PrismaService) {}
+    isLongRunning(): boolean {
+        return false;
+    }
 
     async scrapeBookMetaData(isbn: string): Promise<VolumeInfo> {
         const url = `${this.openLibraryApiBase}/${isbn}.json`;

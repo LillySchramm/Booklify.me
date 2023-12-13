@@ -360,4 +360,13 @@ export class UsersService implements OnModuleInit {
 
         return true;
     }
+
+    async getAllUserIdsWithBook(isbn: string): Promise<string[]> {
+        const owners = await this.prisma.ownershipStatus.findMany({
+            where: { bookIsbn: isbn, status: 'OWNED' },
+            select: { userId: true },
+        });
+
+        return owners.map((owner) => owner.userId);
+    }
 }

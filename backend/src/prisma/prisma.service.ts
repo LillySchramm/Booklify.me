@@ -1,8 +1,9 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { LogLevel } from '@prisma/client/runtime/library';
 
 import * as config from 'config';
+
+type LogLevel = 'info' | 'query' | 'warn' | 'error';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {

@@ -13,6 +13,7 @@ export interface VolumeInfo {
         isbndb?: string;
     };
     series?: string;
+    incomplete?: boolean;
 }
 
 export interface GoogleBookResponse {

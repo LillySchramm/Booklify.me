@@ -15,6 +15,9 @@ export class GoogleBookScraper implements BookScraper {
     private googleBooksApiBase = 'https://www.googleapis.com/books/v1/volumes';
 
     constructor(private readonly prisma: PrismaService) {}
+    isLongRunning(): boolean {
+        return false;
+    }
 
     async scrapeBookMetaData(isbn: string): Promise<VolumeInfo> {
         const url = `${this.googleBooksApiBase}?q=isbn:${isbn}`;

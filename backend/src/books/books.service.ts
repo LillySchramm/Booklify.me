@@ -91,7 +91,9 @@ export class BooksService implements OnModuleInit {
                 connect: (book.authors || []).map((name) => ({ name })),
             },
             BookFlags: {
-                create: {},
+                create: {
+                    recrawlLongruning: book.incomplete,
+                },
             },
         };
 
@@ -185,8 +187,9 @@ export class BooksService implements OnModuleInit {
     async scrapeBookMetaData(
         isbn: string,
         update = false,
+        longruning = false,
     ): Promise<VolumeInfo> {
-        const book = await this.scraper.scrapeBookMetaData(isbn);
+        const book = await this.scraper.scrapeBookMetaData(isbn, longruning);
         if (book.title === undefined) {
             throw new NotFoundException(
                 'Could not find book with ISBN ' + isbn,
@@ -333,6 +336,13 @@ export class BooksService implements OnModuleInit {
         });
     }
 
+    async getOneWithLongrunningRecrawlFlag(): Promise<{ isbn: string } | null> {
+        return await this.prisma.book.findFirst({
+            select: { isbn: true },
+            where: { BookFlags: { recrawlLongruning: true } },
+        });
+    }
+
     async setRecrawlCoverFlag(isbn: string, value: boolean) {
         await this.prisma.bookFlags.update({
             where: { bookIsbn: isbn },
@@ -358,6 +368,13 @@ export class BooksService implements OnModuleInit {
         await this.prisma.bookFlags.update({
             where: { bookIsbn: isbn },
             data: { recrawlInfo: value },
+        });
+    }
+
+    async setRecrawlLongrunningFlag(isbn: string, value: boolean) {
+        await this.prisma.bookFlags.update({
+            where: { bookIsbn: isbn },
+            data: { recrawlLongruning: value },
         });
     }
 }

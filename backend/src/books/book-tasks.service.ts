@@ -9,6 +9,7 @@ export class BookTasksService {
     private readonly logger = new Logger(BookTasksService.name);
 
     private infoCrawlInProgress = false;
+    private longrunningCrawlInProgress = false;
 
     constructor(
         private bookService: BooksService,
@@ -36,7 +37,7 @@ export class BookTasksService {
 
         this.logger.log(`Updating grouping for user ${user.id}...`);
 
-        await this.bookGrouping.groupBooksOfUser(user.id);
+        await this.bookGrouping.groupBooksOfUser(user.id, true);
 
         this.logger.log(`Updated grouping for user ${user.id}!`);
     }
@@ -73,5 +74,31 @@ export class BookTasksService {
         await this.bookService.scrapeBookCover(book.isbn);
 
         this.logger.log(`Recrawled cover for book ${book.isbn}!`);
+    }
+
+    @Cron('*/5 * * * * *')
+    async doLongruning() {
+        if (this.longrunningCrawlInProgress) return;
+
+        const book = await this.bookService.getOneWithLongrunningRecrawlFlag();
+        if (!book) return;
+
+        this.longrunningCrawlInProgress = true;
+
+        this.logger.log(
+            `Recrawling info for book ${book.isbn} because it misses longruning...`,
+        );
+
+        await this.bookService.scrapeBookMetaData(book.isbn, true, true);
+        await this.bookService.setRecrawlLongrunningFlag(book.isbn, false);
+
+        const users = await this.userService.getAllUserIdsWithBook(book.isbn);
+        for (const userId of users) {
+            await this.bookGrouping.groupBooksOfUser(userId, true);
+        }
+
+        this.longrunningCrawlInProgress = false;
+
+        this.logger.log(`Recrawled info for book ${book.isbn}!`);
     }
 }

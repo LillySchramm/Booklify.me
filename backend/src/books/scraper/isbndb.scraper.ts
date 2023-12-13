@@ -20,6 +20,9 @@ export class IsbndbBookScraper implements BookScraper {
         private cacheManager: Cache,
         private readonly prisma: PrismaService,
     ) {}
+    isLongRunning(): boolean {
+        return false;
+    }
 
     async scrapeBookMetaData(isbn: string): Promise<VolumeInfo> {
         const url = `${this.isbndbApiBase}${isbn}`;

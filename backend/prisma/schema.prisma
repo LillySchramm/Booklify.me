@@ -101,8 +101,9 @@ model BookFlags {
   bookIsbn String @id @unique
   Book     Book   @relation(fields: [bookIsbn], references: [isbn])
 
-  recrawlCover Boolean @default(false)
-  recrawlInfo  Boolean @default(false)
+  recrawlCover      Boolean @default(false)
+  recrawlInfo       Boolean @default(false)
+  recrawlLongruning Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt

@@ -21,6 +21,7 @@ export interface BookScraper {
     ): Promise<CoverScrapeResult[]>;
 
     checkConfig(): boolean;
+    isLongRunning(): boolean;
 }
 
 @Injectable()
@@ -69,11 +70,22 @@ export class Scraper implements BookScraper {
                 .join(', ')}`,
         );
     }
+    isLongRunning(): boolean {
+        return false;
+    }
 
-    async scrapeBookMetaData(isbn: string): Promise<VolumeInfo> {
+    async scrapeBookMetaData(
+        isbn: string,
+        allowLongruning: boolean = false,
+    ): Promise<VolumeInfo> {
         let volume: VolumeInfo = {};
 
         for await (const scraper of this.metadataScrapers) {
+            if (!allowLongruning && scraper.isLongRunning()) {
+                volume.incomplete = true;
+                continue;
+            }
+
             const volumeFromScraper = await scraper.scrapeBookMetaData(isbn);
             if (volumeFromScraper) {
                 volume = this.merge(volume, volumeFromScraper);

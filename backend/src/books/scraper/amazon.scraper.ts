@@ -41,6 +41,9 @@ export class AmazonBookScraper implements BookScraper {
         this.geoNodeUsername = config.get('geonode.username');
         this.geoNodePassword = config.get('geonode.password');
     }
+    isLongRunning(): boolean {
+        return true;
+    }
 
     private async _get(
         url: string,
