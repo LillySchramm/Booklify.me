@@ -7,6 +7,8 @@ import {
 import { SystemService } from './system.service';
 import { SystemHealthDto } from './dto/systemHealth.dto';
 import { SystemInfoDto } from './dto/systemInfo.dto';
+import { RecaptchaDto } from './dto/recaptcha.dto';
+import * as config from 'config';
 
 @Controller('system')
 @ApiTags('System')
@@ -34,8 +36,14 @@ export class SystemController {
     async getSystemInfo() {
         const signUpDisabled = await this.systemService.isSignUpDisabled();
 
+        const recaptcha = new RecaptchaDto({
+            enabled: config.get<boolean>('recaptcha.enabled'),
+            siteKey: config.get<string>('recaptcha.site_key'),
+        });
+
         const response = new SystemInfoDto({
             signUpEnabled: !signUpDisabled,
+            recaptcha,
         });
 
         return response;

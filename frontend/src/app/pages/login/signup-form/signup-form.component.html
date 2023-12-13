@@ -56,6 +56,15 @@
                 }}</mat-error>
             }
         </mat-form-field>
+        @if ($recaptchaEnabled()) {
+            <re-captcha
+                [siteKey]="$recaptchaSiteKey()"
+                size="invisible"
+                (resolved)="onCaptchaResolved($event)"
+                #recaptcha
+            ></re-captcha>
+            <app-captcha-disclaimer class="mb-2" />
+        }
         <button
             mat-flat-button
             color="accent"

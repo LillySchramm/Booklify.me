@@ -14,6 +14,7 @@ export * from './newPasswordDto';
 export * from './ownershipStatusDto';
 export * from './publisherDto';
 export * from './publisherListDto';
+export * from './recaptchaDto';
 export * from './resetPasswordDto';
 export * from './resetPasswordRequestDto';
 export * from './sessionDto';

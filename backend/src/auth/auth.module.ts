@@ -7,6 +7,7 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { SecretsModule } from 'src/secrets/secrets.module';
 import * as config from 'config';
 import { AuthTasksService } from './auth-tasks.service';
+import { RecaptchaService } from './recaptcha/recaptcha.service';
 
 const TOKEN_EXPIRATION = config.get<string>('security.access_token_expiration');
 
@@ -23,8 +24,8 @@ const TOKEN_EXPIRATION = config.get<string>('security.access_token_expiration');
         PrismaModule,
         SecretsModule,
     ],
-    providers: [AuthService, AuthTasksService],
+    providers: [AuthService, AuthTasksService, RecaptchaService],
     controllers: [AuthController],
-    exports: [AuthService],
+    exports: [AuthService, RecaptchaService],
 })
 export class AuthModule {}

@@ -58,5 +58,12 @@
   "geonode": {
       "username": "GEONODE_USERNAME",
       "password": "GEONODE_PASSWORD",
+  },
+  "recaptcha": {
+      "site_key": "RECAPTCHA_SITE_KEY",
+      "enabled": {
+        "__name": "RECAPTCHA_ENABLED",
+        "__format": "boolean"
+      }
   }
 }

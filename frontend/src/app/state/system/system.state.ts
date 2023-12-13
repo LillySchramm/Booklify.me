@@ -43,4 +43,14 @@ export class SystemState {
     static signUpEnabled(state: SystemStateModel): boolean {
         return state.systemInfo?.signUpEnabled ?? true;
     }
+
+    @Selector()
+    static recaptchaEnabled(state: SystemStateModel): boolean {
+        return state.systemInfo?.recaptcha.enabled ?? false;
+    }
+
+    @Selector()
+    static recaptchaSiteKey(state: SystemStateModel): string {
+        return state.systemInfo?.recaptcha.siteKey ?? '';
+    }
 }

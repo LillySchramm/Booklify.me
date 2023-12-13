@@ -30,6 +30,7 @@ model/newPasswordDto.ts
 model/ownershipStatusDto.ts
 model/publisherDto.ts
 model/publisherListDto.ts
+model/recaptchaDto.ts
 model/resetPasswordDto.ts
 model/resetPasswordRequestDto.ts
 model/sessionDto.ts

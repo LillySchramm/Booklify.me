@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
     FormControl,
@@ -13,9 +13,16 @@ import { MatInputModule } from '@angular/material/input';
 import { TranslocoModule } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Actions, Select, Store, ofActionDispatched } from '@ngxs/store';
+import {
+    RecaptchaComponent,
+    RecaptchaFormsModule,
+    RecaptchaModule,
+} from 'ng-recaptcha';
 import { Observable } from 'rxjs';
+import { CaptchaDisclaimerComponent } from 'src/app/common/components/captcha-disclaimer/captcha-disclaimer.component';
 import { FormErrorPipe } from 'src/app/common/pipes/form-error.pipe';
 import { CustomValidators } from 'src/app/common/validators/validators';
+import { SystemState } from 'src/app/state/system/system.state';
 import { UserActions } from 'src/app/state/user/user.actions';
 import { UserState } from 'src/app/state/user/user.state';
 
@@ -31,6 +38,9 @@ import { UserState } from 'src/app/state/user/user.state';
         TranslocoModule,
         FormErrorPipe,
         MatIconModule,
+        RecaptchaModule,
+        RecaptchaFormsModule,
+        CaptchaDisclaimerComponent,
     ],
     templateUrl: './signup-form.component.html',
     styleUrls: ['./signup-form.component.scss'],
@@ -38,6 +48,17 @@ import { UserState } from 'src/app/state/user/user.state';
 export class SignupFormComponent implements OnInit {
     @Select(UserState.signUpDisabled) signUpDisabled$!: Observable<boolean>;
     $signUpDisabled = toSignal(this.signUpDisabled$);
+
+    @Select(SystemState.recaptchaEnabled)
+    recaptchaEnabled$!: Observable<boolean>;
+    $recaptchaEnabled = toSignal(this.recaptchaEnabled$);
+
+    @Select(SystemState.recaptchaSiteKey)
+    recaptchaSiteKey$!: Observable<string>;
+    $recaptchaSiteKey = toSignal(this.recaptchaSiteKey$);
+
+    @ViewChild('recaptcha', { static: false })
+    recaptchaRef!: RecaptchaComponent;
 
     hide1 = true;
     hide2 = true;
@@ -87,8 +108,8 @@ export class SignupFormComponent implements OnInit {
             });
     }
 
-    public onSubmit(): void {
-        if (!this.form.valid) {
+    onCaptchaResolved(token: string | null): void {
+        if (!token) {
             return;
         }
 
@@ -97,7 +118,16 @@ export class SignupFormComponent implements OnInit {
                 email: this.form.get('email')!.value!,
                 name: this.form.get('username')!.value!,
                 password: this.form.get('password1')!.value!,
+                recaptchaToken: token,
             }),
         );
+    }
+
+    public onSubmit(): void {
+        if (!this.form.valid) {
+            return;
+        }
+
+        this.recaptchaRef.execute();
     }
 }

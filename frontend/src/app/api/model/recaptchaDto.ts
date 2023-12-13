@@ -10,9 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface SignUpDto {
-    name: string;
-    email: string;
-    password: string;
-    recaptchaToken: string;
+export interface RecaptchaDto {
+    enabled: boolean;
+    siteKey: string;
 }

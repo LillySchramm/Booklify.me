@@ -31,6 +31,10 @@ export class SignUpDto {
     })
     password: string;
 
+    @ApiProperty()
+    @IsString()
+    recaptchaToken: string;
+
     constructor(partial: Partial<SignUpDto>) {
         Object.assign(this, partial);
     }

@@ -9,7 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { RecaptchaDto } from './recaptchaDto';
 
 export interface SystemInfoDto {
     signUpEnabled: boolean;
+    recaptcha: RecaptchaDto;
 }

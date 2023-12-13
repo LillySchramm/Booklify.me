@@ -41,6 +41,7 @@ import { SignInSuccessDto } from './dto/signInSuccess.dto';
 import { randomUUID } from 'node:crypto';
 import { SessionListDto } from './dto/sessionList.dto';
 import { ChangePasswordDto } from './dto/changePassword.dto';
+import { RecaptchaService } from './recaptcha/recaptcha.service';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -50,6 +51,7 @@ export class AuthController {
     constructor(
         private authService: AuthService,
         private userService: UsersService,
+        private recaptchaService: RecaptchaService,
     ) {}
 
     @HttpCode(HttpStatus.OK)
@@ -114,6 +116,10 @@ export class AuthController {
         if (userCount !== 0 && config.get<boolean>('disable_registration')) {
             throw new BadRequestException('Registration is disabled.');
         }
+
+        await this.recaptchaService.validateRecaptchaToken(
+            signUpDto.recaptchaToken,
+        );
 
         const doesAlreadyExist = await this.userService.doesAlreadyExist(
             signUpDto.email,
