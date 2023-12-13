@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import {
     FormControl,
@@ -20,7 +19,6 @@ import { UserActions } from 'src/app/state/user/user.actions';
     selector: 'app-new-password-form',
     standalone: true,
     imports: [
-        CommonModule,
         ReactiveFormsModule,
         MatFormFieldModule,
         MatInputModule,

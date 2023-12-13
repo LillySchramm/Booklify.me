@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,7 +13,7 @@ import { UserState } from 'src/app/state/user/user.state';
 @Component({
     selector: 'app-update-book-ownership-button',
     standalone: true,
-    imports: [CommonModule, MatButtonModule, MatIconModule, TranslocoModule],
+    imports: [MatButtonModule, MatIconModule, TranslocoModule],
     templateUrl: './update-book-ownership-button.component.html',
     styleUrls: ['./update-book-ownership-button.component.scss'],
 })

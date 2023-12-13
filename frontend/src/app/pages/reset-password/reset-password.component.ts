@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { UiActions } from 'src/app/state/ui/ui.actions';
@@ -7,7 +6,7 @@ import { ResetPasswordCardComponent } from './reset-password-card/reset-password
 @Component({
     selector: 'app-reset-password',
     standalone: true,
-    imports: [CommonModule, ResetPasswordCardComponent],
+    imports: [ResetPasswordCardComponent],
     templateUrl: './reset-password.component.html',
     styleUrls: ['./reset-password.component.scss'],
 })

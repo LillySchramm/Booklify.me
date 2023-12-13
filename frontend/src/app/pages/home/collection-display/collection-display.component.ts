@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TranslocoModule } from '@ngneat/transloco';
@@ -17,7 +16,7 @@ export interface BookGrouping {
 @Component({
     selector: 'app-collection-display',
     standalone: true,
-    imports: [CommonModule, BookGroupComponent, TranslocoModule],
+    imports: [BookGroupComponent, TranslocoModule],
     templateUrl: './collection-display.component.html',
     styleUrls: ['./collection-display.component.scss'],
 })

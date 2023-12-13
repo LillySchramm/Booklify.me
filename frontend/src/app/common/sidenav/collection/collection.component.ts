@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -21,7 +20,6 @@ import { UserState } from 'src/app/state/user/user.state';
     selector: 'app-collection',
     standalone: true,
     imports: [
-        CommonModule,
         MatFormFieldModule,
         MatInputModule,
         ReactiveFormsModule,

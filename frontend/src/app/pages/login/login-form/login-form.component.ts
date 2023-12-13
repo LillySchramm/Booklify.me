@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -24,7 +23,6 @@ import { UserState } from 'src/app/state/user/user.state';
     selector: 'app-login-form',
     standalone: true,
     imports: [
-        CommonModule,
         ReactiveFormsModule,
         MatFormFieldModule,
         MatInputModule,

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,7 +16,6 @@ import { UserDisplayComponent } from './user-display/user-display.component';
     selector: 'app-header',
     standalone: true,
     imports: [
-        CommonModule,
         MatToolbarModule,
         MatButtonModule,
         TranslocoModule,

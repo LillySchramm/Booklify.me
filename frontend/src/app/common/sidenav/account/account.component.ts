@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -10,7 +9,6 @@ import { TranslocoModule } from '@ngneat/transloco';
     selector: 'app-account',
     standalone: true,
     imports: [
-        CommonModule,
         MatDividerModule,
         MatButtonModule,
         MatIconModule,

@@ -2,21 +2,20 @@
     class="fixed z-50 w-full"
     (toggleSidenav)="toggleSidenav()"
 ></app-header>
-
 <mat-drawer-container class="!flex min-h-screen w-full">
-    <mat-drawer
-        [mode]="ui.smallScreen ? 'over' : 'side'"
-        #sideNav
-        [opened]="!ui.smallScreen"
-        *ngIf="$isSidenavVisible()"
-        class="!fixed max-h-screen w-80"
-    >
-        <div class="flex h-full flex-col">
-            <div class="mb-4 h-16"></div>
-            <app-sidenav class="flex-grow"></app-sidenav>
-        </div>
-    </mat-drawer>
-
+    @if ($isSidenavVisible()) {
+        <mat-drawer
+            [mode]="ui.smallScreen ? 'over' : 'side'"
+            #sideNav
+            [opened]="!ui.smallScreen"
+            class="!fixed max-h-screen w-80"
+        >
+            <div class="flex h-full flex-col">
+                <div class="mb-4 h-16"></div>
+                <app-sidenav class="flex-grow"></app-sidenav>
+            </div>
+        </mat-drawer>
+    }
     <mat-drawer
         mode="side"
         [opened]="$isInfoVisible()"
@@ -27,7 +26,6 @@
             <app-book-details-side class="flex-grow"></app-book-details-side>
         </div>
     </mat-drawer>
-
     <mat-drawer-content class="!flex max-h-screen min-h-screen w-full flex-col">
         <div class="mb-[4.5rem]"></div>
         <div class="flex flex-grow pl-2 pr-2">

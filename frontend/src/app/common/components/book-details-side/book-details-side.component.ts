@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,12 +14,7 @@ import { BookDetailsComponent } from '../book-details/book-details.component';
 @Component({
     selector: 'app-book-details-side',
     standalone: true,
-    imports: [
-        CommonModule,
-        MatButtonModule,
-        BookDetailsComponent,
-        MatIconModule,
-    ],
+    imports: [MatButtonModule, BookDetailsComponent, MatIconModule],
     templateUrl: './book-details-side.component.html',
     styleUrls: ['./book-details-side.component.scss'],
 })

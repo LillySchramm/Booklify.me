@@ -4,14 +4,12 @@
             <mat-icon>settings</mat-icon>
             <span>{{ t('account-menu.account') }}</span>
         </button>
-
         <button mat-menu-item (click)="logout()">
             <mat-icon>logout</mat-icon>
             <span>{{ t('account-menu.logout') }}</span>
         </button>
     </mat-menu>
-
-    <ng-container *ngIf="$user() as user">
+    @if ($user(); as user) {
         <div>
             <button
                 class="text-lg"
@@ -23,5 +21,5 @@
                 <span>{{ user.name }}</span>
             </button>
         </div>
-    </ng-container>
+    }
 </ng-container>

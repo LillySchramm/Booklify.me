@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TranslocoModule } from '@ngneat/transloco';
@@ -14,12 +13,7 @@ import { SignupCardComponent } from './signup-card/signup-card.component';
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [
-        CommonModule,
-        LoginCardComponent,
-        SignupCardComponent,
-        TranslocoModule,
-    ],
+    imports: [LoginCardComponent, SignupCardComponent, TranslocoModule],
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
 })

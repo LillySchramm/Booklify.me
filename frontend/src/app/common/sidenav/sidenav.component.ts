@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatDividerModule } from '@angular/material/divider';
@@ -13,7 +12,6 @@ import { CollectionComponent } from './collection/collection.component';
     selector: 'app-sidenav',
     standalone: true,
     imports: [
-        CommonModule,
         CollectionComponent,
         MatDividerModule,
         TranslocoModule,

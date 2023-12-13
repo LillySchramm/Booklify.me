@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
@@ -13,7 +12,6 @@ import { SignupFormComponent } from '../signup-form/signup-form.component';
     selector: 'app-signup-card',
     standalone: true,
     imports: [
-        CommonModule,
         SignupFormComponent,
         MatCardModule,
         TranslocoModule,

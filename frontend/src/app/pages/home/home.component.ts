@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TranslocoService } from '@ngneat/transloco';
@@ -17,7 +16,7 @@ import { CollectionDisplayComponent } from './collection-display/collection-disp
 @Component({
     selector: 'app-home',
     standalone: true,
-    imports: [CommonModule, CollectionDisplayComponent],
+    imports: [CollectionDisplayComponent],
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss'],
 })

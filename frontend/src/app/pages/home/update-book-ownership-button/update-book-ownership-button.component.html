@@ -1,22 +1,23 @@
 <ng-container *transloco="let t">
-    <button
-        mat-fab
-        extended
-        *ngIf="$currentUser()?.id === $currentOwnerId()"
-        [disabled]="$ownershipChangeLoading()"
-        [color]="$ownsSelectedBook() ? 'warn' : 'primary'"
-        class="mat-elevation-z1 !w-full"
-        (click)="updateOwnership()"
-    >
-        <mat-icon>{{
-            $ownsSelectedBook() ? 'delete_forever' : 'add'
-        }}</mat-icon>
-        {{
-            t(
-                $ownsSelectedBook()
-                    ? 'collection.remove-book-text'
-                    : 'collection.add-book-text'
-            )
-        }}
-    </button>
+    @if ($currentUser()?.id === $currentOwnerId()) {
+        <button
+            mat-fab
+            extended
+            [disabled]="$ownershipChangeLoading()"
+            [color]="$ownsSelectedBook() ? 'warn' : 'primary'"
+            class="mat-elevation-z1 !w-full"
+            (click)="updateOwnership()"
+        >
+            <mat-icon>{{
+                $ownsSelectedBook() ? 'delete_forever' : 'add'
+            }}</mat-icon>
+            {{
+                t(
+                    $ownsSelectedBook()
+                        ? 'collection.remove-book-text'
+                        : 'collection.add-book-text'
+                )
+            }}
+        </button>
+    }
 </ng-container>

@@ -1,6 +1,8 @@
 <div class="flex flex-grow items-center justify-center">
     <div class="flex flex-wrap justify-center gap-10">
         <app-login-card></app-login-card>
-        <app-signup-card *ngIf="$signUpEnabled()"></app-signup-card>
+        @if ($signUpEnabled()) {
+            <app-signup-card></app-signup-card>
+        }
     </div>
 </div>

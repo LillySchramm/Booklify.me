@@ -9,17 +9,16 @@
     [attr.id]="'book-' + book.isbn"
     #card
 >
-    <div
-        class="mb-2 flex-grow bg-contain bg-center bg-no-repeat"
-        [lazyLoad]="coverUrl!"
-        *ngIf="coverUrl !== null; else noimage"
-    ></div>
-
-    <ng-template #noimage>
+    @if (coverUrl !== null) {
+        <div
+            class="mb-2 flex-grow bg-contain bg-center bg-no-repeat"
+            [lazyLoad]="coverUrl!"
+        ></div>
+    } @else {
         <app-no-image-placeholder class="h-full flex-grow object-contain">{{
             t('books.no-cover')
         }}</app-no-image-placeholder>
-    </ng-template>
+    }
     <div class="flex-grow-0">
         <p class="!m-0 text-xs">
             {{ book.title }}

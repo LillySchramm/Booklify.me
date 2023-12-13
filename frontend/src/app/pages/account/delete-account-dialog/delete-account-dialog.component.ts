@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import {
     FormControl,
@@ -17,7 +16,6 @@ import { TranslocoModule } from '@ngneat/transloco';
     selector: 'app-delete-account-dialog',
     standalone: true,
     imports: [
-        CommonModule,
         MatFormFieldModule,
         FormsModule,
         ReactiveFormsModule,

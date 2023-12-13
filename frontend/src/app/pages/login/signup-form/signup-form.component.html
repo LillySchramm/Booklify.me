@@ -3,19 +3,21 @@
         <mat-form-field color="accent">
             <mat-label>{{ t('login.email') }}</mat-label>
             <input matInput type="email" formControlName="email" required />
-            <mat-error *ngIf="form.get('email')?.invalid">{{
-                form.get('email')?.errors | formError
-            }}</mat-error>
+            @if (form.get('email')?.invalid) {
+                <mat-error>{{
+                    form.get('email')?.errors | formError
+                }}</mat-error>
+            }
         </mat-form-field>
-
         <mat-form-field color="accent">
             <mat-label>{{ t('login.username') }}</mat-label>
             <input matInput type="text" formControlName="username" required />
-            <mat-error *ngIf="form.get('username')?.invalid">{{
-                form.get('username')?.errors | formError
-            }}</mat-error>
+            @if (form.get('username')?.invalid) {
+                <mat-error>{{
+                    form.get('username')?.errors | formError
+                }}</mat-error>
+            }
         </mat-form-field>
-
         <mat-form-field color="accent">
             <mat-label>{{ t('login.password') }}</mat-label>
             <input
@@ -29,11 +31,12 @@
                     hide1 ? 'visibility_off' : 'visibility'
                 }}</mat-icon>
             </button>
-            <mat-error *ngIf="form.get('password1')?.invalid">{{
-                form.get('password1')?.errors | formError
-            }}</mat-error>
+            @if (form.get('password1')?.invalid) {
+                <mat-error>{{
+                    form.get('password1')?.errors | formError
+                }}</mat-error>
+            }
         </mat-form-field>
-
         <mat-form-field color="accent">
             <mat-label>{{ t('login.repeat-password') }}</mat-label>
             <input
@@ -47,11 +50,12 @@
                     hide2 ? 'visibility_off' : 'visibility'
                 }}</mat-icon>
             </button>
-            <mat-error *ngIf="form.get('password2')?.invalid">{{
-                form.get('password2')?.errors | formError
-            }}</mat-error>
+            @if (form.get('password2')?.invalid) {
+                <mat-error>{{
+                    form.get('password2')?.errors | formError
+                }}</mat-error>
+            }
         </mat-form-field>
-
         <button
             mat-flat-button
             color="accent"

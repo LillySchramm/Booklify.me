@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -27,7 +26,6 @@ import { BooksState } from 'src/app/state/books/books.state';
     selector: 'app-add-book-dialog',
     standalone: true,
     imports: [
-        CommonModule,
         MatDialogModule,
         MatButtonModule,
         TranslocoModule,

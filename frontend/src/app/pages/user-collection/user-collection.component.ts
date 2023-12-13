@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
@@ -17,7 +16,7 @@ import { CollectionDisplayComponent } from '../home/collection-display/collectio
 @Component({
     selector: 'app-user-collection',
     standalone: true,
-    imports: [CommonModule, CollectionDisplayComponent],
+    imports: [CollectionDisplayComponent],
     templateUrl: './user-collection.component.html',
     styleUrls: ['./user-collection.component.scss'],
 })

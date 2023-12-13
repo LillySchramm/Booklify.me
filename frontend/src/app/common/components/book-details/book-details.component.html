@@ -1,92 +1,96 @@
-<ng-container *ngIf="book$ | async as book">
+@if (book$ | async; as book) {
     <div *transloco="let t">
-        <ng-container *ngIf="!compact">
+        @if (!compact) {
             <div class="flex flex-col">
+                @if (coverUrl !== null) {
+                    <img
+                        [src]="coverUrl"
+                        loading="lazy"
+                        alt="cover-image"
+                        class="h-[24rem] object-contain"
+                    />
+                }
+                <mat-divider class="!mt-4"></mat-divider>
+            </div>
+            @if (book.description) {
+                <div class="mt-4">
+                    <div [innerHTML]="book.description" class="p-4"></div>
+                    <mat-divider class="!mb-4 !mt-4"></mat-divider>
+                </div>
+            }
+        }
+        @if (compact) {
+            @if (coverUrl !== null) {
                 <img
-                    *ngIf="coverUrl !== null"
                     [src]="coverUrl"
                     loading="lazy"
                     alt="cover-image"
-                    class="h-[24rem] object-contain"
+                    class="float-left mb-2 mr-4 h-60 object-contain"
                 />
-
-                <mat-divider class="!mt-4"></mat-divider>
-            </div>
-
-            <div *ngIf="book.description" class="mt-4">
-                <div [innerHTML]="book.description" class="p-4"></div>
-                <mat-divider class="!mb-4 !mt-4"></mat-divider>
-            </div>
-        </ng-container>
-        <ng-container *ngIf="compact">
-            <img
-                *ngIf="coverUrl !== null"
-                [src]="coverUrl"
-                loading="lazy"
-                alt="cover-image"
-                class="float-left mb-2 mr-4 h-60 object-contain"
-            />
-
-            <div *ngIf="book.description" class="">
-                <div [innerHTML]="book.description" class="pr-4"></div>
-            </div>
-        </ng-container>
-
+            }
+            @if (book.description) {
+                <div class="">
+                    <div [innerHTML]="book.description" class="pr-4"></div>
+                </div>
+            }
+        }
         <div class="p-4" [ngClass]="compact ? '!p-0' : ''">
-            <p *ngIf="compact" class="!m-0">
-                {{ t('book-details.title') }}
-                <span class="text-highlight">{{ book.title }}</span>
-            </p>
-
-            <p
-                *ngIf="$authorNames() as authorNames"
-                [ngClass]="compact ? '!m-0' : ''"
-            >
-                {{ t('book-details.authors') }}
-                <span *ngFor="let author of authorNames; index as i">
-                    <span class="text-highlight">{{ author }}</span>
-                    <span *ngIf="i !== authorNames.length - 1">, </span>
-                </span>
-            </p>
-
+            @if (compact) {
+                <p class="!m-0">
+                    {{ t('book-details.title') }}
+                    <span class="text-highlight">{{ book.title }}</span>
+                </p>
+            }
+            @if ($authorNames(); as authorNames) {
+                <p [ngClass]="compact ? '!m-0' : ''">
+                    {{ t('book-details.authors') }}
+                    @for (author of authorNames; track author; let i = $index) {
+                        <span>
+                            <span class="text-highlight">{{ author }}</span>
+                            @if (i !== authorNames.length - 1) {
+                                <span>, </span>
+                            }
+                        </span>
+                    }
+                </p>
+            }
             <p [ngClass]="compact ? '!m-0' : ''">
                 {{ t('book-details.publisher') }}
                 <span class="text-highlight">{{ $publisherName() }}</span>
             </p>
-
-            <p
-                *ngIf="book.publishedDate as publishedDate"
-                [ngClass]="compact ? '!m-0' : ''"
-            >
-                {{ t('book-details.published') }}
-                <span class="text-highlight">{{ publishedDate | date }}</span>
-            </p>
-
-            <p
-                *ngIf="book.pageCount || book.printedPageCount"
-                [ngClass]="compact ? '!m-0' : ''"
-            >
-                {{ t('book-details.pages') }}
-                <span class="text-highlight">{{
-                    book.pageCount || book.printedPageCount
-                }}</span>
-            </p>
-
-            <p *ngIf="book.language" [ngClass]="compact ? '!m-0' : ''">
-                {{ t('book-details.language') }}
-                <span class="text-highlight">{{
-                    book.language | language
-                }}</span>
-            </p>
-
-            <p *ngIf="book.language" [ngClass]="compact ? '!m-0' : ''">
-                {{ t('book-details.isbn') }}
-                <span class="text-highlight">{{ book.isbn | isbn }}</span>
-            </p>
-
-            <app-update-book-ownership-button
-                *ngIf="!compact"
-            ></app-update-book-ownership-button>
+            @if (book.publishedDate; as publishedDate) {
+                <p [ngClass]="compact ? '!m-0' : ''">
+                    {{ t('book-details.published') }}
+                    <span class="text-highlight">{{
+                        publishedDate | date
+                    }}</span>
+                </p>
+            }
+            @if (book.pageCount || book.printedPageCount) {
+                <p [ngClass]="compact ? '!m-0' : ''">
+                    {{ t('book-details.pages') }}
+                    <span class="text-highlight">{{
+                        book.pageCount || book.printedPageCount
+                    }}</span>
+                </p>
+            }
+            @if (book.language) {
+                <p [ngClass]="compact ? '!m-0' : ''">
+                    {{ t('book-details.language') }}
+                    <span class="text-highlight">{{
+                        book.language | language
+                    }}</span>
+                </p>
+            }
+            @if (book.language) {
+                <p [ngClass]="compact ? '!m-0' : ''">
+                    {{ t('book-details.isbn') }}
+                    <span class="text-highlight">{{ book.isbn | isbn }}</span>
+                </p>
+            }
+            @if (!compact) {
+                <app-update-book-ownership-button></app-update-book-ownership-button>
+            }
         </div>
     </div>
-</ng-container>
+}
