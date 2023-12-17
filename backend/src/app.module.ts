@@ -14,6 +14,7 @@ import { AuthorsModule } from './authors/authors.module';
 import { PublishersModule } from './publishers/publishers.module';
 import { SystemModule } from './system/system.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { CronModule } from './cron/cron.module';
 
 @Module({
     imports: [
@@ -30,6 +31,7 @@ import { ScheduleModule } from '@nestjs/schedule';
         PublishersModule,
         SystemModule,
         ScheduleModule.forRoot(),
+        CronModule.forRoot(),
     ],
     controllers: [AppController],
     providers: [AppService],

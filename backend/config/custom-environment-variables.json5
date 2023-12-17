@@ -65,5 +65,42 @@
         "__name": "RECAPTCHA_ENABLED",
         "__format": "boolean"
       }
-  }
+  },
+  "tasks": {
+      "recrawlCover": {
+          "enabled": {
+            "__name": "TASKS_RECRAWL_COVER_ENABLED",
+            "__format": "boolean"
+          }},
+          "cron": "TASKS_RECRAWL_COVER_CRON",
+      },
+      "recrawlInfo": {
+          "enabled": {
+            "__name": "TASKS_RECRAWL_INFO_ENABLED",
+            "__format": "boolean"
+          }},
+          "cron": "TASKS_RECRAWL_INFO_CRON",
+      },
+      "tryFindCover": {
+          "enabled": {
+            "__name": "TASKS_TRY_FIND_COVER_ENABLED",
+            "__format": "boolean"
+          }},
+          "cron": "TASKS_TRY_FIND_COVER_CRON",
+      },
+      "doLongruning": {
+          "enabled": {
+            "__name": "TASKS_DO_LONGRUNING_ENABLED",
+            "__format": "boolean"
+          }},
+          "cron": "TASKS_DO_LONGRUNING_CRON",
+      },
+      "updateOutdatedGrouping": {
+          "enabled": {
+            "__name": "TASKS_UPDATE_OUTDATED_GROUPING_ENABLED",
+            "__format": "boolean"
+          }},
+          "cron": "TASKS_UPDATE_OUTDATED_GROUPING_CRON",
+      },
+    },
 }

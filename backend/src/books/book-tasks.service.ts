@@ -1,23 +1,22 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
 import { BooksService } from './books.service';
 import { BookGroupingService } from 'src/book-groups/bookGrouping.service';
 import { UsersService } from 'src/users/users.service';
+import { Cron } from 'src/cron/cron.service';
 
 @Injectable()
 export class BookTasksService {
     private readonly logger = new Logger(BookTasksService.name);
 
-    private infoCrawlInProgress = false;
-    private longrunningCrawlInProgress = false;
-
     constructor(
         private bookService: BooksService,
         private bookGrouping: BookGroupingService,
         private userService: UsersService,
-    ) {}
+    ) {
+        this.logger.log('BookTasksService initialized!');
+    }
 
-    @Cron('*/5 * * * * *')
+    @Cron()
     async recrawlCover() {
         const book = await this.bookService.getOneWithRecrawlCoverFlag();
         if (!book) return;
@@ -30,7 +29,7 @@ export class BookTasksService {
         this.logger.log(`Recrawled cover for book ${book.isbn}!`);
     }
 
-    @Cron('*/5 * * * * *')
+    @Cron()
     async updateOutdatedGrouping() {
         const user = await this.userService.getUserWithOutdatedGroupingFlag();
         if (!user) return;
@@ -42,14 +41,10 @@ export class BookTasksService {
         this.logger.log(`Updated grouping for user ${user.id}!`);
     }
 
-    @Cron('*/5 * * * * *')
+    @Cron()
     async recrawlInfo() {
-        if (this.infoCrawlInProgress) return;
-
         const book = await this.bookService.getOneWithRecrawlInfoFlag();
         if (!book) return;
-
-        this.infoCrawlInProgress = true;
 
         this.logger.log(`Recrawling info for book ${book.isbn}...`);
 
@@ -57,10 +52,9 @@ export class BookTasksService {
         await this.bookService.setRecrawlInfoFlag(book.isbn, false);
 
         this.logger.log(`Recrawled info for book ${book.isbn}!`);
-        this.infoCrawlInProgress = false;
     }
 
-    @Cron('0 0 * * * *')
+    @Cron()
     async tryFindCover() {
         const books = await this.bookService.getAllWithoutCover();
         if (!books) return;
@@ -76,14 +70,10 @@ export class BookTasksService {
         this.logger.log(`Recrawled cover for book ${book.isbn}!`);
     }
 
-    @Cron('*/5 * * * * *')
+    @Cron()
     async doLongruning() {
-        if (this.longrunningCrawlInProgress) return;
-
         const book = await this.bookService.getOneWithLongrunningRecrawlFlag();
         if (!book) return;
-
-        this.longrunningCrawlInProgress = true;
 
         this.logger.log(
             `Recrawling info for book ${book.isbn} because it misses longruning...`,
@@ -96,8 +86,6 @@ export class BookTasksService {
         for (const userId of users) {
             await this.bookGrouping.groupBooksOfUser(userId, true);
         }
-
-        this.longrunningCrawlInProgress = false;
 
         this.logger.log(`Recrawled info for book ${book.isbn}!`);
     }

@@ -26,8 +26,8 @@ import { CacheModule } from '@nestjs/cache-manager';
         BookGroupsModule,
         AuthorsModule,
         PublishersModule,
-        BookGroupsModule,
         CacheModule.register(),
     ],
+    exports: [BookTasksService],
 })
 export class BooksModule {}

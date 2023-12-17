@@ -767,12 +767,12 @@
     multer "1.4.4-lts.1"
     tslib "2.6.2"
 
-"@nestjs/schedule@^3.0.4":
-  version "3.0.4"
-  resolved "https://registry.npmjs.org/@nestjs/schedule/-/schedule-3.0.4.tgz"
-  integrity sha512-uFJpuZsXfpvgx2y7/KrIZW9e1L68TLiwRodZ6+Gc8xqQiHSUzAVn+9F4YMxWFlHITZvvkjWziUFgRNCitDcTZQ==
+"@nestjs/schedule@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@nestjs/schedule/-/schedule-4.0.0.tgz#522fa0c79a2b44a66aab16a46bdf4c11ae73f3c3"
+  integrity sha512-zz4h54m/F/1qyQKvMJCRphmuwGqJltDAkFxUXCVqJBXEs5kbPt93Pza3heCQOcMH22MZNhGlc9DmDMLXVHmgVQ==
   dependencies:
-    cron "2.4.3"
+    cron "3.1.3"
     uuid "9.0.1"
 
 "@nestjs/schematics@^10.0.0", "@nestjs/schematics@^10.0.1":
@@ -2369,13 +2369,13 @@ create-require@^1.1.0:
   resolved "https://registry.npmjs.org/create-require/-/create-require-1.1.1.tgz"
   integrity sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==
 
-cron@2.4.3:
-  version "2.4.3"
-  resolved "https://registry.npmjs.org/cron/-/cron-2.4.3.tgz"
-  integrity sha512-YBvExkQYF7w0PxyeFLRyr817YVDhGxaCi5/uRRMqa4aWD3IFKRd+uNbpW1VWMdqQy8PZ7CElc+accXJcauPKzQ==
+cron@3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/cron/-/cron-3.1.3.tgz#4eac8f6691ce7e24c8e89b5317b8097d6f2d0053"
+  integrity sha512-KVxeKTKYj2eNzN4ElnT6nRSbjbfhyxR92O/Jdp6SH3pc05CDJws59jBrZWEMQlxevCiE6QUTrXy+Im3vC3oD3A==
   dependencies:
     "@types/luxon" "~3.3.0"
-    luxon "~3.3.0"
+    luxon "~3.4.0"
 
 cross-spawn@^7.0.0, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
   version "7.0.3"
@@ -4569,10 +4569,10 @@ lru-cache@^7.5.1:
   resolved "https://registry.npmjs.org/lru-cache/-/lru-cache-7.18.3.tgz"
   integrity sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==
 
-luxon@~3.3.0:
-  version "3.3.0"
-  resolved "https://registry.npmjs.org/luxon/-/luxon-3.3.0.tgz"
-  integrity sha512-An0UCfG/rSiqtAIiBPO0Y9/zAnHUZxAMiCpTd5h2smgsj7GGmcenvrvww2cqNA8/4A5ZrD1gJpHN2mIHZQF+Mg==
+luxon@~3.4.0:
+  version "3.4.4"
+  resolved "https://registry.yarnpkg.com/luxon/-/luxon-3.4.4.tgz#cf20dc27dc532ba41a169c43fdcc0063601577af"
+  integrity sha512-zobTr7akeGHnv7eBOXcRgMeCP6+uyYsczwmeRCauvpvaAltgNyTbLH/+VaEAPUeWBT+1GuNmz4wC/6jtQzbbVA==
 
 macos-release@^2.5.0:
   version "2.5.1"
