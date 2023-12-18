@@ -102,5 +102,13 @@
           },
           "cron": "TASKS_UPDATE_OUTDATED_GROUPING_CRON",
       },
-    }
+    },
+    "legal": {
+        "enabled": {
+            "__name": "LEGAL_ENABLED",
+            "__format": "boolean"
+        },
+        "privacy_policy": "LEGAL_PRIVACY_POLICY",
+        "terms_of_service": "LEGAL_TERMS_OF_SERVICE",
+    },
 }

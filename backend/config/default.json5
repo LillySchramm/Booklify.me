@@ -63,4 +63,9 @@
             "cron": "* * * * *"
         },
     },
+    "legal": {
+        "enabled": true,
+        "privacy_policy": "https://example.com/privacy",
+        "terms_of_service": "https://example.com/tos"
+    },
 }

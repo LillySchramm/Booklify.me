@@ -37,7 +37,7 @@
                 }}</mat-error>
             }
         </mat-form-field>
-        <mat-form-field color="accent">
+        <mat-form-field color="accent" class="mb-0">
             <mat-label>{{ t('login.repeat-password') }}</mat-label>
             <input
                 matInput
@@ -56,6 +56,29 @@
                 }}</mat-error>
             }
         </mat-form-field>
+        @if ($legalEnabled()) {
+            <mat-checkbox formControlName="tosAndPrivacy">
+                <span
+                    class="block max-w-sm"
+                    [innerHTML]="
+                        t('login.legal', {
+                            tos: $tosUrl(),
+                            privacy: $privacyUrl()
+                        })
+                    "
+                ></span>
+            </mat-checkbox>
+            @if (
+                form.get('tosAndPrivacy')?.invalid &&
+                form.get('tosAndPrivacy')?.touched
+            ) {
+                <mat-error class="mb-2">{{
+                    form.get('tosAndPrivacy')?.errors | formError
+                }}</mat-error>
+            } @else {
+                <mat-hint class="mb-2"></mat-hint>
+            }
+        }
         @if ($recaptchaEnabled()) {
             <re-captcha
                 [siteKey]="$recaptchaSiteKey()"

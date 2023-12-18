@@ -228,6 +228,8 @@ export class UsersService implements OnModuleInit {
         name: string,
         email: string,
         password: string,
+        agreedTos: boolean,
+        agreedPrivacy: boolean,
     ): Promise<User> {
         const passwordHash = await bcrypt.hash(password, saltRounds);
         const mailEnabled = config.get<boolean>('mail.enabled');
@@ -239,6 +241,8 @@ export class UsersService implements OnModuleInit {
                 password: passwordHash,
                 activated: !mailEnabled,
                 UserFlags: { create: {} },
+                agreedTosAt: agreedTos ? new Date() : null,
+                agreedPrivacyAt: agreedPrivacy ? new Date() : null,
             },
         });
 

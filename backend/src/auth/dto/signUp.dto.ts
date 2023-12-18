@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+    IsBoolean,
     IsEmail,
+    IsOptional,
     IsString,
     IsStrongPassword,
     Length,
@@ -34,6 +36,16 @@ export class SignUpDto {
     @ApiProperty()
     @IsString()
     recaptchaToken: string;
+
+    @ApiProperty({ example: true, nullable: true, type: Boolean })
+    @IsOptional()
+    @IsBoolean()
+    agreedTos: boolean | null;
+
+    @ApiProperty({ example: true, nullable: true, type: Boolean })
+    @IsOptional()
+    @IsBoolean()
+    agreedPrivacy: boolean | null;
 
     constructor(partial: Partial<SignUpDto>) {
         Object.assign(this, partial);

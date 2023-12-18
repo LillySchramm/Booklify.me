@@ -117,6 +117,16 @@ export class AuthController {
             throw new BadRequestException('Registration is disabled.');
         }
 
+        const isLegalEnabled = config.get<boolean>('legal.enabled');
+        if (
+            isLegalEnabled &&
+            (!signUpDto.agreedTos || !signUpDto.agreedPrivacy)
+        ) {
+            throw new BadRequestException(
+                'You have to agree to the Terms of Service and the Privacy Policy.',
+            );
+        }
+
         await this.recaptchaService.validateRecaptchaToken(
             signUpDto.recaptchaToken,
         );
@@ -134,6 +144,8 @@ export class AuthController {
                 signUpDto.name,
                 signUpDto.email,
                 signUpDto.password,
+                !!signUpDto.agreedTos,
+                !!signUpDto.agreedPrivacy,
             ),
         );
     }

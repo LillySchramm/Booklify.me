@@ -9,9 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { LegalDto } from './legalDto';
 import { RecaptchaDto } from './recaptchaDto';
 
 export interface SystemInfoDto {
     signUpEnabled: boolean;
     recaptcha: RecaptchaDto;
+    legal: LegalDto;
 }

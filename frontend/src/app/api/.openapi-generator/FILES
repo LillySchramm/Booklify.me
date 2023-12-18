@@ -25,6 +25,7 @@ model/bookListDto.ts
 model/changePasswordDto.ts
 model/getIdListDto.ts
 model/identifierDto.ts
+model/legalDto.ts
 model/models.ts
 model/newPasswordDto.ts
 model/ownershipStatusDto.ts

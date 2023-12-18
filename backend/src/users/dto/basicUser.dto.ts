@@ -20,6 +20,10 @@ export class BasicUserDto implements UserWithFlags {
     createdAt: Date;
     @Exclude()
     updatedAt: Date;
+    @Exclude()
+    agreedTosAt: Date | null;
+    @Exclude()
+    agreedPrivacyAt: Date | null;
 
     constructor(partial: Partial<BasicUserDto>) {
         Object.assign(this, partial);

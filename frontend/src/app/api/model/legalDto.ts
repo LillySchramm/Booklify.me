@@ -10,11 +10,8 @@
  * Do not edit the class manually.
  */
 
-export interface SignUpDto {
-    name: string;
-    email: string;
-    password: string;
-    recaptchaToken: string;
-    agreedTos: boolean | null;
-    agreedPrivacy: boolean | null;
+export interface LegalDto {
+    enabled: boolean;
+    tosUrl: string;
+    privacyUrl: string;
 }

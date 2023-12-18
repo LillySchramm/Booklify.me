@@ -18,7 +18,10 @@
     "signup": "Signup",
     "repeat-password": "Repeat Password",
     "username": "Username",
-    "rememberMe": "Remember Me"
+    "rememberMe": "Remember Me",
+    "legal": "Yes, I have read and agree to the <a href=\"{{ tos }}\" class=\"text-warn\">Terms of Service</a> and <a href=\"{{ privacy }}\" class=\"text-warn\">Privacy Policy</a>.",
+    "tos": "Terms Of Service",
+    "privacy": "Privacy Policy"
   },
   "form-errors": {
     "required": "This field is required",

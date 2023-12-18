@@ -10,6 +10,7 @@ export * from './bookListDto';
 export * from './changePasswordDto';
 export * from './getIdListDto';
 export * from './identifierDto';
+export * from './legalDto';
 export * from './newPasswordDto';
 export * from './ownershipStatusDto';
 export * from './publisherDto';

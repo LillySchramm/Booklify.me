@@ -7,6 +7,7 @@ import {
     Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -41,6 +42,7 @@ import { UserState } from 'src/app/state/user/user.state';
         RecaptchaModule,
         RecaptchaFormsModule,
         CaptchaDisclaimerComponent,
+        MatCheckboxModule,
     ],
     templateUrl: './signup-form.component.html',
     styleUrls: ['./signup-form.component.scss'],
@@ -48,6 +50,17 @@ import { UserState } from 'src/app/state/user/user.state';
 export class SignupFormComponent implements OnInit {
     @Select(UserState.signUpDisabled) signUpDisabled$!: Observable<boolean>;
     $signUpDisabled = toSignal(this.signUpDisabled$);
+
+    @Select(SystemState.legalEnabled) legalEnabled$!: Observable<
+        boolean | undefined
+    >;
+    $legalEnabled = toSignal(this.legalEnabled$);
+
+    @Select(SystemState.privacyUrl) privacyUrl$!: Observable<string>;
+    $privacyUrl = toSignal(this.privacyUrl$);
+
+    @Select(SystemState.tosUrl) tosUrl$!: Observable<string>;
+    $tosUrl = toSignal(this.tosUrl$);
 
     @Select(SystemState.recaptchaEnabled)
     recaptchaEnabled$!: Observable<boolean>;
@@ -80,6 +93,7 @@ export class SignupFormComponent implements OnInit {
             CustomValidators.passwordContainsSpecialCharacterValidator(),
         ]),
         password2: new FormControl('', [Validators.required]),
+        tosAndPrivacy: new FormControl(false, []),
     });
 
     constructor(
@@ -94,6 +108,15 @@ export class SignupFormComponent implements OnInit {
         this.actions$
             .pipe(ofActionDispatched(UserActions.VerifyEmailSuccess))
             .subscribe(() => this.form.reset(undefined, { emitEvent: false }));
+
+        this.legalEnabled$.subscribe((enabled) => {
+            if (enabled) {
+                this.form
+                    .get('tosAndPrivacy')
+                    ?.setValidators(Validators.requiredTrue);
+                this.form.markAsDirty();
+            }
+        });
     }
 
     ngOnInit(): void {
@@ -119,6 +142,8 @@ export class SignupFormComponent implements OnInit {
                 name: this.form.get('username')!.value!,
                 password: this.form.get('password1')!.value!,
                 recaptchaToken: token,
+                agreedPrivacy: this.form.get('tosAndPrivacy')!.value,
+                agreedTos: this.form.get('tosAndPrivacy')!.value,
             }),
         );
     }

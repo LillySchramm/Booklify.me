@@ -53,4 +53,19 @@ export class SystemState {
     static recaptchaSiteKey(state: SystemStateModel): string {
         return state.systemInfo?.recaptcha.siteKey ?? '';
     }
+
+    @Selector()
+    static legalEnabled(state: SystemStateModel): boolean | undefined {
+        return state.systemInfo?.legal.enabled;
+    }
+
+    @Selector()
+    static tosUrl(state: SystemStateModel): string {
+        return state.systemInfo?.legal.tosUrl ?? '';
+    }
+
+    @Selector()
+    static privacyUrl(state: SystemStateModel): string {
+        return state.systemInfo?.legal.privacyUrl ?? '';
+    }
 }

@@ -17,6 +17,10 @@ export class UserDto implements User {
     updatedAt: Date;
     @ApiProperty()
     activated: boolean;
+    @Exclude()
+    agreedTosAt: Date | null;
+    @Exclude()
+    agreedPrivacyAt: Date | null;
 
     constructor(partial: Partial<UserDto>) {
         Object.assign(this, partial);
