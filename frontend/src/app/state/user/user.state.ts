@@ -187,10 +187,7 @@ export class UserState {
     }
 
     @Action(UserActions.SignUpSuccess)
-    signUpSuccess(
-        ctx: StateContext<UserStateModel>,
-        action: UserActions.SignUpSuccess,
-    ) {
+    signUpSuccess(ctx: StateContext<UserStateModel>) {
         ctx.patchState({
             signup: {
                 ...ctx.getState().signup,
@@ -198,7 +195,6 @@ export class UserState {
                 success: true,
                 error: undefined,
             },
-            currentUser: action.user,
         });
 
         this.router.navigate(['signup-success']);
