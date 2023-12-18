@@ -128,6 +128,7 @@ export class SignupFormComponent implements OnInit {
             return;
         }
 
+        this.recaptchaRef.reset();
         this.recaptchaRef.execute();
     }
 }
