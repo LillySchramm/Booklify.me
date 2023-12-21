@@ -8,15 +8,19 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.frontend.replicaCount }}
   {{- end }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       {{- include "booklify.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+      {{- with .Values.podAnnotations }}
+
         {{- toYaml . | nindent 8 }}
       {{- end }}
+        rollme: {{ randAlphaNum 5 | quote }}
       labels:
         {{- include "booklify.selectorLabels" . | nindent 8 }}
     spec:

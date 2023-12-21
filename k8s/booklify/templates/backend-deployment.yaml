@@ -8,15 +8,18 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.backend.replicaCount }}
   {{- end }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       {{- include "booklify.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+      {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
+        {{ randAlphaNum 5 | quote }}: {{ randAlphaNum 5 | quote }}
       labels:
         {{- include "booklify.selectorLabels" . | nindent 8 }}
     spec:
@@ -27,58 +30,16 @@ spec:
       serviceAccountName: {{ include "booklify.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: backend-config
+          configMap:
+            name: backend-config-{{ .Values.backend.config | toJson | sha256sum }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.backend.image }}:{{ .Values.backend.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.backend.pullPolicy }}
-          env:
-          - name: DATABASE_URL
-            value: {{ .Values.backend.config.db.url | quote }}
-
-          - name: S3_ENDPOINT
-            value: {{ .Values.backend.config.s3.endpoint | quote }}
-          - name: S3_PORT
-            value: {{ .Values.backend.config.s3.port | quote }}
-          - name: S3_USE_SSL
-            value: {{ .Values.backend.config.s3.use_ssl | quote }}
-          - name: S3_ACCESS_KEY
-            value: {{ .Values.backend.config.s3.access_key | quote }}
-          - name: S3_SECRET_KEY
-            value: {{ .Values.backend.config.s3.secret_key | quote }}
-          - name: S3_BUCKET_NAME
-            value: {{ .Values.backend.config.s3.bucket_name | quote }}
-
-          - name: CORS
-            value: {{ .Values.backend.config.cors | quote }}
-          - name: URL
-            value: {{ .Values.backend.config.url | quote }}
-
-          - name: SECURITY_KEY
-            value: {{ .Values.backend.config.security.key | quote}}
-          - name: ACCESS_TOKEN_EXPIRATION
-            value: {{ .Values.backend.config.security.access_token_expiration | quote }}
-
-          - name: DISABLE_REGISTRATION
-            value: {{ .Values.backend.config.disable_registration | quote }}
-
-          - name: MAIL_ENABLED
-            value: {{ .Values.backend.config.mail.enabled | quote }}
-          - name: MAIL_SMTP
-            value: {{ .Values.backend.config.mail.smtp | quote }}
-          - name: MAIL_FROM
-            value: {{ .Values.backend.config.mail.from | quote }}
-          - name: MAIL_IGNORE_TLS
-            value: {{ .Values.backend.config.mail.ignore_tls | quote }}
-
-          - name: ISBNDB_KEY
-            value: {{ .Values.backend.config.isbndb.key | quote }}
-
-          - name: GEONODE_USERNAME
-            value: {{ .Values.backend.config.geonode.username | quote }}
-          - name: GEONODE_PASSWORD
-            value: {{ .Values.backend.config.geonode.password | quote }}
           ports:
             - name: http-backend
               containerPort: 3000
@@ -91,6 +52,14 @@ spec:
             httpGet:
               path: /system/health
               port: http-backend
+          volumeMounts:
+            - name: backend-config
+              mountPath: /app/config/production.json5
+              subPath: production.json5
+              readOnly: true
+          env:
+            - name: DATABASE_URL
+              value: {{ .Values.backend.config.db.url }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

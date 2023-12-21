@@ -37,31 +37,59 @@ backend:
     pullPolicy: Always
 
     config:
-        url: "https://a.host"
-        cors: "*"
+        url: 'http://localhost:4200'
+        disable_registration: false
+        cors: '*'
         db:
-            url: ""
-        s3:
-            endpoint: ""
-            bucket_name: ""
-            access_key: ""
-            secret_key: ""
-            use_ssl: ""
-            port: 443
-        security:
-            key: "ASecureKey"
-            access_token_expiration: "1h"
-        disable_registration: "false"
+            url: 'postgresql://uwu:owo@localhost:5432/mangalist?schema=public'
         mail:
-            enabled: "false"
-            smtp: ""
-            from: "Booklify <no-reply@a.host>"
-            ignore_tls: "true"
+            enabled: false
+            smtp: ''
+            from: '"Booklify" <me@example.com>'
+        s3:
+            endpoint: ''
+            port: 9000
+            access_key: ''
+            secret_key: ''
+            use_ssl: false
+            bucket_name: mangalist
+        security:
+            key: AVerySecurePassword
+            access_token_expiration: 1h
+            max_session_idle_days: 90
+            max_temp_session_age_days: 1
+        debug:
+            show_query: false
+            always_regroup: false
         isbndb:
-            key: ""
+            key: ''
         geonode:
-            username: ""
-            password: ""
+            username: ''
+            password: ''
+        recaptcha:
+            enabled: true
+            secret: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
+            site_key: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
+        tasks:
+            recrawlCover:
+                enabled: true
+                cron: '* * * * *'
+            recrawlInfo:
+                enabled: true
+                cron: '* * * * *'
+            tryFindCover:
+                enabled: true
+                cron: 0 * * * *
+            doLongruning:
+                enabled: true
+                cron: '* * * * *'
+            updateOutdatedGrouping:
+                enabled: true
+                cron: '* * * * *'
+        legal:
+            enabled: true
+            privacy_policy: 'https://example.com/privacy'
+            terms_of_service: 'https://example.com/tos'
 
     ingress:
         enabled: true
@@ -88,7 +116,6 @@ serviceAccount:
     name: ""
 
 podAnnotations: {}
-
 podSecurityContext: {}
 
 securityContext: {}
