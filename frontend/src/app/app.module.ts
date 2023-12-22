@@ -46,8 +46,10 @@ import { TranslocoRootModule } from './transloco-root.module';
             AuthorState,
             SystemState,
         ]),
-        NgxsReduxDevtoolsPluginModule.forRoot(),
-        NgxsLoggerPluginModule.forRoot(),
+        NgxsReduxDevtoolsPluginModule.forRoot({
+            disabled: environment.production,
+        }),
+        NgxsLoggerPluginModule.forRoot({ disabled: true }),
         MatSnackBarModule,
         MatSidenavModule,
         SidenavComponent,
@@ -70,7 +72,6 @@ import { TranslocoRootModule } from './transloco-root.module';
             provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
             useValue: { appearance: 'outline' },
         },
-
         {
             provide: APP_INITIALIZER,
             useFactory: initApp,
