@@ -40,6 +40,7 @@ interface BookStateModel {
     searchError?: string;
     searchLoading: boolean;
     ownershipChangeLoading: boolean;
+    filter?: string;
 }
 
 @State<BookStateModel>({
@@ -303,6 +304,16 @@ export class BooksState {
         });
     }
 
+    @Action(BookActions.SetFilter)
+    setFilter(
+        { patchState }: StateContext<BookStateModel>,
+        { filter }: BookActions.SetFilter,
+    ) {
+        patchState({
+            filter: filter,
+        });
+    }
+
     @Selector()
     static currentOwnerId(state: BookStateModel): string | undefined {
         return state.currentOwnerId;
@@ -410,6 +421,11 @@ export class BooksState {
         }
 
         return state.bookMap[state.searchResult];
+    }
+
+    @Selector()
+    static filter(state: BookStateModel) {
+        return state.filter;
     }
 
     static group(id: string) {

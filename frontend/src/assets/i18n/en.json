@@ -67,7 +67,7 @@
   },
   "collection": {
     "search": "Search",
-    "filter": "Filter",
+    "filter": "Search Collection",
     "add-book": "Add Book",
     "add-group": "Add Group",
     "add-book-text": "Add book to your collection",

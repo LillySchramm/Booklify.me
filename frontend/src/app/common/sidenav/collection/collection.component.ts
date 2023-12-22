@@ -8,14 +8,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { TranslocoModule } from '@ngneat/transloco';
-import { Select } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { Select, Store } from '@ngxs/store';
+import { Observable, debounceTime } from 'rxjs';
 import { UserDto } from 'src/app/api';
 import { FormErrorPipe } from 'src/app/common/pipes/form-error.pipe';
 import { AddBookDialogComponent } from 'src/app/pages/home/add-book-dialog/add-book-dialog.component';
+import { BookActions } from 'src/app/state/books/books.actions';
 import { BooksState } from 'src/app/state/books/books.state';
 import { UserState } from 'src/app/state/user/user.state';
 
+@UntilDestroy()
 @Component({
     selector: 'app-collection',
     standalone: true,
@@ -46,10 +49,25 @@ export class CollectionComponent {
     $currentOwnerId = toSignal(this.currentOwnerId$);
 
     public form = new FormGroup({
-        searchText: new FormControl({ value: '', disabled: true }),
+        searchText: new FormControl(''),
     });
 
-    constructor(private dialog: MatDialog) {}
+    constructor(
+        private dialog: MatDialog,
+        private store: Store,
+    ) {
+        this.store.dispatch(new BookActions.SetFilter(undefined));
+        this.form.valueChanges
+            .pipe(untilDestroyed(this), debounceTime(100))
+            .subscribe((value) => {
+                if (value.searchText === null) {
+                    return;
+                }
+                this.store.dispatch(
+                    new BookActions.SetFilter(value.searchText),
+                );
+            });
+    }
 
     openAddBookDialog() {
         this.dialog.open(AddBookDialogComponent);

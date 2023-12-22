@@ -26,6 +26,8 @@ export class CollectionDisplayComponent {
     >;
     $currentCollection = toSignal(this.currentCollection$);
 
+    @Select(BooksState.filter) filter$!: Observable<string | undefined>;
+
     @Select(BooksState.currentGroupMap) currentGroupMap$!: Observable<
         BookGroupMap | undefined
     >;
@@ -57,6 +59,7 @@ export class CollectionDisplayComponent {
                 };
             });
         }),
+        map((entries) => entries.filter((entry) => entry.value.length > 0)),
         withLatestFrom(this.currentGroupMap$),
         map(([entries, groupMap]) => {
             if (!groupMap)
@@ -96,21 +99,44 @@ export class CollectionDisplayComponent {
                         }
 
                         return a.isbn.localeCompare(b.isbn);
-                        // return a.title.localeCompare(b.title);
                     }),
                 };
             });
         }),
+        withLatestFrom(this.filter$),
+        map(([entries, filter]) => {
+            if (!filter) return entries;
+
+            return entries
+                .map((entry) => {
+                    return {
+                        key: entry.key,
+                        value: entry.value.filter((book) =>
+                            this.filterBook(book, entry.key, filter),
+                        ),
+                    };
+                })
+                .filter((entry) => entry.value.length > 0);
+        }),
     );
     $groupedBooks = toSignal(this.groupedBooks$);
-
-    // @Select(BooksState.currentCollectionMap) currentCollectionMap$!: Observable<BookMap | undefined>;
-    // $currentCollectionMap = toSignal(this.currentCollectionMap$);
 
     constructor(private store: Store) {}
 
     trackById(index: number, element: any): number {
         return element.key;
+    }
+
+    filterBook(book: BookDto, groupName: string, filter: string): boolean {
+        filter = filter.toLowerCase();
+
+        if (book.title === null) return false;
+
+        return (
+            book.title.toLowerCase().includes(filter) ||
+            book.isbn.includes(filter) ||
+            groupName.toLowerCase().includes(filter)
+        );
     }
 
     getBookNumberFromTitle(title: string): number | null {

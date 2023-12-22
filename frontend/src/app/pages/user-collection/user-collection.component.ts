@@ -41,6 +41,8 @@ export class UserCollectionComponent implements OnInit {
         this.store.dispatch(new UiActions.ChangeInfoVisibility(false));
         this.store.dispatch(new UiActions.ChangeSidenavMode('collection'));
 
+        this.store.dispatch(new BookActions.SetFilter(undefined));
+
         this.store
             .select(UserState.user(name))
             .pipe(untilDestroyed(this))

@@ -63,8 +63,12 @@ export namespace BookActions {
             public payload: SetOwnershipStatusDto,
         ) {}
     }
-
     export class ChangeOwnershipSuccess {
         static readonly type = '[Books] Change Ownership Success';
+    }
+
+    export class SetFilter {
+        static readonly type = '[Books] Set Filter';
+        constructor(public filter: string | undefined) {}
     }
 }
