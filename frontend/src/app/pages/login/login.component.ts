@@ -4,7 +4,6 @@ import { TranslocoModule } from '@ngneat/transloco';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { TokenService } from 'src/app/common/services/token.service';
-import { SystemActions } from 'src/app/state/system/system.actions';
 import { SystemState } from 'src/app/state/system/system.state';
 import { UiActions } from 'src/app/state/ui/ui.actions';
 import { LoginCardComponent } from './login-card/login-card.component';
@@ -30,7 +29,5 @@ export class LoginComponent {
         this.store.dispatch(new UiActions.ChangeInfoVisibility(false));
         this.store.dispatch(new UiActions.ChangePageTitle(undefined));
         this.store.dispatch(new UiActions.ChangePageSubtitle(undefined));
-
-        this.store.dispatch(new SystemActions.LoadSystemInfo());
     }
 }

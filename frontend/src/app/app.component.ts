@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { SnackBarService } from './common/services/snack-bar.service';
 import { TokenService } from './common/services/token.service';
 import { UiService } from './common/services/ui.service';
+import { SystemActions } from './state/system/system.actions';
 import { UiState } from './state/ui/ui.state';
 
 @UntilDestroy()
@@ -43,6 +44,8 @@ export class AppComponent {
                 message.config,
             );
         });
+
+        this.store.dispatch(new SystemActions.LoadSystemInfo());
     }
 
     toggleSidenav() {
