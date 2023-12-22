@@ -15,6 +15,7 @@ import { PublishersModule } from './publishers/publishers.module';
 import { SystemModule } from './system/system.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CronModule } from './cron/cron.module';
+import { ReportsModule } from './reports/reports.module';
 
 @Module({
     imports: [
@@ -32,6 +33,7 @@ import { CronModule } from './cron/cron.module';
         SystemModule,
         ScheduleModule.forRoot(),
         CronModule.forRoot(),
+        ReportsModule,
     ],
     controllers: [AppController],
     providers: [AppService],

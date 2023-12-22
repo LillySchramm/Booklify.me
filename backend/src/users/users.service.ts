@@ -25,6 +25,13 @@ const PASSWORD_RESET_EMAIL_CONTENT = `
 <p>- Booklify.me</p>
 `;
 
+const BAN_EMAIL_CONTENT = `
+<h1>Account Banned</h1>
+<p>Hey $username, your account has been banned by a moderator, because you violated our terms of service.</p>
+<p>If you think this is a mistake, please contact us at <a href="mailto:"$email">$email</a>.</p>
+<p>- Booklify.me</p>
+`;
+
 export type UserWithFlags = {
     UserFlags: UserFlags | null;
 } & User;
@@ -59,25 +66,28 @@ export class UsersService implements OnModuleInit {
 
     async findByEmail(email: string): Promise<User | null> {
         return await this.prisma.user.findFirst({
-            where: { email: { equals: email, mode: 'insensitive' } },
+            where: {
+                email: { equals: email, mode: 'insensitive' },
+                banned: false,
+            },
         });
     }
 
     async findByIdOrThrow(id: string): Promise<User> {
         return await this.prisma.user.findFirstOrThrow({
-            where: { id },
+            where: { id, banned: false },
         });
     }
 
     async findById(id: string): Promise<User | null> {
         return await this.prisma.user.findFirst({
-            where: { id },
+            where: { id, banned: false },
         });
     }
 
     async findByIdWithFlags(id: string): Promise<UserWithFlags | null> {
         return await this.prisma.user.findFirst({
-            where: { id, activated: true },
+            where: { id, activated: true, banned: false },
             include: { UserFlags: true },
         });
     }
@@ -87,6 +97,7 @@ export class UsersService implements OnModuleInit {
             where: {
                 name: { equals: name, mode: 'insensitive' },
                 activated: true,
+                banned: false,
             },
             include: { UserFlags: true },
         });
@@ -107,6 +118,26 @@ export class UsersService implements OnModuleInit {
         });
 
         return user !== null;
+    }
+
+    async banUser(userId: string): Promise<void> {
+        const user = await this.findById(userId);
+        if (!user) return;
+        await this.prisma.user.update({
+            data: { banned: true },
+            where: { id: userId },
+        });
+
+        const emailContent = BAN_EMAIL_CONTENT.replaceAll(
+            '$username',
+            user.name,
+        ).replaceAll('$email', config.get<string>('reports.contact_email'));
+
+        await this.mail.sendMail(
+            `${user.name} <${user.email}>`,
+            'Account Banned',
+            emailContent,
+        );
     }
 
     async validateVerification(
@@ -259,6 +290,7 @@ export class UsersService implements OnModuleInit {
                 UserFlags: {
                     lastAppliedGrouperVersion: { lt: GROUPING_VERSION },
                 },
+                banned: false,
             },
         });
     }

@@ -22,8 +22,9 @@ model User {
   email     String  @unique
   password  String
   activated Boolean @default(false)
+  banned    Boolean @default(false)
 
-  agreedTosAt DateTime?
+  agreedTosAt     DateTime?
   agreedPrivacyAt DateTime?
 
   createdAt            DateTime               @default(now())
@@ -34,6 +35,9 @@ model User {
   OwnershipStatus      OwnershipStatus[]
   BookGroup            BookGroup[]
   UserFlags            UserFlags?
+
+  SentReports     Report[] @relation("ReportSender")
+  ReceivedReports Report[] @relation("ReportTarget")
 }
 
 model UserFlags {
@@ -214,4 +218,34 @@ model MetadataResponse {
   responseCode Int
   body         String?
   createdAt    DateTime         @default(now())
+}
+
+model Moderator {
+  id    Int    @id @default(autoincrement())
+  email String
+}
+
+enum ReportCategory {
+  USERNAME
+  OTHER
+}
+
+model Report {
+  id String @id @default(uuid())
+
+  sender User @relation(fields: [senderId], references: [id], name: "ReportSender")
+  target User @relation(fields: [targetId], references: [id], name: "ReportTarget")
+
+  key String
+
+  category          ReportCategory
+  alternateCategory String?
+  message           String
+
+  resolved Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  senderId  String
+  targetId  String
 }

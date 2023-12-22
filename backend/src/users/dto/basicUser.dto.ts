@@ -24,6 +24,8 @@ export class BasicUserDto implements UserWithFlags {
     agreedTosAt: Date | null;
     @Exclude()
     agreedPrivacyAt: Date | null;
+    @Exclude()
+    banned: boolean;
 
     constructor(partial: Partial<BasicUserDto>) {
         Object.assign(this, partial);

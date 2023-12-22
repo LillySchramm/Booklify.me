@@ -29,7 +29,9 @@ import { UserFlagsPatchDto } from './dto/userFlagsPatch.dto';
  */
 export function userCanBeAccessed(user: UserWithFlags, request: any): boolean {
     return (
-        user.UserFlags?.public || (request.user && user.id === request.user.id)
+        !user.banned &&
+        (user.UserFlags?.public ||
+            (request.user && user.id === request.user.id))
     );
 }
 

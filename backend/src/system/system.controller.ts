@@ -10,6 +10,7 @@ import { SystemInfoDto } from './dto/systemInfo.dto';
 import { RecaptchaDto } from './dto/recaptcha.dto';
 import * as config from 'config';
 import { LegalDto } from './dto/legal.dto';
+import { ReportsDto } from './dto/reports.dto';
 
 @Controller('system')
 @ApiTags('System')
@@ -48,10 +49,15 @@ export class SystemController {
             enabled: config.get<boolean>('legal.enabled'),
         });
 
+        const reports = new ReportsDto({
+            enabled: config.get<boolean>('reports.enabled'),
+        });
+
         const response = new SystemInfoDto({
             signUpEnabled: !signUpDisabled,
             recaptcha,
             legal,
+            reports,
         });
 
         return response;

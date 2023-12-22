@@ -50,11 +50,12 @@ export class AuthGuard implements CanActivate {
 
             await this.authService.setLastUsed(session.id);
 
+            const user = await this.userService.findByIdOrThrow(payload.sub);
+            if (user.banned) throw new UnauthorizedException();
+
             request['authToken'] = payload;
             request['session'] = session;
-            request['user'] = await this.userService.findByIdOrThrow(
-                payload.sub,
-            );
+            request['user'] = user;
         } catch {
             if (isOptional) return true;
             throw new UnauthorizedException();

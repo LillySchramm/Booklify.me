@@ -15,7 +15,7 @@ async function bootstrap() {
     app.enableCors({ origin: corsConfig });
 
     const apiConfig = new DocumentBuilder()
-        .setTitle('Mangalist API')
+        .setTitle('Booklify API')
         .setVersion('1.0')
         .addSecurity('bearer', {
             type: 'apiKey',

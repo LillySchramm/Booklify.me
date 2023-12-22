@@ -21,6 +21,8 @@ export class UserDto implements User {
     agreedTosAt: Date | null;
     @Exclude()
     agreedPrivacyAt: Date | null;
+    @Exclude()
+    banned: boolean;
 
     constructor(partial: Partial<UserDto>) {
         Object.assign(this, partial);

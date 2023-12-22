@@ -1,5 +1,6 @@
 {
     "url": "http://localhost:4200",
+    "api_url": "http://localhost:3000",
     "disable_registration": false,
     "cors": "*",
     "db": {
@@ -67,5 +68,9 @@
         "enabled": true,
         "privacy_policy": "https://example.com/privacy",
         "terms_of_service": "https://example.com/tos"
+    },
+    "reports": {
+        "enabled": true,
+        "contact_email": "uwu@example.com",
     },
 }

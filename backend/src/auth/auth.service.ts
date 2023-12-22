@@ -34,7 +34,7 @@ export class AuthService {
     ): Promise<UserToken> {
         const user = await this.usersService.findByEmail(email);
 
-        if (!user) throw new UnauthorizedException();
+        if (!user || user.banned) throw new UnauthorizedException();
         if (!user.activated) throw new PreconditionFailedException();
 
         const passwordOk = await bcrypt.compare(password, user.password);
