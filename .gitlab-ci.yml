@@ -85,13 +85,14 @@ build_backend_container:
         name: "gcr.io/kaniko-project/executor:debug"
         entrypoint: [""]
     script:
+        - export CI_COMMIT_TAG=${CI_COMMIT_TAG:-${CI_COMMIT_REF_SLUG}}
         - mkdir -p /kaniko/.docker
         - echo "{\"auths\":{\"registry.cdev.nexus\":{\"auth\":\"$(printf "%s:%s" "${PRIVATE_REG_USER}" "${PRIVATE_REG_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
         - >-
             /kaniko/executor
             --context "${CI_PROJECT_DIR}/backend"
             --dockerfile "${CI_PROJECT_DIR}/backend/Dockerfile"
-            --destination "registry.cdev.nexus/booklify-ce/backend:${CI_COMMIT_REF_SLUG}"
+            --destination "registry.cdev.nexus/booklify-ce/backend:${CI_COMMIT_TAG}"
 
 build_frontend_container:
     stage: container-build
@@ -101,13 +102,14 @@ build_frontend_container:
         name: "gcr.io/kaniko-project/executor:debug"
         entrypoint: [""]
     script:
+        - export CI_COMMIT_TAG=${CI_COMMIT_TAG:-${CI_COMMIT_REF_SLUG}}
         - mkdir -p /kaniko/.docker
         - echo "{\"auths\":{\"registry.cdev.nexus\":{\"auth\":\"$(printf "%s:%s" "${PRIVATE_REG_USER}" "${PRIVATE_REG_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
         - >-
             /kaniko/executor
             --context "${CI_PROJECT_DIR}/frontend"
             --dockerfile "${CI_PROJECT_DIR}/frontend/Dockerfile"
-            --destination "registry.cdev.nexus/booklify-ce/frontend:${CI_COMMIT_REF_SLUG}"
+            --destination "registry.cdev.nexus/booklify-ce/frontend:${CI_COMMIT_TAG}"
 
 backend_prettier:
     image: ${DOCKER_CACHE}/node:18-alpine
@@ -152,34 +154,3 @@ frontend_lint:
     script:
         - cd frontend
         - yarn run lint
-
-# deploy-to-kubernetes:
-#     stage: deploy
-#     image:
-#         name: "registry01.eps-dev.de/devops/deployment-containers/helmctl:latest"
-#         entrypoint: [""]
-#     needs:
-#         - build_backend_container
-#         - build_frontend_container
-#     script:
-#         - helm uninstall backend --namespace mangalist || true
-#         - helm upgrade --atomic --install backend ./deployments/mangalist-backend
-#           --values ./deployments/mangalist-backend/values.yaml
-#           --set image.repository=registry01.eps-dev.de/mangalist/backend/${CI_COMMIT_REF_SLUG}
-#           --set config[0].value=${DATABASE_URL}
-#           --set config[1].value=${GITHUB_CLIENT_ID}
-#           --set config[2].value=${GITHUB_CLIENT_SECRET}
-#           --set config[3].value=${MINIO_BUCKET_NAME}
-#           --set config[4].value=${MINIO_ENDPOINT}
-#           --set config[5].value=${MINIO_PORT}
-#           --set config[6].value=${MINIO_USE_SSL}
-#           --set config[7].value=${MINIO_ACCESS_KEY}
-#           --set config[8].value=${MINIO_SECRET_KEY}
-#           --namespace mangalist
-#         - helm uninstall frontend --namespace mangalist || true
-#         - helm upgrade --atomic --install frontend ./deployments/mangalist-frontend
-#           --values ./deployments/mangalist-frontend/values.yaml
-#           --set image.repository=registry01.eps-dev.de/mangalist/frontend/${CI_COMMIT_REF_SLUG}
-#           --namespace mangalist
-#     only:
-#         - master
