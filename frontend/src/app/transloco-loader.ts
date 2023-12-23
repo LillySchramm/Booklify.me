@@ -7,6 +7,9 @@ export class TranslocoHttpLoader implements TranslocoLoader {
     private http = inject(HttpClient);
 
     getTranslation(lang: string) {
-        return this.http.get<Translation>(`/assets/i18n/${lang}.json`);
+        const cacheBuster = Date.now();
+        return this.http.get<Translation>(
+            `/assets/i18n/${lang}.json?x=${cacheBuster}`,
+        );
     }
 }
