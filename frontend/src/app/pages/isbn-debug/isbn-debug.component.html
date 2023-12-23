@@ -1,0 +1,5 @@
+<div class="flex flex-wrap gap-40 p-10">
+    @for (isbn of isbns; track isbn) {
+        <img [src]="generateIsbn(isbn)" />
+    }
+</div>

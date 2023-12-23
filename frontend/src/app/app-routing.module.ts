@@ -60,6 +60,13 @@ const routes: Routes = [
                 (m) => m.ResetPasswordComponent,
             ),
     },
+    {
+        path: 'debug/isbn',
+        loadComponent: () =>
+            import('./pages/isbn-debug/isbn-debug.component').then(
+                (m) => m.IsbnDebugComponent,
+            ),
+    },
 ];
 
 @NgModule({
