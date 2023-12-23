@@ -91,6 +91,7 @@ build_backend_container:
         - >-
             /kaniko/executor
             --context "${CI_PROJECT_DIR}/backend"
+            --build-arg "BUILD_VERSION=${CI_COMMIT_TAG}"
             --dockerfile "${CI_PROJECT_DIR}/backend/Dockerfile"
             --destination "registry.cdev.nexus/booklify-ce/backend:${CI_COMMIT_TAG}"
 
