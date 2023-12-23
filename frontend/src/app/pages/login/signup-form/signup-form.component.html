@@ -24,6 +24,7 @@
                 matInput
                 [type]="hide1 ? 'password' : 'text'"
                 formControlName="password1"
+                onkeypress="return event.keyCode != 13;"
                 required
             />
             <button mat-icon-button matSuffix (click)="hide1 = !hide1">
@@ -43,6 +44,7 @@
                 matInput
                 [type]="hide2 ? 'password' : 'text'"
                 formControlName="password2"
+                onkeypress="return event.keyCode != 13;"
                 required
             />
             <button mat-icon-button matSuffix (click)="hide2 = !hide2">
