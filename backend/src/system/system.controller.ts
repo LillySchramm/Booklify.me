@@ -58,6 +58,7 @@ export class SystemController {
             recaptcha,
             legal,
             reports,
+            version: config.get<string>('version'),
         });
 
         return response;

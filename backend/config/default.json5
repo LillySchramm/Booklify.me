@@ -3,6 +3,7 @@
     "api_url": "http://localhost:3000",
     "disable_registration": false,
     "cors": "*",
+    "version": "v0.0.0",
     "db": {
         "url": "postgresql://uwu:owo@localhost:5432/mangalist?schema=public"
     },

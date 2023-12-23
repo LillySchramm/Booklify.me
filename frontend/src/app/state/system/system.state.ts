@@ -73,4 +73,9 @@ export class SystemState {
     static reportEnabled(state: SystemStateModel): boolean {
         return state.systemInfo?.reports.enabled ?? false;
     }
+
+    @Selector()
+    static version(state: SystemStateModel): string {
+        return state.systemInfo?.version ?? '';
+    }
 }

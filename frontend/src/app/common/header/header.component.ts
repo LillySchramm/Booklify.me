@@ -45,5 +45,8 @@ export class HeaderComponent {
     @Select(SystemState.tosUrl) tosUrl$!: Observable<string>;
     $tosUrl = toSignal(this.tosUrl$);
 
+    @Select(SystemState.version) version$!: Observable<string>;
+    $version = toSignal(this.version$);
+
     @Output() toggleSidenav = new EventEmitter<void>();
 }

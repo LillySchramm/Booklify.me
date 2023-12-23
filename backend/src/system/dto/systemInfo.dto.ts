@@ -12,6 +12,8 @@ export class SystemInfoDto {
     legal: LegalDto;
     @ApiProperty()
     reports: ReportsDto;
+    @ApiProperty()
+    version: string;
 
     constructor(partial: Partial<SystemInfoDto>) {
         Object.assign(this, partial);

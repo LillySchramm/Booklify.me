@@ -18,4 +18,5 @@ export interface SystemInfoDto {
     recaptcha: RecaptchaDto;
     legal: LegalDto;
     reports: ReportsDto;
+    version: string;
 }
