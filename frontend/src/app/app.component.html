@@ -26,7 +26,10 @@
             <app-book-details-side class="flex-grow"></app-book-details-side>
         </div>
     </mat-drawer>
-    <mat-drawer-content class="!flex max-h-screen min-h-screen w-full flex-col">
+    <mat-drawer-content
+        class="!flex max-h-screen min-h-screen w-full flex-col"
+        [ngClass]="{ '!ml-0': !$isSidenavVisible() }"
+    >
         <div class="mb-[4.5rem]"></div>
         <div class="flex flex-grow pl-2 pr-2">
             <router-outlet></router-outlet>
