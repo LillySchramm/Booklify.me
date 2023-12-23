@@ -51,6 +51,7 @@ export class AccountComponent {
         this.store.dispatch(new UiActions.ChangePageSubtitle(undefined));
         this.store.dispatch(new UiActions.ChangeInfoVisibility(false));
         this.store.dispatch(new UiActions.ChangeSidenavMode('account'));
+        this.store.dispatch(new UiActions.ChangeReportId(undefined));
     }
 
     export() {

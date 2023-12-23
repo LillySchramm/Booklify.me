@@ -25,11 +25,7 @@ import { Observable } from 'rxjs';
 import { CustomHttpParameterCodec } from '../encoder';
 
 // @ts-ignore
-import { AuthorDto } from '../model/authorDto';
-// @ts-ignore
-import { AuthorListDto } from '../model/authorListDto';
-// @ts-ignore
-import { GetIdListDto } from '../model/getIdListDto';
+import { CreateReportDto } from '../model/createReportDto';
 
 // @ts-ignore
 import { Configuration } from '../configuration';
@@ -38,7 +34,7 @@ import { BASE_PATH } from '../variables';
 @Injectable({
     providedIn: 'root',
 })
-export class AuthorsService {
+export class ReportsService {
     protected basePath = 'http://localhost';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
@@ -127,69 +123,73 @@ export class AuthorsService {
     }
 
     /**
+     * @param key
      * @param id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public authorsControllerGetAuthor(
+    public reportsControllerBanUser(
+        key: string,
         id: string,
         observe?: 'body',
         reportProgress?: boolean,
-        options?: {
-            httpHeaderAccept?: 'application/json';
-            context?: HttpContext;
-        },
-    ): Observable<AuthorDto>;
-    public authorsControllerGetAuthor(
+        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
+    ): Observable<any>;
+    public reportsControllerBanUser(
+        key: string,
         id: string,
         observe?: 'response',
         reportProgress?: boolean,
-        options?: {
-            httpHeaderAccept?: 'application/json';
-            context?: HttpContext;
-        },
-    ): Observable<HttpResponse<AuthorDto>>;
-    public authorsControllerGetAuthor(
+        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
+    ): Observable<HttpResponse<any>>;
+    public reportsControllerBanUser(
+        key: string,
         id: string,
         observe?: 'events',
         reportProgress?: boolean,
-        options?: {
-            httpHeaderAccept?: 'application/json';
-            context?: HttpContext;
-        },
-    ): Observable<HttpEvent<AuthorDto>>;
-    public authorsControllerGetAuthor(
+        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
+    ): Observable<HttpEvent<any>>;
+    public reportsControllerBanUser(
+        key: string,
         id: string,
         observe: any = 'body',
         reportProgress: boolean = false,
-        options?: {
-            httpHeaderAccept?: 'application/json';
-            context?: HttpContext;
-        },
+        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
     ): Observable<any> {
+        if (key === null || key === undefined) {
+            throw new Error(
+                'Required parameter key was null or undefined when calling reportsControllerBanUser.',
+            );
+        }
         if (id === null || id === undefined) {
             throw new Error(
-                'Required parameter id was null or undefined when calling authorsControllerGetAuthor.',
+                'Required parameter id was null or undefined when calling reportsControllerBanUser.',
+            );
+        }
+
+        let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
+        if (key !== undefined && key !== null) {
+            localVarQueryParameters = this.addToHttpParams(
+                localVarQueryParameters,
+                <any>key,
+                'key',
+            );
+        }
+        if (id !== undefined && id !== null) {
+            localVarQueryParameters = this.addToHttpParams(
+                localVarQueryParameters,
+                <any>id,
+                'id',
             );
         }
 
         let localVarHeaders = this.defaultHeaders;
 
-        let localVarCredential: string | undefined;
-        // authentication (bearer) required
-        localVarCredential = this.configuration.lookupCredential('bearer');
-        if (localVarCredential) {
-            localVarHeaders = localVarHeaders.set(
-                'authorization',
-                localVarCredential,
-            );
-        }
-
         let localVarHttpHeaderAcceptSelected: string | undefined =
             options && options.httpHeaderAccept;
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
-            const httpHeaderAccepts: string[] = ['application/json'];
+            const httpHeaderAccepts: string[] = [];
             localVarHttpHeaderAcceptSelected =
                 this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
@@ -219,20 +219,13 @@ export class AuthorsService {
             }
         }
 
-        let localVarPath = `/authors/${this.configuration.encodeParam({
-            name: 'id',
-            value: id,
-            in: 'path',
-            style: 'simple',
-            explode: false,
-            dataType: 'string',
-            dataFormat: undefined,
-        })}`;
-        return this.httpClient.request<AuthorDto>(
+        let localVarPath = `/reports/ban`;
+        return this.httpClient.request<any>(
             'get',
             `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -243,49 +236,37 @@ export class AuthorsService {
     }
 
     /**
-     * @param getIdListDto
+     * @param createReportDto
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public authorsControllerGetAuthors(
-        getIdListDto: GetIdListDto,
+    public reportsControllerCreateReport(
+        createReportDto: CreateReportDto,
         observe?: 'body',
         reportProgress?: boolean,
-        options?: {
-            httpHeaderAccept?: 'application/json';
-            context?: HttpContext;
-        },
-    ): Observable<AuthorListDto>;
-    public authorsControllerGetAuthors(
-        getIdListDto: GetIdListDto,
+        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
+    ): Observable<any>;
+    public reportsControllerCreateReport(
+        createReportDto: CreateReportDto,
         observe?: 'response',
         reportProgress?: boolean,
-        options?: {
-            httpHeaderAccept?: 'application/json';
-            context?: HttpContext;
-        },
-    ): Observable<HttpResponse<AuthorListDto>>;
-    public authorsControllerGetAuthors(
-        getIdListDto: GetIdListDto,
+        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
+    ): Observable<HttpResponse<any>>;
+    public reportsControllerCreateReport(
+        createReportDto: CreateReportDto,
         observe?: 'events',
         reportProgress?: boolean,
-        options?: {
-            httpHeaderAccept?: 'application/json';
-            context?: HttpContext;
-        },
-    ): Observable<HttpEvent<AuthorListDto>>;
-    public authorsControllerGetAuthors(
-        getIdListDto: GetIdListDto,
+        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
+    ): Observable<HttpEvent<any>>;
+    public reportsControllerCreateReport(
+        createReportDto: CreateReportDto,
         observe: any = 'body',
         reportProgress: boolean = false,
-        options?: {
-            httpHeaderAccept?: 'application/json';
-            context?: HttpContext;
-        },
+        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
     ): Observable<any> {
-        if (getIdListDto === null || getIdListDto === undefined) {
+        if (createReportDto === null || createReportDto === undefined) {
             throw new Error(
-                'Required parameter getIdListDto was null or undefined when calling authorsControllerGetAuthors.',
+                'Required parameter createReportDto was null or undefined when calling reportsControllerCreateReport.',
             );
         }
 
@@ -305,7 +286,7 @@ export class AuthorsService {
             options && options.httpHeaderAccept;
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
-            const httpHeaderAccepts: string[] = ['application/json'];
+            const httpHeaderAccepts: string[] = [];
             localVarHttpHeaderAcceptSelected =
                 this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
@@ -346,13 +327,126 @@ export class AuthorsService {
             }
         }
 
-        let localVarPath = `/authors`;
-        return this.httpClient.request<AuthorListDto>(
+        let localVarPath = `/reports`;
+        return this.httpClient.request<any>(
             'post',
             `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: getIdListDto,
+                body: createReportDto,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress,
+            },
+        );
+    }
+
+    /**
+     * @param key
+     * @param id
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public reportsControllerDismissReport(
+        key: string,
+        id: string,
+        observe?: 'body',
+        reportProgress?: boolean,
+        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
+    ): Observable<any>;
+    public reportsControllerDismissReport(
+        key: string,
+        id: string,
+        observe?: 'response',
+        reportProgress?: boolean,
+        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
+    ): Observable<HttpResponse<any>>;
+    public reportsControllerDismissReport(
+        key: string,
+        id: string,
+        observe?: 'events',
+        reportProgress?: boolean,
+        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
+    ): Observable<HttpEvent<any>>;
+    public reportsControllerDismissReport(
+        key: string,
+        id: string,
+        observe: any = 'body',
+        reportProgress: boolean = false,
+        options?: { httpHeaderAccept?: undefined; context?: HttpContext },
+    ): Observable<any> {
+        if (key === null || key === undefined) {
+            throw new Error(
+                'Required parameter key was null or undefined when calling reportsControllerDismissReport.',
+            );
+        }
+        if (id === null || id === undefined) {
+            throw new Error(
+                'Required parameter id was null or undefined when calling reportsControllerDismissReport.',
+            );
+        }
+
+        let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
+        if (key !== undefined && key !== null) {
+            localVarQueryParameters = this.addToHttpParams(
+                localVarQueryParameters,
+                <any>key,
+                'key',
+            );
+        }
+        if (id !== undefined && id !== null) {
+            localVarQueryParameters = this.addToHttpParams(
+                localVarQueryParameters,
+                <any>id,
+                'id',
+            );
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarHttpHeaderAcceptSelected: string | undefined =
+            options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [];
+            localVarHttpHeaderAcceptSelected =
+                this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set(
+                'Accept',
+                localVarHttpHeaderAcceptSelected,
+            );
+        }
+
+        let localVarHttpContext: HttpContext | undefined =
+            options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (
+                this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
+            ) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/reports/dismiss`;
+        return this.httpClient.request<any>(
+            'get',
+            `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

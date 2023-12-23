@@ -150,5 +150,16 @@
     "current": "Current Session",
     "created": "Created",
     "lastUsed": "Last Used"
+  },
+  "report": {
+    "title": "Report User",
+    "send": "Send Report",
+    "message": "Message",
+    "category": {
+      "label": "Category",
+      "OTHER": "Other",
+      "USERNAME": "Username"
+    },
+    "hint": "The books owned by a user aren't a valid reason to report. Abuse of the report feature will result in a ban."
   }
 }

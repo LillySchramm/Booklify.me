@@ -5,6 +5,7 @@ import { TranslocoModule } from '@ngneat/transloco';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { UiState } from 'src/app/state/ui/ui.state';
+import { ReportButtonComponent } from '../components/report-button/report-button.component';
 import { AccountComponent } from './account/account.component';
 import { CollectionComponent } from './collection/collection.component';
 
@@ -16,6 +17,7 @@ import { CollectionComponent } from './collection/collection.component';
         MatDividerModule,
         TranslocoModule,
         AccountComponent,
+        ReportButtonComponent,
     ],
     templateUrl: './sidenav.component.html',
     styleUrls: ['./sidenav.component.scss'],

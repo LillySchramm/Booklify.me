@@ -22,6 +22,7 @@ import { SidenavComponent } from './common/sidenav/sidenav.component';
 import { AuthorState } from './state/authors/author.state';
 import { BooksState } from './state/books/books.state';
 import { PublisherState } from './state/publisher/publisher.state';
+import { ReportState } from './state/reports/reports.state';
 import { SystemState } from './state/system/system.state';
 import { UiState } from './state/ui/ui.state';
 import { UserState } from './state/user/user.state';
@@ -45,6 +46,7 @@ import { TranslocoRootModule } from './transloco-root.module';
             PublisherState,
             AuthorState,
             SystemState,
+            ReportState,
         ]),
         NgxsReduxDevtoolsPluginModule.forRoot({
             disabled: environment.production,

@@ -68,4 +68,9 @@ export class SystemState {
     static privacyUrl(state: SystemStateModel): string {
         return state.systemInfo?.legal.privacyUrl ?? '';
     }
+
+    @Selector()
+    static reportEnabled(state: SystemStateModel): boolean {
+        return state.systemInfo?.reports.enabled ?? false;
+    }
 }

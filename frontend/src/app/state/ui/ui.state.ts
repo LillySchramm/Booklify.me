@@ -9,6 +9,7 @@ interface UiStateModel {
     pageTitle?: string;
     pageSubtitle?: string;
     infoTitle?: string;
+    reportId?: string;
 }
 
 @State<UiStateModel>({
@@ -92,6 +93,18 @@ export class UiState {
         });
     }
 
+    @Action(UiActions.ChangeReportId)
+    changeReportId(
+        { getState, setState }: StateContext<UiStateModel>,
+        { payload }: UiActions.ChangeReportId,
+    ) {
+        const state = getState();
+        setState({
+            ...state,
+            reportId: payload,
+        });
+    }
+
     @Selector()
     static pageSubtitle(state: UiStateModel) {
         return state.pageSubtitle;
@@ -120,5 +133,10 @@ export class UiState {
     @Selector()
     static sideNavMode(state: UiStateModel) {
         return state.sideNavMode;
+    }
+
+    @Selector()
+    static reportId(state: UiStateModel) {
+        return state.reportId;
     }
 }

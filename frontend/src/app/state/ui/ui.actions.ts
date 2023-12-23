@@ -28,4 +28,9 @@ export namespace UiActions {
         static readonly type = '[UI] Change Sidenav Mode';
         constructor(public payload: string) {}
     }
+
+    export class ChangeReportId {
+        static readonly type = '[UI] Change Report Id';
+        constructor(public payload: string | undefined) {}
+    }
 }

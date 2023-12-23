@@ -1,0 +1,64 @@
+<ng-container *transloco="let t">
+    <h2 mat-dialog-title class="!mb-0">{{ t('report.title') }}</h2>
+    <mat-dialog-content class="mat-typography !pb-0">
+        <form
+            [formGroup]="form"
+            class="flex w-full flex-col items-baseline p-4 pb-0 pt-0"
+        >
+            <p>{{ t('report.hint') }}</p>
+            <mat-form-field class="w-full">
+                <mat-label>{{ t('report.category.label') }}</mat-label>
+                <mat-select formControlName="category">
+                    <mat-option>--</mat-option>
+                    @for (category of categories; track categories) {
+                        <mat-option [value]="category">{{
+                            t('report.category.' + category)
+                        }}</mat-option>
+                    }
+                </mat-select>
+                @if (form.get('category')?.invalid) {
+                    <mat-error>{{
+                        form.get('category')?.errors | formError
+                    }}</mat-error>
+                }
+            </mat-form-field>
+            <mat-form-field color="accent" class="w-full grow !pb-0">
+                <mat-label>{{ t('report.message') }}</mat-label>
+                <textarea
+                    matInput
+                    type="text"
+                    formControlName="comment"
+                ></textarea>
+                @if (form.get('comment')?.invalid) {
+                    <mat-error>{{
+                        form.get('comment')?.errors | formError
+                    }}</mat-error>
+                }
+            </mat-form-field>
+        </form>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <div>
+            <button
+                mat-flat-button
+                color="primary"
+                class="mr-4"
+                [disabled]="form.pristine || form.invalid || $isLoading()"
+                (click)="report()"
+            >
+                {{ t('report.send') }}
+            </button>
+        </div>
+        <button mat-button mat-dialog-close>
+            {{ t('add-book-dialog.close') }}
+        </button>
+    </mat-dialog-actions>
+    @if ($isLoading()) {
+        <mat-progress-bar
+            mode="indeterminate"
+            class="rounded-xl"
+        ></mat-progress-bar>
+    } @else {
+        <div class="mb-1"></div>
+    }
+</ng-container>

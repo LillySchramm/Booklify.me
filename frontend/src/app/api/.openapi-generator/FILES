@@ -7,6 +7,7 @@ api/authors.service.ts
 api/bookGroups.service.ts
 api/books.service.ts
 api/publishers.service.ts
+api/reports.service.ts
 api/system.service.ts
 api/users.service.ts
 configuration.ts
@@ -23,6 +24,7 @@ model/bookGroupPatchDto.ts
 model/bookGroupPostDto.ts
 model/bookListDto.ts
 model/changePasswordDto.ts
+model/createReportDto.ts
 model/getIdListDto.ts
 model/identifierDto.ts
 model/legalDto.ts
@@ -32,6 +34,7 @@ model/ownershipStatusDto.ts
 model/publisherDto.ts
 model/publisherListDto.ts
 model/recaptchaDto.ts
+model/reportsDto.ts
 model/resetPasswordDto.ts
 model/resetPasswordRequestDto.ts
 model/sessionDto.ts

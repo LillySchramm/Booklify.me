@@ -37,6 +37,7 @@ export class HomeComponent {
         this.store.dispatch(new UiActions.ChangePageSubtitle(''));
         this.store.dispatch(new UiActions.ChangeSidenavMode('collection'));
         this.store.dispatch(new UiActions.ChangeInfoVisibility(false));
+        this.store.dispatch(new UiActions.ChangeReportId(undefined));
 
         this.session$.pipe(untilDestroyed(this)).subscribe((session) => {
             if (!session) return;

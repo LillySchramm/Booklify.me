@@ -10,9 +10,6 @@
  * Do not edit the class manually.
  */
 
-export interface AuthorDto {
-    id: string;
-    name: string;
-    createdAt: string;
-    updatedAt: string;
+export interface ReportsDto {
+    enabled: boolean;
 }

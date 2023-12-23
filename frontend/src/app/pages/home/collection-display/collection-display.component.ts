@@ -6,6 +6,7 @@ import { Select, Store } from '@ngxs/store';
 import { Observable, map, withLatestFrom } from 'rxjs';
 import { BookDto } from 'src/app/api';
 import { BookGroupMap, BooksState } from 'src/app/state/books/books.state';
+import { UiActions } from 'src/app/state/ui/ui.actions';
 import { BookGroupComponent } from '../book-group/book-group.component';
 
 export interface BookGrouping {
@@ -32,6 +33,10 @@ export class CollectionDisplayComponent {
         BookGroupMap | undefined
     >;
     $currentGroupMap = toSignal(this.currentGroupMap$);
+
+    @Select(BooksState.currentOwnerId) currentOwnerId$!: Observable<
+        string | undefined
+    >;
 
     groupedBooks$ = this.currentCollection$.pipe(
         untilDestroyed(this),
@@ -121,7 +126,11 @@ export class CollectionDisplayComponent {
     );
     $groupedBooks = toSignal(this.groupedBooks$);
 
-    constructor(private store: Store) {}
+    constructor(private store: Store) {
+        this.currentOwnerId$.pipe(untilDestroyed(this)).subscribe((ownerId) => {
+            this.store.dispatch(new UiActions.ChangeReportId(ownerId));
+        });
+    }
 
     trackById(index: number, element: any): number {
         return element.key;

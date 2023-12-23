@@ -10,9 +10,9 @@
  * Do not edit the class manually.
  */
 
-export interface AuthorDto {
-    id: string;
-    name: string;
-    createdAt: string;
-    updatedAt: string;
+export interface CreateReportDto {
+    category: string;
+    alternateCategory: string | null;
+    message: string;
+    targetId: string;
 }
