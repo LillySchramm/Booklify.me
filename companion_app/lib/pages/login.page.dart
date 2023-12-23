@@ -6,6 +6,7 @@ import 'package:companion_app/state/main.state.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -35,6 +36,13 @@ class _LoginFormState extends State<LoginForm> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   var rememberMe = false;
+
+  Future<void> _launchUrl() async {
+    final url = Uri.parse('https://booklify.me/login');
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch url');
+    }
+  }
 
   void onLoginPressed() async {
     var valid = _formKey.currentState!.validate();
@@ -106,6 +114,16 @@ class _LoginFormState extends State<LoginForm> {
               onPressed: onLoginPressed,
               label: const Text('Login'),
               icon: Icon(Icons.login)),
+          Expanded(child: SizedBox.shrink()),
+          TextButton.icon(
+              onPressed: _launchUrl,
+              label: const Text('Don\'t have an account? Register here'),
+              icon: Icon(Icons.open_in_new),
+              style: ButtonStyle(
+                iconColor: MaterialStateProperty.all(Colors.black),
+                foregroundColor: MaterialStateProperty.all(Colors.black),
+              ),
+            ),
         ],
       ),
     );
