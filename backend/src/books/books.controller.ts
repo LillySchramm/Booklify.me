@@ -17,6 +17,7 @@ import {
     ApiBearerAuth,
     ApiNotFoundResponse,
     ApiOkResponse,
+    ApiQuery,
     ApiTags,
 } from '@nestjs/swagger';
 import { BookDto } from './dto/book.dto';
@@ -68,13 +69,26 @@ export class BooksController {
     @UseGuards(AuthGuard)
     @ApiBearerAuth()
     @ApiOkResponse({ type: BookDto })
-    async getBook(@Param('isbn') isbn: string, @Request() req: any) {
+    @ApiNotFoundResponse()
+    @ApiQuery({ name: 'skipCrawl', required: false, type: Boolean })
+    async getBook(
+        @Param('isbn') isbn: string,
+        @Request() req: any,
+        @Query('skipCrawl') skipCrawl?: string,
+    ) {
         const isIsbn = isISBN(isbn);
         if (!isIsbn) throw new BadRequestException();
 
+        if (skipCrawl === undefined) skipCrawl = 'false';
+        const _skipCrawl = skipCrawl.toLowerCase() === 'true';
+
         isbn = isbn.replaceAll('-', '').trim();
 
-        const book = await this.bookService.getBook(isbn, req.user.id);
+        const book = await this.bookService.getBook(
+            isbn,
+            req.user.id,
+            !_skipCrawl,
+        );
         if (!book) throw new NotFoundException();
 
         return new BookDto(book);

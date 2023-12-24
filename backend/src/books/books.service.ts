@@ -173,9 +173,11 @@ export class BooksService implements OnModuleInit {
     async getBook(
         isbn: string,
         userId: string,
+        crawl = true,
     ): Promise<BookWithGroupIdAndAuthors | null> {
         const existingBook = await this.getBookByIsbn(isbn, userId);
         if (existingBook !== null) return existingBook;
+        if (!crawl) return null;
 
         const metadata = await this.scrapeBookMetaData(isbn);
         await this.scrapeBookCover(isbn, metadata);
