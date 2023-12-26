@@ -6,30 +6,10 @@
             </button>
         }
         <a routerLink="/" class="select-none">{{ t('app.name') }}</a>
-        <span class="mx-2 hidden sm:block">|</span>
-        <a
-            href="https://gitlab.eps-dev.de/Lilly/booklify-ce/-/blob/v2/CHANGELOG.md"
-            class="hidden select-none sm:block"
-            target="_blank"
-            >{{ $version() }}</a
-        >
+
         <span class="flex-grow"></span>
         @if ($user()) {
             <app-user-display></app-user-display>
-        } @else if ($legalEnabled()) {
-            <a
-                [href]="$tosUrl()"
-                class="select-none text-xs sm:text-lg"
-                target="_blank"
-                >{{ t('login.tos') }}</a
-            >
-            <span class="mx-2">|</span>
-            <a
-                [href]="$privacyUrl()"
-                class="select-none text-xs sm:text-lg"
-                target="_blank"
-                >{{ t('login.privacy') }}</a
-            >
         }
     </mat-toolbar>
 </header>

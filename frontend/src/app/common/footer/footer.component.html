@@ -1,0 +1,45 @@
+<div
+    class="flex h-full w-full flex-wrap items-end justify-between sm:justify-center"
+    *transloco="let t"
+>
+    <div class="select-none text-xs sm:text-lg">
+        Made with ❤️ by
+        <a
+            href="https://cdev.nexus"
+            select-none
+            text-xs
+            sm:text-lg
+            target="_blank"
+        >
+            Lilly Schramm
+        </a>
+    </div>
+    @if ($legalEnabled()) {
+        <div class="hidden flex-grow sm:block"></div>
+        <div class="select-none text-xs sm:text-lg">
+            <a
+                [href]="$tosUrl()"
+                class="select-none text-xs sm:text-lg"
+                target="_blank"
+                >{{ t('login.tos') }}</a
+            >
+            <span class="mx-2 text-xs sm:text-lg">|</span>
+            <a
+                [href]="$privacyUrl()"
+                class="select-none text-xs sm:text-lg"
+                target="_blank"
+                >{{ t('login.privacy') }}</a
+            >
+        </div>
+        <div class="hidden flex-grow sm:block"></div>
+    }
+
+    <div class="hidden sm:block">
+        <a
+            href="https://gitlab.eps-dev.de/Lilly/booklify-ce/-/blob/v2/CHANGELOG.md"
+            class="select-none text-xs sm:text-lg"
+            target="_blank"
+            >{{ $version() }}</a
+        >
+    </div>
+</div>
