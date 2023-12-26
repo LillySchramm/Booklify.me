@@ -22,11 +22,13 @@
         <h3>{{ t('account.subtitles.password') }}</h3>
         <app-new-password-form></app-new-password-form>
     </div>
-    <mat-divider class="w-full"></mat-divider>
-    <div class="mb-4 mt-4" id="export">
-        <h1 class="!m-0">{{ t('account.titles.sessions') }}</h1>
-        <h3>{{ t('account.subtitles.sessions') }}</h3>
-        <app-session-table></app-session-table>
+    <div class="hidden sm:block">
+        <mat-divider class="w-full"></mat-divider>
+        <div class="mb-4 mt-4" id="export">
+            <h1 class="!m-0">{{ t('account.titles.sessions') }}</h1>
+            <h3>{{ t('account.subtitles.sessions') }}</h3>
+            <app-session-table></app-session-table>
+        </div>
     </div>
     <mat-divider class="w-full"></mat-divider>
     <div class="mb-4 mt-4" id="export">
