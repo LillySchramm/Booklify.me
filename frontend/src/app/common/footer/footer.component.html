@@ -1,8 +1,8 @@
 <div
-    class="flex h-full w-full flex-wrap items-end justify-between sm:justify-center"
+    class="flex h-full w-full flex-wrap items-end justify-between"
     *transloco="let t"
 >
-    <div class="select-none text-xs sm:text-lg">
+    <div class="flex-1 select-none text-xs sm:text-lg">
         Made with ❤️ by
         <a
             href="https://cdev.nexus"
@@ -15,8 +15,7 @@
         </a>
     </div>
     @if ($legalEnabled()) {
-        <div class="hidden flex-grow sm:block"></div>
-        <div class="select-none text-xs sm:text-lg">
+        <div class="flex-1 select-none text-center text-xs sm:text-lg">
             <a
                 [href]="$tosUrl()"
                 class="select-none text-xs sm:text-lg"
@@ -31,10 +30,9 @@
                 >{{ t('login.privacy') }}</a
             >
         </div>
-        <div class="hidden flex-grow sm:block"></div>
     }
 
-    <div class="hidden sm:block">
+    <div class="hidden flex-1 text-right sm:block">
         <a
             href="https://gitlab.eps-dev.de/Lilly/booklify-ce/-/blob/v2/CHANGELOG.md"
             class="select-none text-xs sm:text-lg"
