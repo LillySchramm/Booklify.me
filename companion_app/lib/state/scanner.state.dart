@@ -8,6 +8,7 @@ class ScannerState extends ChangeNotifier {
 
   bool loading = false;
   bool notFound = false;
+  bool wasKnown = true;
   bool changingOwnership = false;
   BookDto? book;
   PublisherDto? publisher;
@@ -17,6 +18,7 @@ class ScannerState extends ChangeNotifier {
   void reset() {
     loading = false;
     notFound = false;
+    wasKnown = true;
     book = null;
     publisher = null;
     ownershipStatus = null;
@@ -63,6 +65,11 @@ class ScannerState extends ChangeNotifier {
 
   void setScannedIsbn(String? isbn) {
     scannedIsbn = isbn;
+    notifyListeners();
+  }
+
+  void setWasKnown(bool wasKnown) {
+    this.wasKnown = wasKnown;
     notifyListeners();
   }
 }

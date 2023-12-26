@@ -92,6 +92,16 @@ Future<BookDto?> getBook(AuthState authState, String isbn) async {
   return null;
 }
 
+Future<bool> isBookKnown(AuthState authState, String isbn) async {
+  var accessToken = await authState.getToken();
+
+  final response = await http.get(Uri.parse('$_baseUrl/$isbn?skipCrawl=true'), headers: {
+    HttpHeaders.authorizationHeader: 'Bearer $accessToken',
+  });
+
+  return response.statusCode == 200;
+}
+
 Future<OwnershipStatusDto?> getBookOwnershipStatus(
     AuthState authState, String isbn) async {
   var accessToken = await authState.getToken();

@@ -83,6 +83,9 @@ class _ScanPageState extends State<ScanPage> {
     scannerState.reset();
     scannerState.setLoading(true);
 
+    var known = await isBookKnown(authState, isbn);
+    scannerState.setWasKnown(known);
+
     var book = await getBook(authState, isbn);
     scannerState.setBook(book);
 
@@ -107,8 +110,8 @@ class _ScanPageState extends State<ScanPage> {
         authors.add(author);
       }
     }
-    scannerState.setAuthors(authors);
 
+    scannerState.setAuthors(authors);
     scannerState.setLoading(false);
   }
 }

@@ -181,8 +181,24 @@ class BookLoadingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var scannerState = context.watch<ScannerState>();
+
+    if (scannerState.wasKnown) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );}
     return const Center(
-      child: CircularProgressIndicator(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(),
+          SizedBox(height: 10),
+          Text("No one scanned this book before!"),
+          SizedBox(height: 10),
+          Text("Getting it for the first time may take up to 15 seconds.", style: TextStyle(fontWeight: FontWeight.bold)),
+        ],
+      ),
     );
   }
 }
