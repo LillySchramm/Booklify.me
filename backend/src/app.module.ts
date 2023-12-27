@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
@@ -17,6 +17,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { CronModule } from './cron/cron.module';
 import { ReportsModule } from './reports/reports.module';
 import { LokiModule } from './loki/loki.module';
+import { LokiMiddleware } from './loki/loki.middleware';
 
 @Module({
     imports: [
@@ -40,4 +41,8 @@ import { LokiModule } from './loki/loki.module';
     controllers: [AppController],
     providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(LokiMiddleware).forRoutes('*');
+    }
+}

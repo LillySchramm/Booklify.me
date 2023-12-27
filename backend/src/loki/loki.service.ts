@@ -13,6 +13,15 @@ type LokiLog = [string, string];
 type LokiBuffer = { [key: string]: LokiLog[] };
 type LokiMetadata = { [key: string]: string };
 
+type LokiRequestMetadata = {
+    path: string;
+    method: string;
+    ip: string;
+    userAgent: string;
+    duration: string;
+    statusCode: string;
+};
+
 @Injectable()
 export class LokiService {
     private static buffer: LokiBuffer = {};
@@ -35,7 +44,23 @@ export class LokiService {
         this.pushBuffer(log, {
             level,
             context,
+            type: 'log',
         });
+    }
+
+    public static addRequestLog(
+        message: string,
+        lokiRequestMetadata: LokiRequestMetadata,
+    ) {
+        if (!this.lokiEnabled) return;
+
+        const now = new Date().getTime().toString();
+        const nano = process.hrtime.bigint().toString().slice(-6);
+        const nowNano = now + nano;
+
+        const log: LokiLog = [nowNano, message];
+
+        this.pushBuffer(log, { ...lokiRequestMetadata, type: 'request' });
     }
 
     private static pushBuffer(log: LokiLog, metadata: LokiMetadata) {
