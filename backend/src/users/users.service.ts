@@ -1,4 +1,4 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { PasswordResetRequest, User, UserFlags } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { saltRounds } from 'src/auth/constants';
@@ -7,6 +7,7 @@ import * as config from 'config';
 import { randomBytes } from 'crypto';
 import { MailService } from 'src/mail/mail.service';
 import { GROUPING_VERSION } from 'src/book-groups/bookGrouping.service';
+import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 
 const VERIFICATION_EMAIL_CONTENT = `
 <h1>Verify your Booklify Account</h1>
@@ -38,7 +39,7 @@ export type UserWithFlags = {
 
 @Injectable()
 export class UsersService implements OnModuleInit {
-    private readonly logger = new Logger(UsersService.name);
+    private readonly logger = new LokiLogger(UsersService.name);
 
     constructor(
         private readonly prisma: PrismaService,

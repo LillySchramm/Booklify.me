@@ -1,9 +1,4 @@
-import {
-    Injectable,
-    Logger,
-    NotFoundException,
-    OnModuleInit,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { VolumeInfo } from './models/volume.model';
 import { S3Service } from 'src/s3/s3.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -22,10 +17,11 @@ import { AuthorsService } from 'src/authors/authors.service';
 import { PublishersService } from 'src/publishers/publishers.service';
 import { BookGroupingService } from 'src/book-groups/bookGrouping.service';
 import { Scraper } from './scraper/scraper';
+import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 
 @Injectable()
 export class BooksService implements OnModuleInit {
-    private readonly logger = new Logger(S3Service.name);
+    private readonly logger = new LokiLogger(S3Service.name);
 
     private coverTextBlacklist: string[] = [
         'No Image Available',

@@ -1,4 +1,4 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as config from 'config';
 import {
     createCipheriv,
@@ -7,13 +7,14 @@ import {
     generateKeyPairSync,
     randomBytes,
 } from 'node:crypto';
+import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 type SECRET = 'JWT_PUBLIC' | 'JWT_PRIVATE';
 
 @Injectable()
 export class SecretsService implements OnModuleInit {
-    private readonly logger = new Logger(SecretsService.name);
+    private readonly logger = new LokiLogger(SecretsService.name);
 
     private secretKey = config.get<string>('security.key');
 

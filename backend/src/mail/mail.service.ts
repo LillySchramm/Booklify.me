@@ -1,14 +1,15 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Transporter, createTransport } from 'nodemailer';
 import * as config from 'config';
 import { htmlToText } from 'nodemailer-html-to-text';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 
 @Injectable()
 export class MailService implements OnModuleInit {
     private transporter: Transporter;
 
-    private readonly logger = new Logger(MailService.name);
+    private readonly logger = new LokiLogger(MailService.name);
 
     constructor(private prisma: PrismaService) {
         if (!config.get<boolean>('mail.enabled')) return;

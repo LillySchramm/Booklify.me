@@ -64,6 +64,10 @@
             "enabled": true,
             "cron": "* * * * *"
         },
+        "flushLoki": {
+            "enabled": false,
+            "cron": "*\\10 * * * * *"
+        },
     },
     "legal": {
         "enabled": true,
@@ -73,5 +77,11 @@
     "reports": {
         "enabled": true,
         "contact_email": "uwu@example.com",
+    },
+    "loki": {
+        "enabled": false,
+        "api": "",
+        "username": "",
+        "password": "",
     },
 }

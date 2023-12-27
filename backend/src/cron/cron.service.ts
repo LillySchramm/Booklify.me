@@ -6,7 +6,6 @@
 
 import {
     Injectable,
-    Logger,
     OnApplicationBootstrap,
     OnApplicationShutdown,
     OnModuleInit,
@@ -18,6 +17,7 @@ import { CronCallback, CronJob, CronJobParams } from 'cron';
 import * as config from 'config';
 import { DiscoveryService, MetadataScanner, Reflector } from '@nestjs/core';
 import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper';
+import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 
 export const INTERNAL_CRON = 'INTERNAL_CRON';
 
@@ -42,7 +42,7 @@ type CronJobOptions = TargetHost & CronOptionsHost & RefHost<CronJob>;
 export class CronService
     implements OnApplicationBootstrap, OnApplicationShutdown, OnModuleInit
 {
-    private readonly logger = new Logger(CronService.name);
+    private readonly logger = new LokiLogger(CronService.name);
     private readonly cronJobs: Record<string, CronJobOptions> = {};
     private readonly cronJobsRunning: Record<string, boolean> = {};
 

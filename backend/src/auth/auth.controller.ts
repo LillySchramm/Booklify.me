@@ -10,7 +10,6 @@ import {
     BadRequestException,
     ConflictException,
     Query,
-    Logger,
     NotFoundException,
     UnauthorizedException,
     ParseUUIDPipe,
@@ -42,11 +41,12 @@ import { randomUUID } from 'node:crypto';
 import { SessionListDto } from './dto/sessionList.dto';
 import { ChangePasswordDto } from './dto/changePassword.dto';
 import { RecaptchaService } from './recaptcha/recaptcha.service';
+import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 
 @Controller('auth')
 @ApiTags('Auth')
 export class AuthController {
-    private readonly logger = new Logger(AuthController.name);
+    private readonly logger = new LokiLogger(AuthController.name);
 
     constructor(
         private authService: AuthService,

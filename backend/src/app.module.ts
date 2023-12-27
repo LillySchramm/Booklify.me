@@ -16,6 +16,7 @@ import { SystemModule } from './system/system.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CronModule } from './cron/cron.module';
 import { ReportsModule } from './reports/reports.module';
+import { LokiModule } from './loki/loki.module';
 
 @Module({
     imports: [
@@ -34,6 +35,7 @@ import { ReportsModule } from './reports/reports.module';
         ScheduleModule.forRoot(),
         CronModule.forRoot(),
         ReportsModule,
+        LokiModule,
     ],
     controllers: [AppController],
     providers: [AppService],

@@ -5,14 +5,14 @@ import {
     VolumeInfo,
 } from '../models/volume.model';
 import { BookScraper, CoverScrapeResult } from './scraper';
-import { Logger } from '@nestjs/common';
 import * as config from 'config';
 import { Cache } from 'cache-manager';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { MetadataProvider } from '@prisma/client';
+import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 
 export class IsbndbBookScraper implements BookScraper {
-    private readonly logger = new Logger(IsbndbBookScraper.name);
+    private readonly logger = new LokiLogger(IsbndbBookScraper.name);
 
     private isbndbApiBase = 'https://api2.isbndb.com/book/';
 

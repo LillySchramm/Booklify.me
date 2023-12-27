@@ -3,7 +3,6 @@ import {
     Body,
     Controller,
     Get,
-    Logger,
     NotFoundException,
     Param,
     ParseUUIDPipe,
@@ -32,11 +31,12 @@ import { BookListDto } from './dto/bookList.dto';
 import { BookGroupsService } from 'src/book-groups/bookGroups.service';
 import { UsersService } from 'src/users/users.service';
 import { userCanBeAccessed } from 'src/users/users.controller';
+import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 
 @Controller('books')
 @ApiTags('books')
 export class BooksController {
-    private readonly logger = new Logger(BooksController.name);
+    private readonly logger = new LokiLogger(BooksController.name);
 
     constructor(
         private readonly bookService: BooksService,

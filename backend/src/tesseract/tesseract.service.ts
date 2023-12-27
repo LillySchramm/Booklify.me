@@ -1,9 +1,10 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 import { createWorker, Worker as TWorker } from 'tesseract.js';
 
 @Injectable()
 export class TesseractService implements OnModuleInit {
-    private readonly logger = new Logger(TesseractService.name);
+    private readonly logger = new LokiLogger(TesseractService.name);
 
     private enWorker: TWorker;
     private deWorker: TWorker;

@@ -5,12 +5,12 @@ import {
     VolumeInfo,
 } from '../models/volume.model';
 import { BookScraper, CoverScrapeResult } from './scraper';
-import { Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { MetadataProvider } from '@prisma/client';
+import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 
 export class GoogleBookScraper implements BookScraper {
-    private readonly logger = new Logger(GoogleBookScraper.name);
+    private readonly logger = new LokiLogger(GoogleBookScraper.name);
 
     private googleBooksApiBase = 'https://www.googleapis.com/books/v1/volumes';
 

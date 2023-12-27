@@ -1,6 +1,5 @@
 import {
     Controller,
-    Logger,
     Post,
     UseGuards,
     Request,
@@ -17,11 +16,12 @@ import { UsersService } from 'src/users/users.service';
 import * as config from 'config';
 import { CreateReportDto } from './dto/report.dto';
 import { ReportsService } from './reports.service';
+import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 
 @ApiTags('Reports')
 @Controller('reports')
 export class ReportsController {
-    private readonly logger = new Logger(ReportsController.name);
+    private readonly logger = new LokiLogger(ReportsController.name);
 
     constructor(
         private readonly userService: UsersService,

@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { VolumeInfo } from '../models/volume.model';
 import { GoogleBookScraper } from './google.scraper';
 import { IsbndbBookScraper } from './isbndb.scraper';
@@ -7,6 +7,7 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AmazonBookScraper } from './amazon.scraper';
+import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 
 export interface CoverScrapeResult {
     buffer: Buffer | null;
@@ -26,7 +27,7 @@ export interface BookScraper {
 
 @Injectable()
 export class Scraper implements BookScraper {
-    private readonly logger = new Logger(Scraper.name);
+    private readonly logger = new LokiLogger(Scraper.name);
 
     private metadataScrapers: BookScraper[] = [];
     private coverScrapers: BookScraper[] = [];

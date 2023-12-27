@@ -1,12 +1,12 @@
 import { gotScraping } from 'got-scraping';
 import { OpenLibraryBookVolume, VolumeInfo } from '../models/volume.model';
 import { BookScraper, CoverScrapeResult } from './scraper';
-import { Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { MetadataProvider } from '@prisma/client';
+import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 
 export class OpenLibraryBookScraper implements BookScraper {
-    private readonly logger = new Logger(OpenLibraryBookScraper.name);
+    private readonly logger = new LokiLogger(OpenLibraryBookScraper.name);
 
     private openLibraryApiBase = 'https://openlibrary.org/isbn';
     private openLibraryCoverBase = 'https://covers.openlibrary.org/b/isbn';

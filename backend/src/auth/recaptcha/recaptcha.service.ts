@@ -1,10 +1,11 @@
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as config from 'config';
 import { gotScraping as got } from 'got-scraping';
+import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 
 @Injectable()
 export class RecaptchaService {
-    private readonly logger = new Logger(RecaptchaService.name);
+    private readonly logger = new LokiLogger(RecaptchaService.name);
 
     async validateRecaptchaToken(token: string): Promise<boolean> {
         if (!config.get<boolean>('recaptcha.enabled')) {

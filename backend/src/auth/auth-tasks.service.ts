@@ -1,10 +1,11 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { AuthService } from './auth.service';
+import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 
 @Injectable()
 export class AuthTasksService {
-    private readonly logger = new Logger(AuthTasksService.name);
+    private readonly logger = new LokiLogger(AuthTasksService.name);
 
     constructor(private authService: AuthService) {}
 

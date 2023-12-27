@@ -1,13 +1,13 @@
 /* eslint-disable camelcase */
 import { VolumeInfo } from '../models/volume.model';
 import { BookScraper, CoverScrapeResult } from './scraper';
-import { Logger } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { gotScraping } from 'got-scraping';
 import * as cheerio from 'cheerio';
 import { MetadataProvider } from '@prisma/client';
 import * as dateParser from 'any-date-parser';
 import * as config from 'config';
+import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 
 const GEONODE_CONFIG = {
     js_render: false,
@@ -26,7 +26,7 @@ const GEONODE_CONFIG = {
 const MAX_ATTEMPTS = 3;
 
 export class AmazonBookScraper implements BookScraper {
-    private readonly logger = new Logger(AmazonBookScraper.name);
+    private readonly logger = new LokiLogger(AmazonBookScraper.name);
 
     private readonly amazonBaseUrl = 'https://www.amazon.de';
     private readonly amazonSearchUrl = 'https://www.amazon.de/s?k=';

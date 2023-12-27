@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import {
     Author,
     Book,
@@ -12,6 +12,7 @@ import * as isbn from 'isbn3';
 import * as config from 'config';
 import { UsersService } from 'src/users/users.service';
 import { cloneDeep, isEqual } from 'lodash';
+import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 
 type BookWithPublisherAndAuthors = Book & {
     publisher: Publisher | null;
@@ -28,7 +29,7 @@ export const MIN_NAME_LENGTH_FOR_COMPARISON = 5;
 
 @Injectable()
 export class BookGroupingService {
-    private readonly logger = new Logger(BookGroupingService.name);
+    private readonly logger = new LokiLogger(BookGroupingService.name);
 
     private readonly BLACKLISTED_CHUNKS = [
         'vol.',

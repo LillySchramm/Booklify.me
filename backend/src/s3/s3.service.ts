@@ -1,10 +1,11 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as Minio from 'minio';
 import * as config from 'config';
+import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 
 @Injectable()
 export class S3Service extends Minio.Client implements OnModuleInit {
-    private readonly logger = new Logger(S3Service.name);
+    private readonly logger = new LokiLogger(S3Service.name);
     public bucketName: string;
 
     constructor() {
