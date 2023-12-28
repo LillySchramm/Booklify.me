@@ -21,6 +21,7 @@
         [opened]="$isInfoVisible()"
         class="!fixed max-h-screen w-[29rem] overflow-x-hidden"
         position="end"
+        (openedChange)="setInfoVisibility($event)"
     >
         <div class="flex h-full flex-col overflow-x-hidden">
             <app-book-details-side class="flex-grow"></app-book-details-side>

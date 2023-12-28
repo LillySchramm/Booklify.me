@@ -10,6 +10,7 @@ interface UiStateModel {
     pageSubtitle?: string;
     infoTitle?: string;
     reportId?: string;
+    isInfoFullyVisible?: boolean;
 }
 
 @State<UiStateModel>({
@@ -105,6 +106,18 @@ export class UiState {
         });
     }
 
+    @Action(UiActions.ChangeIsInfoFullyVisible)
+    changeIsInfoFullyVisible(
+        { getState, setState }: StateContext<UiStateModel>,
+        { payload }: UiActions.ChangeIsInfoFullyVisible,
+    ) {
+        const state = getState();
+        setState({
+            ...state,
+            isInfoFullyVisible: payload,
+        });
+    }
+
     @Selector()
     static pageSubtitle(state: UiStateModel) {
         return state.pageSubtitle;
@@ -138,5 +151,10 @@ export class UiState {
     @Selector()
     static reportId(state: UiStateModel) {
         return state.reportId;
+    }
+
+    @Selector()
+    static isInfoFullyVisible(state: UiStateModel) {
+        return state.isInfoFullyVisible;
     }
 }

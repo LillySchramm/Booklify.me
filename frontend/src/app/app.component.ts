@@ -9,6 +9,7 @@ import { SnackBarService } from './common/services/snack-bar.service';
 import { TokenService } from './common/services/token.service';
 import { UiService } from './common/services/ui.service';
 import { SystemActions } from './state/system/system.actions';
+import { UiActions } from './state/ui/ui.actions';
 import { UiState } from './state/ui/ui.state';
 
 @UntilDestroy()
@@ -50,5 +51,9 @@ export class AppComponent {
 
     toggleSidenav() {
         this.sideNav?.toggle();
+    }
+
+    setInfoVisibility(visible: boolean) {
+        this.store.dispatch(new UiActions.ChangeIsInfoFullyVisible(visible));
     }
 }

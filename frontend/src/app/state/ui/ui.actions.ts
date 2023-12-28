@@ -33,4 +33,9 @@ export namespace UiActions {
         static readonly type = '[UI] Change Report Id';
         constructor(public payload: string | undefined) {}
     }
+
+    export class ChangeIsInfoFullyVisible {
+        static readonly type = '[UI] Change Is Info Fully Visible';
+        constructor(public payload: boolean) {}
+    }
 }
