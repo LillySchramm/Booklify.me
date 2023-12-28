@@ -99,7 +99,8 @@
     "isbn": "ISBN",
     "search": "Search",
     "add": "Add To Collection",
-    "already-in-collection": "You Already Have This Book In Your Collection"
+    "already-in-collection": "You Already Have This Book In Your Collection",
+    "app": "Or Use The App"
   },
   "home": {
     "noBooks": "There aren't any books in this collection yet"

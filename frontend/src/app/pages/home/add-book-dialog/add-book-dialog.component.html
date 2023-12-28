@@ -29,6 +29,21 @@
                 class="inline-block max-h-[45vh] w-full overflow-scroll overflow-x-hidden"
                 [displayBook]="book"
             ></app-book-details>
+        } @else {
+            <div class="flex items-center">
+                <span class="mr-2 block h-0 flex-grow border"></span>
+                <span class="block">{{ t('add-book-dialog.app') }}</span>
+                <span class="ml-2 block h-0 flex-grow border"></span>
+            </div>
+            <div class="mt-4 flex justify-center">
+                <a href="https://cdev.nexus" target="_blank">
+                    <img
+                        src="assets/icon/google-play-badge-full.png"
+                        class="w-52"
+                        alt="Google Play Badge"
+                    />
+                </a>
+            </div>
         }
     </mat-dialog-content>
     <mat-dialog-actions align="end">
