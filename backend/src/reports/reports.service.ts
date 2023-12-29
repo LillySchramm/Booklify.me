@@ -8,22 +8,6 @@ import { MailService } from 'src/mail/mail.service';
 import { UsersService } from 'src/users/users.service';
 import * as config from 'config';
 
-const MOD_INFO_MAIL = `
-<h1>User Report</h1>
-<p>A user has been reported.</p>
-<ul>
-    <li>Target: %TARGET%</li>
-    <li>Sender: %SENDER%</li>
-    <li>Category: %CATEGORY%</li>
-    <li>Message: %MESSAGE%</li>
-</ul>
-<div style="display: flex; gap: 1rem;">
-    <a href="%DISMISS_URL%">DISMISS</a>
-    <a href="%BAN_URL%">BAN</a>
-</div>
-<p>- Booklify.me</p>
-`;
-
 @Injectable()
 export class ReportsService {
     constructor(
@@ -68,29 +52,18 @@ export class ReportsService {
 
         const apiBaseUrl = config.get<string>('api_url');
 
-        const message = MOD_INFO_MAIL.replace(
-            '%TARGET%',
-            `${target!.name} (${target!.email}) <${target!.id}>`,
-        )
-            .replace(
-                '%SENDER%',
-                `${sender!.name} (${sender!.email}) <${sender!.id}>`,
-            )
-            .replace('%CATEGORY%', dto.category)
-            .replace('%MESSAGE%', dto.message)
-            .replace(
-                '%BAN_URL%',
-                `${apiBaseUrl}/reports/ban?key=${key}&id=${report.id}`,
-            )
-            .replace(
-                '%DISMISS_URL%',
-                `${apiBaseUrl}/reports/dismiss?key=${key}&id=${report.id}`,
-            );
-
         this.mail.sendMail(
             allModeratorEmails.join(', '),
             'User report',
-            message,
+            'MOD_INFO',
+            {
+                TARGET: `${target!.name} (${target!.email}) <${target!.id}>`,
+                SENDER: `${sender!.name} (${sender!.email}) <${sender!.id}>`,
+                CATEGORY: dto.category,
+                MESSAGE: dto.message,
+                BAN_URL: `${apiBaseUrl}/reports/ban?key=${key}&id=${report.id}`,
+                DISMISS_URL: `${apiBaseUrl}/reports/dismiss?key=${key}&id=${report.id}`,
+            },
         );
     }
 

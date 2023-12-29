@@ -9,30 +9,6 @@ import { MailService } from 'src/mail/mail.service';
 import { GROUPING_VERSION } from 'src/book-groups/bookGrouping.service';
 import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 
-const VERIFICATION_EMAIL_CONTENT = `
-<h1>Verify your Booklify Account</h1>
-<p>Hey $username, thank you for creating your account.</p>
-<p>To complete your signup, please verify your E-Mail by clicking on the link below.</p>
-<a href="$host/verify?id=$id&user_id=$userId&key=$key">$host/verify?id=$id&user_id=$userId&key=$key</a>
-<p>- Booklify.me</p>
-`;
-
-const PASSWORD_RESET_EMAIL_CONTENT = `
-<h1>Password Reset</h1>
-<p>Hey $username, we have received a password reset request for your account.</p>
-<p>To complete reset your password, please click on the link below and follow the instructions shown on the page.</p>
-<a href="$host/reset-password?reset_id=$id&user_id=$userId&token=$token">$host/reset-password?reset_id=$id&user_id=$userId&token=$token</a>
-<p>If you haven't requested a reset, you should ignore this E-Mail!</p>
-<p>- Booklify.me</p>
-`;
-
-const BAN_EMAIL_CONTENT = `
-<h1>Account Banned</h1>
-<p>Hey $username, your account has been banned by a moderator, because you violated our terms of service.</p>
-<p>If you think this is a mistake, please contact us at <a href="mailto:"$email">$email</a>.</p>
-<p>- Booklify.me</p>
-`;
-
 export type UserWithFlags = {
     UserFlags: UserFlags | null;
 } & User;
@@ -129,15 +105,14 @@ export class UsersService implements OnModuleInit {
             where: { id: userId },
         });
 
-        const emailContent = BAN_EMAIL_CONTENT.replaceAll(
-            '$username',
-            user.name,
-        ).replaceAll('$email', config.get<string>('reports.contact_email'));
-
         await this.mail.sendMail(
             `${user.name} <${user.email}>`,
             'Account Banned',
-            emailContent,
+            'BAN',
+            {
+                USERNAME: user.name,
+                EMAIL: config.get<string>('reports.contact_email'),
+            },
         );
     }
 
@@ -180,19 +155,17 @@ export class UsersService implements OnModuleInit {
             data: { keyHash, userId: user.id },
         });
 
-        const emailContent = VERIFICATION_EMAIL_CONTENT.replaceAll(
-            '$host',
-            config.get<string>('url'),
-        )
-            .replaceAll('$id', verificationEmail.id)
-            .replaceAll('$userId', verificationEmail.userId)
-            .replaceAll('$key', key)
-            .replaceAll('$username', user.name);
-
         await this.mail.sendMail(
             `${user.name} <${user.email}>`,
             'Just one last step!',
-            emailContent,
+            'VERIFICATION',
+            {
+                HOST: config.get<string>('url'),
+                ID: verificationEmail.id,
+                USER_ID: verificationEmail.userId,
+                KEY: key,
+                USERNAME: user.name,
+            },
         );
     }
 
@@ -238,19 +211,17 @@ export class UsersService implements OnModuleInit {
             data: { keyHash, userId: user.id },
         });
 
-        const emailContent = PASSWORD_RESET_EMAIL_CONTENT.replaceAll(
-            '$username',
-            user.name,
-        )
-            .replaceAll('$host', config.get<string>('url'))
-            .replaceAll('$id', resetRequest.id)
-            .replaceAll('$userId', resetRequest.userId)
-            .replaceAll('$token', key);
-
         await this.mail.sendMail(
             `${user.name} <${user.email}>`,
             'Password Reset',
-            emailContent,
+            'PASSWORD_RESET',
+            {
+                HOST: config.get<string>('url'),
+                ID: resetRequest.id,
+                USER_ID: resetRequest.userId,
+                TOKEN: key,
+                USERNAME: user.name,
+            },
         );
 
         return { request: resetRequest, token: key };
