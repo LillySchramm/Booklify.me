@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
+import {
+    MatCheckboxChange,
+    MatCheckboxModule,
+} from '@angular/material/checkbox';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,7 +16,7 @@ import { TranslocoModule } from '@ngneat/transloco';
 import { Select, Store } from '@ngxs/store';
 import { Observable, take } from 'rxjs';
 import { UiActions } from 'src/app/state/ui/ui.actions';
-import { UserActions } from 'src/app/state/user/user.actions';
+import { EMailFlags, UserActions } from 'src/app/state/user/user.actions';
 import { UserState } from 'src/app/state/user/user.state';
 import { DeleteAccountDialogComponent } from './delete-account-dialog/delete-account-dialog.component';
 import { NewPasswordFormComponent } from './new-password-form/new-password-form.component';
@@ -30,6 +34,7 @@ import { SessionTableComponent } from './session-table/session-table.component';
         MatSlideToggleModule,
         NewPasswordFormComponent,
         SessionTableComponent,
+        MatCheckboxModule,
     ],
     templateUrl: './account.component.html',
     styleUrls: ['./account.component.scss'],
@@ -72,5 +77,11 @@ export class AccountComponent {
 
     changePublic(event: MatSlideToggleChange) {
         this.store.dispatch(new UserActions.ChangeVisibility(event.checked));
+    }
+
+    changeEmailFlags(event: MatCheckboxChange, type: keyof EMailFlags) {
+        const flags: EMailFlags = {};
+        flags[type] = event.checked;
+        this.store.dispatch(new UserActions.ChangeEmailFlags(flags));
     }
 }

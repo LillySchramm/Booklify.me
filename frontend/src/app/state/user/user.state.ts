@@ -529,6 +529,35 @@ export class UserState {
         });
     }
 
+    @Action(UserActions.ChangeEmailFlags)
+    changeEmailFlags(
+        ctx: StateContext<UserStateModel>,
+        action: UserActions.ChangeEmailFlags,
+    ) {
+        return this.userApi
+            .usersControllerPatchUserFlags({
+                ...action.flags,
+            })
+            .pipe(
+                tap((flags) =>
+                    ctx.dispatch(
+                        new UserActions.ChangeEmailFlagsSuccess(flags),
+                    ),
+                ),
+            );
+    }
+
+    @Action(UserActions.ChangeEmailFlagsSuccess)
+    changeEmailFlagsSuccess(
+        ctx: StateContext<UserStateModel>,
+        action: UserActions.ChangeEmailFlagsSuccess,
+    ) {
+        this.snack.show('EMail preferences where changed successfully');
+        ctx.patchState({
+            flags: action.flags,
+        });
+    }
+
     @Action(UserActions.ChangeVisibility)
     changeVisibility(
         ctx: StateContext<UserStateModel>,

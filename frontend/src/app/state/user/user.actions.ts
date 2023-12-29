@@ -10,6 +10,10 @@ import {
     UserFlagsDto,
 } from 'src/app/api';
 
+export interface EMailFlags {
+    changelogNotificationEnabled?: boolean;
+}
+
 export namespace UserActions {
     export class SignUp {
         static readonly type = '[User] Sign Up';
@@ -164,6 +168,16 @@ export namespace UserActions {
     export class ChangeVisibility {
         static readonly type = '[User] Change Visibility';
         constructor(public visibility: boolean) {}
+    }
+
+    export class ChangeEmailFlags {
+        static readonly type = '[User] Change Email Flags';
+        constructor(public flags: EMailFlags) {}
+    }
+
+    export class ChangeEmailFlagsSuccess {
+        static readonly type = '[User] Change Email Flags Success';
+        constructor(public flags: UserFlagsDto) {}
     }
 
     export class ChangeInfoVisibilitySuccess {

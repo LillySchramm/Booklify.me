@@ -1,8 +1,9 @@
-<div *transloco="let t" class="w-full">
-    <div class="mb-4" id="export">
-        <h1 class="!m-0">{{ t('account.titles.visibility') }}</h1>
-        <h3>{{ t('account.subtitles.visibility') }}</h3>
-        @if ($userFlags(); as userFlags) {
+@if ($userFlags(); as userFlags) {
+    <div *transloco="let t" class="w-full">
+        <div class="mb-4" id="export">
+            <h1 class="!m-0">{{ t('account.titles.visibility') }}</h1>
+            <h3>{{ t('account.subtitles.visibility') }}</h3>
+
             <div>
                 <mat-slide-toggle
                     [checked]="userFlags.public"
@@ -14,44 +15,63 @@
                     }}</span></mat-slide-toggle
                 >
             </div>
-        }
-    </div>
-    <mat-divider class="w-full"></mat-divider>
-    <div class="mb-4 mt-4" id="export">
-        <h1 class="!m-0">{{ t('account.titles.password') }}</h1>
-        <h3>{{ t('account.subtitles.password') }}</h3>
-        <app-new-password-form></app-new-password-form>
-    </div>
-    <div class="hidden sm:block">
+        </div>
         <mat-divider class="w-full"></mat-divider>
         <div class="mb-4 mt-4" id="export">
-            <h1 class="!m-0">{{ t('account.titles.sessions') }}</h1>
-            <h3>{{ t('account.subtitles.sessions') }}</h3>
-            <app-session-table></app-session-table>
+            <h1 class="!m-0">{{ t('account.titles.emails') }}</h1>
+            <h3>{{ t('account.subtitles.emails') }}</h3>
+            <mat-checkbox
+                [checked]="userFlags.changelogNotificationEnabled"
+                (change)="
+                    changeEmailFlags($event, 'changelogNotificationEnabled')
+                "
+                >{{
+                    t('account.emails.changelogNotificationEnabled')
+                }}</mat-checkbox
+            >
+        </div>
+        <mat-divider class="w-full"></mat-divider>
+        <div class="mb-4 mt-4" id="export">
+            <h1 class="!m-0">{{ t('account.titles.password') }}</h1>
+            <h3>{{ t('account.subtitles.password') }}</h3>
+            <app-new-password-form></app-new-password-form>
+        </div>
+        <div class="hidden sm:block">
+            <mat-divider class="w-full"></mat-divider>
+            <div class="mb-4 mt-4" id="export">
+                <h1 class="!m-0">{{ t('account.titles.sessions') }}</h1>
+                <h3>{{ t('account.subtitles.sessions') }}</h3>
+                <app-session-table></app-session-table>
+            </div>
+        </div>
+        <mat-divider class="w-full"></mat-divider>
+        <div class="mb-4 mt-4" id="export">
+            <h1 class="!m-0">{{ t('account.titles.export') }}</h1>
+            <h3>{{ t('account.subtitles.export') }}</h3>
+            <button
+                mat-fab
+                extended
+                class="mat-elevation-z0"
+                (click)="export()"
+            >
+                <mat-icon>ios_share</mat-icon>
+                {{ t('account.buttons.export') }}
+            </button>
+        </div>
+        <mat-divider class="w-full"></mat-divider>
+        <div class="mb-4 mt-4" id="export">
+            <h1 class="!m-0">{{ t('account.titles.danger-zone') }}</h1>
+            <h3>{{ t('account.subtitles.danger-zone') }}</h3>
+            <button
+                mat-fab
+                extended
+                class="mat-elevation-z0"
+                color="warn"
+                (click)="deleteAccount()"
+            >
+                <mat-icon>delete</mat-icon>
+                {{ t('account.buttons.delete') }}
+            </button>
         </div>
     </div>
-    <mat-divider class="w-full"></mat-divider>
-    <div class="mb-4 mt-4" id="export">
-        <h1 class="!m-0">{{ t('account.titles.export') }}</h1>
-        <h3>{{ t('account.subtitles.export') }}</h3>
-        <button mat-fab extended class="mat-elevation-z0" (click)="export()">
-            <mat-icon>ios_share</mat-icon>
-            {{ t('account.buttons.export') }}
-        </button>
-    </div>
-    <mat-divider class="w-full"></mat-divider>
-    <div class="mb-4 mt-4" id="export">
-        <h1 class="!m-0">{{ t('account.titles.danger-zone') }}</h1>
-        <h3>{{ t('account.subtitles.danger-zone') }}</h3>
-        <button
-            mat-fab
-            extended
-            class="mat-elevation-z0"
-            color="warn"
-            (click)="deleteAccount()"
-        >
-            <mat-icon>delete</mat-icon>
-            {{ t('account.buttons.delete') }}
-        </button>
-    </div>
-</div>
+}

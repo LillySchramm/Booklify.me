@@ -12,4 +12,5 @@
 
 export interface UserFlagsDto {
     _public: boolean;
+    changelogNotificationEnabled: boolean;
 }

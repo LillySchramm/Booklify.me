@@ -248,11 +248,13 @@ export class BooksService {
 
     /**
      * @param isbn
+     * @param skipCrawl
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
     public booksControllerGetBook(
         isbn: string,
+        skipCrawl?: boolean,
         observe?: 'body',
         reportProgress?: boolean,
         options?: {
@@ -262,6 +264,7 @@ export class BooksService {
     ): Observable<BookDto>;
     public booksControllerGetBook(
         isbn: string,
+        skipCrawl?: boolean,
         observe?: 'response',
         reportProgress?: boolean,
         options?: {
@@ -271,6 +274,7 @@ export class BooksService {
     ): Observable<HttpResponse<BookDto>>;
     public booksControllerGetBook(
         isbn: string,
+        skipCrawl?: boolean,
         observe?: 'events',
         reportProgress?: boolean,
         options?: {
@@ -280,6 +284,7 @@ export class BooksService {
     ): Observable<HttpEvent<BookDto>>;
     public booksControllerGetBook(
         isbn: string,
+        skipCrawl?: boolean,
         observe: any = 'body',
         reportProgress: boolean = false,
         options?: {
@@ -290,6 +295,15 @@ export class BooksService {
         if (isbn === null || isbn === undefined) {
             throw new Error(
                 'Required parameter isbn was null or undefined when calling booksControllerGetBook.',
+            );
+        }
+
+        let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
+        if (skipCrawl !== undefined && skipCrawl !== null) {
+            localVarQueryParameters = this.addToHttpParams(
+                localVarQueryParameters,
+                <any>skipCrawl,
+                'skipCrawl',
             );
         }
 
@@ -353,6 +367,7 @@ export class BooksService {
             `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
