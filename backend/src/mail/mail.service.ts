@@ -45,6 +45,8 @@ export class MailService implements OnModuleInit {
             return '';
         }
 
+        data = { ...data, VERSION: config.get<string>('version') };
+
         for (const key in data) {
             template = template.replaceAll(`{{${key}}}`, data[key]);
         }
