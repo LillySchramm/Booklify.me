@@ -18,6 +18,7 @@ import { CronModule } from './cron/cron.module';
 import { ReportsModule } from './reports/reports.module';
 import { LokiModule } from './loki/loki.module';
 import { LokiMiddleware } from './loki/loki.middleware';
+import { ChangelogModule } from './changelog/changelog.module';
 
 @Module({
     imports: [
@@ -37,6 +38,7 @@ import { LokiMiddleware } from './loki/loki.middleware';
         CronModule.forRoot(),
         ReportsModule,
         LokiModule,
+        ChangelogModule,
     ],
     controllers: [AppController],
     providers: [AppService],

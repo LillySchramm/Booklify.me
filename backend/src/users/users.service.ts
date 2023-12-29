@@ -388,4 +388,19 @@ export class UsersService implements OnModuleInit {
 
         return owners.map((owner) => owner.userId);
     }
+
+    async getOneUserWithOutdatedChangelogFlag(
+        version: string,
+    ): Promise<User | null> {
+        return await this.prisma.user.findFirst({
+            where: {
+                UserFlags: {
+                    lastNotifiedChangelogVersion: { not: version },
+                    changelogNotificationEnabled: true,
+                },
+                banned: false,
+                activated: true,
+            },
+        });
+    }
 }

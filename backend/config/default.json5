@@ -68,6 +68,10 @@
             "enabled": false,
             "cron": "*\\10 * * * * *"
         },
+        "sendChangelog": {
+            "enabled": true,
+            "cron": "*/5 * * * * *"
+        },
     },
     "legal": {
         "enabled": true,

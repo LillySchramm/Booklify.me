@@ -45,8 +45,10 @@ model UserFlags {
   userId String @id @unique
   User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  lastAppliedGrouperVersion Int     @default(0)
-  public                    Boolean @default(true)
+  lastAppliedGrouperVersion    Int     @default(0)
+  public                       Boolean @default(true)
+  lastNotifiedChangelogVersion String  @default("0")
+  changelogNotificationEnabled Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt

@@ -13,6 +13,10 @@ export class UserFlagsDto implements UserFlags {
     createdAt: Date;
     @Exclude()
     updatedAt: Date;
+    @Exclude()
+    lastNotifiedChangelogVersion: string;
+    @ApiProperty()
+    changelogNotificationEnabled: boolean;
 
     constructor(partial: Partial<UserFlagsDto>) {
         Object.assign(this, partial);
