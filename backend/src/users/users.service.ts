@@ -118,9 +118,11 @@ export class UsersService implements OnModuleInit {
 
     async validateVerification(
         id: string,
-        userId: string,
+        user: User,
         key: string,
     ): Promise<boolean> {
+        const userId = user.id;
+
         const verificationRequest =
             await this.prisma.verificationEmail.findFirst({
                 where: { id, userId, invalidated: false },
@@ -135,6 +137,15 @@ export class UsersService implements OnModuleInit {
             data: { activated: true },
             where: { id: userId },
         });
+
+        await this.mail.sendMail(
+            `${user.name} <${user.email}>`,
+            'Welcome to Booklify!',
+            'FIRST_STEPS',
+            {
+                USERNAME: user.name,
+            },
+        );
 
         return true;
     }

@@ -228,7 +228,7 @@ export class AuthController {
         if (user.activated)
             throw new BadRequestException('User already activated');
 
-        const ok = await this.userService.validateVerification(id, userId, key);
+        const ok = await this.userService.validateVerification(id, user, key);
 
         if (!ok) throw new UnauthorizedException();
 
