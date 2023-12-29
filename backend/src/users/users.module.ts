@@ -5,6 +5,7 @@ import { MailModule } from 'src/mail/mail.module';
 import { UsersController } from './users.controller';
 import { AuthModule } from 'src/auth/auth.module';
 import { SecretsModule } from 'src/secrets/secrets.module';
+import { ChangelogModule } from 'src/changelog/changelog.module';
 
 @Module({
     providers: [UsersService],
@@ -14,6 +15,7 @@ import { SecretsModule } from 'src/secrets/secrets.module';
         MailModule,
         forwardRef(() => AuthModule),
         SecretsModule,
+        ChangelogModule,
     ],
     controllers: [UsersController],
 })

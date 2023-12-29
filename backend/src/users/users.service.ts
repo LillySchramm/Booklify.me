@@ -8,6 +8,7 @@ import { randomBytes } from 'crypto';
 import { MailService } from 'src/mail/mail.service';
 import { GROUPING_VERSION } from 'src/book-groups/bookGrouping.service';
 import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
+import { ChangelogService } from 'src/changelog/changelog.service';
 
 export type UserWithFlags = {
     UserFlags: UserFlags | null;
@@ -20,6 +21,7 @@ export class UsersService implements OnModuleInit {
     constructor(
         private readonly prisma: PrismaService,
         private readonly mail: MailService,
+        private readonly changelog: ChangelogService,
     ) {}
 
     async onModuleInit() {
@@ -254,7 +256,12 @@ export class UsersService implements OnModuleInit {
                 email,
                 password: passwordHash,
                 activated: !mailEnabled,
-                UserFlags: { create: {} },
+                UserFlags: {
+                    create: {
+                        lastNotifiedChangelogVersion:
+                            this.changelog.getLatestVersion(),
+                    },
+                },
                 agreedTosAt: agreedTos ? new Date() : null,
                 agreedPrivacyAt: agreedPrivacy ? new Date() : null,
             },
@@ -387,20 +394,5 @@ export class UsersService implements OnModuleInit {
         });
 
         return owners.map((owner) => owner.userId);
-    }
-
-    async getOneUserWithOutdatedChangelogFlag(
-        version: string,
-    ): Promise<User | null> {
-        return await this.prisma.user.findFirst({
-            where: {
-                UserFlags: {
-                    lastNotifiedChangelogVersion: { not: version },
-                    changelogNotificationEnabled: true,
-                },
-                banned: false,
-                activated: true,
-            },
-        });
     }
 }

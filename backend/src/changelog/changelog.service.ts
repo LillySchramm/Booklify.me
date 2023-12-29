@@ -2,9 +2,10 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { readFileSync } from 'node:fs';
 import { Cron } from 'src/cron/cron.service';
 import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
-import { UsersService } from 'src/users/users.service';
 import * as MarkdonwTransformer from 'markdown-it';
 import { MailService } from 'src/mail/mail.service';
+import { User } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ChangelogService implements OnModuleInit {
@@ -14,7 +15,7 @@ export class ChangelogService implements OnModuleInit {
     private changelogHtml = '';
 
     constructor(
-        private userService: UsersService,
+        private prisma: PrismaService,
         private mailService: MailService,
     ) {}
 
@@ -46,7 +47,7 @@ export class ChangelogService implements OnModuleInit {
 
     @Cron()
     async sendChangelog() {
-        const user = await this.userService.getOneUserWithOutdatedChangelogFlag(
+        const user = await this.getOneUserWithOutdatedChangelogFlag(
             this.latestVersion,
         );
 
@@ -60,11 +61,38 @@ export class ChangelogService implements OnModuleInit {
             {
                 CHANGELOG_HTML: this.changelogHtml,
                 CHANGELOG_VERSION: this.latestVersion,
+                USERNAME: user.name,
             },
         );
 
-        await this.userService.setUserFlags(user.id, {
-            lastNotifiedChangelogVersion: this.latestVersion,
+        await this.setLastNotifiedChangelogVersionFlag(
+            user.id,
+            this.latestVersion,
+        );
+    }
+
+    async getOneUserWithOutdatedChangelogFlag(
+        version: string,
+    ): Promise<User | null> {
+        return await this.prisma.user.findFirst({
+            where: {
+                UserFlags: {
+                    lastNotifiedChangelogVersion: { not: version },
+                    changelogNotificationEnabled: true,
+                },
+                banned: false,
+                activated: true,
+            },
+        });
+    }
+
+    async setLastNotifiedChangelogVersionFlag(
+        userId: string,
+        version: string,
+    ): Promise<void> {
+        await this.prisma.userFlags.update({
+            where: { userId },
+            data: { lastNotifiedChangelogVersion: version },
         });
     }
 }
