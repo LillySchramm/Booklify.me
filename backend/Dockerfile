@@ -18,7 +18,6 @@ RUN npx prisma generate
 COPY dist/main.js main.js
 COPY config/ config/
 COPY assets/ assets/
-COPY ../CHANGELOG.md assets/CHANGELOG.md
 
 ENV VERSION=${BUILD_VERSION}
 
