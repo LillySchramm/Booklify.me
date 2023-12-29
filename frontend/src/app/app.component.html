@@ -19,7 +19,7 @@
     <mat-drawer
         mode="side"
         [opened]="$isInfoVisible()"
-        class="!fixed max-h-screen w-[29rem] overflow-x-hidden"
+        class="!fixed max-h-screen w-full overflow-x-hidden md:w-[29rem]"
         position="end"
         (openedChange)="setInfoVisibility($event)"
     >
