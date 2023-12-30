@@ -65,7 +65,7 @@ export class BookCardComponent implements OnInit {
             return;
         }
 
-        if (i < 100) {
+        if (i < 50) {
             el.scrollIntoView({ behavior: 'instant', block: 'center' });
             setTimeout(() => {
                 this.scroll(el, i + 1);

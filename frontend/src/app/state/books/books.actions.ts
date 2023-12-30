@@ -65,6 +65,7 @@ export namespace BookActions {
     }
     export class ChangeOwnershipSuccess {
         static readonly type = '[Books] Change Ownership Success';
+        constructor(public added: boolean) {}
     }
 
     export class SetFilter {

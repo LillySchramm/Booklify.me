@@ -1,0 +1,7 @@
+id: 3f70d953-eb55-45fc-8f40-0e2319264ba7
+title: Fixed a bug which caused the book groups to jitter in older browsers.
+type: 5
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1703962366

@@ -292,13 +292,24 @@ export class BooksState {
                             state.currentOwnerId || '',
                         ),
                     );
-                    dispatch(new BookActions.ChangeOwnershipSuccess());
+                    dispatch(
+                        new BookActions.ChangeOwnershipSuccess(
+                            payload.status === 'OWNED',
+                        ),
+                    );
                 }),
             );
     }
 
     @Action(BookActions.ChangeOwnershipSuccess)
-    changeOwnershipSuccess({ patchState }: StateContext<BookStateModel>) {
+    changeOwnershipSuccess(
+        { patchState }: StateContext<BookStateModel>,
+        { added }: BookActions.ChangeOwnershipSuccess,
+    ) {
+        if (added) {
+            this.snack.show('Book added to your collection!');
+        }
+
         patchState({
             ownershipChangeLoading: false,
         });

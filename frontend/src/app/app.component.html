@@ -17,7 +17,7 @@
         </mat-drawer>
     }
     <mat-drawer
-        mode="side"
+        [mode]="ui.smallScreen ? 'over' : 'side'"
         [opened]="$isInfoVisible()"
         class="!fixed max-h-screen w-full overflow-x-hidden md:w-[29rem]"
         position="end"
