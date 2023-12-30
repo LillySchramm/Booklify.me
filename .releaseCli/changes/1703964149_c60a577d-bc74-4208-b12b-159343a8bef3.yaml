@@ -1,0 +1,7 @@
+id: c60a577d-bc74-4208-b12b-159343a8bef3
+title: Books now only get sorted into their series if at least one other book of this series is present in the collection.
+type: 2
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1703964149

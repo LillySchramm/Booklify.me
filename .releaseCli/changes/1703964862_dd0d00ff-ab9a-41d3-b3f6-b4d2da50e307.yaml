@@ -1,0 +1,7 @@
+id: dd0d00ff-ab9a-41d3-b3f6-b4d2da50e307
+title: Fixed the book series detection in certain cases where the title was weirdly formated by the publisher.
+type: 5
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1703964862

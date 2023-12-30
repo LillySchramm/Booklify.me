@@ -20,12 +20,14 @@ type BookWithPublisherAndAuthors = Book & {
     OwnershipStatus: OwnershipStatus[];
 };
 
-export const GROUPING_VERSION = 3;
+export const GROUPING_VERSION = 4;
 export const MAX_REGULAR_GROUPING_TRIES = 10;
 
 // If the name of a book is shorter than this, it will not be used for grouping.
 // The Lower the number, the more likely are false positives.
 export const MIN_NAME_LENGTH_FOR_COMPARISON = 5;
+
+export const MIN_GROUP_SIZE = 2;
 
 @Injectable()
 export class BookGroupingService {
@@ -39,7 +41,7 @@ export class BookGroupingService {
         'part',
         'bd.',
     ];
-    private readonly BLACKLISTED_ENDING_CHARACTERS = [','];
+    private readonly BLACKLISTED_ENDING_CHARACTERS = [',', '.', ':', '-'];
 
     constructor(
         private prisma: PrismaService,
@@ -126,7 +128,7 @@ export class BookGroupingService {
 
         groupedBooks = this.deduplicateGroups(groupedBooks);
 
-        groupedBooks = this.removeSoloGroupsWithOutNumber(groupedBooks);
+        groupedBooks = this.removeToSmallGroups(groupedBooks);
 
         return groupedBooks;
     }
@@ -181,15 +183,18 @@ export class BookGroupingService {
 
     // If a book is the only book in a group and the title does not end with a number,
     // it is most likely not part of a series and/or a false positive.
-    private removeSoloGroupsWithOutNumber(
+    private removeToSmallGroups(
         groupedBooks: Map<string, BookWithPublisherAndAuthors[]>,
     ): Map<string, BookWithPublisherAndAuthors[]> {
         const soloGroups = Array.from(groupedBooks.keys()).filter(
             (groupName) => {
                 const books = groupedBooks.get(groupName) || [];
-                return books.length === 1 && !/.*\d$/g.test(books[0].title!);
+                return books.length < MIN_GROUP_SIZE;
             },
         );
+
+        const ungroupedBooks = groupedBooks.get('') || [];
+        groupedBooks.set('', ungroupedBooks);
 
         for (const soloGroup of soloGroups) {
             const books = groupedBooks.get(soloGroup) || [];
@@ -489,7 +494,9 @@ export class BookGroupingService {
         }
         // Removing all colons and commas because they are often used to indicate a sub-title
         // eg. "Vol. 1: The Beginning"
-        str = str.replaceAll(':', '').replaceAll(',', '');
+        for (const blacklistedCharacter of this.BLACKLISTED_ENDING_CHARACTERS) {
+            str = str.replaceAll(blacklistedCharacter, '');
+        }
 
         return /^\d*$/.test(str);
     }
