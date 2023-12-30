@@ -387,9 +387,11 @@ export class BookGroupingService {
         const numbers = titleChunks.filter((chunk) =>
             this.isStringNumeric(chunk),
         );
-        titleChunks = titleChunks.filter(
-            (chunk) => !this.isStringNumeric(chunk),
-        );
+        titleChunks = titleChunks
+            .filter((chunk) => !this.isStringNumeric(chunk))
+            .filter((chunk) => !!chunk);
+
+        if (!numbers.length) return '';
 
         const titleEndsWithNumber =
             numbers.length &&
