@@ -189,7 +189,7 @@ export class BookGroupingService {
         const soloGroups = Array.from(groupedBooks.keys()).filter(
             (groupName) => {
                 const books = groupedBooks.get(groupName) || [];
-                return books.length < MIN_GROUP_SIZE;
+                return books.length < MIN_GROUP_SIZE && groupName;
             },
         );
 
