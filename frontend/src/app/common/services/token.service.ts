@@ -47,6 +47,7 @@ export class TokenService {
     }
 
     public async refresh(): Promise<void> {
+        this.accessToken = localStorage.getItem('accessToken');
         if (this.refreshInProgress || this.accessToken === null) {
             return;
         }

@@ -18,7 +18,7 @@ import { AppComponent } from './app.component';
 import { BookDetailsSideComponent } from './common/components/book-details-side/book-details-side.component';
 import { FooterComponent } from './common/footer/footer.component';
 import { HeaderComponent } from './common/header/header.component';
-import { getToken } from './common/services/token.service';
+import { TokenService, getToken } from './common/services/token.service';
 import { SidenavComponent } from './common/sidenav/sidenav.component';
 import { AuthorState } from './state/authors/author.state';
 import { BooksState } from './state/books/books.state';
@@ -79,7 +79,7 @@ import { TranslocoRootModule } from './transloco-root.module';
         {
             provide: APP_INITIALIZER,
             useFactory: initApp,
-            deps: [TranslocoService],
+            deps: [TranslocoService, TokenService],
             multi: true,
         },
     ],
@@ -88,11 +88,16 @@ import { TranslocoRootModule } from './transloco-root.module';
 })
 export class AppModule {}
 
-export function initApp(translocoService: TranslocoService) {
+export function initApp(
+    translocoService: TranslocoService,
+    tokenService: TokenService,
+) {
     return () => {
         return new Promise((resolve) => {
-            translocoService.load('en').subscribe(() => {
-                resolve(true);
+            tokenService.refresh().then(() => {
+                translocoService.load('en').subscribe(() => {
+                    resolve(true);
+                });
             });
         });
     };
