@@ -72,6 +72,14 @@
             "enabled": true,
             "cron": "*/5 * * * * *"
         },
+        "invalidateOutdatedSessions": {
+            "enabled": true,
+            "cron": "0 * * * *"
+        },
+        "invalidateOutdatedTempSessions": {
+            "enabled": true,
+            "cron": "* * * * *"
+        },
     },
     "legal": {
         "enabled": true,

@@ -1,0 +1,7 @@
+id: 45bc0df4-773f-468c-ac26-14dc2ad6c7fa
+title: Fixed the scheduling of invalidation outdated sessions.
+type: 5
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1704045796

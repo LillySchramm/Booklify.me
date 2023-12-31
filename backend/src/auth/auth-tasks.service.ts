@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
 import { AuthService } from './auth.service';
 import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
+import { Cron } from 'src/cron/cron.service';
 
 @Injectable()
 export class AuthTasksService {
@@ -9,7 +9,7 @@ export class AuthTasksService {
 
     constructor(private authService: AuthService) {}
 
-    @Cron('0 * * * * *')
+    @Cron()
     async invalidateOutdatedSessions() {
         const invalidatedCount =
             await this.authService.invalidateExpiredSessions();
@@ -18,7 +18,7 @@ export class AuthTasksService {
         this.logger.log(`Invalidated ${invalidatedCount} sessions!`);
     }
 
-    @Cron('0 * * * * *')
+    @Cron()
     async invalidateOutdatedTempSessions() {
         const invalidatedCount =
             await this.authService.invalidateOldNonPermanentSessions();
