@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoModule } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Select, Store } from '@ngxs/store';
@@ -17,7 +18,7 @@ export interface BookGrouping {
 @Component({
     selector: 'app-collection-display',
     standalone: true,
-    imports: [BookGroupComponent, TranslocoModule],
+    imports: [BookGroupComponent, TranslocoModule, MatProgressSpinnerModule],
     templateUrl: './collection-display.component.html',
     styleUrls: ['./collection-display.component.scss'],
 })
@@ -37,6 +38,10 @@ export class CollectionDisplayComponent {
     @Select(BooksState.currentOwnerId) currentOwnerId$!: Observable<
         string | undefined
     >;
+
+    @Select(BooksState.loadingCollection)
+    loadingCollection$!: Observable<boolean>;
+    $loadingCollection = toSignal(this.loadingCollection$);
 
     groupedBooks$ = this.currentCollection$.pipe(
         untilDestroyed(this),
