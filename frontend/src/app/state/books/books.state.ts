@@ -259,7 +259,7 @@ export class BooksState {
             searchError: error,
         });
 
-        this.snack.show('No book found with this ISBN', 'error');
+        this.snack.show('No book found with this ISBN');
     }
 
     @Action(BookActions.ChangeOwnership)
