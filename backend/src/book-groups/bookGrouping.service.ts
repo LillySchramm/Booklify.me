@@ -20,7 +20,7 @@ type BookWithPublisherAndAuthors = Book & {
     OwnershipStatus: OwnershipStatus[];
 };
 
-export const GROUPING_VERSION = 5;
+export const GROUPING_VERSION = 6;
 export const MAX_REGULAR_GROUPING_TRIES = 10;
 
 // If the name of a book is shorter than this, it will not be used for grouping.
@@ -391,7 +391,7 @@ export class BookGroupingService {
             .filter((chunk) => !this.isStringNumeric(chunk))
             .filter((chunk) => !!chunk);
 
-        if (!numbers.length) return '';
+        if (!titleChunks.length) return '';
 
         const titleEndsWithNumber =
             numbers.length &&
