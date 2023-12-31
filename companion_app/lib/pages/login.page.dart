@@ -116,14 +116,14 @@ class _LoginFormState extends State<LoginForm> {
               icon: Icon(Icons.login)),
           Expanded(child: SizedBox.shrink()),
           TextButton.icon(
-              onPressed: _launchUrl,
-              label: const Text('Don\'t have an account? Register here'),
-              icon: Icon(Icons.open_in_new),
-              style: ButtonStyle(
-                iconColor: MaterialStateProperty.all(Colors.black),
-                foregroundColor: MaterialStateProperty.all(Colors.black),
-              ),
+            onPressed: _launchUrl,
+            label: const Text('Don\'t have an account? Register here'),
+            icon: Icon(Icons.open_in_new),
+            style: ButtonStyle(
+              iconColor: MaterialStateProperty.all(Colors.black),
+              foregroundColor: MaterialStateProperty.all(Colors.black),
             ),
+          ),
         ],
       ),
     );

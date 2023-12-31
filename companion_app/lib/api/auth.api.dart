@@ -75,8 +75,7 @@ Future<TokenDto> login(String email, String password, bool rememberMe) async {
 Future<TokenDto?> refreshWithRefreshToken(
     String refreshToken, String sessionId) async {
   final response = await http.get(
-    Uri.parse(
-        '$_baseUrl/refresh?token=$refreshToken&session_id=$sessionId'),
+    Uri.parse('$_baseUrl/refresh?token=$refreshToken&session_id=$sessionId'),
   );
 
   if (response.statusCode == 200) {

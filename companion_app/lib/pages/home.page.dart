@@ -186,7 +186,8 @@ class BookLoadingIndicator extends StatelessWidget {
     if (scannerState.wasKnown) {
       return const Center(
         child: CircularProgressIndicator(),
-      );}
+      );
+    }
     return const Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -196,7 +197,8 @@ class BookLoadingIndicator extends StatelessWidget {
           SizedBox(height: 10),
           Text("No one scanned this book before!"),
           SizedBox(height: 10),
-          Text("Getting it for the first time may take up to 15 seconds.", style: TextStyle(fontWeight: FontWeight.bold)),
+          Text("Getting it for the first time may take up to 15 seconds.",
+              style: TextStyle(fontWeight: FontWeight.bold)),
         ],
       ),
     );
