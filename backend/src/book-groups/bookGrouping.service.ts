@@ -20,7 +20,7 @@ type BookWithPublisherAndAuthors = Book & {
     OwnershipStatus: OwnershipStatus[];
 };
 
-export const GROUPING_VERSION = 4;
+export const GROUPING_VERSION = 5;
 export const MAX_REGULAR_GROUPING_TRIES = 10;
 
 // If the name of a book is shorter than this, it will not be used for grouping.

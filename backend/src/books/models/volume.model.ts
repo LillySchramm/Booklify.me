@@ -16,6 +16,8 @@ export interface VolumeInfo {
     incomplete?: boolean;
 }
 
+type StringOrObject = string | { type: string; value: string };
+
 export interface GoogleBookResponse {
     totalItems: number;
     items: GoogleVolume[];
@@ -33,7 +35,7 @@ export interface OpenLibraryBookVolume {
     number_of_pages?: number;
     subtitle?: string;
     covers?: number[];
-    description?: string;
+    description?: StringOrObject;
 }
 
 export interface IsbndbBookResponse {

@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.0.2  - 31.12.2023
+
+### Fixed
+
+- Fixed a rare error while grouping books, that sometimes occurred when a book had no number in its title.  
+- Fixed an issue which prevented a book to be found if OpenLibrary returned malformed data. 
+
+
 ## v1.0.1  - 30.12.2023
 
 > Fixing a few day one issues.

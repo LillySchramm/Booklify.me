@@ -42,10 +42,20 @@ export class OpenLibraryBookScraper implements BookScraper {
             openLibraryBookResponse.body,
         ) as OpenLibraryBookVolume;
 
+        let description: string | undefined;
+        if (typeof openLibraryBookData.description === 'string') {
+            description = openLibraryBookData.description;
+        } else if (
+            typeof openLibraryBookData.description === 'object' &&
+            openLibraryBookData.description.type === '/type/text'
+        ) {
+            description = openLibraryBookData.description.value;
+        }
+
         const book: VolumeInfo = {
             title: openLibraryBookData.title,
             subtitle: openLibraryBookData.subtitle,
-            description: openLibraryBookData.description,
+            description: description,
             publisher: openLibraryBookData.publishers?.[0],
             pageCount: openLibraryBookData.number_of_pages,
             printedPageCount: openLibraryBookData.number_of_pages,

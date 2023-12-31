@@ -1,5 +1,5 @@
 id: a0ccde63-d51b-475a-b177-68e7c4f90d23
-title: 'Fixed a rare error while grouping books, that sometimes occurred when a book had no number in it''s title. '
+title: 'Fixed a rare error while grouping books, that sometimes occurred when a book had no number in its title. '
 type: 5
 description: ""
 breaking: false

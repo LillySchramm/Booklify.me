@@ -1,0 +1,7 @@
+id: 3245994f-ff0a-4f0c-b4e8-31d5b9f77c90
+title: Fixed an issue which prevented a book to be found if OpenLibrary returned malformed data.
+type: 5
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1703980787
