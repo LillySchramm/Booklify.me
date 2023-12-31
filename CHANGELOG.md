@@ -1,5 +1,27 @@
 # Changelog
 
+## v1.0.3  - 31.12.2023
+
+### Added
+
+- Added a loading indicator for the collection page. 
+### Changed
+
+- Icons are now served by Booklify instead of Google. 
+- Fonts are now served by Booklify instead of Google. 
+- Updated the app icon. (Credits to [Lonaasan](https://shadowlona.dev)) 
+- Improved search times by an average of 40% when getting a book for the first time. 
+- Improved the error feedback if a book was not found. 
+### Fixed
+
+- Fixed webmanifest for frontend. 
+- Fixed a race condition, which sometimes logged out users with valid sessions. 
+- Fixed a bug which caused the frontend to send mallformated ISBNs to the backend. 
+- Fixed the scheduling of invalidation outdated sessions. 
+- Fixed some typos. 
+- Added a fallback when visiting an url which does not exist. 
+
+
 ## v1.0.2  - 31.12.2023
 
 ### Fixed
