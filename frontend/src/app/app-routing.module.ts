@@ -67,6 +67,10 @@ const routes: Routes = [
                 (m) => m.IsbnDebugComponent,
             ),
     },
+    {
+        path: '**',
+        redirectTo: '/home',
+    },
 ];
 
 @NgModule({

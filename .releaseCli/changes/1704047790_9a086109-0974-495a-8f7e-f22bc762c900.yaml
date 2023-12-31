@@ -1,0 +1,7 @@
+id: 9a086109-0974-495a-8f7e-f22bc762c900
+title: Added a fallback when visiting an url which does not exist.
+type: 5
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1704047790
