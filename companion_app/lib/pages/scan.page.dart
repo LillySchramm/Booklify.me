@@ -56,7 +56,6 @@ class _ScanPageState extends State<ScanPage> {
         controller: cameraController,
         onDetect: (capture) {
           final List<Barcode> barcodes = capture.barcodes;
-          final Uint8List? image = capture.image;
           for (final barcode in barcodes) {
             var mainState = context.read<MainState>();
             var scannerState = context.read<ScannerState>();
