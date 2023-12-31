@@ -1,0 +1,7 @@
+id: 71272bfb-5504-442a-903a-89bdce6d4069
+title: Fixed a bug which caused the frontend to send mallformated ISBNs to the backend.
+type: 5
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1704041120
