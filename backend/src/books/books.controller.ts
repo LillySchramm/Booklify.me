@@ -79,6 +79,8 @@ export class BooksController {
         const isIsbn = isISBN(isbn);
         if (!isIsbn) throw new BadRequestException();
 
+        isbn = isbn.replaceAll(/\D/g, '');
+
         if (skipCrawl === undefined) skipCrawl = 'false';
         const _skipCrawl = skipCrawl.toLowerCase() === 'true';
 

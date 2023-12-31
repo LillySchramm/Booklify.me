@@ -81,17 +81,46 @@ export class Scraper implements BookScraper {
     ): Promise<VolumeInfo> {
         let volume: VolumeInfo = {};
 
+        const promises: Promise<VolumeInfo>[] = [];
         for await (const scraper of this.metadataScrapers) {
             if (!allowLongruning && scraper.isLongRunning()) {
                 volume.incomplete = true;
                 continue;
             }
 
-            const volumeFromScraper = await scraper.scrapeBookMetaData(isbn);
-            if (volumeFromScraper) {
-                volume = this.merge(volume, volumeFromScraper);
-            }
+            promises.push(this._scrapeBookMetaData(isbn, scraper));
         }
+
+        const results = await Promise.allSettled(promises);
+        results.forEach((result) => {
+            if (result.status === 'fulfilled') {
+                if (!result.value) {
+                    return;
+                }
+                volume = this.merge(volume, result.value);
+            } else {
+                this.logger.error(
+                    `Error scraping metadata with ${result.reason}`,
+                );
+            }
+        });
+
+        return volume;
+    }
+
+    async _scrapeBookMetaData(
+        isbn: string,
+        scraper: BookScraper,
+    ): Promise<VolumeInfo> {
+        this.logger.debug(
+            `Scraping metadata for ${isbn} with ${scraper.constructor.name}`,
+        );
+
+        const volume = await scraper.scrapeBookMetaData(isbn);
+
+        this.logger.debug(
+            `Scraped metadata for ${isbn} with ${scraper.constructor.name}`,
+        );
 
         return volume;
     }
@@ -102,16 +131,46 @@ export class Scraper implements BookScraper {
     ): Promise<CoverScrapeResult[]> {
         const coverScrapeResults: CoverScrapeResult[] = [];
 
+        const promises: Promise<CoverScrapeResult[]>[] = [];
         for await (const scraper of this.coverScrapers) {
-            const coverScrapeResult = await scraper.scrapeBookCover(
-                isbn,
-                volume,
+            this.logger.debug(
+                `Scraping cover for ${isbn} with ${scraper.constructor.name}`,
             );
 
-            coverScrapeResults.push(...coverScrapeResult);
+            promises.push(this._scrapeBookCover(isbn, scraper, volume));
         }
 
+        const results = await Promise.allSettled(promises);
+        results.forEach((result) => {
+            if (result.status === 'fulfilled') {
+                if (!result.value) {
+                    return;
+                }
+                coverScrapeResults.push(...result.value);
+            } else {
+                this.logger.error(`Error scraping cover with ${result.reason}`);
+            }
+        });
+
         return coverScrapeResults;
+    }
+
+    private async _scrapeBookCover(
+        isbn: string,
+        scraper: BookScraper,
+        volume?: VolumeInfo,
+    ): Promise<CoverScrapeResult[]> {
+        this.logger.debug(
+            `Scraping cover for ${isbn} with ${scraper.constructor.name}`,
+        );
+
+        const results = await scraper.scrapeBookCover(isbn, volume);
+
+        this.logger.debug(
+            `Scraped ${results.length} covers for ${isbn} with ${scraper.constructor.name}`,
+        );
+
+        return results;
     }
 
     private numbersInString(str: string): number {

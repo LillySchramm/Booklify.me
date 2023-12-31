@@ -1,4 +1,4 @@
-import { gotScraping } from 'got-scraping';
+import { gotScraping, Response } from 'got-scraping';
 import { OpenLibraryBookVolume, VolumeInfo } from '../models/volume.model';
 import { BookScraper, CoverScrapeResult } from './scraper';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -67,11 +67,23 @@ export class OpenLibraryBookScraper implements BookScraper {
 
     async scrapeBookCover(isbn: string): Promise<CoverScrapeResult[]> {
         const url = `${this.openLibraryCoverBase}/${isbn}-L.jpg?default=false`;
-        const openLibraryBookResponse = await gotScraping.get(url, {
-            timeout: {
-                request: 5000,
-            },
-        });
+
+        let openLibraryBookResponse: Response<string> | undefined;
+        try {
+            openLibraryBookResponse = await gotScraping.get(url, {
+                timeout: {
+                    request: 5000,
+                },
+            });
+        } catch (e) {
+            this.logger.error(
+                `Open Library Cover API Request for ISBN ${isbn} failed: ${e}`,
+            );
+        }
+
+        if (!openLibraryBookResponse) {
+            return [{ buffer: null, url: '' }];
+        }
 
         if (openLibraryBookResponse.statusCode !== 200) {
             this.logger.error(

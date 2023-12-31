@@ -21,7 +21,7 @@ import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 
 @Injectable()
 export class BooksService implements OnModuleInit {
-    private readonly logger = new LokiLogger(S3Service.name);
+    private readonly logger = new LokiLogger(BooksService.name);
 
     private coverTextBlacklist: string[] = [
         'No Image Available',
