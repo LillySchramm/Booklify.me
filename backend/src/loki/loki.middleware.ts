@@ -34,6 +34,7 @@ export class LokiMiddleware implements NestMiddleware {
                 ip: ip as string,
                 method,
                 path: url,
+                rawPath: request.originalUrl,
                 userAgent,
                 statusCode: statusCode.toString(),
             });

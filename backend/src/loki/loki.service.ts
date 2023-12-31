@@ -15,6 +15,7 @@ type LokiMetadata = { [key: string]: string };
 
 type LokiRequestMetadata = {
     path: string;
+    rawPath: string;
     method: string;
     ip: string;
     userAgent: string;
@@ -25,6 +26,8 @@ type LokiRequestMetadata = {
 @Injectable()
 export class LokiService {
     private static buffer: LokiBuffer = {};
+
+    private static readonly maxMessageLength = 1000;
 
     private static readonly lokiApi = config.get<string>('loki.api');
     private static readonly lokiEnabled = config.get<boolean>('loki.enabled');
@@ -58,9 +61,18 @@ export class LokiService {
         const nano = process.hrtime.bigint().toString().slice(-6);
         const nowNano = now + nano;
 
+        let tooLong = false;
+        if (message.length > this.maxMessageLength) {
+            message = message.slice(0, this.maxMessageLength) + '...';
+            tooLong = true;
+        }
         const log: LokiLog = [nowNano, message];
 
-        this.pushBuffer(log, { ...lokiRequestMetadata, type: 'request' });
+        this.pushBuffer(log, {
+            ...lokiRequestMetadata,
+            type: 'request',
+            tooLong: tooLong.toString(),
+        });
     }
 
     private static pushBuffer(log: LokiLog, metadata: LokiMetadata) {
