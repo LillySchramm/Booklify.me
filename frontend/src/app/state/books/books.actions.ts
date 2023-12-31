@@ -5,6 +5,15 @@ import {
     SetOwnershipStatusDto,
 } from 'src/app/api';
 
+export interface HttpError {
+    status: number;
+    statusText: string;
+    url: string;
+    ok: boolean;
+    name: string;
+    message: string;
+}
+
 export namespace BookActions {
     export class LoadBooksOfUser {
         static readonly type = '[Books] Load Books of User';
@@ -53,7 +62,7 @@ export namespace BookActions {
 
     export class SearchBooksFail {
         static readonly type = '[Books] Search Book Fail';
-        constructor(public error: string) {}
+        constructor(public error: HttpError) {}
     }
 
     export class ChangeOwnership {

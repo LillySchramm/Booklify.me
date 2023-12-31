@@ -222,7 +222,7 @@ export class BooksState {
         return this.bookApi.booksControllerGetBook(isbn).pipe(
             tap((book) => dispatch(new BookActions.SearchBooksSuccess(book))),
             catchError((error) =>
-                dispatch(new BookActions.SearchBooksFail(error.error)),
+                dispatch(new BookActions.SearchBooksFail(error)),
             ),
         );
     }
@@ -256,10 +256,18 @@ export class BooksState {
     ) {
         patchState({
             searchLoading: false,
-            searchError: error,
+            searchError: error.message,
         });
 
-        this.snack.show('No book found with this ISBN');
+        if (error.status === 404) {
+            this.snack.show('No book found with this ISBN');
+
+            return;
+        }
+
+        this.snack.show(
+            'Something went wrong on our side. Please try again in a few minutes.',
+        );
     }
 
     @Action(BookActions.ChangeOwnership)
