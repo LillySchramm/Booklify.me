@@ -1,0 +1,7 @@
+id: cfdc6922-6ce4-4c32-9a82-b2ba20ff4d28
+title: Fixed a bug, which caused inactive users to be logged out.
+type: 5
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1704068999

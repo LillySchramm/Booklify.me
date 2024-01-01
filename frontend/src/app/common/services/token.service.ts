@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { interval } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 export interface TokenInfo {
@@ -31,6 +32,10 @@ export class TokenService {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         tokenService = this;
         this.accessToken = localStorage.getItem('accessToken');
+
+        interval(1000 * 1).subscribe(() => {
+            this.refresh().then(() => {});
+        });
     }
 
     public getToken(): string | null {
