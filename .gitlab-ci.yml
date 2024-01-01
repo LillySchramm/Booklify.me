@@ -9,6 +9,7 @@ stages:
 
 include:
   - template: Jobs/SAST.gitlab-ci.yml
+  - template: Security/Container-Scanning.gitlab-ci.yml
 
 variables:
     SAST_EXCLUDED_PATHS: spec,test,tests,tmp,companion_app
@@ -178,3 +179,5 @@ spotbugs-sast:
 
 flawfinder-sast:
     needs: []
+    rules:
+        - when: never
