@@ -4,7 +4,14 @@ stages:
     - container-build
     - deploy
     - linting
+    - test
     - audit
+
+include:
+  - template: Jobs/SAST.gitlab-ci.yml
+
+variables:
+    SAST_EXCLUDED_PATHS: spec,test,tests,tmp,companion_app
 
 .cache0: &npm-cache
     key: $CI_COMMIT_REF_SLUG-npm
@@ -156,3 +163,18 @@ frontend_lint:
     script:
         - cd frontend
         - yarn run lint
+
+nodejs-scan-sast:
+    needs:
+        - install_npm_dependencies
+
+semgrep-sast:
+    needs: []
+
+spotbugs-sast:
+    needs: []
+    rules:
+        - when: never
+
+flawfinder-sast:
+    needs: []
