@@ -181,4 +181,3 @@ flawfinder-sast:
     needs: []
     rules:
         - when: never
-
