@@ -19,25 +19,23 @@ export class AuthGuard implements CanActivate {
 
     canActivate(): Observable<boolean> {
         const success$ = new Subject<boolean>();
-        this.tokenService.refresh().then(() => {
-            this.auth
-                .authControllerGetSession()
-                .pipe(
-                    take(1),
-                    map((session) => {
-                        this.store.dispatch(
-                            new UserActions.NewSession(session),
-                        );
-                        success$.next(!!session);
-                    }),
-                    catchError(() => {
-                        this.router.navigate(['login']);
-                        success$.next(false);
-                        return of(false);
-                    }),
-                )
-                .subscribe();
-        });
+        this.tokenService.refresh();
+
+        this.auth
+            .authControllerGetSession()
+            .pipe(
+                take(1),
+                map((session) => {
+                    this.store.dispatch(new UserActions.NewSession(session));
+                    success$.next(!!session);
+                }),
+                catchError(() => {
+                    this.router.navigate(['login']);
+                    success$.next(false);
+                    return of(false);
+                }),
+            )
+            .subscribe();
 
         return success$;
     }

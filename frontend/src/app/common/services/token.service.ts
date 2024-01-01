@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { interval } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import * as syncFetch from 'sync-fetch';
 
 export interface TokenInfo {
     sub: string;
@@ -23,7 +23,7 @@ export function getToken(): string | null {
     providedIn: 'root',
 })
 export class TokenService {
-    private readonly tokenTimeout = 0.5;
+    private readonly tokenTimeout = 0.8;
 
     private refreshInProgress = false;
     private accessToken: string | null = null;
@@ -32,16 +32,12 @@ export class TokenService {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         tokenService = this;
         this.accessToken = localStorage.getItem('accessToken');
-
-        interval(1000 * 1).subscribe(() => {
-            this.refresh().then(() => {});
-        });
     }
 
     public getToken(): string | null {
         if (this.accessToken === null) return null;
 
-        this.refresh().then(() => {});
+        this.refresh();
 
         return this.accessToken;
     }
@@ -51,7 +47,7 @@ export class TokenService {
         localStorage.setItem('accessToken', token);
     }
 
-    public async refresh(): Promise<void> {
+    public refresh(): void {
         this.accessToken = localStorage.getItem('accessToken');
         if (this.refreshInProgress || this.accessToken === null) {
             return;
@@ -64,13 +60,13 @@ export class TokenService {
         const tokenLifeLeft = tokenInfo.exp - now;
 
         if (tokenLifeLeft < tokenLife * (1 - this.tokenTimeout)) {
-            let newTokenResponse: Response;
+            let newTokenResponse: any;
             if (tokenInfo.refreshToken) {
-                newTokenResponse = await fetch(
+                newTokenResponse = syncFetch(
                     `${environment.apiUrl}/auth/refresh?token=${tokenInfo.refreshToken}&session_id=${tokenInfo.jti}`,
                 );
             } else {
-                newTokenResponse = await fetch(
+                newTokenResponse = syncFetch(
                     `${environment.apiUrl}/auth/token`,
                     {
                         method: 'GET',
@@ -83,7 +79,7 @@ export class TokenService {
             }
 
             if (newTokenResponse.ok) {
-                const newToken = await newTokenResponse.json();
+                const newToken = newTokenResponse.json();
                 this.setToken(newToken.accessToken);
             } else {
                 this.deleteToken();

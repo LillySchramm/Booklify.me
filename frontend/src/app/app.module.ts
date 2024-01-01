@@ -94,10 +94,9 @@ export function initApp(
 ) {
     return () => {
         return new Promise((resolve) => {
-            tokenService.refresh().then(() => {
-                translocoService.load('en').subscribe(() => {
-                    resolve(true);
-                });
+            tokenService.refresh();
+            translocoService.load('en').subscribe(() => {
+                resolve(true);
             });
         });
     };
