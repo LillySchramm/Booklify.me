@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoModule } from '@ngneat/transloco';
 import { Select, Store } from '@ngxs/store';
 import { LazyLoadImageModule } from 'ng-lazyload-image';
@@ -24,6 +28,10 @@ import { UiState } from 'src/app/state/ui/ui.state';
         NoImagePlaceholderComponent,
         TranslocoModule,
         LazyLoadImageModule,
+        MatMenuModule,
+        MatButtonModule,
+        MatIconModule,
+        MatTooltipModule,
     ],
     templateUrl: './book-card.component.html',
     styleUrls: ['./book-card.component.scss'],
@@ -39,6 +47,7 @@ export class BookCardComponent implements OnInit {
     $isInfoFullyVisible = toSignal(this.isInfoFullyVisible$);
 
     @Input() book!: BookDto;
+    @Input() showFlags: boolean = false;
 
     coverUrl?: string | null = '';
 

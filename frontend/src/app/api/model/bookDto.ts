@@ -26,4 +26,6 @@ export interface BookDto {
     bookCoverId: string | null;
     authors: Array<IdentifierDto>;
     groupId: string | null;
+    hidden: boolean;
+    noGroup: boolean;
 }

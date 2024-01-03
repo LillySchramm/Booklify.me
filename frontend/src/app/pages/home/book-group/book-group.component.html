@@ -11,7 +11,10 @@
             </mat-expansion-panel-header>
             <div class="flex flex-wrap justify-center sm:justify-start">
                 @for (book of books; track trackById(i, book); let i = $index) {
-                    <app-book-card [book]="book"></app-book-card>
+                    <app-book-card
+                        [book]="book"
+                        [showFlags]="$currentOwnerId() === $currentUser()?.id"
+                    ></app-book-card>
                 }
             </div>
         </mat-expansion-panel>
