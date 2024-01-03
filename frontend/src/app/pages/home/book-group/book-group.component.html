@@ -1,6 +1,6 @@
 @if (group$ && group$ | async; as group) {
     <div *transloco="let t" class="m-0 mb-2 w-full">
-        <mat-expansion-panel [expanded]="books.length > 1" class="w-full">
+        <mat-expansion-panel [expanded]="true" class="w-full">
             <mat-expansion-panel-header>
                 <mat-panel-title>
                     {{ group.name }} ({{ books.length }})

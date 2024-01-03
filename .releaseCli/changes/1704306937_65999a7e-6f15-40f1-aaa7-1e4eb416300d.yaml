@@ -1,0 +1,7 @@
+id: 65999a7e-6f15-40f1-aaa7-1e4eb416300d
+title: Collections with only one book are no longer collapsed by default.
+type: 3
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1704306937
