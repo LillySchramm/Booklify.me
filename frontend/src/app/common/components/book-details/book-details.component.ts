@@ -46,6 +46,8 @@ export class BookDetailsComponent {
     book$ = new BehaviorSubject<BookDto | undefined>(undefined);
     $book = toSignal(this.book$);
 
+    shownBook: BookDto | undefined = undefined;
+
     @Select(PublisherState.publishers) publishers$!: Observable<PublisherMap>;
     @Select(AuthorState.authors) authors$!: Observable<AuthorMap>;
 
@@ -100,6 +102,8 @@ export class BookDetailsComponent {
             if (!book) {
                 return;
             }
+
+            this.shownBook = book;
 
             if (book.bookCoverId) {
                 this.coverUrl = this.cover.getCoverUrl(book.bookCoverId);

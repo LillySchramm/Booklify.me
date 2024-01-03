@@ -1,4 +1,4 @@
-@if (book$ | async; as book) {
+@if (shownBook) {
     <div *transloco="let t">
         @if (!compact) {
             <div class="flex flex-col">
@@ -12,9 +12,9 @@
                 }
                 <mat-divider class="!mt-4"></mat-divider>
             </div>
-            @if (book.description) {
+            @if (shownBook.description) {
                 <div class="mt-4">
-                    <div [innerHTML]="book.description" class="p-4"></div>
+                    <div [innerHTML]="shownBook.description" class="p-4"></div>
                     <mat-divider class="!mb-4 !mt-4"></mat-divider>
                 </div>
             }
@@ -28,9 +28,9 @@
                     class="float-left mb-2 mr-4 h-60 object-contain"
                 />
             }
-            @if (book.description) {
+            @if (shownBook.description) {
                 <div class="">
-                    <div [innerHTML]="book.description" class="pr-4"></div>
+                    <div [innerHTML]="shownBook.description" class="pr-4"></div>
                 </div>
             }
         }
@@ -38,7 +38,7 @@
             @if (compact) {
                 <p class="!m-0">
                     {{ t('book-details.title') }}
-                    <span class="text-highlight">{{ book.title }}</span>
+                    <span class="text-highlight">{{ shownBook.title }}</span>
                 </p>
             }
             @if ($authorNames(); as authorNames) {
@@ -58,7 +58,11 @@
                 {{ t('book-details.publisher') }}
                 <span class="text-highlight">{{ $publisherName() }}</span>
             </p>
-            @if (book.publishedDate; as publishedDate) {
+            @if (
+                shownBook.publishedDate !== 'undefined' &&
+                    shownBook.publishedDate;
+                as publishedDate
+            ) {
                 <p [ngClass]="compact ? '!m-0' : ''">
                     {{ t('book-details.published') }}
                     <span class="text-highlight">{{
@@ -66,26 +70,28 @@
                     }}</span>
                 </p>
             }
-            @if (book.pageCount || book.printedPageCount) {
+            @if (shownBook.pageCount || shownBook.printedPageCount) {
                 <p [ngClass]="compact ? '!m-0' : ''">
                     {{ t('book-details.pages') }}
                     <span class="text-highlight">{{
-                        book.pageCount || book.printedPageCount
+                        shownBook.pageCount || shownBook.printedPageCount
                     }}</span>
                 </p>
             }
-            @if (book.language) {
+            @if (shownBook.language) {
                 <p [ngClass]="compact ? '!m-0' : ''">
                     {{ t('book-details.language') }}
                     <span class="text-highlight">{{
-                        book.language | language
+                        shownBook.language | language
                     }}</span>
                 </p>
             }
-            @if (book.language) {
+            @if (shownBook.isbn) {
                 <p [ngClass]="compact ? '!m-0' : ''">
                     {{ t('book-details.isbn') }}
-                    <span class="text-highlight">{{ book.isbn | isbn }}</span>
+                    <span class="text-highlight">{{
+                        shownBook.isbn | isbn
+                    }}</span>
                 </p>
             }
             @if (!compact) {
