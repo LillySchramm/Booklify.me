@@ -59,7 +59,11 @@ export class BooksController {
         if (!user || !userCanBeAccessed(user, req))
             throw new NotFoundException();
 
-        const books = await this.bookService.getAllOwnedBooksOfUser(user.id);
+        const includeHidden = !!req.user && id === req.user.id;
+        const books = await this.bookService.getAllOwnedBooksOfUser(
+            user.id,
+            includeHidden,
+        );
         const bookDtos = books.map((book) => new BookDto(book));
 
         return new BookListDto({ books: bookDtos });
@@ -125,6 +129,8 @@ export class BooksController {
             book,
             body.status,
             body.bookGroupId,
+            body.hidden,
+            body.noGroup,
         );
         return new OwnershipStatusDto(ownershipStatus);
     }

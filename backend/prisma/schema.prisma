@@ -158,6 +158,8 @@ model OwnershipStatus {
   userId      String
   bookIsbn    String
   bookGroupId String?
+  hidden      Boolean  @default(false)
+  noGroup     Boolean  @default(false)
 
   @@id([userId, bookIsbn])
   @@index([status])

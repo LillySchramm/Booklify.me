@@ -49,10 +49,20 @@ export class BookGroupsService {
         });
     }
 
-    async getAllBookGroupsOfUser(userId: string): Promise<BookGroup[]> {
-        return await this.prisma.bookGroup.findMany({
-            where: { userId },
+    async getAllBookGroupsOfUser(
+        userId: string,
+        includeHidden: boolean = true,
+    ): Promise<BookGroup[]> {
+        const groups = await this.prisma.bookGroup.findMany({
+            where: {
+                userId,
+                OwnershipStatus: includeHidden
+                    ? {}
+                    : { some: { hidden: false, status: 'OWNED' } },
+            },
         });
+
+        return groups;
     }
 
     async getAllBookGroupsOfUserWithOwnershipStatus(

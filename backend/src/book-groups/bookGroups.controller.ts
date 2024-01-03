@@ -49,8 +49,10 @@ export class BookGroupsController {
         if (!user || !userCanBeAccessed(user, req))
             throw new NotFoundException();
 
+        const includeHidden = !!req.user && req.user.id === user.id;
         const bookGroups = await this.bookGroupsService.getAllBookGroupsOfUser(
             user.id,
+            includeHidden,
         );
         const bookGroupDtos = bookGroups.map((bookGroup) => {
             return new BookGroupDto(bookGroup);

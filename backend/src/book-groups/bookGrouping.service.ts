@@ -272,9 +272,15 @@ export class BookGroupingService {
         this.logger.log(`Grouping books of user ${userId}... Forced: ${force}`);
 
         const books = await this.getAllRelevantBooksOfUser(userId);
+        const booksWithNoGroupFlag = books.filter(
+            (book) => book.OwnershipStatus[0].noGroup,
+        );
+        const booksWithoutNoGroupFlag = books.filter(
+            (book) => !book.OwnershipStatus[0].noGroup,
+        );
 
         let groupedBooks = new Map<string, BookWithPublisherAndAuthors[]>();
-        groupedBooks.set('', books);
+        groupedBooks.set('', booksWithoutNoGroupFlag);
 
         for (let i = 0; i < MAX_REGULAR_GROUPING_TRIES; i++) {
             const newGrouping = this.groupBooks(cloneDeep(groupedBooks));
@@ -296,6 +302,11 @@ export class BookGroupingService {
             }
             groupedBooks = newGrouping;
         }
+
+        groupedBooks.set('', [
+            ...(groupedBooks.get('') || []),
+            ...booksWithNoGroupFlag,
+        ]);
 
         this.logger.debug(
             `Grouping of user ${userId} finished with ${groupedBooks.get('')
