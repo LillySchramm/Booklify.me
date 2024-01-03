@@ -13,6 +13,7 @@ import * as config from 'config';
 import { UsersService } from 'src/users/users.service';
 import { cloneDeep, isEqual } from 'lodash';
 import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
+import { removeStopwords, eng, deu } from 'stopword';
 
 type BookWithPublisherAndAuthors = Book & {
     publisher: Publisher | null;
@@ -20,12 +21,16 @@ type BookWithPublisherAndAuthors = Book & {
     OwnershipStatus: OwnershipStatus[];
 };
 
-export const GROUPING_VERSION = 6;
+export const GROUPING_VERSION = 7;
 export const MAX_REGULAR_GROUPING_TRIES = 10;
 
 // If the name of a book is shorter than this, it will not be used for grouping.
 // The Lower the number, the more likely are false positives.
 export const MIN_NAME_LENGTH_FOR_COMPARISON = 5;
+export const MIN_NAME_LENGTH_FOR_GROUP_COMPARISON = 10;
+
+// If the volume number of a book is higher than this, it will likely be a false positive (year).
+export const MAX_VOLUME_NUMBER = 500;
 
 export const MIN_GROUP_SIZE = 2;
 
@@ -382,6 +387,7 @@ export class BookGroupingService {
         titleChunks = titleChunks.filter(
             (chunk) => !this.BLACKLISTED_CHUNKS.includes(chunk.toLowerCase()),
         );
+
         const titleWithoutBlacklistedChunks = titleChunks.join(' ');
 
         const numbers = titleChunks.filter((chunk) =>
@@ -391,7 +397,11 @@ export class BookGroupingService {
             .filter((chunk) => !this.isStringNumeric(chunk))
             .filter((chunk) => !!chunk);
 
-        if (!titleChunks.length) return '';
+        if (
+            !titleChunks.length ||
+            Number.parseInt(numbers[numbers.length - 1]) > MAX_VOLUME_NUMBER
+        )
+            return '';
 
         const titleEndsWithNumber =
             numbers.length &&
@@ -450,6 +460,8 @@ export class BookGroupingService {
 
         return (
             currentSeriesNames.find((seriesName) => {
+                if (seriesName === '') return false;
+
                 const cleanedSeriesName = this.cleanUpString(seriesName);
                 const cleanedBookTitle = this.cleanUpString(book.title!);
 
@@ -457,17 +469,29 @@ export class BookGroupingService {
                     cleanedSeriesName.includes(cleanedBookTitle) ||
                     cleanedBookTitle.includes(cleanedSeriesName);
 
-                return contained;
+                const closeContains =
+                    (cleanedBookTitle.length >
+                        MIN_NAME_LENGTH_FOR_GROUP_COMPARISON &&
+                        cleanedSeriesName.includes(cleanedBookTitle)) ||
+                    (cleanedSeriesName.length >
+                        MIN_NAME_LENGTH_FOR_GROUP_COMPARISON &&
+                        cleanedBookTitle.includes(cleanedSeriesName));
+
+                return contained || closeContains;
             }) || ''
         );
     }
 
-    private cleanUpString(str: string): string {
-        return str
+    private cleanUpString(str: string, join: string = ''): string {
+        const cleanedString = str
             .toLowerCase()
             .replaceAll(/\([^\)]+\)/g, '')
-            .replaceAll(/[^a-z0-9]/g, '')
-            .replaceAll(' ', '');
+            .replaceAll(/[^a-z0-9\s]/g, '');
+
+        const chunks = cleanedString.split(' ');
+        const stopwordFree = removeStopwords(chunks, [...eng, ...deu]);
+
+        return stopwordFree.join(join);
     }
 
     /**
