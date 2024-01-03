@@ -16,4 +16,6 @@ export interface OwnershipStatusDto {
     userId: string;
     bookIsbn: string;
     bookGroupId: string | null;
+    hidden: boolean;
+    noGroup: boolean;
 }

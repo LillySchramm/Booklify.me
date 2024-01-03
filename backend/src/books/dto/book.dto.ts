@@ -5,6 +5,8 @@ import { Exclude, Expose } from 'class-transformer';
 export type BookWithGroupIdAndAuthors = Book & {
     OwnershipStatus: {
         bookGroupId: string | null;
+        hidden: boolean;
+        noGroup: boolean;
     }[];
     authors: {
         id: string;
@@ -41,12 +43,16 @@ export class BookDto implements BookWithGroupIdAndAuthors {
     publisherId: string | null;
     @ApiProperty({ nullable: true, type: String })
     bookCoverId: string | null;
-    @Exclude()
-    OwnershipStatus: { bookGroupId: string | null }[];
     @ApiProperty({ type: () => IdentifierDto, isArray: true })
     authors: IdentifierDto[];
     @Exclude()
     series: string | null;
+    @Exclude()
+    OwnershipStatus: {
+        bookGroupId: string | null;
+        hidden: boolean;
+        noGroup: boolean;
+    }[];
 
     @ApiProperty({ type: String, nullable: true })
     @Expose()
@@ -56,6 +62,26 @@ export class BookDto implements BookWithGroupIdAndAuthors {
         }
 
         return this.OwnershipStatus[0].bookGroupId;
+    }
+
+    @ApiProperty({ type: Boolean })
+    @Expose()
+    get hidden(): boolean {
+        if (this.OwnershipStatus.length === 0) {
+            return false;
+        }
+
+        return this.OwnershipStatus[0].hidden;
+    }
+
+    @ApiProperty({ type: Boolean })
+    @Expose()
+    get noGroup(): boolean {
+        if (this.OwnershipStatus.length === 0) {
+            return false;
+        }
+
+        return this.OwnershipStatus[0].noGroup;
     }
 
     constructor(partial: Partial<BookDto>) {

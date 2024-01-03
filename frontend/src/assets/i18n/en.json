@@ -167,5 +167,9 @@
       "USERNAME": "Username"
     },
     "hint": "The books owned by a user aren't a valid reason to report. Abuse of the report feature will result in a ban."
+  },
+  "book": {
+    "hidden": "This book is hidden in the public view",
+    "noGroup": "This book has been excluded from automatic grouping"
   }
 }

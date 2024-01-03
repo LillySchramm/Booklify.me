@@ -135,7 +135,7 @@ export class BooksService implements OnModuleInit {
             include: {
                 OwnershipStatus: {
                     where: { userId },
-                    select: { bookGroupId: true },
+                    select: { bookGroupId: true, hidden: true, noGroup: true },
                 },
                 authors: {
                     select: { id: true },
@@ -271,6 +271,8 @@ export class BooksService implements OnModuleInit {
         book: Book,
         status: BookStatus,
         bookGroupId: string | null = null,
+        hidden: boolean | undefined,
+        noGroup: boolean | undefined,
     ): Promise<OwnershipStatus> {
         if (status === BookStatus.NONE) {
             bookGroupId = null;
@@ -286,8 +288,10 @@ export class BooksService implements OnModuleInit {
                 bookIsbn: book.isbn,
                 userId: user.id,
                 bookGroupId,
+                hidden,
+                noGroup,
             },
-            update: { status, bookGroupId },
+            update: { status, bookGroupId, hidden, noGroup },
         });
 
         if (status === BookStatus.OWNED) {
@@ -303,22 +307,36 @@ export class BooksService implements OnModuleInit {
         });
         if (ownershipStatus !== null) return ownershipStatus;
 
-        return await this.setBookOwnership(user, book, BookStatus.NONE);
+        return await this.setBookOwnership(
+            user,
+            book,
+            BookStatus.NONE,
+            null,
+            undefined,
+            undefined,
+        );
     }
 
     async getAllOwnedBooksOfUser(
         userId: string,
+        includeHidden = true,
     ): Promise<BookWithGroupIdAndAuthors[]> {
         await this.bookGroupingService.groupBooksOfUser(userId);
 
         return await this.prisma.book.findMany({
             where: {
-                OwnershipStatus: { some: { userId, status: BookStatus.OWNED } },
+                OwnershipStatus: {
+                    some: {
+                        userId,
+                        status: BookStatus.OWNED,
+                        hidden: includeHidden ? {} : false,
+                    },
+                },
             },
             include: {
                 OwnershipStatus: {
                     where: { userId },
-                    select: { bookGroupId: true },
+                    select: { bookGroupId: true, hidden: true, noGroup: true },
                 },
                 authors: {
                     select: { id: true },

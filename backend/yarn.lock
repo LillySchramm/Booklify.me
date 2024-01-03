@@ -1259,6 +1259,11 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.3.tgz#6209321eb2c1712a7e7466422b8cb1fc0d9dd5d8"
   integrity sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==
 
+"@types/stopword@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@types/stopword/-/stopword-2.0.3.tgz#4e7c629000a74eb56f772fa0f4eb77775de425de"
+  integrity sha512-hioMj0lOvISM+EDevf7ijG8EMbU+J3pj4SstCyfQC1t39uPYpAe7beSfBdU6c1d9jeECTQQtR3UJWtVoUO8Weg==
+
 "@types/superagent@*":
   version "8.1.1"
   resolved "https://registry.yarnpkg.com/@types/superagent/-/superagent-8.1.1.tgz#dbc620c5df3770b0c3092f947d6d5e808adae2bc"
@@ -5880,6 +5885,11 @@ statuses@2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-2.0.1.tgz#55cb000ccf1d48728bd23c685a063998cf1a1b63"
   integrity sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==
+
+stopword@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/stopword/-/stopword-3.0.1.tgz#258e812334d3287c1647bce2ec73426d46a6747b"
+  integrity sha512-pz2XNVtoApA7eSX1viol5ybGGG2Re2bI7/+8TfeaMb09C9NEWgabr7HHf4DbqgrmEuI62sH2BcAEHVAlreCmrQ==
 
 streamsearch@^1.1.0:
   version "1.1.0"

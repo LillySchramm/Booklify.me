@@ -8,19 +8,67 @@
     [attr.id]="'book-' + book.isbn"
     #card
 >
-    @if (coverUrl !== null) {
-        <div
-            class="mb-2 flex-grow bg-contain bg-center bg-no-repeat"
-            [lazyLoad]="coverUrl!"
-        ></div>
-    } @else {
-        <app-no-image-placeholder class="h-full flex-grow object-contain">{{
-            t('books.no-cover')
-        }}</app-no-image-placeholder>
-    }
+    <div class="absolute h-40 w-28 sm:h-48 sm:w-32 md:h-52 md:w-36">
+        <div class="mr-4 flex justify-end p-1 opacity-70">
+            @if (showFlags) {
+                <div
+                    class="flex flex-col"
+                    [matMenuTriggerFor]="menu"
+                    (click)="$event.stopPropagation()"
+                >
+                    <mat-icon
+                        class="m-0.5 !inline-table rounded-full bg-secondary p-0.5"
+                        >more_vert</mat-icon
+                    >
+                    @if (book.noGroup) {
+                        <mat-icon
+                            class="m-0.5 !inline-table rounded-full bg-secondary p-0.5"
+                            [matTooltip]="t('book.noGroup')"
+                            >horizontal_split</mat-icon
+                        >
+                    }
+
+                    @if (book.hidden) {
+                        <mat-icon
+                            class="m-0.5 !inline-table rounded-full bg-secondary p-0.5"
+                            [matTooltip]="t('book.hidden')"
+                            >visibility_off</mat-icon
+                        >
+                    }
+                </div>
+            }
+        </div>
+    </div>
+    <div class="flex-grow">
+        @if (coverUrl !== null) {
+            <div
+                class="mb-2 h-full bg-contain bg-center bg-no-repeat"
+                [lazyLoad]="coverUrl!"
+            ></div>
+        } @else {
+            <app-no-image-placeholder class="h-full object-contain">{{
+                t('books.no-cover')
+            }}</app-no-image-placeholder>
+        }
+    </div>
     <div class="flex-grow-0">
         <p class="!m-0 text-xs">
             {{ book.title }}
         </p>
     </div>
 </div>
+
+<mat-menu #menu="matMenu">
+    <button mat-menu-item>
+        <mat-icon>dialpad</mat-icon>
+        <span>Redial</span>
+    </button>
+    <button mat-menu-item disabled>
+        <mat-icon>voicemail</mat-icon>
+        <span>Check voice mail</span>
+    </button>
+    <button mat-menu-item>
+        <mat-icon>notifications_off</mat-icon>
+        <span>Disable alerts</span>
+    </button>
+</mat-menu>

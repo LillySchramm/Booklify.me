@@ -13,6 +13,8 @@
 export interface SetOwnershipStatusDto {
     status: SetOwnershipStatusDto.StatusEnum;
     bookGroupId: string | null;
+    hidden?: boolean;
+    noGroup?: boolean;
 }
 export namespace SetOwnershipStatusDto {
     export type StatusEnum = 'NONE' | 'OWNED';

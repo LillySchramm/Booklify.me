@@ -1,0 +1,7 @@
+id: 971c4ab2-54c8-4080-9a05-6721130707f8
+title: Fixed a bug, which caused the sidenav info about a book to not update correctly.
+type: 5
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1704310846

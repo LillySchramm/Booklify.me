@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { Store } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { Observable, map } from 'rxjs';
-import { BookDto, BookGroupDto } from 'src/app/api';
+import { BookDto, BookGroupDto, UserDto } from 'src/app/api';
 import { BooksState } from 'src/app/state/books/books.state';
+import { UserState } from 'src/app/state/user/user.state';
 import { BookCardComponent } from '../book-card/book-card.component';
 
 @UntilDestroy()
@@ -23,6 +25,16 @@ import { BookCardComponent } from '../book-card/book-card.component';
     styleUrls: ['./book-group.component.scss'],
 })
 export class BookGroupComponent implements OnInit {
+    @Select(UserState.currentUser) currentUser$!: Observable<
+        UserDto | undefined
+    >;
+    $currentUser = toSignal(this.currentUser$);
+
+    @Select(BooksState.currentOwnerId) currentOwnerId$!: Observable<
+        string | undefined
+    >;
+    $currentOwnerId = toSignal(this.currentOwnerId$);
+
     @Input() groupId!: string;
     @Input() books!: BookDto[];
 
