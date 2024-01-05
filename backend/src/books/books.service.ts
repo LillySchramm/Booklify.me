@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
+import {
+    Injectable,
+    InternalServerErrorException,
+    NotFoundException,
+    OnModuleInit,
+} from '@nestjs/common';
 import { VolumeInfo } from './models/volume.model';
 import { S3Service } from 'src/s3/s3.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -175,7 +180,22 @@ export class BooksService implements OnModuleInit {
         if (existingBook !== null) return existingBook;
         if (!crawl) return null;
 
-        const metadata = await this.scrapeBookMetaData(isbn);
+        let metadata: VolumeInfo | undefined;
+        try {
+            metadata = await this.scrapeBookMetaData(isbn);
+        } catch (e) {
+            // I know this looks ugly, but it's the only way to check if the
+            // error is a NotFoundException because it gets obfuscated by the
+            // retry decorator TODO: Fix this
+            if (
+                e.message &&
+                e.message.includes('Could not find book with ISBN')
+            )
+                return null;
+
+            throw new InternalServerErrorException();
+        }
+
         await this.scrapeBookCover(isbn, metadata);
 
         return await this.getBookByIsbn(isbn, userId);

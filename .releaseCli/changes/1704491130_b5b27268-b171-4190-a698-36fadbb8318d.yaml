@@ -1,0 +1,7 @@
+id: b5b27268-b171-4190-a698-36fadbb8318d
+title: 'Fixed a bug, which caused the backend to indicate a system error if a book could not be found. '
+type: 5
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1704491130
