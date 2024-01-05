@@ -301,6 +301,27 @@ export class BooksService implements OnModuleInit {
         return ownership;
     }
 
+    async setMultipleBookOwnershipStatus(
+        isbns: string[],
+        hidden: boolean | undefined,
+        noGroup: boolean | undefined,
+        userId: string,
+    ): Promise<number> {
+        const ownerships = await this.prisma.ownershipStatus.updateMany({
+            where: {
+                userId,
+                bookIsbn: { in: isbns },
+            },
+            data: { hidden, noGroup },
+        });
+
+        if (noGroup !== undefined) {
+            await this.bookGroupingService.groupBooksOfUser(userId, true);
+        }
+
+        return ownerships.count;
+    }
+
     async getBookOwnership(user: User, book: Book): Promise<OwnershipStatus> {
         const ownershipStatus = await this.prisma.ownershipStatus.findFirst({
             where: { bookIsbn: book.isbn, userId: user.id },

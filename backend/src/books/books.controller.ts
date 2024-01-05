@@ -32,6 +32,7 @@ import { BookGroupsService } from 'src/book-groups/bookGroups.service';
 import { UsersService } from 'src/users/users.service';
 import { userCanBeAccessed } from 'src/users/users.controller';
 import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
+import { SetOwnershipFlagsDto } from './dto/setOwnershipFlags.dto';
 
 @Controller('books')
 @ApiTags('books')
@@ -133,6 +134,27 @@ export class BooksController {
             body.noGroup,
         );
         return new OwnershipStatusDto(ownershipStatus);
+    }
+
+    @Post('status')
+    @UseGuards(AuthGuard)
+    @ApiBearerAuth()
+    @ApiOkResponse()
+    async setBookOwnershipFlags(
+        @Body() body: SetOwnershipFlagsDto,
+        @Request() req: any,
+    ) {
+        const anyIsbnInvalid = body.isbns.some((b) => !isISBN(b));
+        if (anyIsbnInvalid) throw new BadRequestException();
+
+        const count = await this.bookService.setMultipleBookOwnershipStatus(
+            body.isbns,
+            body.hidden,
+            body.noGroup,
+            req.user.id,
+        );
+
+        return { count };
     }
 
     @Get(':isbn/status')
