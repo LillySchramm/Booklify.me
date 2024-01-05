@@ -3,6 +3,16 @@
         <mat-expansion-panel [expanded]="true" class="w-full">
             <mat-expansion-panel-header>
                 <mat-panel-title>
+                    @if ($currentOwnerId() === $currentUser()?.id) {
+                        <button
+                            mat-icon-button
+                            (click)="$event.stopPropagation()"
+                            [mat-menu-trigger-for]="menu"
+                            class="mr-1"
+                        >
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                    }
                     {{ group.name }} ({{ books.length }})
                 </mat-panel-title>
                 <mat-panel-description>
@@ -18,5 +28,36 @@
                 }
             </div>
         </mat-expansion-panel>
+
+        <mat-menu #menu="matMenu">
+            <!-- @if() -->
+            @if ($allHidden()) {
+                <button mat-menu-item (click)="setVisible(true)">
+                    <mat-icon>visibility</mat-icon>
+                    <span>{{ t('book.unhide-all') }}</span>
+                </button>
+            } @else {
+                <button mat-menu-item (click)="setVisible(false)">
+                    <mat-icon>visibility_off</mat-icon>
+                    <span>{{ t('book.hide-all') }}</span>
+                </button>
+            }
+
+            @if (group.id === 'unknown') {
+                <button
+                    mat-menu-item
+                    (click)="setGroup(true)"
+                    [disabled]="$allGrouped()"
+                >
+                    <mat-icon>horizontal_split</mat-icon>
+                    <span>{{ t('book.group-all') }}</span>
+                </button>
+            } @else {
+                <button mat-menu-item (click)="setGroup(false)">
+                    <mat-icon>group</mat-icon>
+                    <span>{{ t('book.ungroup-all') }}</span>
+                </button>
+            }
+        </mat-menu>
     </div>
 }

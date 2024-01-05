@@ -14,6 +14,11 @@ export interface HttpError {
     message: string;
 }
 
+export interface BookFlagUpdate {
+    bookId: string;
+    bool: boolean;
+}
+
 export namespace BookActions {
     export class LoadBooksOfUser {
         static readonly type = '[Books] Load Books of User';
@@ -80,5 +85,25 @@ export namespace BookActions {
     export class SetFilter {
         static readonly type = '[Books] Set Filter';
         constructor(public filter: string | undefined) {}
+    }
+
+    export class UpdateBookVisibility {
+        static readonly type = '[Books] Update Book Visibility';
+        constructor(
+            public isbns: string[],
+            public visible: boolean,
+        ) {}
+    }
+
+    export class UpdatedBookGrouping {
+        static readonly type = '[Books] Updated Book Grouping';
+        constructor(
+            public isbns: string[],
+            public group: boolean,
+        ) {}
+    }
+
+    export class UpdateBookSuccess {
+        static readonly type = '[Books] Update Book Success';
     }
 }

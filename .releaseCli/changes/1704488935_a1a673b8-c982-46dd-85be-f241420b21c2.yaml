@@ -1,0 +1,7 @@
+id: a1a673b8-c982-46dd-85be-f241420b21c2
+title: Added the ability to exclude books from the auto grouping algorithms. (Usefull for excluding false-positives)
+type: 1
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1704488935

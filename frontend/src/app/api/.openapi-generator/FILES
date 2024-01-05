@@ -39,6 +39,7 @@ model/resetPasswordDto.ts
 model/resetPasswordRequestDto.ts
 model/sessionDto.ts
 model/sessionListDto.ts
+model/setOwnershipFlagsDto.ts
 model/setOwnershipStatusDto.ts
 model/signInDto.ts
 model/signInSuccessDto.ts

@@ -81,4 +81,16 @@ export class BookCardComponent implements OnInit {
             }, 2);
         }
     }
+
+    setVisible(visible: boolean): void {
+        this.store.dispatch(
+            new BookActions.UpdateBookVisibility([this.book.isbn], visible),
+        );
+    }
+
+    setGroup(group: boolean): void {
+        this.store.dispatch(
+            new BookActions.UpdatedBookGrouping([this.book.isbn], group),
+        );
+    }
 }

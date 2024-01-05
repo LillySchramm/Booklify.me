@@ -56,19 +56,30 @@
             {{ book.title }}
         </p>
     </div>
-</div>
 
-<mat-menu #menu="matMenu">
-    <button mat-menu-item>
-        <mat-icon>dialpad</mat-icon>
-        <span>Redial</span>
-    </button>
-    <button mat-menu-item disabled>
-        <mat-icon>voicemail</mat-icon>
-        <span>Check voice mail</span>
-    </button>
-    <button mat-menu-item>
-        <mat-icon>notifications_off</mat-icon>
-        <span>Disable alerts</span>
-    </button>
-</mat-menu>
+    <mat-menu #menu="matMenu">
+        @if (book.hidden) {
+            <button mat-menu-item (click)="setVisible(true)">
+                <mat-icon>visibility</mat-icon>
+                <span>{{ t('book.unhide') }}</span>
+            </button>
+        } @else {
+            <button mat-menu-item (click)="setVisible(false)">
+                <mat-icon>visibility_off</mat-icon>
+                <span>{{ t('book.hide') }}</span>
+            </button>
+        }
+
+        @if (book.noGroup) {
+            <button mat-menu-item (click)="setGroup(true)">
+                <mat-icon>horizontal_split</mat-icon>
+                <span>{{ t('book.group') }}</span>
+            </button>
+        } @else {
+            <button mat-menu-item (click)="setGroup(false)">
+                <mat-icon>group</mat-icon>
+                <span>{{ t('book.ungroup') }}</span>
+            </button>
+        }
+    </mat-menu>
+</div>

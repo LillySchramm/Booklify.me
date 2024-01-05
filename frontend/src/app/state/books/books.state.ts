@@ -333,6 +333,62 @@ export class BooksState {
         });
     }
 
+    @Action(BookActions.UpdateBookVisibility)
+    updateBookVisibility(
+        { getState, dispatch, patchState }: StateContext<BookStateModel>,
+        { isbns, visible }: BookActions.UpdateBookVisibility,
+    ) {
+        const state = getState();
+
+        for (const isbn of isbns) {
+            state.bookMap[isbn].hidden = !visible;
+        }
+
+        patchState({ bookMap: state.bookMap });
+
+        return this.bookApi
+            .booksControllerSetBookOwnershipFlags({ isbns, hidden: !visible })
+            .pipe(
+                tap(() => {
+                    dispatch(new BookActions.UpdateBookSuccess());
+                }),
+            );
+    }
+
+    @Action(BookActions.UpdatedBookGrouping)
+    updateBookGrouping(
+        { getState, dispatch, patchState }: StateContext<BookStateModel>,
+        { isbns, group }: BookActions.UpdatedBookGrouping,
+    ) {
+        const state = getState();
+
+        for (const isbn of isbns) {
+            state.bookMap[isbn].noGroup = !group;
+            state.bookMap[isbn].groupId = group
+                ? state.bookMap[isbn].groupId
+                : 'unknown';
+        }
+
+        patchState({ bookMap: state.bookMap });
+
+        return this.bookApi
+            .booksControllerSetBookOwnershipFlags({ isbns, noGroup: !group })
+            .pipe(
+                tap(() => {
+                    dispatch(new BookActions.UpdateBookSuccess());
+                }),
+            );
+    }
+
+    @Action(BookActions.UpdateBookSuccess)
+    updateBookSuccess({ dispatch, getState }: StateContext<BookStateModel>) {
+        dispatch(
+            new BookActions.LoadBooksOfUser(getState().currentOwnerId || ''),
+        );
+
+        this.snack.show('Book(s) updated successfully!');
+    }
+
     @Selector()
     static currentOwnerId(state: BookStateModel): string | undefined {
         return state.currentOwnerId;

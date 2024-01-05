@@ -22,6 +22,7 @@ export * from './resetPasswordDto';
 export * from './resetPasswordRequestDto';
 export * from './sessionDto';
 export * from './sessionListDto';
+export * from './setOwnershipFlagsDto';
 export * from './setOwnershipStatusDto';
 export * from './signInDto';
 export * from './signInSuccessDto';
