@@ -11,6 +11,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subject, map } from 'rxjs';
 import { BookDto, BookGroupDto, UserDto } from 'src/app/api';
+import { UiService } from 'src/app/common/services/ui.service';
 import { BookActions } from 'src/app/state/books/books.actions';
 import { BooksState } from 'src/app/state/books/books.state';
 import { UserState } from 'src/app/state/user/user.state';
@@ -75,6 +76,7 @@ export class BookGroupComponent implements OnInit {
     constructor(
         private store: Store,
         private transloco: TranslocoService,
+        public ui: UiService,
     ) {}
 
     ngOnInit(): void {
