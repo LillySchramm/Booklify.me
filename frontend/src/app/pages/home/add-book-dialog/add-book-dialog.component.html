@@ -57,20 +57,42 @@
                     : ''
             "
         >
-            <button
-                mat-flat-button
-                color="primary"
-                class="mr-4"
-                [disabled]="
-                    $searchLoading() ||
-                    !$searchResult() ||
-                    $ownershipChangeLoading() ||
-                    $currentCollection()?.includes($searchResult()?.isbn ?? '')
-                "
-                (click)="addBook()"
-            >
-                {{ t('add-book-dialog.add') }}
-            </button>
+            @if ($searchResult()) {
+                <div class="flex flex-wrap justify-around sm:justify-start">
+                    <button
+                        mat-flat-button
+                        color="primary"
+                        class="mb-4 sm:mb-0"
+                        [disabled]="
+                            $searchLoading() ||
+                            !$searchResult() ||
+                            $ownershipChangeLoading() ||
+                            $currentCollection()?.includes(
+                                $searchResult()?.isbn ?? ''
+                            )
+                        "
+                        (click)="addBook(false)"
+                    >
+                        {{ t('add-book-dialog.add') }}
+                    </button>
+                    <button
+                        mat-flat-button
+                        color="primary"
+                        class="mr-4"
+                        [disabled]="
+                            $searchLoading() ||
+                            !$searchResult() ||
+                            $ownershipChangeLoading() ||
+                            $currentCollection()?.includes(
+                                $searchResult()?.isbn ?? ''
+                            )
+                        "
+                        (click)="addBook(true)"
+                    >
+                        {{ t('add-book-dialog.add-and-hide') }}
+                    </button>
+                </div>
+            }
         </div>
         <button mat-button mat-dialog-close>
             {{ t('add-book-dialog.close') }}

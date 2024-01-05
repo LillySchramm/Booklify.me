@@ -75,7 +75,7 @@ export class AddBookDialogComponent {
         this.store.dispatch(new BookActions.SearchBooks(isbn));
     }
 
-    addBook() {
+    addBook(hide: boolean) {
         const book = this.$searchResult();
 
         if (
@@ -89,6 +89,7 @@ export class AddBookDialogComponent {
             new BookActions.ChangeOwnership(book.isbn, {
                 bookGroupId: book.groupId,
                 status: 'OWNED',
+                hidden: hide,
             }),
         );
     }
