@@ -178,6 +178,7 @@
     "unhide-all": "Unhide All",
     "hide-all": "Hide All",
     "group-all": "Include All In Grouping",
-    "ungroup-all": "Do Not Group Any"
+    "ungroup-all": "Do Not Group Any",
+    "remove": "Remove Book"
   }
 }

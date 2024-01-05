@@ -93,4 +93,13 @@ export class BookCardComponent implements OnInit {
             new BookActions.UpdatedBookGrouping([this.book.isbn], group),
         );
     }
+
+    remove(): void {
+        this.store.dispatch(
+            new BookActions.ChangeOwnership(this.book.isbn, {
+                bookGroupId: null,
+                status: 'NONE',
+            }),
+        );
+    }
 }

@@ -81,5 +81,10 @@
                 <span>{{ t('book.ungroup') }}</span>
             </button>
         }
+
+        <button mat-menu-item (click)="remove()">
+            <mat-icon>delete_forever</mat-icon>
+            <span>{{ t('book.remove') }}</span>
+        </button>
     </mat-menu>
 </div>

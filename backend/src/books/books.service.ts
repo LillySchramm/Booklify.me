@@ -294,9 +294,7 @@ export class BooksService implements OnModuleInit {
             update: { status, bookGroupId, hidden, noGroup },
         });
 
-        if (status === BookStatus.OWNED) {
-            await this.bookGroupingService.groupBooksOfUser(user.id, true);
-        }
+        await this.bookGroupingService.groupBooksOfUser(user.id, true);
 
         return ownership;
     }
