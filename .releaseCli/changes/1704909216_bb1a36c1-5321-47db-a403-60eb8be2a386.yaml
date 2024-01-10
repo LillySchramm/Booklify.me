@@ -1,0 +1,7 @@
+id: bb1a36c1-5321-47db-a403-60eb8be2a386
+title: Fixed a bug which prevented signup if recaptcha was disabled.
+type: 5
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1704909216

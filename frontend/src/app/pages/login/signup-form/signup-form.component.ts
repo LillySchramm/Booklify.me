@@ -148,12 +148,29 @@ export class SignupFormComponent implements OnInit {
         );
     }
 
+    private submitSignup(token: string = ''): void {
+        this.store.dispatch(
+            new UserActions.SignUp({
+                email: this.form.get('email')!.value!,
+                name: this.form.get('username')!.value!,
+                password: this.form.get('password1')!.value!,
+                recaptchaToken: token,
+                agreedPrivacy: this.form.get('tosAndPrivacy')!.value,
+                agreedTos: this.form.get('tosAndPrivacy')!.value,
+            }),
+        );
+    }
+
     public onSubmit(): void {
         if (!this.form.valid) {
             return;
         }
 
-        this.recaptchaRef.reset();
-        this.recaptchaRef.execute();
+        if (this.recaptchaRef) {
+            this.recaptchaRef.reset();
+            this.recaptchaRef.execute();
+        } else {
+            this.submitSignup();
+        }
     }
 }
