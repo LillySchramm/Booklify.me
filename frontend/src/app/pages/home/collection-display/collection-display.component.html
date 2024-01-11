@@ -28,7 +28,11 @@
             class="flex h-full w-full items-center justify-center"
         >
             <span class="text-4xl">
-                {{ t('home.noBooks') }}
+                {{
+                    $currentCollection()?.length
+                        ? t('home.noMatchFilter')
+                        : t('home.noBooks')
+                }}
             </span>
         </div>
     }
