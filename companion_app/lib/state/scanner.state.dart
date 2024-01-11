@@ -10,6 +10,7 @@ class ScannerState extends ChangeNotifier {
   bool notFound = false;
   bool wasKnown = true;
   bool changingOwnership = false;
+  bool isHidden = false;
   BookDto? book;
   PublisherDto? publisher;
   String? ownershipStatus;
@@ -50,6 +51,11 @@ class ScannerState extends ChangeNotifier {
 
   void setOwnershipStatus(String? status) {
     ownershipStatus = status;
+    notifyListeners();
+  }
+
+  void setHidden(bool hidden) {
+    isHidden = hidden;
     notifyListeners();
   }
 

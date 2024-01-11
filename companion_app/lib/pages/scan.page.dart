@@ -97,6 +97,7 @@ class _ScanPageState extends State<ScanPage> {
 
     var ownershipStatus = await getBookOwnershipStatus(authState, isbn);
     scannerState.setOwnershipStatus(ownershipStatus!.status);
+    scannerState.setHidden(ownershipStatus.hidden);
 
     var publisher = await getPublisher(authState, book.publisher);
     scannerState.setPublisher(publisher);

@@ -83,8 +83,62 @@ class BookDisplay extends StatelessWidget {
             textAlign: TextAlign.center),
         SizedBox(height: 10),
         BookStatusButton(),
+        SizedBox(height: 10),
+        BookHideButton(),
       ],
     ));
+  }
+}
+
+class BookHideButton extends StatelessWidget {
+  const BookHideButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var scannerState = context.watch<ScannerState>();
+
+    var color = Colors.green;
+    var text = "Hide book";
+    var icon = Icons.visibility_off;
+
+    if (scannerState.ownershipStatus == "NONE") {
+      text = "Add book and hide";
+    }
+
+    if (scannerState.isHidden) {
+      color = Colors.red;
+      text = "Unhide book";
+      icon = Icons.visibility;
+    }
+
+    return FilledButton.icon(
+        onPressed: scannerState.changingOwnership
+            ? null
+            : () => onHiddenPressed(context),
+        icon: Icon(icon),
+        label: Text(text),
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(color),
+        ));
+  }
+
+  void onHiddenPressed(BuildContext context) async {
+    var scannerState = context.read<ScannerState>();
+    var authState = context.read<AuthState>();
+
+    scannerState.setChangingOwnership(true);
+
+    await setOwnershipStatus(
+        authState, scannerState.book!, "OWNED", !scannerState.isHidden);
+
+    var hiddenStatus =
+        await getBookOwnershipStatus(authState, scannerState.book!.isbn);
+    scannerState.setHidden(hiddenStatus!.hidden);
+    scannerState.setOwnershipStatus(hiddenStatus.status);
+
+    scannerState.setChangingOwnership(false);
   }
 }
 
@@ -106,12 +160,10 @@ class BookStatusButton extends StatelessWidget {
       icon = CupertinoIcons.trash;
     }
 
-    if (scannerState.changingOwnership) {
-      return ProgressSpinner();
-    }
-
     return FilledButton.icon(
-        onPressed: () => onStatusPressed(context),
+        onPressed: scannerState.changingOwnership
+            ? null
+            : () => onStatusPressed(context),
         icon: Icon(icon),
         label: Text(text),
         style: ButtonStyle(
@@ -126,11 +178,12 @@ class BookStatusButton extends StatelessWidget {
     scannerState.setChangingOwnership(true);
 
     await setOwnershipStatus(authState, scannerState.book!,
-        scannerState.ownershipStatus == "OWNED" ? "NONE" : "OWNED");
+        scannerState.ownershipStatus == "OWNED" ? "NONE" : "OWNED", false);
 
     var ownershipStatus =
         await getBookOwnershipStatus(authState, scannerState.book!.isbn);
     scannerState.setOwnershipStatus(ownershipStatus!.status);
+    scannerState.setHidden(ownershipStatus.hidden);
 
     scannerState.setChangingOwnership(false);
   }

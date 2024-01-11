@@ -22,14 +22,17 @@ class AuthorIdDto {
 
 class OwnershipStatusDto {
   final String status;
+  final bool hidden;
 
   const OwnershipStatusDto({
     required this.status,
+    required this.hidden,
   });
 
   factory OwnershipStatusDto.fromJson(Map<String, dynamic> json) {
     return OwnershipStatusDto(
       status: json['status'],
+      hidden: json['hidden'],
     );
   }
 }
@@ -121,8 +124,8 @@ Future<OwnershipStatusDto?> getBookOwnershipStatus(
   return null;
 }
 
-Future setOwnershipStatus(
-    AuthState authState, BookDto bookDto, String ownershipStatus) async {
+Future setOwnershipStatus(AuthState authState, BookDto bookDto,
+    String ownershipStatus, bool hidden) async {
   var accessToken = await authState.getToken();
 
   final response = await http.post(
@@ -134,6 +137,7 @@ Future setOwnershipStatus(
     body: jsonEncode(<String, dynamic>{
       'status': ownershipStatus,
       'bookGroupId': bookDto.groupId,
+      'hidden': hidden,
     }),
   );
 }
