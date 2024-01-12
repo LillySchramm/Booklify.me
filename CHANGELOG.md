@@ -1,5 +1,31 @@
 # Changelog
 
+## v1.1.0  - 12.1.2024
+
+### Added
+
+- Added the ability to hide books from the public account page. 
+- Added the ability to exclude books from the auto grouping algorithms. (Usefull for excluding false-positives) 
+- Added a new interaction menu for the book cards. 
+- Added a 'Add And Hide' button to the add book dialog. 
+- Add-An-Hide has been added to the Companion App 
+- Added an author filter to the collection pages.  
+### Changed
+
+- Refined the automatic book grouping. 
+- Greatly improved frontend performance for collections with many books. 
+### Removed
+
+- Collections with only one book are no longer collapsed by default. 
+### Fixed
+
+- Fixed a bug, which caused inactive users to be logged out. 
+- Fixed a bug, which caused the sidenav info about a book to not update correctly. 
+- Fixed a bug, which caused the backend to indicate a system error if a book could not be found.  
+- Fixed a bug which prevented signup if recaptcha was disabled. 
+- If no books match the given filter an appropriate message will be displayed. 
+
+
 ## v1.0.3  - 31.12.2023
 
 ### Added
