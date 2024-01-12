@@ -1,3 +1,5 @@
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { NgClass } from '@angular/common';
 import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -6,6 +8,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Select, Store } from '@ngxs/store';
 import { Observable, map, withLatestFrom } from 'rxjs';
 import { BookDto } from 'src/app/api';
+import { FooterComponent } from 'src/app/common/footer/footer.component';
 import { BookGroupMap, BooksState } from 'src/app/state/books/books.state';
 import { UiActions } from 'src/app/state/ui/ui.actions';
 import { BookGroupComponent } from '../book-group/book-group.component';
@@ -18,7 +21,14 @@ export interface BookGrouping {
 @Component({
     selector: 'app-collection-display',
     standalone: true,
-    imports: [BookGroupComponent, TranslocoModule, MatProgressSpinnerModule],
+    imports: [
+        BookGroupComponent,
+        TranslocoModule,
+        MatProgressSpinnerModule,
+        ScrollingModule,
+        NgClass,
+        FooterComponent,
+    ],
     templateUrl: './collection-display.component.html',
     styleUrls: ['./collection-display.component.scss'],
 })

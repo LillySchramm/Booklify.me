@@ -2,9 +2,10 @@ import { Component, ViewChild } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UntilDestroy } from '@ngneat/until-destroy';
+import { Router, RoutesRecognized } from '@angular/router';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, filter, map } from 'rxjs';
 import { SnackBarService } from './common/services/snack-bar.service';
 import { TokenService } from './common/services/token.service';
 import { UiService } from './common/services/ui.service';
@@ -25,6 +26,23 @@ export class AppComponent {
     @Select(UiState.isInfoVisible) isInfoVisible$!: Observable<boolean>;
     $isInfoVisible = toSignal(this.isInfoVisible$);
 
+    pageProvidesFooter$ = this.router.events.pipe(
+        untilDestroyed(this),
+        filter((event) => event instanceof RoutesRecognized),
+        map((event) => {
+            if (event instanceof RoutesRecognized) {
+                const route = event.state.root.firstChild;
+                if (route === null) {
+                    return false;
+                }
+
+                return route.data['providesFooter'];
+            }
+            return false;
+        }),
+    );
+    $pageProvidesFooter = toSignal(this.pageProvidesFooter$);
+
     innerWidth = window.innerWidth;
 
     @ViewChild('sideNav', { read: MatDrawer, static: false }) sideNav:
@@ -37,6 +55,7 @@ export class AppComponent {
         private _token: TokenService,
         private store: Store,
         public ui: UiService,
+        private router: Router,
     ) {
         this.snackBar.message$.subscribe((message) => {
             this._snackBar.open(

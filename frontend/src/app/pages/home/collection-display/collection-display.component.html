@@ -1,16 +1,28 @@
 @if ($groupedBooks(); as groupedBooks) {
     @if (groupedBooks.length) {
-        @for (
-            group of groupedBooks;
-            track trackById(i, group);
-            let i = $index
-        ) {
-            <app-book-group
-                [groupId]="group.key"
-                [books]="group.value"
-                class="w-full"
-            />
-        }
+        <cdk-virtual-scroll-viewport
+            appendOnly
+            class="h-full w-full"
+            itemSize="200"
+        >
+            <div>
+                <div class="mt-2"></div>
+                <app-book-group
+                    *cdkVirtualFor="
+                        let group of groupedBooks;
+                        trackBy: trackById;
+                        let first = first
+                    "
+                    [groupId]="group.key"
+                    [books]="group.value"
+                    class="w-full"
+                />
+
+                <div class="mb-2 h-[6vh] min-h-[6vh] px-4">
+                    <app-footer class="h-full w-full"></app-footer>
+                </div>
+            </div>
+        </cdk-virtual-scroll-viewport>
     } @else if ($loadingCollection()) {
         <div
             *transloco="let t"

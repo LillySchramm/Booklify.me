@@ -1,0 +1,7 @@
+id: 24d4d6da-8ead-4fe4-a90a-6c49022b0d18
+title: Greatly improved frontend performance for collections with many books.
+type: 2
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1705084504

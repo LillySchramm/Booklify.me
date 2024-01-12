@@ -29,6 +29,7 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         loadComponent: () =>
             import('./pages/home/home.component').then((m) => m.HomeComponent),
+        data: { providesFooter: true },
     },
     {
         path: 'account',
@@ -52,6 +53,7 @@ const routes: Routes = [
             import('./pages/user-collection/user-collection.component').then(
                 (m) => m.UserCollectionComponent,
             ),
+        data: { providesFooter: true },
     },
     {
         path: 'reset-password',

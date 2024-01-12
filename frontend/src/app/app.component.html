@@ -28,14 +28,16 @@
         </div>
     </mat-drawer>
     <mat-drawer-content
-        class="!flex max-h-screen min-h-screen w-full flex-col pt-20"
+        class="!flex max-h-screen min-h-screen w-full flex-col pt-16"
         [ngClass]="{ '!ml-0': !$isSidenavVisible() }"
     >
         <div class="flex flex-grow pl-2 pr-2">
             <router-outlet></router-outlet>
         </div>
-        <div class="mb-4 h-[6vh] min-h-[6vh] px-4">
-            <app-footer class="h-full w-full"></app-footer>
-        </div>
+        @if (!$pageProvidesFooter()) {
+            <div class="mb-2 h-[6vh] min-h-[6vh] px-4">
+                <app-footer class="h-full w-full"></app-footer>
+            </div>
+        }
     </mat-drawer-content>
 </mat-drawer-container>
