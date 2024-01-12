@@ -71,7 +71,11 @@
     "add-book": "Add Book",
     "add-group": "Add Group",
     "add-book-text": "Add book to your collection",
-    "remove-book-text": "Remove book from your collection"
+    "remove-book-text": "Remove book from your collection",
+    "publisher": "Publisher",
+    "add-publisher": "Add Publisher...",
+    "author": "Author",
+    "add-author": "Add Author"
   },
   "book-groups": {
     "unknown": "Unassigned",
@@ -104,7 +108,8 @@
     "add-and-hide": "Add To Collection And Hide"
   },
   "home": {
-    "noBooks": "There aren't any books in this collection yet"
+    "noBooks": "There aren't any books in this collection yet",
+    "noMatchFilter": "No books in this collection match the filter"
   },
   "account": {
     "return-to-home": "Return To Your Collection",

@@ -41,6 +41,7 @@ interface BookStateModel {
     searchLoading: boolean;
     ownershipChangeLoading: boolean;
     filter?: string;
+    authorFilter?: string[];
 }
 
 @State<BookStateModel>({
@@ -333,6 +334,16 @@ export class BooksState {
         });
     }
 
+    @Action(BookActions.SetAuthorFilter)
+    setAuthorFilter(
+        { patchState }: StateContext<BookStateModel>,
+        { authorIds }: BookActions.SetAuthorFilter,
+    ) {
+        patchState({
+            authorFilter: authorIds,
+        });
+    }
+
     @Action(BookActions.UpdateBookVisibility)
     updateBookVisibility(
         { getState, dispatch, patchState }: StateContext<BookStateModel>,
@@ -501,6 +512,47 @@ export class BooksState {
     @Selector()
     static filter(state: BookStateModel) {
         return state.filter;
+    }
+
+    @Selector()
+    static authorFilter(state: BookStateModel) {
+        return state.authorFilter;
+    }
+
+    @Selector()
+    static currentPublishers(state: BookStateModel) {
+        const publishers = new Set<string>();
+
+        if (!state.currentCollection) {
+            return [];
+        }
+
+        for (const isbn of state.currentCollection) {
+            const book = state.bookMap[isbn];
+            if (book.publisherId) {
+                publishers.add(book.publisherId);
+            }
+        }
+
+        return Array.from(publishers.values());
+    }
+
+    @Selector()
+    static currentAuthors(state: BookStateModel) {
+        const authors = new Set<string>();
+
+        if (!state.currentCollection) {
+            return [];
+        }
+
+        for (const isbn of state.currentCollection) {
+            const book = state.bookMap[isbn];
+            for (const author of book.authors) {
+                authors.add(author.id);
+            }
+        }
+
+        return Array.from(authors.values());
     }
 
     static group(id: string) {

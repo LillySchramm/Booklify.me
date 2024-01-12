@@ -10,13 +10,19 @@ import { MatInputModule } from '@angular/material/input';
 import { TranslocoModule } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Select, Store } from '@ngxs/store';
-import { Observable, debounceTime } from 'rxjs';
+import { Observable, combineLatest, debounceTime, map } from 'rxjs';
 import { UserDto } from 'src/app/api';
 import { FormErrorPipe } from 'src/app/common/pipes/form-error.pipe';
 import { AddBookDialogComponent } from 'src/app/pages/home/add-book-dialog/add-book-dialog.component';
+import { AuthorState } from 'src/app/state/authors/author.state';
 import { BookActions } from 'src/app/state/books/books.actions';
 import { BooksState } from 'src/app/state/books/books.state';
+import {
+    PublisherMap,
+    PublisherState,
+} from 'src/app/state/publisher/publisher.state';
 import { UserState } from 'src/app/state/user/user.state';
+import { ChipFilterComponent } from '../../components/chip-filter/chip-filter.component';
 
 @UntilDestroy()
 @Component({
@@ -33,6 +39,7 @@ import { UserState } from 'src/app/state/user/user.state';
         MatIconModule,
         MatDialogModule,
         AddBookDialogComponent,
+        ChipFilterComponent,
     ],
     templateUrl: './collection.component.html',
     styleUrls: ['./collection.component.scss'],
@@ -47,6 +54,34 @@ export class CollectionComponent {
         string | undefined
     >;
     $currentOwnerId = toSignal(this.currentOwnerId$);
+
+    @Select(BooksState.currentPublishers) publisherIds$!: Observable<string[]>;
+    $publisherIds = toSignal(this.publisherIds$);
+
+    @Select(BooksState.currentAuthors) authorIds$!: Observable<string[]>;
+    $authorIds = toSignal(this.authorIds$);
+
+    @Select(PublisherState.publishers) publishers$!: Observable<PublisherMap>;
+
+    publisherNames$ = combineLatest([
+        this.publisherIds$,
+        this.publishers$,
+    ]).pipe(
+        map(([ids, entities]) => {
+            return ids.map((id) => entities[id]?.name).sort();
+        }),
+    );
+    $publisherNames = toSignal(this.publisherNames$);
+
+    @Select(AuthorState.authors) authors$!: Observable<PublisherMap>;
+    $authors = toSignal(this.authors$);
+
+    authorNames$ = combineLatest([this.authorIds$, this.authors$]).pipe(
+        map(([ids, entities]) => {
+            return ids.map((id) => entities[id]?.name).sort();
+        }),
+    );
+    $authorNames = toSignal(this.authorNames$);
 
     public form = new FormGroup({
         searchText: new FormControl(''),
@@ -67,6 +102,19 @@ export class CollectionComponent {
                     new BookActions.SetFilter(value.searchText),
                 );
             });
+    }
+
+    setAuthorFilter(authorNames: string[]) {
+        const authors = this.$authors();
+        if (!authors) {
+            return;
+        }
+
+        const authorIds = Object.keys(authors).filter((key) =>
+            authorNames.includes(authors[key].name),
+        );
+
+        this.store.dispatch(new BookActions.SetAuthorFilter(authorIds));
     }
 
     openAddBookDialog() {

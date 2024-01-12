@@ -29,6 +29,9 @@ export class CollectionDisplayComponent {
     $currentCollection = toSignal(this.currentCollection$);
 
     @Select(BooksState.filter) filter$!: Observable<string | undefined>;
+    @Select(BooksState.authorFilter) authorFilter$!: Observable<
+        string[] | undefined
+    >;
 
     @Select(BooksState.currentGroupMap) currentGroupMap$!: Observable<
         BookGroupMap | undefined
@@ -113,16 +116,28 @@ export class CollectionDisplayComponent {
                 };
             });
         }),
-        withLatestFrom(this.filter$),
-        map(([entries, filter]) => {
-            if (!filter) return entries;
+        withLatestFrom(this.filter$, this.authorFilter$),
+        map(([entries, filter, authorFilter]) => {
+            if (!filter && !authorFilter) return entries;
+
+            const cache = this.getFilterFromCache(
+                entries.length,
+                filter,
+                authorFilter,
+            );
+            if (cache) return cache;
 
             return entries
                 .map((entry) => {
                     return {
                         key: entry.key,
                         value: entry.value.filter((book) =>
-                            this.filterBook(book, entry.key, filter),
+                            this.filterBook(
+                                book,
+                                entry.key,
+                                filter,
+                                authorFilter,
+                            ),
                         ),
                     };
                 })
@@ -130,6 +145,15 @@ export class CollectionDisplayComponent {
         }),
     );
     $groupedBooks = toSignal(this.groupedBooks$);
+
+    filterCache: Map<
+        string,
+        {
+            key: string;
+            value: BookDto[];
+        }[]
+    > = new Map();
+    lastFilterSize = 0;
 
     constructor(private store: Store) {
         this.currentOwnerId$.pipe(untilDestroyed(this)).subscribe((ownerId) => {
@@ -141,8 +165,18 @@ export class CollectionDisplayComponent {
         return element.key;
     }
 
-    filterBook(book: BookDto, groupName: string, filter: string): boolean {
-        filter = filter.toLowerCase();
+    filterBook(
+        book: BookDto,
+        groupName: string,
+        filter: string | undefined,
+        authorFilter: string[] | undefined,
+    ): boolean {
+        filter = filter ? filter.toLowerCase() : '';
+
+        const containsAuthor = authorFilter?.length
+            ? !!book.authors.find((author) => authorFilter.includes(author.id))
+            : true;
+        if (!containsAuthor) return false;
 
         if (book.title === null) return false;
 
@@ -160,5 +194,26 @@ export class CollectionDisplayComponent {
             return Number.parseInt(found[found.length - 1]);
         }
         return null;
+    }
+
+    private getFilterFromCache(
+        count: number,
+        filter: string | undefined,
+        authorFilter: string[] | undefined,
+    ):
+        | {
+              key: string;
+              value: BookDto[];
+          }[]
+        | null {
+        if (!this.filterCache) this.filterCache = new Map();
+
+        if (this.lastFilterSize !== count) {
+            this.filterCache.clear();
+            this.lastFilterSize = count;
+        }
+
+        const key = `${filter}-${authorFilter?.join('-')}`;
+        return this.filterCache.get(key) || null;
     }
 }

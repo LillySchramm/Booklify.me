@@ -1,6 +1,9 @@
-<div class="flex h-full flex-grow flex-col" *transloco="let t">
-    <form [formGroup]="form" class="flex flex-col p-4">
-        <mat-form-field color="accent">
+<div class="flex h-full max-h-full flex-col overflow-hidden" *transloco="let t">
+    <form
+        [formGroup]="form"
+        class="flex max-h-[73vh] flex-col overflow-scroll p-4"
+    >
+        <mat-form-field class="mb-0" color="accent">
             <mat-label>{{ t('collection.filter') }}</mat-label>
             <input matInput type="text" formControlName="searchText" />
             @if (form.get('searchText')?.invalid) {
@@ -9,6 +12,13 @@
                 }}</mat-error>
             }
         </mat-form-field>
+
+        <app-chip-filter
+            [label]="t('collection.author')"
+            [placeholder]="t('collection.add-author')"
+            [items]="$authorNames() || []"
+            (itemsChange)="setAuthorFilter($event)"
+        ></app-chip-filter>
     </form>
     <div class="flex-grow"></div>
     @if ($currentUser()?.id === $currentOwnerId()) {
