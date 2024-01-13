@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.1.1  - 13.1.2024
+
+### Fixed
+
+- Fixed a bug which sometimes caused the book groups to be shown with incorrect titles. 
+- Fixed a bug which caused scrollbars to always be shown in sidenav. 
+
+
 ## v1.1.0  - 12.1.2024
 
 ### Added
