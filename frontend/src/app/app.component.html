@@ -31,7 +31,7 @@
         class="!flex max-h-screen min-h-screen w-full flex-col pt-16"
         [ngClass]="{ '!ml-0': !$isSidenavVisible() }"
     >
-        <div class="flex flex-grow pl-2 pr-2">
+        <div class="flex flex-grow pl-2">
             <router-outlet></router-outlet>
         </div>
         @if (!$pageProvidesFooter()) {

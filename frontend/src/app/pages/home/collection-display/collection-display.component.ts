@@ -6,7 +6,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoModule } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Select, Store } from '@ngxs/store';
-import { Observable, map, withLatestFrom } from 'rxjs';
+import { BehaviorSubject, Observable, map, withLatestFrom } from 'rxjs';
 import { BookDto } from 'src/app/api';
 import { FooterComponent } from 'src/app/common/footer/footer.component';
 import { BookGroupMap, BooksState } from 'src/app/state/books/books.state';
@@ -56,9 +56,14 @@ export class CollectionDisplayComponent {
     loadingCollection$!: Observable<boolean>;
     $loadingCollection = toSignal(this.loadingCollection$);
 
+    sorting$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    $sorting = toSignal(this.sorting$);
+
     groupedBooks$ = this.currentCollection$.pipe(
         untilDestroyed(this),
         map((collection) => {
+            this.sorting$.next(true);
+
             if (!collection) return {} as BookGrouping;
 
             const map = {} as BookGrouping;
@@ -85,6 +90,7 @@ export class CollectionDisplayComponent {
         map((entries) => entries.filter((entry) => entry.value.length > 0)),
         withLatestFrom(this.currentGroupMap$),
         map(([entries, groupMap]) => {
+            this.sorting$.next(true);
             if (!groupMap)
                 return [] as {
                     key: string;
@@ -128,16 +134,19 @@ export class CollectionDisplayComponent {
         }),
         withLatestFrom(this.filter$, this.authorFilter$),
         map(([entries, filter, authorFilter]) => {
-            if (!filter && !authorFilter) return entries;
-
+            this.sorting$.next(true);
             const cache = this.getFilterFromCache(
                 entries.length,
                 filter,
                 authorFilter,
             );
-            if (cache) return cache;
 
-            return entries
+            if ((!filter && !authorFilter) || cache) {
+                this.sorting$.next(false);
+                return cache ?? entries;
+            }
+
+            const sorted = entries
                 .map((entry) => {
                     return {
                         key: entry.key,
@@ -152,6 +161,11 @@ export class CollectionDisplayComponent {
                     };
                 })
                 .filter((entry) => entry.value.length > 0);
+
+            this.setFilterToCache(filter, authorFilter, sorted);
+            this.sorting$.next(false);
+
+            return sorted;
         }),
     );
     $groupedBooks = toSignal(this.groupedBooks$);
@@ -225,5 +239,17 @@ export class CollectionDisplayComponent {
 
         const key = `${filter}-${authorFilter?.join('-')}`;
         return this.filterCache.get(key) || null;
+    }
+
+    private setFilterToCache(
+        filter: string | undefined,
+        authorFilter: string[] | undefined,
+        value: {
+            key: string;
+            value: BookDto[];
+        }[],
+    ): void {
+        const key = `${filter}-${authorFilter?.join('-')}`;
+        this.filterCache.set(key, value);
     }
 }

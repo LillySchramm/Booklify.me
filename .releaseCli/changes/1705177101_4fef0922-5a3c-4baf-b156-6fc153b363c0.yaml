@@ -1,0 +1,7 @@
+id: 4fef0922-5a3c-4baf-b156-6fc153b363c0
+title: Fixed a bug which sometimes caused the book groups to be shown with incorrect titles.
+type: 5
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1705177101

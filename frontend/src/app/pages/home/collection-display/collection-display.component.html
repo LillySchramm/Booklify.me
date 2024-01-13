@@ -1,16 +1,17 @@
 @if ($groupedBooks(); as groupedBooks) {
-    @if (groupedBooks.length) {
+    @if (groupedBooks.length && !$sorting()) {
         <cdk-virtual-scroll-viewport
             appendOnly
             class="h-full w-full"
-            itemSize="200"
+            itemSize="56"
         >
-            <div>
+            <div class="pr-2">
                 <div class="mt-2"></div>
                 <app-book-group
                     *cdkVirtualFor="
                         let group of groupedBooks;
                         trackBy: trackById;
+                        templateCacheSize: 0;
                         let first = first
                     "
                     [groupId]="group.key"
@@ -23,7 +24,7 @@
                 </div>
             </div>
         </cdk-virtual-scroll-viewport>
-    } @else if ($loadingCollection()) {
+    } @else if ($loadingCollection() || $sorting()) {
         <div
             *transloco="let t"
             class="flex h-full w-full items-center justify-center"

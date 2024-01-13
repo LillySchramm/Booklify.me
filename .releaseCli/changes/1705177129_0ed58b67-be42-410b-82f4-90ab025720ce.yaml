@@ -1,0 +1,7 @@
+id: 0ed58b67-be42-410b-82f4-90ab025720ce
+title: Fixed a bug which caused scrollbars to always be shown in sidenav.
+type: 5
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1705177129
