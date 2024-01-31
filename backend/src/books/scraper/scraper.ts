@@ -160,10 +160,6 @@ export class Scraper implements BookScraper {
         scraper: BookScraper,
         volume?: VolumeInfo,
     ): Promise<CoverScrapeResult[]> {
-        this.logger.debug(
-            `Scraping cover for ${isbn} with ${scraper.constructor.name}`,
-        );
-
         const results = await scraper.scrapeBookCover(isbn, volume);
 
         this.logger.debug(
