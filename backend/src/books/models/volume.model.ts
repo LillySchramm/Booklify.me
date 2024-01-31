@@ -14,6 +14,7 @@ export interface VolumeInfo {
     };
     series?: string;
     incomplete?: boolean;
+    amazonLink?: string;
 }
 
 type StringOrObject = string | { type: string; value: string };

@@ -101,6 +101,7 @@ model Book {
   updatedAt        DateTime          @updatedAt
   publisherId      String?
   bookCoverId      String?
+  amazonLink       String?
   OwnershipStatus  OwnershipStatus[]
   BookFlags        BookFlags?
 

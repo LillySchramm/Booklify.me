@@ -88,6 +88,7 @@ export class BooksService implements OnModuleInit {
             pageCount: book.pageCount,
             printedPageCount: book.printedPageCount,
             publishedDate: book.publishedDate,
+            amazonLink: book.amazonLink,
             authors: {
                 connect: (book.authors || []).map((name) => ({ name })),
             },

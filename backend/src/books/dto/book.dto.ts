@@ -43,6 +43,8 @@ export class BookDto implements BookWithGroupIdAndAuthors {
     publisherId: string | null;
     @ApiProperty({ nullable: true, type: String })
     bookCoverId: string | null;
+    @ApiProperty({ type: String, nullable: true })
+    amazonLink: string | null;
     @ApiProperty({ type: () => IdentifierDto, isArray: true })
     authors: IdentifierDto[];
     @Exclude()

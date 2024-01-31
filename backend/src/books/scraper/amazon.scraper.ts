@@ -219,6 +219,8 @@ export class AmazonBookScraper implements BookScraper {
             return retry ? {} : await this.scrapeBookMetaData(isbn, true);
         }
 
+        const cleanedUrl = url.split('/ref=')[0];
+
         return {
             authors,
             pageCount,
@@ -227,6 +229,7 @@ export class AmazonBookScraper implements BookScraper {
             publishedDate,
             title,
             series,
+            amazonLink: cleanedUrl,
         };
     }
 
