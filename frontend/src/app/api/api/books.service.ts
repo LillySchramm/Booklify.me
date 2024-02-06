@@ -355,15 +355,7 @@ export class BooksService {
             }
         }
 
-        let localVarPath = `/books/${this.configuration.encodeParam({
-            name: 'isbn',
-            value: isbn,
-            in: 'path',
-            style: 'simple',
-            explode: false,
-            dataType: 'string',
-            dataFormat: undefined,
-        })}`;
+        let localVarPath = `/books/${this.configuration.encodeParam({ name: 'isbn', value: isbn, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
         return this.httpClient.request<BookDto>(
             'get',
             `${this.configuration.basePath}${localVarPath}`,
@@ -450,15 +442,7 @@ export class BooksService {
             }
         }
 
-        let localVarPath = `/books/cover/${this.configuration.encodeParam({
-            name: 'id',
-            value: id,
-            in: 'path',
-            style: 'simple',
-            explode: false,
-            dataType: 'string',
-            dataFormat: undefined,
-        })}.png`;
+        let localVarPath = `/books/cover/${this.configuration.encodeParam({ name: 'id', value: id, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}.png`;
         return this.httpClient.request<any>(
             'get',
             `${this.configuration.basePath}${localVarPath}`,
@@ -566,15 +550,7 @@ export class BooksService {
             }
         }
 
-        let localVarPath = `/books/${this.configuration.encodeParam({
-            name: 'isbn',
-            value: isbn,
-            in: 'path',
-            style: 'simple',
-            explode: false,
-            dataType: 'string',
-            dataFormat: undefined,
-        })}/status`;
+        let localVarPath = `/books/${this.configuration.encodeParam({ name: 'isbn', value: isbn, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}/status`;
         return this.httpClient.request<OwnershipStatusDto>(
             'get',
             `${this.configuration.basePath}${localVarPath}`,
@@ -817,15 +793,7 @@ export class BooksService {
             }
         }
 
-        let localVarPath = `/books/${this.configuration.encodeParam({
-            name: 'isbn',
-            value: isbn,
-            in: 'path',
-            style: 'simple',
-            explode: false,
-            dataType: 'string',
-            dataFormat: undefined,
-        })}/status`;
+        let localVarPath = `/books/${this.configuration.encodeParam({ name: 'isbn', value: isbn, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}/status`;
         return this.httpClient.request<OwnershipStatusDto>(
             'post',
             `${this.configuration.basePath}${localVarPath}`,

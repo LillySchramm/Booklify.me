@@ -219,15 +219,7 @@ export class AuthorsService {
             }
         }
 
-        let localVarPath = `/authors/${this.configuration.encodeParam({
-            name: 'id',
-            value: id,
-            in: 'path',
-            style: 'simple',
-            explode: false,
-            dataType: 'string',
-            dataFormat: undefined,
-        })}`;
+        let localVarPath = `/authors/${this.configuration.encodeParam({ name: 'id', value: id, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
         return this.httpClient.request<AuthorDto>(
             'get',
             `${this.configuration.basePath}${localVarPath}`,

@@ -6,7 +6,7 @@ import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable, combineLatest, map } from 'rxjs';
-import { BookDto } from 'src/app/api';
+import { BookDto, UserDto } from 'src/app/api';
 import { UpdateBookOwnershipButtonComponent } from 'src/app/pages/home/update-book-ownership-button/update-book-ownership-button.component';
 import { AuthorMap, AuthorState } from 'src/app/state/authors/author.state';
 import {
@@ -17,7 +17,10 @@ import { UiActions } from 'src/app/state/ui/ui.actions';
 import { IsbnPipe } from '../../pipes/isbn.pipe';
 import { LanguagePipe } from '../../pipes/language.pipe';
 import { CoverService } from '../../services/cover.service';
+import { AmazonButtonComponent } from '../amazon-button/amazon-button.component';
 import { NoImagePlaceholderComponent } from '../no-image-placeholder/no-image-placeholder.component';
+import { UserState } from 'src/app/state/user/user.state';
+import { BooksState } from 'src/app/state/books/books.state';
 
 @UntilDestroy()
 @Component({
@@ -31,6 +34,7 @@ import { NoImagePlaceholderComponent } from '../no-image-placeholder/no-image-pl
         LanguagePipe,
         IsbnPipe,
         UpdateBookOwnershipButtonComponent,
+        AmazonButtonComponent,
     ],
     templateUrl: './book-details.component.html',
     styleUrls: ['./book-details.component.scss'],
@@ -45,6 +49,16 @@ export class BookDetailsComponent {
 
     book$ = new BehaviorSubject<BookDto | undefined>(undefined);
     $book = toSignal(this.book$);
+
+    @Select(UserState.currentUser) currentUser$!: Observable<
+    UserDto | undefined
+    >;
+    $currentUser = toSignal(this.currentUser$);
+
+    @Select(BooksState.currentOwnerId) currentOwnerId$!: Observable<
+        string | undefined
+    >;
+    $currentOwnerId = toSignal(this.currentOwnerId$);
 
     shownBook: BookDto | undefined = undefined;
 

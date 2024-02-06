@@ -9,16 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { AmazonDto } from './amazonDto';
-import { LegalDto } from './legalDto';
-import { RecaptchaDto } from './recaptchaDto';
-import { ReportsDto } from './reportsDto';
 
-export interface SystemInfoDto {
-    signUpEnabled: boolean;
-    recaptcha: RecaptchaDto;
-    legal: LegalDto;
-    reports: ReportsDto;
-    version: string;
-    amazon: AmazonDto;
+export interface AmazonDto {
+    referralTag: string;
 }

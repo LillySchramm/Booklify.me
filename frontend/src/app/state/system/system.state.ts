@@ -78,4 +78,9 @@ export class SystemState {
     static version(state: SystemStateModel): string {
         return state.systemInfo?.version ?? '';
     }
+
+    @Selector()
+    static amazonReferralTag(state: SystemStateModel): string | undefined {
+        return state.systemInfo?.amazon.referralTag;
+    }
 }

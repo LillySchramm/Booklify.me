@@ -1,0 +1,12 @@
+<ng-container *transloco="let t">
+    <a [href]="$amazonLink()" target="_blank" rel="noopener noreferrer" class="!mt-4">
+        <mat-icon>shopping_cart</mat-icon>
+        {{ t('book-details.buy-on-amazon') }}
+        @if($amazonReferralTag()) { * }
+    </a>
+    @if($amazonReferralTag()) {
+        <p class="!mt-2 text-highlight text-right text-xs">
+            {{ t('book-details.amazon-referral-tag') }}
+        </p>
+    }
+</ng-container>

@@ -329,15 +329,7 @@ export class BookGroupsService {
             }
         }
 
-        let localVarPath = `/book-groups/${this.configuration.encodeParam({
-            name: 'id',
-            value: id,
-            in: 'path',
-            style: 'simple',
-            explode: false,
-            dataType: 'string',
-            dataFormat: undefined,
-        })}`;
+        let localVarPath = `/book-groups/${this.configuration.encodeParam({ name: 'id', value: id, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
         return this.httpClient.request<any>(
             'delete',
             `${this.configuration.basePath}${localVarPath}`,
@@ -584,15 +576,7 @@ export class BookGroupsService {
             }
         }
 
-        let localVarPath = `/book-groups/${this.configuration.encodeParam({
-            name: 'id',
-            value: id,
-            in: 'path',
-            style: 'simple',
-            explode: false,
-            dataType: 'string',
-            dataFormat: undefined,
-        })}`;
+        let localVarPath = `/book-groups/${this.configuration.encodeParam({ name: 'id', value: id, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
         return this.httpClient.request<BookGroupDto>(
             'patch',
             `${this.configuration.basePath}${localVarPath}`,

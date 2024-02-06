@@ -901,15 +901,7 @@ export class AuthService {
             }
         }
 
-        let localVarPath = `/auth/session/${this.configuration.encodeParam({
-            name: 'id',
-            value: id,
-            in: 'path',
-            style: 'simple',
-            explode: false,
-            dataType: 'string',
-            dataFormat: undefined,
-        })}`;
+        let localVarPath = `/auth/session/${this.configuration.encodeParam({ name: 'id', value: id, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
         return this.httpClient.request<SessionDto>(
             'delete',
             `${this.configuration.basePath}${localVarPath}`,

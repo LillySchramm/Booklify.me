@@ -24,6 +24,7 @@ export interface BookDto {
     updatedAt: string;
     publisherId: string | null;
     bookCoverId: string | null;
+    amazonLink: string | null;
     authors: Array<IdentifierDto>;
     groupId: string | null;
     hidden: boolean;

@@ -95,6 +95,12 @@
                 </p>
             }
             @if (!compact) {
+                @if (shownBook.amazonLink && $currentOwnerId() !== $currentUser()?.id) {
+                    <app-amazon-button
+                        [url]="shownBook.amazonLink"
+                        class="!mb-4 block"
+                    ></app-amazon-button>
+                }
                 <app-update-book-ownership-button></app-update-book-ownership-button>
             }
         </div>

@@ -95,7 +95,9 @@
     "pages": "Pages: ",
     "language": "Language: ",
     "isbn": "ISBN: ",
-    "title": "Title"
+    "title": "Title",
+    "buy-on-amazon": "Buy On Amazon",
+    "amazon-referral-tag": "* this is a referral link"
   },
   "add-book-dialog": {
     "title": "Add Book",

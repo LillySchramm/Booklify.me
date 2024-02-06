@@ -1,3 +1,4 @@
+export * from './amazonDto';
 export * from './authorDto';
 export * from './authorListDto';
 export * from './basicUserDto';
