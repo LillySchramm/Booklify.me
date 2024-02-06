@@ -54,7 +54,7 @@
         },
         "tryFindCover": {
             "enabled": true,
-            "cron": "0 * * * *"
+            "cron": "*/30 * * * * *"
         },
         "doLongruning": {
             "enabled": true,
@@ -96,4 +96,7 @@
         "username": "",
         "password": "",
     },
+    "amazon":  {
+        "referral_tag": ""
+    }
 }

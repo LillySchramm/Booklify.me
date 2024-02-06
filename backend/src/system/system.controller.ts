@@ -11,6 +11,7 @@ import { RecaptchaDto } from './dto/recaptcha.dto';
 import * as config from 'config';
 import { LegalDto } from './dto/legal.dto';
 import { ReportsDto } from './dto/reports.dto';
+import { AmazonDto } from './dto/amazon.dto';
 
 @Controller('system')
 @ApiTags('System')
@@ -53,12 +54,17 @@ export class SystemController {
             enabled: config.get<boolean>('reports.enabled'),
         });
 
+        const amazon = new AmazonDto({
+            referralTag: config.get<string>('amazon.referral_tag'),
+        });
+
         const response = new SystemInfoDto({
             signUpEnabled: !signUpDisabled,
             recaptcha,
             legal,
             reports,
             version: config.get<string>('version'),
+            amazon,
         });
 
         return response;
