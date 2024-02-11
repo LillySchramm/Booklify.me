@@ -75,6 +75,13 @@ export class CollectionDisplayComponent {
                 }
 
                 map[groupId].push(book);
+
+                if (book.favorite) {
+                    if (!map['favorite']) {
+                        map['favorite'] = [];
+                    }
+                    map['favorite'].push(book);
+                }
             }
 
             return map;
@@ -98,6 +105,9 @@ export class CollectionDisplayComponent {
                 }[];
 
             return entries.sort((a, b) => {
+                if (a.key === 'favorite') return -1;
+                if (b.key === 'favorite') return 1;
+
                 if (a.key === 'unknown') return 1;
                 if (b.key === 'unknown') return -1;
 

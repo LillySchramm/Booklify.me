@@ -18,4 +18,5 @@ export interface OwnershipStatusDto {
     bookGroupId: string | null;
     hidden: boolean;
     noGroup: boolean;
+    favorite: boolean;
 }

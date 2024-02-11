@@ -49,8 +49,13 @@ export class BookCardComponent implements OnInit {
     isInfoFullyVisible$!: Observable<boolean>;
     $isInfoFullyVisible = toSignal(this.isInfoFullyVisible$);
 
+    @Select(BooksState.selectedFavorite)
+    selectedFavorite$!: Observable<boolean>;
+    $selectedFavorite = toSignal(this.selectedFavorite$);
+
     @Input() book!: BookDto;
     @Input() showFlags: boolean = false;
+    @Input() favorite: boolean = false;
 
     coverUrl?: string | null = '';
 
@@ -70,7 +75,9 @@ export class BookCardComponent implements OnInit {
 
     openInfo(): void {
         this.store.dispatch(new UiActions.ChangeInfoVisibility(true));
-        this.store.dispatch(new BookActions.SelectBook(this.book.isbn));
+        this.store.dispatch(
+            new BookActions.SelectBook(this.book.isbn, this.favorite),
+        );
     }
 
     scroll(el: HTMLElement, i: number = 0) {
@@ -96,6 +103,15 @@ export class BookCardComponent implements OnInit {
     setGroup(group: boolean): void {
         this.store.dispatch(
             new BookActions.UpdatedBookGrouping([this.book.isbn], group),
+        );
+    }
+
+    toggleFavorite(): void {
+        this.store.dispatch(
+            new BookActions.UpdateBookFavorite(
+                [this.book.isbn],
+                !this.book.favorite,
+            ),
         );
     }
 

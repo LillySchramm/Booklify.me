@@ -52,7 +52,10 @@ export namespace BookActions {
 
     export class SelectBook {
         static readonly type = '[Books] Select Book';
-        constructor(public id: string | undefined) {}
+        constructor(
+            public id: string | undefined,
+            public favorite: boolean,
+        ) {}
     }
 
     export class SearchBooks {
@@ -108,6 +111,14 @@ export namespace BookActions {
         constructor(
             public isbns: string[],
             public group: boolean,
+        ) {}
+    }
+
+    export class UpdateBookFavorite {
+        static readonly type = '[Books] Updated Book Favorite';
+        constructor(
+            public isbns: string[],
+            public favorite: boolean,
         ) {}
     }
 

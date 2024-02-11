@@ -29,4 +29,5 @@ export interface BookDto {
     groupId: string | null;
     hidden: boolean;
     noGroup: boolean;
+    favorite: boolean;
 }

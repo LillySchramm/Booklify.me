@@ -28,6 +28,7 @@ export interface BookGroupMap {
 
 interface BookStateModel {
     selectedBook?: string;
+    selectedFavorite: boolean;
     currentCollection?: string[];
     bookMap: BookMap;
     currentOwnerId?: string;
@@ -51,6 +52,7 @@ interface BookStateModel {
         loadingGroups: false,
         searchLoading: false,
         ownershipChangeLoading: false,
+        selectedFavorite: false,
         bookMap: {},
     },
 })
@@ -202,10 +204,11 @@ export class BooksState {
     @Action(BookActions.SelectBook)
     selectBook(
         { patchState }: StateContext<BookStateModel>,
-        { id }: BookActions.SelectBook,
+        { id, favorite }: BookActions.SelectBook,
     ) {
         patchState({
             selectedBook: id,
+            selectedFavorite: favorite,
         });
     }
 
@@ -391,6 +394,28 @@ export class BooksState {
             );
     }
 
+    @Action(BookActions.UpdateBookFavorite)
+    updateBookFavorite(
+        { getState, dispatch, patchState }: StateContext<BookStateModel>,
+        { isbns, favorite }: BookActions.UpdateBookFavorite,
+    ) {
+        const state = getState();
+
+        for (const isbn of isbns) {
+            state.bookMap[isbn].favorite = favorite;
+        }
+
+        patchState({ bookMap: state.bookMap });
+
+        return this.bookApi
+            .booksControllerSetBookOwnershipFlags({ isbns, favorite })
+            .pipe(
+                tap(() => {
+                    dispatch(new BookActions.UpdateBookSuccess());
+                }),
+            );
+    }
+
     @Action(BookActions.UpdateBookSuccess)
     updateBookSuccess({ dispatch, getState }: StateContext<BookStateModel>) {
         dispatch(
@@ -413,6 +438,11 @@ export class BooksState {
     @Selector()
     static bookMap(state: BookStateModel) {
         return state.bookMap;
+    }
+
+    @Selector()
+    static selectedFavorite(state: BookStateModel) {
+        return state.selectedFavorite;
     }
 
     @Selector()

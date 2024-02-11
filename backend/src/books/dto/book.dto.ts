@@ -7,6 +7,7 @@ export type BookWithGroupIdAndAuthors = Book & {
         bookGroupId: string | null;
         hidden: boolean;
         noGroup: boolean;
+        favorite: boolean;
     }[];
     authors: {
         id: string;
@@ -54,6 +55,7 @@ export class BookDto implements BookWithGroupIdAndAuthors {
         bookGroupId: string | null;
         hidden: boolean;
         noGroup: boolean;
+        favorite: boolean;
     }[];
 
     @ApiProperty({ type: String, nullable: true })
@@ -84,6 +86,16 @@ export class BookDto implements BookWithGroupIdAndAuthors {
         }
 
         return this.OwnershipStatus[0].noGroup;
+    }
+
+    @ApiProperty({ type: Boolean })
+    @Expose()
+    get favorite(): boolean {
+        if (this.OwnershipStatus.length === 0) {
+            return false;
+        }
+
+        return this.OwnershipStatus[0].favorite;
     }
 
     constructor(partial: Partial<BookDto>) {

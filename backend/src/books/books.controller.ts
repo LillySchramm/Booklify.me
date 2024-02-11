@@ -10,6 +10,7 @@ import {
     Query,
     Request,
     Res,
+    UnauthorizedException,
     UseGuards,
 } from '@nestjs/common';
 import {
@@ -73,6 +74,7 @@ export class BooksController {
     @Get(':isbn')
     @UseGuards(AuthGuard)
     @ApiBearerAuth()
+    @AuthOptional()
     @ApiOkResponse({ type: BookDto })
     @ApiNotFoundResponse()
     @ApiQuery({ name: 'skipCrawl', required: false, type: Boolean })
@@ -91,11 +93,11 @@ export class BooksController {
 
         isbn = isbn.replaceAll('-', '').trim();
 
-        const book = await this.bookService.getBook(
-            isbn,
-            req.user.id,
-            !_skipCrawl,
-        );
+        if (!_skipCrawl && !req.user) throw new UnauthorizedException();
+
+        const userId = req.user?.id;
+
+        const book = await this.bookService.getBook(isbn, userId, !_skipCrawl);
         if (!book) throw new NotFoundException();
 
         return new BookDto(book);

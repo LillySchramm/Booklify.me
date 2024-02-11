@@ -141,7 +141,12 @@ export class BooksService implements OnModuleInit {
             include: {
                 OwnershipStatus: {
                     where: { userId },
-                    select: { bookGroupId: true, hidden: true, noGroup: true },
+                    select: {
+                        bookGroupId: true,
+                        hidden: true,
+                        noGroup: true,
+                        favorite: true,
+                    },
                 },
                 authors: {
                     select: { id: true },
@@ -377,7 +382,12 @@ export class BooksService implements OnModuleInit {
             include: {
                 OwnershipStatus: {
                     where: { userId },
-                    select: { bookGroupId: true, hidden: true, noGroup: true },
+                    select: {
+                        bookGroupId: true,
+                        hidden: true,
+                        noGroup: true,
+                        favorite: true,
+                    },
                 },
                 authors: {
                     select: { id: true },

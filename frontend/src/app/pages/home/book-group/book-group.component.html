@@ -26,6 +26,7 @@
                     <app-book-card
                         [book]="book"
                         [showFlags]="$currentOwnerId() === $currentUser()?.id"
+                        [favorite]="groupId === 'favorite'"
                     ></app-book-card>
                 }
             </div>

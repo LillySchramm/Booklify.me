@@ -86,7 +86,9 @@ export class BookGroupComponent implements OnInit {
                 if (!group) {
                     return {
                         id: this.groupId,
-                        name: this.transloco.translate('book-groups.unknown'),
+                        name: this.transloco.translate(
+                            'book-groups.' + this.groupId,
+                        ),
                     } as BookGroupDto;
                 }
                 return group;

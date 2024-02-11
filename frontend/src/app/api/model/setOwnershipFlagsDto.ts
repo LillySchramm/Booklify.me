@@ -14,4 +14,5 @@ export interface SetOwnershipFlagsDto {
     isbns: Array<string>;
     hidden?: boolean;
     noGroup?: boolean;
+    favorite?: boolean;
 }

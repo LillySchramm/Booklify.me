@@ -79,6 +79,7 @@
   },
   "book-groups": {
     "unknown": "Unassigned",
+    "favorite": "Favorites",
     "group": "Book Group"
   },
   "books": {

@@ -36,6 +36,6 @@ export class BookDetailsSideComponent {
 
     close(): void {
         this.store.dispatch(new UiActions.ChangeInfoVisibility(false));
-        this.store.dispatch(new BookActions.SelectBook(undefined));
+        this.store.dispatch(new BookActions.SelectBook(undefined, false));
     }
 }
