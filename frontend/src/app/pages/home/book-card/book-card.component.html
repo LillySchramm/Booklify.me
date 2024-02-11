@@ -86,5 +86,10 @@
             <mat-icon>delete_forever</mat-icon>
             <span>{{ t('book.remove') }}</span>
         </button>
+
+        <button mat-menu-item (click)="copyStandaloneLink()">
+            <mat-icon>share</mat-icon>
+            <span>{{ t('book.share') }}</span>
+        </button>
     </mat-menu>
 </div>

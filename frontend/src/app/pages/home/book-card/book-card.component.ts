@@ -6,13 +6,14 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslocoModule } from '@ngneat/transloco';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { Select, Store } from '@ngxs/store';
 import { LazyLoadImageModule } from 'ng-lazyload-image';
 import { Observable } from 'rxjs';
 import { BookDto } from 'src/app/api';
 import { NoImagePlaceholderComponent } from 'src/app/common/components/no-image-placeholder/no-image-placeholder.component';
 import { CoverService } from 'src/app/common/services/cover.service';
+import { SnackBarService } from 'src/app/common/services/snack-bar.service';
 import { UiService } from 'src/app/common/services/ui.service';
 import { BookActions } from 'src/app/state/books/books.actions';
 import { BooksState } from 'src/app/state/books/books.state';
@@ -55,6 +56,8 @@ export class BookCardComponent implements OnInit {
         private cover: CoverService,
         private store: Store,
         public ui: UiService,
+        public snackBar: SnackBarService,
+        public transloco: TranslocoService,
     ) {}
 
     ngOnInit(): void {
@@ -100,6 +103,16 @@ export class BookCardComponent implements OnInit {
                 bookGroupId: null,
                 status: 'NONE',
             }),
+        );
+    }
+
+    copyStandaloneLink(): void {
+        const url = window.location.origin + `/book/${this.book.isbn}`;
+        navigator.clipboard.writeText(url);
+
+        this.snackBar.show(
+            this.transloco.translate('book-card.linkCopied'),
+            this.transloco.translate('common.ok'),
         );
     }
 }

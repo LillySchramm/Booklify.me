@@ -181,15 +181,22 @@
     "noGroup": "This book has been excluded from automatic grouping",
     "unhide": "Unhide",
     "hide": "Hide",
-    "group": "Include In Auto Gouping",
+    "group": "Include In Auto Grouping",
     "ungroup": "Do Not Group",
     "unhide-all": "Unhide All",
     "hide-all": "Hide All",
     "group-all": "Include All In Grouping",
     "ungroup-all": "Do Not Group Any",
-    "remove": "Remove Book"
+    "remove": "Remove Book",
+    "share": "Share Book"
   },
   "book-overview": {
     "book-not-known": "This book has not been scanned by anyone yet"
+  },
+  "common": {
+    "ok": "OK"
+  },
+  "book-card": {
+    "linkCopied": "Link was copied to clipboard"
   }
 }
