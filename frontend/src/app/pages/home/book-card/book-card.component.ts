@@ -12,6 +12,7 @@ import { LazyLoadImageModule } from 'ng-lazyload-image';
 import { Observable } from 'rxjs';
 import { BookDto } from 'src/app/api';
 import { NoImagePlaceholderComponent } from 'src/app/common/components/no-image-placeholder/no-image-placeholder.component';
+import { LimitLengthPipe } from 'src/app/common/pipes/limit-length.pipe';
 import { CoverService } from 'src/app/common/services/cover.service';
 import { SnackBarService } from 'src/app/common/services/snack-bar.service';
 import { UiService } from 'src/app/common/services/ui.service';
@@ -33,6 +34,7 @@ import { UiState } from 'src/app/state/ui/ui.state';
         MatButtonModule,
         MatIconModule,
         MatTooltipModule,
+        LimitLengthPipe,
     ],
     templateUrl: './book-card.component.html',
     styleUrls: ['./book-card.component.scss'],
