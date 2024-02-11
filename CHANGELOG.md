@@ -1,5 +1,24 @@
 # Changelog
 
+## v1.2.0  - 11.2.2024
+
+### Added
+
+- Added Amazon referral link button to book details. 
+- Added a standalone page for viewing book details. 
+- Added a button to the book interaction menu which copies the link to the books' page. 
+- Added a feature which allows users to favorite books. 
+- Reduce backend load by allowing the usage of a CDN for media delivery. 
+### Changed
+
+- Updated the browser icons to match the companion app. 
+### Fixed
+
+- Fixed a duplicated log entry. 
+- Fixed a few typos. 
+- Limit the length of book titles shown in the book cards. 
+
+
 ## v1.1.1  - 13.1.2024
 
 ### Fixed
