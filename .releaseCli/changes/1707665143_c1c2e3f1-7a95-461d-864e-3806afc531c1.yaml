@@ -1,0 +1,7 @@
+id: c1c2e3f1-7a95-461d-864e-3806afc531c1
+title: Reduce backend load by allowing the usage of a CDN for media delivery.
+type: 1
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1707665143

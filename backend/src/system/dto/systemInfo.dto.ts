@@ -8,6 +8,8 @@ export class SystemInfoDto {
     @ApiProperty()
     signUpEnabled: boolean;
     @ApiProperty()
+    cdn: string;
+    @ApiProperty()
     recaptcha: RecaptchaDto;
     @ApiProperty()
     legal: LegalDto;

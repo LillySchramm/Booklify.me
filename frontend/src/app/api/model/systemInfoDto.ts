@@ -16,6 +16,7 @@ import { ReportsDto } from './reportsDto';
 
 export interface SystemInfoDto {
     signUpEnabled: boolean;
+    cdn: string;
     recaptcha: RecaptchaDto;
     legal: LegalDto;
     reports: ReportsDto;

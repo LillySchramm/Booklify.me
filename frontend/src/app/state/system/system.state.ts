@@ -83,4 +83,9 @@ export class SystemState {
     static amazonReferralTag(state: SystemStateModel): string | undefined {
         return state.systemInfo?.amazon.referralTag;
     }
+
+    @Selector()
+    static cdn(state: SystemStateModel): string {
+        return state.systemInfo?.cdn ?? '';
+    }
 }

@@ -58,8 +58,11 @@ export class SystemController {
             referralTag: config.get<string>('amazon.referral_tag'),
         });
 
+        const cdn = config.get<string>('cdn_url');
+
         const response = new SystemInfoDto({
             signUpEnabled: !signUpDisabled,
+            cdn,
             recaptcha,
             legal,
             reports,

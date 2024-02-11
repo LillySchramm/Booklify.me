@@ -17,3 +17,8 @@ services:
             - retainFilesOnExit=true
         volumes:
             - ./data/s3:/s3mockroot/mangalist:rw
+    cdn:
+        image: ghcr.io/nginxinc/nginx-s3-gateway/nginx-oss-s3-gateway:latest
+        ports:
+            - 8080:80
+        env_file: config/.test.env
