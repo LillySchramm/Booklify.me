@@ -324,6 +324,7 @@ export class BooksService implements OnModuleInit {
         isbns: string[],
         hidden: boolean | undefined,
         noGroup: boolean | undefined,
+        favorite: boolean | undefined,
         userId: string,
     ): Promise<number> {
         const ownerships = await this.prisma.ownershipStatus.updateMany({
@@ -331,7 +332,7 @@ export class BooksService implements OnModuleInit {
                 userId,
                 bookIsbn: { in: isbns },
             },
-            data: { hidden, noGroup },
+            data: { hidden, noGroup, favorite },
         });
 
         if (noGroup !== undefined) {

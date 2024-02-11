@@ -19,6 +19,8 @@ export class OwnershipStatusDto implements OwnershipStatus {
     hidden: boolean;
     @ApiProperty()
     noGroup: boolean;
+    @ApiProperty()
+    favorite: boolean;
 
     constructor(partial: Partial<OwnershipStatusDto>) {
         Object.assign(this, partial);

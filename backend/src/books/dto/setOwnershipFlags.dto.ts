@@ -10,6 +10,9 @@ export class SetOwnershipFlagsDto {
     @ApiProperty({ type: Boolean, required: false })
     noGroup: boolean | undefined;
 
+    @ApiProperty({ type: Boolean, required: false })
+    favorite: boolean | undefined;
+
     constructor(partial: Partial<SetOwnershipFlagsDto>) {
         Object.assign(this, partial);
     }

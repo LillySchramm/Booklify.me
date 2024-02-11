@@ -151,6 +151,7 @@ export class BooksController {
             body.isbns,
             body.hidden,
             body.noGroup,
+            body.favorite,
             req.user.id,
         );
 
