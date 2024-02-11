@@ -56,6 +56,13 @@ const routes: Routes = [
         data: { providesFooter: true },
     },
     {
+        path: 'book/:isbn',
+        loadComponent: () =>
+            import('./pages/standalone-book/standalone-book.component').then(
+                (m) => m.StandaloneBookComponent,
+            ),
+    },
+    {
         path: 'reset-password',
         loadComponent: () =>
             import('./pages/reset-password/reset-password.component').then(

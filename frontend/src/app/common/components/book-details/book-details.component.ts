@@ -9,18 +9,18 @@ import { BehaviorSubject, Observable, combineLatest, map } from 'rxjs';
 import { BookDto, UserDto } from 'src/app/api';
 import { UpdateBookOwnershipButtonComponent } from 'src/app/pages/home/update-book-ownership-button/update-book-ownership-button.component';
 import { AuthorMap, AuthorState } from 'src/app/state/authors/author.state';
+import { BooksState } from 'src/app/state/books/books.state';
 import {
     PublisherMap,
     PublisherState,
 } from 'src/app/state/publisher/publisher.state';
 import { UiActions } from 'src/app/state/ui/ui.actions';
+import { UserState } from 'src/app/state/user/user.state';
 import { IsbnPipe } from '../../pipes/isbn.pipe';
 import { LanguagePipe } from '../../pipes/language.pipe';
 import { CoverService } from '../../services/cover.service';
 import { AmazonButtonComponent } from '../amazon-button/amazon-button.component';
 import { NoImagePlaceholderComponent } from '../no-image-placeholder/no-image-placeholder.component';
-import { UserState } from 'src/app/state/user/user.state';
-import { BooksState } from 'src/app/state/books/books.state';
 
 @UntilDestroy()
 @Component({
@@ -51,7 +51,7 @@ export class BookDetailsComponent {
     $book = toSignal(this.book$);
 
     @Select(UserState.currentUser) currentUser$!: Observable<
-    UserDto | undefined
+        UserDto | undefined
     >;
     $currentUser = toSignal(this.currentUser$);
 

@@ -72,7 +72,7 @@ export class AddBookDialogComponent {
             return;
 
         const isbn = this.form.value.isbn.replaceAll(/\D/g, '');
-        this.store.dispatch(new BookActions.SearchBooks(isbn));
+        this.store.dispatch(new BookActions.SearchBooks(isbn, false));
     }
 
     addBook(hide: boolean) {

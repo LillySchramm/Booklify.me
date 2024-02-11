@@ -1,0 +1,127 @@
+<div class="h-full w-full" *transloco="let t">
+    @if ($searchLoading()) {
+        <div class="flex h-full w-full items-center justify-center">
+            <mat-spinner [diameter]="50" [strokeWidth]="5" [color]="'accent'" />
+        </div>
+    } @else if ($searchError()) {
+        <div class="flex h-full w-full items-center justify-center p-8">
+            <h1 class="!text-red-500 flex text-center !text-5xl">
+                <mat-icon [inline]="true" class="mr-4 !hidden lg:!block"
+                    >warning</mat-icon
+                >
+                {{ t('book-overview.book-not-known') }}
+            </h1>
+        </div>
+    } @else if ($searchResult()) {
+        <div class="h-full w-full pl-10 pr-10 lg:pl-32 lg:pr-32">
+            <h1 class="!mt-4 text-center !text-4xl !font-bold">
+                {{ $searchResult()?.title }}
+            </h1>
+            <div
+                class="flex h-[90%] w-full flex-col justify-center lg:flex-row"
+            >
+                <div
+                    class="flex items-center justify-center lg:mr-24 lg:min-w-[30vw]"
+                >
+                    @if ($coverUrl() !== null) {
+                        <img
+                            [src]="$coverUrl()"
+                            loading="lazy"
+                            alt="cover-image"
+                            class="object-contain lg:h-[40rem]"
+                        />
+                    } @else {
+                        <app-no-image-placeholder
+                            class="h-full w-full object-contain"
+                            >{{ t('books.no-cover') }}</app-no-image-placeholder
+                        >
+                    }
+                </div>
+                <div class="flex items-center">
+                    <div class="flex-1">
+                        @if ($searchResult()?.description) {
+                            <div class="mt-4">
+                                <div
+                                    [innerHTML]="$searchResult()?.description"
+                                ></div>
+                                <mat-divider class="!mb-4 !mt-4"></mat-divider>
+                            </div>
+                        }
+                        @if ($authorNames(); as authorNames) {
+                            <p>
+                                {{ t('book-details.authors') }}
+                                @for (
+                                    author of authorNames;
+                                    track author;
+                                    let i = $index
+                                ) {
+                                    <span>
+                                        <span class="text-highlight">{{
+                                            author
+                                        }}</span>
+                                        @if (i !== authorNames.length - 1) {
+                                            <span>, </span>
+                                        }
+                                    </span>
+                                }
+                            </p>
+                        }
+                        <p>
+                            {{ t('book-details.publisher') }}
+                            <span class="text-highlight">{{
+                                $publisherName()
+                            }}</span>
+                        </p>
+                        @if (
+                            $searchResult()?.publishedDate !== 'undefined' &&
+                                $searchResult()?.publishedDate;
+                            as publishedDate
+                        ) {
+                            <p>
+                                {{ t('book-details.published') }}
+                                <span class="text-highlight">{{
+                                    publishedDate | date
+                                }}</span>
+                            </p>
+                        }
+                        @if (
+                            $searchResult()?.pageCount ||
+                            $searchResult()?.printedPageCount
+                        ) {
+                            <p>
+                                {{ t('book-details.pages') }}
+                                <span class="text-highlight">{{
+                                    $searchResult()?.pageCount ||
+                                        $searchResult()?.printedPageCount
+                                }}</span>
+                            </p>
+                        }
+                        @if ($searchResult()?.language) {
+                            <p>
+                                {{ t('book-details.language') }}
+                                <span class="text-highlight">{{
+                                    $searchResult()?.language! | language
+                                }}</span>
+                            </p>
+                        }
+                        @if ($searchResult()?.isbn) {
+                            <p>
+                                {{ t('book-details.isbn') }}
+                                <span class="text-highlight">{{
+                                    $searchResult()?.isbn! | isbn
+                                }}</span>
+                            </p>
+                        }
+
+                        @if ($searchResult()?.amazonLink) {
+                            <app-amazon-button
+                                [url]="$searchResult()?.amazonLink!"
+                                class="!mb-4 block"
+                            ></app-amazon-button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

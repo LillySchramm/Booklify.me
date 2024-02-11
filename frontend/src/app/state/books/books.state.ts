@@ -212,7 +212,7 @@ export class BooksState {
     @Action(BookActions.SearchBooks)
     searchBooks(
         { patchState, dispatch }: StateContext<BookStateModel>,
-        { isbn }: BookActions.SearchBooks,
+        { isbn, skipCrawl }: BookActions.SearchBooks,
     ) {
         patchState({
             searchLoading: true,
@@ -220,7 +220,7 @@ export class BooksState {
             searchResult: undefined,
         });
 
-        return this.bookApi.booksControllerGetBook(isbn).pipe(
+        return this.bookApi.booksControllerGetBook(isbn, skipCrawl).pipe(
             tap((book) => dispatch(new BookActions.SearchBooksSuccess(book))),
             catchError((error) =>
                 dispatch(new BookActions.SearchBooksFail(error)),

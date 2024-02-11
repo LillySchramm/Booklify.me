@@ -57,7 +57,10 @@ export namespace BookActions {
 
     export class SearchBooks {
         static readonly type = '[Books] Search Book';
-        constructor(public isbn: string) {}
+        constructor(
+            public isbn: string,
+            public skipCrawl: boolean,
+        ) {}
     }
 
     export class SearchBooksSuccess {

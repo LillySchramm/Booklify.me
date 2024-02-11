@@ -95,7 +95,10 @@
                 </p>
             }
             @if (!compact) {
-                @if (shownBook.amazonLink && $currentOwnerId() !== $currentUser()?.id) {
+                @if (
+                    shownBook.amazonLink &&
+                    $currentOwnerId() !== $currentUser()?.id
+                ) {
                     <app-amazon-button
                         [url]="shownBook.amazonLink"
                         class="!mb-4 block"
