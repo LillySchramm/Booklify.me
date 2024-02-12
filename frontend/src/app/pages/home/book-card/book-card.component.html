@@ -13,16 +13,18 @@
     <div class="absolute h-40 w-28 sm:h-48 sm:w-32 md:h-52 md:w-36">
         <div class="absolute z-30 p-1" (click)="$event.stopPropagation()">
             <div class="flex flex-col">
-                <mat-icon
-                    (click)="toggleFavorite()"
-                    class="m-0.5 !inline-table rounded-full bg-secondary p-0.5 opacity-70"
-                    [ngClass]="
-                        book.favorite
-                            ? '!bg-opacity-0 text-warn opacity-90'
-                            : ''
-                    "
-                    >favorite</mat-icon
-                >
+                @if (book.favorite || showFlags) {
+                    <mat-icon
+                        (click)="toggleFavorite()"
+                        class="m-0.5 !inline-table rounded-full bg-secondary p-0.5 opacity-70"
+                        [ngClass]="
+                            book.favorite
+                                ? '!bg-opacity-0 text-warn opacity-90'
+                                : ''
+                        "
+                        >favorite</mat-icon
+                    >
+                }
             </div>
         </div>
         <div class="mr-4 flex justify-end p-1 opacity-70">

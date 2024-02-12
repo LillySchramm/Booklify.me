@@ -107,6 +107,10 @@ export class BookCardComponent implements OnInit {
     }
 
     toggleFavorite(): void {
+        if (!this.showFlags) {
+            return;
+        }
+
         this.store.dispatch(
             new BookActions.UpdateBookFavorite(
                 [this.book.isbn],

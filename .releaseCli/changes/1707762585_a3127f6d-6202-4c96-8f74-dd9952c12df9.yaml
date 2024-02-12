@@ -1,0 +1,7 @@
+id: a3127f6d-6202-4c96-8f74-dd9952c12df9
+title: Fixed a frontend bug which caused the favorite toggle to show up for user that are not logged in.
+type: 5
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1707762585
