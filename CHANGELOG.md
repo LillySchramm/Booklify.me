@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.2.1  - 12.2.2024
+
+### Changed
+
+- The Book Group Icon of favourites has been changed to a heart. 
+### Fixed
+
+- Fixed a frontend bug which caused the favorite toggle to show up for user that are not logged in. 
+
+
 ## v1.2.0  - 11.2.2024
 
 ### Added
