@@ -10,6 +10,7 @@ module.exports = {
             tertiary: '#505050',
             warn: '#f44336',
             highlight: '#e91e63',
+            white: '#ffffff',
         },
     },
     plugins: [],

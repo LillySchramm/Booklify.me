@@ -3,7 +3,11 @@
         <mat-expansion-panel [expanded]="true" class="w-full">
             <mat-expansion-panel-header>
                 <mat-panel-title>
-                    @if ($currentOwnerId() === $currentUser()?.id) {
+                    @if (group.id === 'favorite') {
+                        <button class="mr-1" mat-icon-button [disabled]="true">
+                            <mat-icon class="!text-white">favorite</mat-icon>
+                        </button>
+                    } @else if ($currentOwnerId() === $currentUser()?.id) {
                         <button
                             mat-icon-button
                             (click)="$event.stopPropagation()"
