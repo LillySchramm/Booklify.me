@@ -23,6 +23,7 @@ import { PublishersService } from 'src/publishers/publishers.service';
 import { BookGroupingService } from 'src/book-groups/bookGrouping.service';
 import { Scraper } from './scraper/scraper';
 import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
+import { InjectSentry, SentryService } from '@ntegral/nestjs-sentry';
 
 @Injectable()
 export class BooksService implements OnModuleInit {
@@ -42,6 +43,7 @@ export class BooksService implements OnModuleInit {
         private publisherService: PublishersService,
         private bookGroupingService: BookGroupingService,
         private scraper: Scraper,
+        @InjectSentry() private readonly client: SentryService,
     ) {}
 
     async onModuleInit() {
@@ -199,6 +201,7 @@ export class BooksService implements OnModuleInit {
             )
                 return null;
 
+            this.client.instance().captureException(e);
             throw new InternalServerErrorException();
         }
 

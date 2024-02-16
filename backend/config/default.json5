@@ -99,5 +99,12 @@
     },
     "amazon":  {
         "referral_tag": ""
+    },
+    "sentry": {
+        "environment": "",
+        "backend": {
+            "dsn": "",
+            "enabled": false
+        }
     }
 }

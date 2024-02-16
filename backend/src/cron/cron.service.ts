@@ -18,6 +18,7 @@ import * as config from 'config';
 import { DiscoveryService, MetadataScanner, Reflector } from '@nestjs/core';
 import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper';
 import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
+import { InjectSentry, SentryService } from '@ntegral/nestjs-sentry';
 
 export const INTERNAL_CRON = 'INTERNAL_CRON';
 
@@ -51,6 +52,7 @@ export class CronService
         private readonly metadataScanner: MetadataScanner,
         private readonly discoveryService: DiscoveryService,
         private readonly reflector: Reflector,
+        @InjectSentry() private readonly client: SentryService,
     ) {}
 
     onModuleInit() {
@@ -190,6 +192,7 @@ export class CronService
                 await methodRef.call(instance, ...args);
             } catch (error) {
                 this.logger.error(error);
+                this.client.instance().captureException(error);
             }
 
             const duration = new Date().getTime() - date.getTime();

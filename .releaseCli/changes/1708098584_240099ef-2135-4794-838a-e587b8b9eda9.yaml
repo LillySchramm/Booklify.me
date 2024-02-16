@@ -1,0 +1,7 @@
+id: 240099ef-2135-4794-838a-e587b8b9eda9
+title: Added the option to monitor the backend via Sentry.
+type: 1
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1708098584
