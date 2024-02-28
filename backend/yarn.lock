@@ -4021,9 +4021,9 @@ isarray@~1.0.0:
   integrity sha512-VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ==
 
 isbn3@^1.1.41:
-  version "1.1.43"
-  resolved "https://registry.yarnpkg.com/isbn3/-/isbn3-1.1.43.tgz#b21961e7bec2cd134b8fa56be4fc62d75d2e64e1"
-  integrity sha512-RFRg0DILq6FG9O7oITmH0tUo5i5Ao3Wth2ldFHNwi5GVXKX6LbHqIvOekeEwZty/lD0RHoTgUqSlEShwa86oiw==
+  version "1.1.45"
+  resolved "https://registry.yarnpkg.com/isbn3/-/isbn3-1.1.45.tgz#9183a28a4ad8d45f5cc0a973331a32b59af9509a"
+  integrity sha512-9oD3yItVFRlYhm/K6RI2K6f+Dti0unzG74X9I7D+xVKMK3TbRl2PMvnWgK6scKnvk4t0BZFyNIznX4H45RrwzQ==
 
 isexe@^2.0.0:
   version "2.0.0"
