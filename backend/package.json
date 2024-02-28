@@ -47,7 +47,7 @@
     "file-type": "^19.0.0",
     "file-type-cjs": "^1.0.7",
     "got": "^13.0.0",
-    "got-scraping": "^3.2.15",
+    "got-scraping": "^4.0.0",
     "isbn3": "^1.1.41",
     "jpeg-js": "^0.4.4",
     "lodash": "^4.17.21",
