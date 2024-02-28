@@ -309,8 +309,9 @@ export class BookGroupingService {
         ]);
 
         this.logger.debug(
-            `Grouping of user ${userId} finished with ${groupedBooks.get('')
-                ?.length} unassigned.`,
+            `Grouping of user ${userId} finished with ${
+                groupedBooks.get('')?.length
+            } unassigned.`,
         );
 
         await this.saveBookGroupMap(groupedBooks, userId);
