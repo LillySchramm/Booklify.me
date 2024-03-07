@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cat <<EOT >> /usr/local/apache2/htdocs/assets/config.json
+cat <<EOT > /usr/local/apache2/htdocs/assets/config.json
 {
   "backend": "${BACKEND_URL:-}"
 }
