@@ -18,6 +18,7 @@ import { AppComponent } from './app.component';
 import { BookDetailsSideComponent } from './common/components/book-details-side/book-details-side.component';
 import { FooterComponent } from './common/footer/footer.component';
 import { HeaderComponent } from './common/header/header.component';
+import { ConfigService } from './common/services/config.service';
 import { TokenService, getToken } from './common/services/token.service';
 import { SidenavComponent } from './common/sidenav/sidenav.component';
 import { AuthorState } from './state/authors/author.state';
@@ -63,13 +64,16 @@ import { TranslocoRootModule } from './transloco-root.module';
     providers: [
         {
             provide: Configuration,
-            useFactory: () =>
-                new Configuration({
-                    basePath: environment.apiUrl,
+            deps: [ConfigService],
+            useFactory: async (configService: ConfigService) => {
+                await configService.fetchConfig();
+                return new Configuration({
+                    basePath: configService.apiUrl(),
                     credentials: {
                         bearer: () => `Bearer ${getToken()}`,
                     },
-                }),
+                });
+            },
             multi: false,
         },
         {
@@ -79,7 +83,7 @@ import { TranslocoRootModule } from './transloco-root.module';
         {
             provide: APP_INITIALIZER,
             useFactory: initApp,
-            deps: [TranslocoService, TokenService],
+            deps: [TranslocoService, TokenService, ConfigService],
             multi: true,
         },
     ],
@@ -91,12 +95,15 @@ export class AppModule {}
 export function initApp(
     translocoService: TranslocoService,
     tokenService: TokenService,
+    configService: ConfigService,
 ) {
     return () => {
         return new Promise((resolve) => {
-            tokenService.refresh();
-            translocoService.load('en').subscribe(() => {
-                resolve(true);
+            configService.fetchConfig().then(() => {
+                tokenService.refresh();
+                translocoService.load('en').subscribe(() => {
+                    resolve(true);
+                });
             });
         });
     };

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
 import * as syncFetch from 'sync-fetch';
+import { ConfigService } from './config.service';
 
 export interface TokenInfo {
     sub: string;
@@ -28,7 +28,7 @@ export class TokenService {
     private refreshInProgress = false;
     private accessToken: string | null = null;
 
-    constructor() {
+    constructor(private configService: ConfigService) {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         tokenService = this;
         this.accessToken = localStorage.getItem('accessToken');
@@ -63,11 +63,11 @@ export class TokenService {
             let newTokenResponse: any;
             if (tokenInfo.refreshToken) {
                 newTokenResponse = syncFetch(
-                    `${environment.apiUrl}/auth/refresh?token=${tokenInfo.refreshToken}&session_id=${tokenInfo.jti}`,
+                    `${this.configService.apiUrl()}/auth/refresh?token=${tokenInfo.refreshToken}&session_id=${tokenInfo.jti}`,
                 );
             } else {
                 newTokenResponse = syncFetch(
-                    `${environment.apiUrl}/auth/token`,
+                    `${this.configService.apiUrl()}/auth/token`,
                     {
                         method: 'GET',
                         headers: {

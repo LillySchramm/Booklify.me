@@ -1,0 +1,7 @@
+id: 03d5b53c-7ab1-4aec-b128-65f7930d041b
+title: The frontend container can now be configured via environment variables.
+type: 1
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1709841396

@@ -1,0 +1,7 @@
+id: 989ca521-de7a-4226-a29a-5f1ff1b06b7c
+title: The API URL can now be set via a config file.
+type: 1
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1709840390
