@@ -65,8 +65,8 @@ import { TranslocoRootModule } from './transloco-root.module';
         {
             provide: Configuration,
             deps: [ConfigService],
-            useFactory: async (configService: ConfigService) => {
-                await configService.fetchConfig();
+            useFactory: (configService: ConfigService) => {
+                configService.fetchConfig();
                 return new Configuration({
                     basePath: configService.apiUrl(),
                     credentials: {
@@ -99,11 +99,10 @@ export function initApp(
 ) {
     return () => {
         return new Promise((resolve) => {
-            configService.fetchConfig().then(() => {
-                tokenService.refresh();
-                translocoService.load('en').subscribe(() => {
-                    resolve(true);
-                });
+            configService.fetchConfig();
+            tokenService.refresh();
+            translocoService.load('en').subscribe(() => {
+                resolve(true);
             });
         });
     };

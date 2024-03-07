@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import * as syncFetch from 'sync-fetch';
 
 export interface FrontendConfig {
     backend?: string;
@@ -12,13 +13,13 @@ export class ConfigService {
     private env: FrontendConfig = {};
     private initialized = false;
 
-    async fetchConfig() {
+    fetchConfig() {
         if (this.initialized) {
             return;
         }
 
-        const env = await fetch('/assets/config.json');
-        this.env = await env.json();
+        const env = syncFetch('/assets/config.json');
+        this.env = env.json();
 
         this.initialized = true;
     }
