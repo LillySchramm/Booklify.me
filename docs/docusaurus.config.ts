@@ -84,6 +84,14 @@ const config: Config = {
                             label: 'Tutorial',
                             to: '/docs/intro',
                         },
+                        {
+                            label: 'Website',
+                            href: 'https://booklify.me/',
+                        },
+                        {
+                            label: 'Companion App',
+                            href: 'https://play.google.com/store/apps/details?id=nexus.cdev.companion_app',
+                        }
                     ],
                 },
                 {
@@ -102,10 +110,6 @@ const config: Config = {
                 {
                     title: 'More',
                     items: [
-                        {
-                            label: 'Website',
-                            href: 'https://booklify.me/',
-                        },
                         {
                             label: 'Privacy Policy',
                             href: 'https://privacy.booklify.me/',

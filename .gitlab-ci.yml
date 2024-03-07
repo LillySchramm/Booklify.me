@@ -18,6 +18,7 @@ variables:
     paths:
         - backend/node_modules/
         - frontend/node_modules/
+        - docs/node_modules/
     policy: pull
 
 install_npm_dependencies:
@@ -30,6 +31,8 @@ install_npm_dependencies:
         - cd backend
         - yarn
         - cd ../frontend
+        - npm i
+        - cd ../docs
         - npm i
 
 check_licenses:
@@ -84,6 +87,22 @@ build_frontend:
         - cd frontend
         - npm run build
 
+build_docs:
+    image: ${DOCKER_CACHE}/node:18
+    stage: build
+    needs:
+        - install_npm_dependencies
+    artifacts:
+        untracked: false
+        expire_in: 1 day
+        paths:
+            - docs/build
+    cache:
+        <<: *npm-cache
+    script:
+        - cd docs
+        - npm run build
+
 build_backend_container:
     stage: container-build
     needs:
@@ -119,6 +138,23 @@ build_frontend_container:
             --context "${CI_PROJECT_DIR}/frontend"
             --dockerfile "${CI_PROJECT_DIR}/frontend/Dockerfile"
             --destination "registry.cdev.nexus/booklify-ce/frontend:${CI_COMMIT_TAG}"
+
+build_docs_container:
+    stage: container-build
+    needs:
+        - build_docs
+    image:
+        name: "gcr.io/kaniko-project/executor:debug"
+        entrypoint: [""]
+    script:
+        - export CI_COMMIT_TAG=${CI_COMMIT_TAG:-${CI_COMMIT_REF_SLUG}}
+        - mkdir -p /kaniko/.docker
+        - echo "{\"auths\":{\"registry.cdev.nexus\":{\"auth\":\"$(printf "%s:%s" "${PRIVATE_REG_USER}" "${PRIVATE_REG_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+        - >-
+            /kaniko/executor
+            --context "${CI_PROJECT_DIR}/docs"
+            --dockerfile "${CI_PROJECT_DIR}/docs/Dockerfile"
+            --destination "registry.cdev.nexus/booklify-ce/docs:${CI_COMMIT_TAG}"
 
 backend_prettier:
     image: ${DOCKER_CACHE}/node:18-alpine
@@ -163,6 +199,21 @@ frontend_lint:
     script:
         - cd frontend
         - yarn run lint
+
+deploy_docs:
+    stage: deploy
+    image:
+        name: registry.cdev.nexus/devops/kubernetes:latest
+        entrypoint: [""]
+    only:
+        - v2
+    needs:
+        - build_docs_container
+    script:
+        - helm uninstall booklify --namespace booklify-docs || true
+        - helm upgrade --install --atomic --debug booklify ./docs/deployment
+          --values ./docs/deployment/values.yaml
+          --namespace booklify-docs
 
 nodejs-scan-sast:
     needs:

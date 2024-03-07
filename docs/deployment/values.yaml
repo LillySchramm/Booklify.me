@@ -1,0 +1,55 @@
+replicaCount: 1
+
+image:
+  repository: registry.cdev.nexus/booklify-ce/docs
+  pullPolicy: Always
+  tag: "v2"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    cert-manager.io/cluster-issuer: letsencrypt
+  hosts:
+    - host: docs.booklify.me
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: docs.booklify.me-tls
+      hosts:
+        - docs.booklify.me
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
