@@ -17,5 +17,8 @@ change_types:
     - id: 5
       name: Fixed
       description: Fixed a bug
+    - id: 6
+      name: Documentation
+      description: Changes to the documentation
 changelog_file: CHANGELOG.md
 version_prefix: v

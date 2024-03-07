@@ -1,0 +1,22 @@
+{
+    "url": "http://localhost:8090",
+    "api_url": "http://localhost:3030",
+    "cors": "*",
+    "s3": {
+        "endpoint": "s3",
+        "port": 9090,
+        "access_key": "",
+        "secret_key": "",
+        "use_ssl": false,
+        "bucket_name": "mangalist"
+    },
+    "security": {
+        "key": "AVerySecurePassword",
+    },
+    "recaptcha": {
+        "enabled": false,
+    },
+    "legal": {
+        "enabled": false,
+    },
+}
