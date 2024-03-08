@@ -13,10 +13,4 @@
     "security": {
         "key": "AVerySecurePassword",
     },
-    "recaptcha": {
-        "enabled": false,
-    },
-    "legal": {
-        "enabled": false,
-    },
 }

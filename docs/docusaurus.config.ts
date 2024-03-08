@@ -78,12 +78,8 @@ const config: Config = {
             style: 'dark',
             links: [
                 {
-                    title: 'Docs',
+                    title: 'Booklify.me',
                     items: [
-                        {
-                            label: 'Tutorial',
-                            to: '/docs/intro',
-                        },
                         {
                             label: 'Website',
                             href: 'https://booklify.me/',
@@ -103,7 +99,7 @@ const config: Config = {
                         },
                         {
                             label: 'Mastodon',
-                            href: 'https://mstd.ink/@lilly',
+                            href: 'https://mstd.ink/@booklify',
                         },
                     ],
                 },
