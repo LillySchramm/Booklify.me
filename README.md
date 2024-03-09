@@ -5,8 +5,9 @@ Booklify.me is an open-source platform for keeping track of everything in your b
 
 Sign up for a free account on [booklify.me](https://booklify.me) and start adding your books today! Or if you prefer to host your own instance, you can read the required documentation [here](https://docs.booklify.me/).
 
-> **The full documentation can be found at [docs.booklify.me](https://docs.booklify.me/).**
+See my own collection at [https://booklify.me/u/Lillychan](https://booklify.me/u/Lillychan) for an example of what you can do with Booklify.
 
+> **The full documentation can be found at [docs.booklify.me](https://docs.booklify.me/).**
 
 ## Features
 
@@ -16,6 +17,7 @@ Sign up for a free account on [booklify.me](https://booklify.me) and start addin
 - **Simple Sharing**: Share your collection with others by just sending them a link.
 - **Mobile App**: A simple mobile app which allows you to quickly add books to your collection by scanning the ISBN.
 - **Open Source**: The entire platform is open source and can be self-hosted.
+
 
 ## Issues and Feature Requests
 
