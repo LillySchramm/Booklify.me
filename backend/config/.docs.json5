@@ -75,7 +75,7 @@
     },
     geonode: {
         "default": null,
-        description: "[GeoNode](https://geonode.com/) is a paid service which provides services usefull for crawling.",
+        description: "[GeoNode](https://geonode.com/) is a paid service which provides services usefull for crawling. Read more about why you should use GeoNode for Booklify [here](/docs/crawlers/amazon).",
         examples: [],
         type: "object",
     },
@@ -97,7 +97,7 @@
     },
     isbndb: {
         "default": null,
-        description: "[ISBNdb](https://isbndb.com/) is a paid service which provides an API which is usefull for getting book metadata.",
+        description: "[ISBNdb](https://isbndb.com/) is a paid service which provides an API which is usefull for getting book metadata. Read more about why you should use ISBNdb for Booklify [here](/docs/crawlers/isbndb).",
         examples: [],
         type: "object",
     },

@@ -11,7 +11,7 @@ See my own collection at [https://booklify.me/u/Lillychan](https://booklify.me/u
 
 ## Features
 
-- **Automatic Book Information**: Just enter the ISBN and Booklify will fetch all the information for you.
+- **Automatic Book Information**: Just enter the ISBN and Booklify will fetch all the information for you [by crawling them from multiple sources](https://docs.booklify.me/docs/category/crawlers).
 - **Book Groups**: Your books are automatically grouped into their respective series.
 - **Favorites**: Mark your favorite books and highlight them in a separate group.
 - **Simple Sharing**: Share your collection with others by just sending them a link.
