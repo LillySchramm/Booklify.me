@@ -7,7 +7,7 @@
     },
     "amazon.referral_tag": {
         "default": "",
-        description: "If set, this tag will be appended to all Amazon links and a note regarding this will be added bentath the link.",
+        description: "If set, this tag will be appended to all Amazon links and a note regarding this will be added beneath the link.",
         examples: [
             "your-tag-20",
         ],

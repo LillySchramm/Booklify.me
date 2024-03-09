@@ -1,5 +1,5 @@
 ---
-sidebar_position: 8
+sidebar_position: 5
 description: Configuration options for the application
 ---
 
@@ -11,7 +11,7 @@ These are all the configuration options which can be set for the application.
 **Type:** `object`
 ### amazon.referral_tag
 **Type:** `string`\
-**Description:** If set, this tag will be appended to all Amazon links and a note regarding this will be added bentath the link.\
+**Description:** If set, this tag will be appended to all Amazon links and a note regarding this will be added beneath the link.\
 **Examples:**
 - `"your-tag-20"`
 
