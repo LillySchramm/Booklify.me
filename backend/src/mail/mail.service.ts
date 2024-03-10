@@ -18,7 +18,7 @@ export class MailService implements OnModuleInit {
         if (!config.get<boolean>('mail.enabled')) return;
 
         this.transporter = createTransport(config.get<string>('mail.smtp'), {
-            from: '"BooklifyMe" <no-reply@booklify.me>',
+            from: config.get<string>('mail.from'),
         });
         this.transporter.use('compile', htmlToText());
         this.loadTemplates();

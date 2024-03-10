@@ -1,0 +1,7 @@
+id: 5c13b4b5-ed55-4e56-a265-443d409bd65b
+title: Actually use the mail.from setting as from in outgoing mail.
+type: 5
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1710029446
