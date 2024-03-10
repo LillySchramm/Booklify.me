@@ -23,7 +23,7 @@ import { UserState } from 'src/app/state/user/user.state';
     styleUrls: ['./signup-success.component.scss'],
 })
 export class SignupSuccessComponent {
-    @Select(UserState.currentUserEmail) email$!: Observable<string | undefined>;
+    @Select(UserState.signupEmail) email$!: Observable<string | undefined>;
     $email = toSignal(this.email$);
 
     @Select(UserState.resending) resending$!: Observable<boolean>;

@@ -31,6 +31,7 @@ interface UserStateModel {
         resending: boolean;
         success?: boolean;
         error?: string;
+        email?: string;
     };
     signin: {
         loading: boolean;
@@ -187,13 +188,17 @@ export class UserState {
     }
 
     @Action(UserActions.SignUpSuccess)
-    signUpSuccess(ctx: StateContext<UserStateModel>) {
+    signUpSuccess(
+        ctx: StateContext<UserStateModel>,
+        action: UserActions.SignUpSuccess,
+    ) {
         ctx.patchState({
             signup: {
                 ...ctx.getState().signup,
                 loading: false,
                 success: true,
                 error: undefined,
+                email: action.user.email,
             },
         });
 
@@ -667,6 +672,11 @@ export class UserState {
     @Selector()
     static currentUserEmail(state: UserStateModel) {
         return state.currentUser?.email;
+    }
+
+    @Selector()
+    static signupEmail(state: UserStateModel) {
+        return state.signup.email;
     }
 
     @Selector()
