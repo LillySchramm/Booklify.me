@@ -1,0 +1,7 @@
+id: c6e6220e-c01c-421f-a891-870c17ed9859
+title: Fixed an error which ocurred if none of the saved books where missing a cover.
+type: 5
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1710029809

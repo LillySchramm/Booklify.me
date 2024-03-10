@@ -58,7 +58,7 @@ export class BookTasksService {
     @Cron()
     async tryFindCover() {
         const books = await this.bookService.getAllWithoutCover();
-        if (!books) return;
+        if (!books.length) return;
 
         const book = books[Math.floor(Math.random() * books.length)];
 
