@@ -77,9 +77,7 @@ These are all the configuration options which can be set for the application.
 **Type:** `string`\
 **Description:** Your ISBNdb API key.\
 **Examples:**
-- `[
-    "00000000-0000-0000-0000-000000000000",
-]`
+- `"00000000-0000-0000-0000-000000000000"`
 
 ## legal
 **Type:** `object`\
