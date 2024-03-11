@@ -48,7 +48,7 @@ const config: Config = {
             appId: 'OJ5P7JZRHM',
             apiKey: '43a5d04cb3ad797ed4d74aff75f5857b',
             indexName: 'booklify',
-            contextualSearch: true,
+            contextualSearch: false,
         },
         navbar: {
             title: 'Booklify.me',
