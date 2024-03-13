@@ -43,7 +43,7 @@ generate_public_licenses:
         expire_in: 1 day
         paths:
             - frontend/src/assets/licenses/frontend_licenses.json
-            - backend/src/assets/licenses/backend_licenses.json
+            - frontend/src/assets/licenses/backend_licenses.json
     needs:
         - install_npm_dependencies
     cache:
