@@ -178,7 +178,7 @@
         type: "boolean",
     },
     "mail.from": {
-        "default": "\"Booklify\" <me@example.com>",
+        "default": "Booklify",
         description: "This string will be used as the from address for all mails which are sent by the server.",
         examples: [],
         type: "string",

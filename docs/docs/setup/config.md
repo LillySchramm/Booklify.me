@@ -121,7 +121,7 @@ These are all the configuration options which can be set for the application.
 **Default:** `false`
 ### mail.from
 **Type:** `string`\
-**Default:** `"\"Booklify\" <me@example.com>"`\
+**Default:** `"Booklify"`\
 **Description:** This string will be used as the from address for all mails which are sent by the server.
 ### mail.smtp
 **Type:** `string`\

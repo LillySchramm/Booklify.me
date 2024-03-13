@@ -11,7 +11,7 @@
     "mail": {
         "enabled": false,
         "smtp": "",
-        "from": "\"Booklify\" <me@example.com>"
+        "from": "Booklify"
     },
     "s3": {
         "endpoint": "",
