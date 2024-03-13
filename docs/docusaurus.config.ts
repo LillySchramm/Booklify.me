@@ -49,6 +49,9 @@ const config: Config = {
             apiKey: '43a5d04cb3ad797ed4d74aff75f5857b',
             indexName: 'booklify',
             contextualSearch: false,
+            searchParameters: {
+                facetFilters: ['lang:en', 'version:1.2.1'],
+            },
         },
         navbar: {
             title: 'Booklify.me',
