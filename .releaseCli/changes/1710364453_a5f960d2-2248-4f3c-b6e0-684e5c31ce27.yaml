@@ -1,0 +1,7 @@
+id: a5f960d2-2248-4f3c-b6e0-684e5c31ce27
+title: Fixed a bug wich caused the book information to grow bigger then it should.
+type: 5
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1710364453

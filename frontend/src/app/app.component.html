@@ -8,7 +8,7 @@
             [mode]="ui.smallScreen ? 'over' : 'side'"
             #sideNav
             [opened]="!ui.smallScreen"
-            class="!fixed max-h-screen w-80"
+            class="!fixed max-h-screen !w-80"
         >
             <div class="flex h-full flex-col">
                 <div class="mb-4 h-16"></div>
@@ -23,8 +23,8 @@
         position="end"
         (openedChange)="setInfoVisibility($event)"
     >
-        <div class="flex h-full flex-col overflow-x-hidden">
-            <app-book-details-side class="flex-grow"></app-book-details-side>
+        <div class="flex h-full flex-col overflow-x-hidden md:w-[29rem]">
+            <app-book-details-side class="!flex-grow"></app-book-details-side>
         </div>
     </mat-drawer>
     <mat-drawer-content
