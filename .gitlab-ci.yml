@@ -47,9 +47,9 @@ generate_public_licenses:
         <<: *npm-cache
     script:
         - cd backend
-        - license-checker-rseidelsohn --json --out ../frontend/src/assets/licenses/backend_licenses.json --customPath /format.json
+        - license-checker-rseidelsohn --production --json --out ../frontend/src/assets/licenses/backend_licenses.json --customPath /format.json
         - cd ../frontend
-        - license-checker-rseidelsohn --json --out ../frontend/src/assets/licenses/frontend_licenses.json --customPath /format.json
+        - license-checker-rseidelsohn --production --json --out ../frontend/src/assets/licenses/frontend_licenses.json --customPath /format.json
 
 check_licenses:
     image: ${DOCKER_CACHE}/node:18-alpine
