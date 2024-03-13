@@ -35,6 +35,22 @@ install_npm_dependencies:
         - cd ../docs
         - npm i
 
+generate_public_licenses:
+    image: registry.cdev.nexus/devops/licenses:latest
+    stage: pre-build
+    artifacts:
+        untracked: true
+        expire_in: 1 day
+    needs:
+        - install_npm_dependencies
+    cache:
+        <<: *npm-cache
+    script:
+        - cd backend
+        - license-checker-rseidelsohn --json --out ../frontend/src/assets/licenses/backend_licenses.json --customPath /format.json
+        - cd ../frontend
+        - license-checker-rseidelsohn --json --out ../frontend/src/assets/licenses/frontend_licenses.json --customPath /format.json
+
 check_licenses:
     image: ${DOCKER_CACHE}/node:18-alpine
     stage: audit
@@ -96,6 +112,7 @@ build_frontend:
     stage: build
     needs:
         - install_npm_dependencies
+        - generate_public_licenses
     artifacts:
         untracked: false
         expire_in: 1 day
