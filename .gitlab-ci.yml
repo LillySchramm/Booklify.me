@@ -39,8 +39,11 @@ generate_public_licenses:
     image: registry.cdev.nexus/devops/licenses:latest
     stage: pre-build
     artifacts:
-        untracked: true
+        untracked: false
         expire_in: 1 day
+        paths:
+            - frontend/src/assets/licenses/frontend_licenses.json
+            - backend/src/assets/licenses/backend_licenses.json
     needs:
         - install_npm_dependencies
     cache:
