@@ -21,7 +21,8 @@
     "rememberMe": "Remember Me",
     "legal": "Yes, I have read and agree to the <a href=\"{{ tos }}\" class=\"text-warn\">Terms of Service</a> and <a href=\"{{ privacy }}\" class=\"text-warn\">Privacy Policy</a>.",
     "tos": "Terms Of Service",
-    "privacy": "Privacy Policy"
+    "privacy": "Privacy Policy",
+    "licenses": "Licenses"
   },
   "form-errors": {
     "required": "This field is required",
@@ -199,5 +200,11 @@
   },
   "book-card": {
     "linkCopied": "Link was copied to clipboard"
+  },
+  "licenses": {
+    "frontend": "Frontend",
+    "backend": "Backend",
+    "title": "Licenses",
+    "description": "These are the awesome projects that Booklify is build upon:"
   }
 }

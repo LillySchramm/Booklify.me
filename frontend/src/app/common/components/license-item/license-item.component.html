@@ -1,0 +1,25 @@
+<mat-card class="mt-4 cursor-pointer" (click)="openText()" *transloco="let t">
+    <mat-card-content class="w-full">
+        <div class="flex">
+            <div class="flex-1">
+                {{ license.name }}{{ '@' }}{{ license.version }}
+            </div>
+            <div class="flex items-center justify-center">
+                {{ license.licenses }}
+                <a class="ml-4 flex">
+                    <mat-icon>description</mat-icon>
+                </a>
+                @if (license.repository) {
+                    <a
+                        href="{{ license.repository }}"
+                        target="_blank"
+                        (click)="$event.stopPropagation()"
+                        class="ml-4 flex"
+                    >
+                        <mat-icon>code_blocks</mat-icon>
+                    </a>
+                }
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,11 @@
+<ng-container *transloco="let t">
+    <h2 mat-dialog-title>{{ data.name }}{{ '@' }}{{ data.version }}</h2>
+    <mat-dialog-content>
+        @for (item of data.licenseText.split('\n\n'); track $index) {
+            <p>{{ item }}</p>
+        }
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-button mat-dialog-close cdkFocusInitial>Close</button>
+    </mat-dialog-actions>
+</ng-container>

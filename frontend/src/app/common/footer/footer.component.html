@@ -14,8 +14,9 @@
             Lilly Schramm
         </a>
     </div>
-    @if ($legalEnabled()) {
-        <div class="flex-1 select-none text-center text-xs sm:text-lg">
+
+    <div class="flex-1 select-none text-center text-xs sm:text-lg">
+        @if ($legalEnabled()) {
             <a
                 [href]="$tosUrl()"
                 class="select-none text-xs sm:text-lg"
@@ -29,8 +30,15 @@
                 target="_blank"
                 >{{ t('login.privacy') }}</a
             >
-        </div>
-    }
+            <span class="mx-2 text-xs sm:text-lg">|</span>
+        }
+
+        <a
+            routerLink="/licenses"
+            class="cursor-pointer select-none text-xs sm:text-lg"
+            >{{ t('login.licenses') }}</a
+        >
+    </div>
 
     <div class="hidden flex-1 text-right sm:block">
         <a

@@ -77,6 +77,13 @@ const routes: Routes = [
             ),
     },
     {
+        path: 'licenses',
+        loadComponent: () =>
+            import('./pages/licenses/licenses.component').then(
+                (m) => m.LicensesComponent,
+            ),
+    },
+    {
         path: '**',
         redirectTo: '/home',
     },

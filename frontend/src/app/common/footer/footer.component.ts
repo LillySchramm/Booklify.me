@@ -1,15 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { RouterModule } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { SystemState } from 'src/app/state/system/system.state';
-
 @Component({
     selector: 'app-footer',
     standalone: true,
-    imports: [CommonModule, TranslocoModule],
+    imports: [CommonModule, TranslocoModule, RouterModule],
     templateUrl: './footer.component.html',
     styleUrl: './footer.component.scss',
 })

@@ -1,0 +1,24 @@
+<div *transloco="let t" class="w-full">
+    <div class="mt-2 flex w-full flex-col items-center justify-center">
+        <h1 class="!text-6xl">{{ t('licenses.title') }}</h1>
+        <p class="!text-center !text-2xl">{{ t('licenses.description') }}</p>
+    </div>
+    <mat-tab-group class="pr-2 md:pl-20 md:pr-20">
+        <mat-tab [label]="t('licenses.frontend')" class="w-full">
+            @for (item of $frontendLicenses(); track $index) {
+                <app-license-item
+                    [license]="item"
+                    class="w-full"
+                ></app-license-item>
+            }
+        </mat-tab>
+        <mat-tab [label]="t('licenses.backend')" class="w-full">
+            @for (item of $backendLicenses(); track $index) {
+                <app-license-item
+                    [license]="item"
+                    class="w-full"
+                ></app-license-item>
+            }
+        </mat-tab>
+    </mat-tab-group>
+</div>
