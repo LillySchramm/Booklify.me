@@ -75,6 +75,10 @@ export class BooksService implements OnModuleInit {
     }
 
     async upsertBook(book: VolumeInfo, isbn: string, update = false) {
+        if (!book.publisher) {
+            book.publisher = 'Unknown';
+        }
+
         const data = {
             isbn,
             title: book.title,
