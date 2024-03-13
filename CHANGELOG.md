@@ -1,5 +1,25 @@
 # Changelog
 
+## v1.2.2  - 13.3.2024
+
+### Added
+
+- Added the option to monitor the backend via Sentry. 
+- The API URL can now be set via a config file. 
+- The frontend container can now be configured via environment variables. 
+- Added a licenses page to the frontend. 
+### Fixed
+
+- Actually use the mail.from setting as from in outgoing mail. 
+- Fixed an error which ocurred if none of the saved books where missing a cover. 
+- Fixed a bug which caused the EMail to not be displayed on the signup-success page. 
+- Fixed a bug which caused errors if no publisher for a book was found. 
+### Documentation
+
+- Added example docker-compose file. 
+- Added a documentation page at docs.booklify.me 
+
+
 ## v1.2.1  - 12.2.2024
 
 ### Changed
