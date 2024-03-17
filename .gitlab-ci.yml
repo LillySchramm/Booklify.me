@@ -205,14 +205,14 @@ api_test:
     cache:
         <<: *npm-cache
     services:
-        - name: postgres:15
+        - name: ${DOCKER_CACHE}/postgres:15
           alias: postgres
           variables:
             POSTGRES_DB: "booklify"
             POSTGRES_USER: "booklify"
             POSTGRES_PASSWORD: "booklify"
 
-        - name: adobe/s3mock:latest
+        - name: ${DOCKER_CACHE}/adobe/s3mock:latest
           alias: s3mock
 
         - name: registry.cdev.nexus/booklify-ce/backend:${CI_COMMIT_REF_SLUG}
