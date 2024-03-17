@@ -216,7 +216,6 @@ api_test:
         - cd backend
         - docker compose -f docker-compose.ci.yml up -d
         - sleep 20
-        - curl  http://docker:3000/system/health
         - yarn run test
 
 backend_prettier:
