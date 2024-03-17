@@ -1,7 +1,8 @@
+import { env } from 'process';
 import * as request from 'supertest';
 
 describe('/system', () => {
-    const app = 'http://backend:3000';
+    const app = env.URL || 'http://localgost:3000';
 
     beforeEach(async () => {
         await request(app).post('/system/reset').expect(201);

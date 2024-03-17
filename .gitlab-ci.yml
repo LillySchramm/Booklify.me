@@ -208,6 +208,7 @@ api_test:
         <<: *npm-cache
     variables:
         FF_NETWORK_PER_BUILD: "true"
+        URL: "http://backend:3000"
     services:
         - name: ${DOCKER_CACHE}/postgres:15
           alias: postgres
@@ -225,35 +226,9 @@ api_test:
               NODE_ENV: "tests_ci"
               DATABASE_URL: "postgresql://booklify:booklify@postgres:5432/booklify"
     script:
-        - sleep 10
-        - curl http://backend:3000 || true
+        - curl --head -X GET --retry 60 --retry-connrefused --retry-delay 1 http://backend:3000/syste,/health
         - cd backend
         - yarn run test
-
-
-# api_test:
-#     image: registry.cdev.nexus/devops/node20-docker:latest
-#     stage: test
-#     needs:
-#     # needs:
-#     #     - build_backend_container
-#         - install_npm_dependencies
-#     services:
-#         - name: docker:dind
-#           alias: docker
-#     variables:
-#         DOCKER_HOST: tcp://docker:2375
-#         DOCKER_DRIVER: overlay2
-#         DOCKER_TLS_CERTDIR: ""
-#     cache:
-#         <<: *npm-cache
-#     script:
-#         - cd backend
-#         - docker compose -f docker-compose.ci.yml up -d
-#         - cat /etc/hosts
-#         - curl docker:3000
-#         - sleep 20
-#         - yarn run test
 
 backend_prettier:
     image: ${DOCKER_CACHE}/node:18-alpine
