@@ -216,7 +216,7 @@ api_test:
         - cd backend
         - docker compose -f docker-compose.ci.yml up -d
         - cat /etc/hosts
-        - curl backend:3000
+        - curl docker:3000
         - sleep 20
         - yarn run test
 
