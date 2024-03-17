@@ -200,7 +200,7 @@ api_test:
     image: ${DOCKER_CACHE}/node:18
     stage: test
     needs:
-        - build_backend_container
+    #     - build_backend_container
         - install_npm_dependencies
     cache:
         <<: *npm-cache
@@ -215,7 +215,7 @@ api_test:
         - name: adobe/s3mock:latest
           alias: s3mock
 
-        - name: registry.cdev.nexus/booklify-ce/backend:${CI_COMMIT_TAG}
+        - name: registry.cdev.nexus/booklify-ce/backend:${CI_COMMIT_REF_SLUG}
           alias: backend
           variables:
               NODE_ENV: "tests_ci"
