@@ -12,10 +12,18 @@ import * as config from 'config';
 import { LegalDto } from './dto/legal.dto';
 import { ReportsDto } from './dto/reports.dto';
 import { AmazonDto } from './dto/amazon.dto';
+import { promisify } from 'util';
+
+import * as child_process from 'child_process';
+import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
+
+const exec = promisify(child_process.exec);
 
 @Controller('system')
 @ApiTags('System')
 export class SystemController {
+    private readonly logger = new LokiLogger(SystemController.name);
+
     constructor(private systemService: SystemService) {}
 
     @Get('health')
@@ -71,5 +79,13 @@ export class SystemController {
         });
 
         return response;
+    }
+
+    @Get('reset')
+    @ApiOkResponse({ type: SystemInfoDto })
+    async reset() {
+        const out = await exec('prisma migrate reset --force');
+
+        this.logger.log(out.stdout + out.stderr);
     }
 }

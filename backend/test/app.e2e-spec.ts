@@ -1,17 +1,27 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import {
+    ClassSerializerInterceptor,
+    INestApplication,
+    ValidationPipe,
+} from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
+import { NestFactory, Reflector } from '@nestjs/core';
+import config from 'config';
 
 describe('AppController (e2e)', () => {
     let app: INestApplication;
 
     beforeEach(async () => {
-        const moduleFixture: TestingModule = await Test.createTestingModule({
-            imports: [AppModule],
-        }).compile();
+        const app = await NestFactory.create(AppModule);
 
-        app = moduleFixture.createNestApplication();
+        const corsConfig = config.get<string>('cors');
+        app.enableCors({ origin: corsConfig });
+        const reflector = app.get(Reflector);
+
+        app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
+        app.useGlobalPipes(new ValidationPipe());
+
         await app.init();
     });
 
