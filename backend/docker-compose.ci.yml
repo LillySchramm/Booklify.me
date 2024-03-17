@@ -1,17 +1,50 @@
-version: '2.8'
+version: '3'
 services:
-    db:
-        image: postgres:15-alpine
-        environment:
-            - POSTGRES_USER=uwu
-            - POSTGRES_PASSWORD=owo
-            - POSTGRES_DB=mangalist
-        ports:
-            - 5432:5432
-    s3:
-        image: adobe/s3mock:latest
-        ports:
-            - 9090:9090
-        environment:
-            - root=/s3mockroot
-            - retainFilesOnExit=true
+  backend:
+    image: registry.cdev.nexus/booklify-ce/backend:v2
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      s3:
+        condition: service_healthy
+    environment:
+        DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+    volumes:
+      - ./config/config.json5:/app/config/production.json5:ro
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/system/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  s3:
+    image: adobe/s3mock:latest
+    restart: unless-stopped
+    environment:
+      - root=/s3mockroot
+      - retainFilesOnExit=true
+    volumes:
+      - s3:/s3mockroot/mangalist:rw
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:9090 || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  postgres:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5

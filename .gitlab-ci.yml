@@ -199,9 +199,9 @@ build_docs_container:
 api_test:
     image: registry.cdev.nexus/devops/node20-docker:latest
     stage: test
-    needs: []
-        # - build_backend_container
-        # - install_npm_dependencies
+    needs:
+        - build_backend_container
+        - install_npm_dependencies
     services:
         - name: docker:dind
           alias: docker
