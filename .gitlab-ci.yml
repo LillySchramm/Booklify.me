@@ -204,6 +204,10 @@ api_test:
         # - install_npm_dependencies
     services:
         - name: docker:dind
+          alias: docker
+    variables:
+        DOCKER_HOST: tcp://docker:2375
+        DOCKER_DRIVER: overlay2
     cache:
         <<: *npm-cache
     script:
