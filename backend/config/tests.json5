@@ -1,0 +1,110 @@
+{
+    "url": "http://localhost:4200",
+    "api_url": "http://localhost:3000",
+    "cdn_url": "",
+    "disable_registration": false,
+    "cors": "*",
+    "version": "v0.0.0",
+    "db": {
+        "url": "postgresql://uwu:owo@localhost:5432/tests?schema=public"
+    },
+    "mail": {
+        "enabled": false,
+        "smtp": "",
+        "from": "Booklify"
+    },
+    "s3": {
+        "endpoint": "localhost",
+        "port": 9090,
+        "access_key": "",
+        "secret_key": "",
+        "use_ssl": false,
+        "bucket_name": "mangalist"
+    },
+    "security": {
+        "key": "AVerySecurePassword",
+        "access_token_expiration": "1h",
+        "max_session_idle_days": 90,
+        "max_temp_session_age_days": 1,
+    },
+    "debug": {
+        "show_query": true,
+        "always_regroup": false
+    },
+    "isbndb": {
+        "key": ""
+    },
+    "geonode": {
+        "username": "",
+        "password": ""
+    },
+    // https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do
+    "recaptcha": {
+        "enabled": false,
+        "secret": "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe",
+        "site_key": "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+    },
+    "tasks": {
+        "recrawlCover": {
+            "enabled": false,
+            "cron": "* * * * *"
+        },
+        "recrawlInfo": {
+            "enabled": false,
+            "cron": "* * * * *"
+        },
+        "tryFindCover": {
+            "enabled": false,
+            "cron": "*/30 * * * * *"
+        },
+        "doLongruning": {
+            "enabled": false,
+            "cron": "* * * * *"
+        },
+        "updateOutdatedGrouping": {
+            "enabled": false,
+            "cron": "* * * * *"
+        },
+        "flushLoki": {
+            "enabled": false,
+            "cron": "*\\10 * * * * *"
+        },
+        "sendChangelog": {
+            "enabled": false,
+            "cron": "*/5 * * * * *"
+        },
+        "invalidateOutdatedSessions": {
+            "enabled": false,
+            "cron": "0 * * * *"
+        },
+        "invalidateOutdatedTempSessions": {
+            "enabled": false,
+            "cron": "* * * * *"
+        },
+    },
+    "legal": {
+        "enabled": false,
+        "privacy_policy": "https://example.com/privacy",
+        "terms_of_service": "https://example.com/tos"
+    },
+    "reports": {
+        "enabled": true,
+        "contact_email": "uwu@example.com",
+    },
+    "loki": {
+        "enabled": false,
+        "api": "",
+        "username": "",
+        "password": "",
+    },
+    "amazon":  {
+        "referral_tag": ""
+    },
+    "sentry": {
+        "environment": "",
+        "backend": {
+            "dsn": "",
+            "enabled": false
+        }
+    }
+}

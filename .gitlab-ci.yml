@@ -196,6 +196,34 @@ build_docs_container:
             --dockerfile "${CI_PROJECT_DIR}/docs/Dockerfile"
             --destination "registry.cdev.nexus/booklify-ce/docs:${CI_COMMIT_TAG}"
 
+api_test:
+    image: ${DOCKER_CACHE}/node:18
+    stage: test
+    needs:
+        - build_backend_container
+        - install_npm_dependencies
+    cache:
+        <<: *npm-cache
+    services:
+        - name: postgres:15
+          alias: postgres
+          variables:
+            POSTGRES_DB: "booklify"
+            POSTGRES_USER: "booklify"
+            POSTGRES_PASSWORD: "booklify"
+
+        - name: adobe/s3mock:latest
+          alias: s3mock
+
+        - name: registry.cdev.nexus/booklify-ce/backend:${CI_COMMIT_TAG}
+          alias: backend
+          variables:
+              NODE_ENV: "tests_ci"
+              DATABASE_URL: "postgresql://booklify:booklify@postgres:5432/booklify"
+    script:
+        - cd backend
+        - yarn run test
+
 backend_prettier:
     image: ${DOCKER_CACHE}/node:18-alpine
     stage: linting
