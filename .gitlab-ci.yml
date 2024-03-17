@@ -12,6 +12,8 @@ include:
 
 variables:
     SAST_EXCLUDED_PATHS: spec,test,tests,tmp,companion_app
+    FF_NETWORK_PER_BUILD: "true"
+    POSTGRES_HOST_AUTH_METHOD: trust
 
 .cache0: &npm-cache
     key: $CI_COMMIT_REF_SLUG-npm
@@ -196,29 +198,61 @@ build_docs_container:
             --dockerfile "${CI_PROJECT_DIR}/docs/Dockerfile"
             --destination "registry.cdev.nexus/booklify-ce/docs:${CI_COMMIT_TAG}"
 
+
 api_test:
-    image: registry.cdev.nexus/devops/node20-docker:latest
+    image: ${DOCKER_CACHE}/node:18
     stage: test
     needs:
-    # needs:
-    #     - build_backend_container
+        - build_backend_container
         - install_npm_dependencies
-    services:
-        - name: docker:dind
-          alias: docker
-    variables:
-        DOCKER_HOST: tcp://docker:2375
-        DOCKER_DRIVER: overlay2
-        DOCKER_TLS_CERTDIR: ""
     cache:
         <<: *npm-cache
+    services:
+        - name: ${DOCKER_CACHE}/postgres:15
+          alias: postgres
+          variables:
+            POSTGRES_DB: "booklify"
+            POSTGRES_USER: "booklify"
+            POSTGRES_PASSWORD: "booklify"
+
+        - name: ${DOCKER_CACHE}/adobe/s3mock:latest
+          alias: s3mock
+
+        - name: registry.cdev.nexus/booklify-ce/backend:${CI_COMMIT_REF_SLUG}
+          alias: backend
+          variables:
+              NODE_ENV: "tests_ci"
+              DATABASE_URL: "postgresql://booklify:booklify@postgres:5432/booklify"
     script:
+        - sleep 10
+        - curl http://backend:3000 || true
         - cd backend
-        - docker compose -f docker-compose.ci.yml up -d
-        - cat /etc/hosts
-        - curl docker:3000
-        - sleep 20
         - yarn run test
+
+
+# api_test:
+#     image: registry.cdev.nexus/devops/node20-docker:latest
+#     stage: test
+#     needs:
+#     # needs:
+#     #     - build_backend_container
+#         - install_npm_dependencies
+#     services:
+#         - name: docker:dind
+#           alias: docker
+#     variables:
+#         DOCKER_HOST: tcp://docker:2375
+#         DOCKER_DRIVER: overlay2
+#         DOCKER_TLS_CERTDIR: ""
+#     cache:
+#         <<: *npm-cache
+#     script:
+#         - cd backend
+#         - docker compose -f docker-compose.ci.yml up -d
+#         - cat /etc/hosts
+#         - curl docker:3000
+#         - sleep 20
+#         - yarn run test
 
 backend_prettier:
     image: ${DOCKER_CACHE}/node:18-alpine

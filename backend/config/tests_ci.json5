@@ -6,7 +6,7 @@
     "cors": "*",
     "version": "v0.0.0",
     "db": {
-        "url": "postgres://postgres:postgres@postgres:5432/postgres"
+        "url": "postgresql://booklify:booklify@postgres:5432/booklify"
     },
     "mail": {
         "enabled": false,
