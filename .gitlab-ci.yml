@@ -217,6 +217,7 @@ api_test:
 
         - name: registry.cdev.nexus/booklify-ce/backend:${CI_COMMIT_REF_SLUG}
           alias: backend
+          pull_policy: always
           variables:
               NODE_ENV: "tests_ci"
               DATABASE_URL: "postgresql://booklify:booklify@testpostgres:5432/booklify"
