@@ -200,7 +200,7 @@ api_test:
     image: ${DOCKER_CACHE}/node:18
     stage: test
     needs:
-    #     - build_backend_container
+        - build_backend_container
         - install_npm_dependencies
     cache:
         <<: *npm-cache
