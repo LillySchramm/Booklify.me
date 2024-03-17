@@ -13,7 +13,7 @@ services:
     environment:
         DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
     volumes:
-      - ./config/config.json5:/app/config/production.json5:ro
+      - ./config/tests_ci.json5:/app/config/production.json5:ro
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:3000/system/health"]
       interval: 5s
@@ -26,8 +26,6 @@ services:
     environment:
       - root=/s3mockroot
       - retainFilesOnExit=true
-    volumes:
-      - s3:/s3mockroot/mangalist:rw
     healthcheck:
       test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:9090 || exit 1"]
       interval: 5s
@@ -41,8 +39,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
-    volumes:
-      - postgres:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
