@@ -6,7 +6,7 @@
     "cors": "*",
     "version": "v0.0.0",
     "db": {
-        "url": "postgresql://uwu:owo@localhost:5432/mangalist?schema=public"
+        "url": "postgresql://booklify:booklify@postgres:5432/booklify"
     },
     "mail": {
         "enabled": false,
@@ -14,8 +14,8 @@
         "from": "Booklify"
     },
     "s3": {
-        "endpoint": "",
-        "port": 9000,
+        "endpoint": "s3mock",
+        "port": 9090,
         "access_key": "",
         "secret_key": "",
         "use_ssl": false,
@@ -28,7 +28,7 @@
         "max_temp_session_age_days": 1,
     },
     "debug": {
-        "show_query": false,
+        "show_query": true,
         "always_regroup": false
     },
     "isbndb": {
@@ -46,23 +46,23 @@
     },
     "tasks": {
         "recrawlCover": {
-            "enabled": true,
+            "enabled": false,
             "cron": "* * * * *"
         },
         "recrawlInfo": {
-            "enabled": true,
+            "enabled": false,
             "cron": "* * * * *"
         },
         "tryFindCover": {
-            "enabled": true,
+            "enabled": false,
             "cron": "*/30 * * * * *"
         },
         "doLongruning": {
-            "enabled": true,
+            "enabled": false,
             "cron": "* * * * *"
         },
         "updateOutdatedGrouping": {
-            "enabled": true,
+            "enabled": false,
             "cron": "* * * * *"
         },
         "flushLoki": {
@@ -70,15 +70,15 @@
             "cron": "*\\10 * * * * *"
         },
         "sendChangelog": {
-            "enabled": true,
+            "enabled": false,
             "cron": "*/5 * * * * *"
         },
         "invalidateOutdatedSessions": {
-            "enabled": true,
+            "enabled": false,
             "cron": "0 * * * *"
         },
         "invalidateOutdatedTempSessions": {
-            "enabled": true,
+            "enabled": false,
             "cron": "* * * * *"
         },
     },
@@ -107,5 +107,5 @@
             "enabled": false
         }
     },
-    "test_mode": false
+    "test_mode": true
 }

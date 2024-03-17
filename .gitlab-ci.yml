@@ -12,6 +12,7 @@ include:
 
 variables:
     SAST_EXCLUDED_PATHS: spec,test,tests,tmp,companion_app
+    POSTGRES_HOST_AUTH_METHOD: trust
 
 .cache0: &npm-cache
     key: $CI_COMMIT_REF_SLUG-npm
@@ -195,6 +196,39 @@ build_docs_container:
             --context "${CI_PROJECT_DIR}/docs"
             --dockerfile "${CI_PROJECT_DIR}/docs/Dockerfile"
             --destination "registry.cdev.nexus/booklify-ce/docs:${CI_COMMIT_TAG}"
+
+
+api_test:
+    image: ${DOCKER_CACHE}/node:18
+    stage: test
+    needs:
+        - build_backend_container
+        - install_npm_dependencies
+    cache:
+        <<: *npm-cache
+    variables:
+        FF_NETWORK_PER_BUILD: "true"
+        URL: "http://backend:3000"
+    services:
+        - name: ${DOCKER_CACHE}/postgres:15
+          alias: postgres
+          variables:
+            POSTGRES_DB: "booklify"
+            POSTGRES_USER: "booklify"
+            POSTGRES_PASSWORD: "booklify"
+
+        - name: ${DOCKER_CACHE}/adobe/s3mock:latest
+          alias: s3mock
+
+        - name: registry.cdev.nexus/booklify-ce/backend:${CI_COMMIT_REF_SLUG}
+          alias: backend
+          variables:
+              NODE_ENV: "tests_ci"
+              DATABASE_URL: "postgresql://booklify:booklify@postgres:5432/booklify"
+    script:
+        - curl --head -X GET --retry 60 --retry-connrefused --retry-delay 1 http://backend:3000/syste,/health
+        - cd backend
+        - yarn run test
 
 backend_prettier:
     image: ${DOCKER_CACHE}/node:18-alpine
