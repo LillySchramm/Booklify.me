@@ -1,4 +1,10 @@
-import { Controller, Get, InternalServerErrorException } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    InternalServerErrorException,
+    Post,
+    UnauthorizedException,
+} from '@nestjs/common';
 import {
     ApiInternalServerErrorResponse,
     ApiOkResponse,
@@ -12,10 +18,13 @@ import * as config from 'config';
 import { LegalDto } from './dto/legal.dto';
 import { ReportsDto } from './dto/reports.dto';
 import { AmazonDto } from './dto/amazon.dto';
+import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 
 @Controller('system')
 @ApiTags('System')
 export class SystemController {
+    private readonly logger = new LokiLogger(SystemController.name);
+
     constructor(private systemService: SystemService) {}
 
     @Get('health')
@@ -71,5 +80,18 @@ export class SystemController {
         });
 
         return response;
+    }
+
+    @Post('reset')
+    @ApiOkResponse({ type: SystemInfoDto })
+    async reset() {
+        const testsMode = config.get<boolean>('test_mode');
+        if (!testsMode) {
+            throw new UnauthorizedException(
+                'Reset is only allowed in test mode',
+            );
+        }
+
+        await this.systemService.resetDatabase();
     }
 }

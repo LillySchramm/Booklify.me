@@ -21,4 +21,6 @@ COPY assets/ assets/
 
 ENV VERSION=${BUILD_VERSION}
 
+EXPOSE 3000
+
 CMD [ "/bin/sh", "entrypoint.sh" ]

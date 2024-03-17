@@ -515,6 +515,12 @@
         examples: [],
         type: "boolean",
     },
+    test_mode: {
+        "default": false,
+        description: "Enables the test mode. This mode is used to test the server and should not be used under any other circumstances.",
+        examples: [],
+        type: "boolean",
+    },
     url: {
         "default": "http://localhost:4200",
         description: "The URL of the frontend server.",
