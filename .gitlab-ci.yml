@@ -206,7 +206,7 @@ api_test:
         <<: *npm-cache
     services:
         - name: ${DOCKER_CACHE}/postgres:15
-          alias: postgres
+          alias: testpostgres
           variables:
             POSTGRES_DB: "booklify"
             POSTGRES_USER: "booklify"
@@ -219,7 +219,7 @@ api_test:
           alias: backend
           variables:
               NODE_ENV: "tests_ci"
-              DATABASE_URL: "postgresql://booklify:booklify@postgres:5432/booklify"
+              DATABASE_URL: "postgresql://booklify:booklify@testpostgres:5432/booklify"
     script:
         - cd backend
         - yarn run test
