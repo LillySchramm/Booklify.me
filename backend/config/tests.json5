@@ -106,5 +106,6 @@
             "dsn": "",
             "enabled": false
         }
-    }
+    },
+    "test_mode": true
 }

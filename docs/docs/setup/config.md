@@ -312,6 +312,10 @@ These are all the configuration options which can be set for the application.
 #### tasks.updateOutdatedGrouping.enabled
 **Type:** `boolean`\
 **Default:** `true`
+## test_mode
+**Type:** `boolean`\
+**Default:** `false`\
+**Description:** Enables the test mode. This mode is used to test the server and should not be used under any other circumstances.
 ## url
 **Type:** `string`\
 **Default:** `"http://localhost:4200"`\

@@ -3,6 +3,7 @@ import {
     Get,
     InternalServerErrorException,
     Post,
+    UnauthorizedException,
 } from '@nestjs/common';
 import {
     ApiInternalServerErrorResponse,
@@ -84,6 +85,13 @@ export class SystemController {
     @Post('reset')
     @ApiOkResponse({ type: SystemInfoDto })
     async reset() {
+        const testsMode = config.get<boolean>('test_mode');
+        if (!testsMode) {
+            throw new UnauthorizedException(
+                'Reset is only allowed in test mode',
+            );
+        }
+
         await this.systemService.resetDatabase();
     }
 }
