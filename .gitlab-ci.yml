@@ -197,7 +197,7 @@ build_docs_container:
             --destination "registry.cdev.nexus/booklify-ce/docs:${CI_COMMIT_TAG}"
 
 api_test:
-    image: ${DOCKER_CACHE}/node:18
+    image: registry.cdev.nexus/devops/node20-docker:latest
     stage: test
     needs: []
         # - build_backend_container
