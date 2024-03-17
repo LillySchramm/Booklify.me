@@ -12,7 +12,6 @@ include:
 
 variables:
     SAST_EXCLUDED_PATHS: spec,test,tests,tmp,companion_app
-    FF_NETWORK_PER_BUILD: "true"
     POSTGRES_HOST_AUTH_METHOD: trust
 
 .cache0: &npm-cache
@@ -207,6 +206,8 @@ api_test:
         - install_npm_dependencies
     cache:
         <<: *npm-cache
+    variables:
+        FF_NETWORK_PER_BUILD: "true"
     services:
         - name: ${DOCKER_CACHE}/postgres:15
           alias: postgres
