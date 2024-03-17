@@ -1,7 +1,7 @@
 version: '3'
 services:
   backend:
-    image: registry.cdev.nexus/booklify-ce/backend:v2
+    image: registry.cdev.nexus/booklify-ce/backend:${CI_COMMIT_TAG:-${CI_COMMIT_REF_SLUG}}
     restart: unless-stopped
     ports:
       - "3000:3000"
