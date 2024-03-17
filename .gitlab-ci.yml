@@ -199,30 +199,16 @@ build_docs_container:
 api_test:
     image: ${DOCKER_CACHE}/node:18
     stage: test
-    needs:
-        - build_backend_container
-        - install_npm_dependencies
+    # needs:
+        # - build_backend_container
+        # - install_npm_dependencies
+    services:
+        - name: docker:dind
     cache:
         <<: *npm-cache
-    services:
-        - name: ${DOCKER_CACHE}/postgres:15
-          alias: testpostgres
-          variables:
-            POSTGRES_DB: "booklify"
-            POSTGRES_USER: "booklify"
-            POSTGRES_PASSWORD: "booklify"
-
-        - name: ${DOCKER_CACHE}/adobe/s3mock:latest
-          alias: s3mock
-
-        - name: registry.cdev.nexus/booklify-ce/backend:${CI_COMMIT_REF_SLUG}
-          alias: backend
-          pull_policy: always
-          variables:
-              NODE_ENV: "tests_ci"
-              DATABASE_URL: "postgresql://booklify:booklify@testpostgres:5432/booklify"
     script:
         - cd backend
+        - docker compose -f docker-compose.ci.yml up -d
         - yarn run test
 
 backend_prettier:

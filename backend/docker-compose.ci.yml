@@ -1,0 +1,17 @@
+version: '2.8'
+services:
+    db:
+        image: postgres:15-alpine
+        environment:
+            - POSTGRES_USER=uwu
+            - POSTGRES_PASSWORD=owo
+            - POSTGRES_DB=mangalist
+        ports:
+            - 5432:5432
+    s3:
+        image: adobe/s3mock:latest
+        ports:
+            - 9090:9090
+        environment:
+            - root=/s3mockroot
+            - retainFilesOnExit=true
