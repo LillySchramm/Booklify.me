@@ -28,6 +28,6 @@ import { CacheModule } from '@nestjs/cache-manager';
         PublishersModule,
         CacheModule.register(),
     ],
-    exports: [BookTasksService],
+    exports: [BookTasksService, BooksService],
 })
 export class BooksModule {}

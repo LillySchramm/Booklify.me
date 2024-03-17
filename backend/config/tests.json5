@@ -28,7 +28,7 @@
         "max_temp_session_age_days": 1,
     },
     "debug": {
-        "show_query": true,
+        "show_query": false,
         "always_regroup": false
     },
     "isbndb": {

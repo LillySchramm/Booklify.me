@@ -5,6 +5,7 @@ import * as config from 'config';
 import { UsersService } from 'src/users/users.service';
 import { sqltag } from '@prisma/client/runtime/library';
 import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
+import { BooksService } from 'src/books/books.service';
 
 @Injectable()
 export class SystemService {
@@ -14,6 +15,7 @@ export class SystemService {
         private prismaService: PrismaService,
         private s3: S3Service,
         private userService: UsersService,
+        private bookService: BooksService,
     ) {}
 
     async checkDatabase(): Promise<boolean> {
@@ -55,7 +57,7 @@ export class SystemService {
         );
 
         const tablesToSkip = ['_prisma_migrations', 'Secret'];
-        for (const table of tables) {
+        for await (const table of tables) {
             if (tablesToSkip.includes(table.tablename)) continue;
 
             this.logger.log(`Truncating table ${table.tablename}...`);
@@ -63,5 +65,30 @@ export class SystemService {
                 `TRUNCATE TABLE "${table.tablename}" CASCADE`,
             );
         }
+
+        await this.bookService.upsertBook(
+            {
+                title: 'Test Book',
+                authors: ['Test Author'],
+                amazonLink: undefined,
+                description: 'Test Description',
+                language: 'de',
+                pageCount: 100,
+                printedPageCount: 100,
+                subtitle: 'Test Subtitle',
+                series: 'Test Series',
+                publisher: 'Test Publisher',
+            },
+            '9783770428601',
+            false,
+        );
+
+        await this.userService.createUser(
+            'test',
+            'test@test.de',
+            '*wgtpGc3o$uVjW',
+            true,
+            true,
+        );
     }
 }

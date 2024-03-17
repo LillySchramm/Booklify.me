@@ -226,7 +226,7 @@ api_test:
               NODE_ENV: "tests_ci"
               DATABASE_URL: "postgresql://booklify:booklify@postgres:5432/booklify"
     script:
-        - curl --head -X GET --retry 60 --retry-connrefused --retry-delay 1 http://backend:3000/syste,/health
+        - curl --head -X GET --retry 60 --retry-connrefused --retry-delay 1 http://backend:3000/system/health
         - cd backend
         - yarn run test
 
