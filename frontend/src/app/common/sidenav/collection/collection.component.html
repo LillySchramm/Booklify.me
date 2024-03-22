@@ -19,6 +19,13 @@
             [items]="$authorNames() || []"
             (itemsChange)="setAuthorFilter($event)"
         ></app-chip-filter>
+
+        <app-chip-filter
+            [label]="t('collection.publisher')"
+            [placeholder]="t('collection.add-publisher')"
+            [items]="$publisherNames() || []"
+            (itemsChange)="setPublisherFilter($event)"
+        ></app-chip-filter>
     </form>
     <div class="flex-grow"></div>
     @if ($currentUser()?.id === $currentOwnerId()) {

@@ -94,8 +94,13 @@ export namespace BookActions {
     }
 
     export class SetAuthorFilter {
-        static readonly type = '[Books] Set Author Filter Success';
+        static readonly type = '[Books] Set Author Filter';
         constructor(public authorIds: string[]) {}
+    }
+
+    export class SetPublisherFilter {
+        static readonly type = '[Books] Set Publisher Filter';
+        constructor(public publisherIds: string[]) {}
     }
 
     export class UpdateBookVisibility {

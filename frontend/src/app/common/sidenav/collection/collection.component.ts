@@ -62,13 +62,30 @@ export class CollectionComponent {
     $authorIds = toSignal(this.authorIds$);
 
     @Select(PublisherState.publishers) publishers$!: Observable<PublisherMap>;
+    $publishers = toSignal(this.publishers$);
 
     publisherNames$ = combineLatest([
         this.publisherIds$,
         this.publishers$,
     ]).pipe(
         map(([ids, entities]) => {
-            return ids.map((id) => entities[id]?.name).sort();
+            return ids
+                .map((id) => entities[id]?.name)
+                .sort()
+                .filter((name) => name !== undefined);
+        }),
+        map((names) => {
+            const deduped: string[] = [];
+            const seen: string[] = [];
+
+            names.forEach((name) => {
+                if (!seen.includes(name.toLowerCase())) {
+                    deduped.push(name);
+                    seen.push(name.toLowerCase());
+                }
+            });
+
+            return deduped;
         }),
     );
     $publisherNames = toSignal(this.publisherNames$);
@@ -115,6 +132,21 @@ export class CollectionComponent {
         );
 
         this.store.dispatch(new BookActions.SetAuthorFilter(authorIds));
+    }
+
+    setPublisherFilter(publisherNames: string[]) {
+        const publishers = this.$publishers();
+        if (!publishers) {
+            return;
+        }
+
+        const publisherIds = Object.keys(publishers).filter((key) =>
+            publisherNames
+                .map((name) => name.toLowerCase())
+                .includes(publishers[key].name.toLowerCase()),
+        );
+
+        this.store.dispatch(new BookActions.SetPublisherFilter(publisherIds));
     }
 
     openAddBookDialog() {

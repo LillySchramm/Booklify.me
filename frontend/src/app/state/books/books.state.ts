@@ -43,6 +43,7 @@ interface BookStateModel {
     ownershipChangeLoading: boolean;
     filter?: string;
     authorFilter?: string[];
+    publisherFilter?: string[];
 }
 
 @State<BookStateModel>({
@@ -347,6 +348,16 @@ export class BooksState {
         });
     }
 
+    @Action(BookActions.SetPublisherFilter)
+    setPublisherFilter(
+        { patchState }: StateContext<BookStateModel>,
+        { publisherIds }: BookActions.SetPublisherFilter,
+    ) {
+        patchState({
+            publisherFilter: publisherIds,
+        });
+    }
+
     @Action(BookActions.UpdateBookVisibility)
     updateBookVisibility(
         { getState, dispatch, patchState }: StateContext<BookStateModel>,
@@ -547,6 +558,11 @@ export class BooksState {
     @Selector()
     static authorFilter(state: BookStateModel) {
         return state.authorFilter;
+    }
+
+    @Selector()
+    static publisherFilter(state: BookStateModel) {
+        return state.publisherFilter;
     }
 
     @Selector()

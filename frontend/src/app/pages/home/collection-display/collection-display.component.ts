@@ -42,6 +42,9 @@ export class CollectionDisplayComponent {
     @Select(BooksState.authorFilter) authorFilter$!: Observable<
         string[] | undefined
     >;
+    @Select(BooksState.publisherFilter) publisherFilter$!: Observable<
+        string[] | undefined
+    >;
 
     @Select(BooksState.currentGroupMap) currentGroupMap$!: Observable<
         BookGroupMap | undefined
@@ -142,8 +145,8 @@ export class CollectionDisplayComponent {
                 };
             });
         }),
-        withLatestFrom(this.filter$, this.authorFilter$),
-        map(([entries, filter, authorFilter]) => {
+        withLatestFrom(this.filter$, this.authorFilter$, this.publisherFilter$),
+        map(([entries, filter, authorFilter, publisherFilter]) => {
             this.sorting$.next(true);
             const cache = this.getFilterFromCache(
                 entries.length,
@@ -151,7 +154,7 @@ export class CollectionDisplayComponent {
                 authorFilter,
             );
 
-            if ((!filter && !authorFilter) || cache) {
+            if ((!filter && !authorFilter && !publisherFilter) || cache) {
                 this.sorting$.next(false);
                 return cache ?? entries;
             }
@@ -166,13 +169,19 @@ export class CollectionDisplayComponent {
                                 entry.key,
                                 filter,
                                 authorFilter,
+                                publisherFilter,
                             ),
                         ),
                     };
                 })
                 .filter((entry) => entry.value.length > 0);
 
-            this.setFilterToCache(filter, authorFilter, sorted);
+            this.setFilterToCache(
+                filter,
+                authorFilter,
+                publisherFilter,
+                sorted,
+            );
             this.sorting$.next(false);
 
             return sorted;
@@ -204,6 +213,7 @@ export class CollectionDisplayComponent {
         groupName: string,
         filter: string | undefined,
         authorFilter: string[] | undefined,
+        publisherFilter?: string[] | undefined,
     ): boolean {
         filter = filter ? filter.toLowerCase() : '';
 
@@ -211,6 +221,11 @@ export class CollectionDisplayComponent {
             ? !!book.authors.find((author) => authorFilter.includes(author.id))
             : true;
         if (!containsAuthor) return false;
+
+        const containsPublisher = publisherFilter?.length
+            ? publisherFilter.includes(book.publisherId || '')
+            : true;
+        if (!containsPublisher) return false;
 
         if (book.title === null) return false;
 
@@ -234,6 +249,7 @@ export class CollectionDisplayComponent {
         count: number,
         filter: string | undefined,
         authorFilter: string[] | undefined,
+        publisherFilter?: string[] | undefined,
     ):
         | {
               key: string;
@@ -247,19 +263,20 @@ export class CollectionDisplayComponent {
             this.lastFilterSize = count;
         }
 
-        const key = `${filter}-${authorFilter?.join('-')}`;
+        const key = `${filter}-${authorFilter?.join('-')}-${publisherFilter?.join('-')}`;
         return this.filterCache.get(key) || null;
     }
 
     private setFilterToCache(
         filter: string | undefined,
         authorFilter: string[] | undefined,
+        publisherFilter: string[] | undefined,
         value: {
             key: string;
             value: BookDto[];
         }[],
     ): void {
-        const key = `${filter}-${authorFilter?.join('-')}`;
+        const key = `${filter}-${authorFilter?.join('-')}-${publisherFilter?.join('-')}`;
         this.filterCache.set(key, value);
     }
 }
