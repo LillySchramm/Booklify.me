@@ -69,7 +69,7 @@
     "@types/got": "^9.6.12",
     "@types/jest": "^29.5.2",
     "@types/lodash": "^4.14.199",
-    "@types/markdown-it": "^13.0.7",
+    "@types/markdown-it": "^14.0.0",
     "@types/mmmagic": "^0.4.30",
     "@types/node": "^20.3.1",
     "@types/nodemailer": "^6.4.9",
