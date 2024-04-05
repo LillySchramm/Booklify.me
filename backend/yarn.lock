@@ -2120,9 +2120,9 @@ bytes@3.1.2:
   integrity sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==
 
 cache-manager@^5.3.2:
-  version "5.5.0"
-  resolved "https://registry.yarnpkg.com/cache-manager/-/cache-manager-5.5.0.tgz#d93eeb8d4612fcf729465ebbaa2d5a5d7055359a"
-  integrity sha512-zndX+tczQ7jzlYiXW5++2iCkJicDjNWjHom60gC7B4Epn+Bro8/NZyrTYhBWLT3tbz0UCPv+zf9CkX6fI3yK7A==
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/cache-manager/-/cache-manager-5.5.1.tgz#b86a3995e9c0d2b26f799c6c483fda470a3d5794"
+  integrity sha512-QYZFOjZTTennYdN3NNCKh+yq452+wQ4ChyL40jkEyghIgg5Ugwb4YO8ARIIF1fvTBkgDLlLTYFaxZVaPGmQ92A==
   dependencies:
     eventemitter3 "^5.0.1"
     lodash.clonedeep "^4.5.0"
