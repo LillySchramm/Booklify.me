@@ -1,6 +1,5 @@
 import 'package:companion_app/api/auth.api.dart';
 import 'package:companion_app/pages/main.page.dart';
-import 'package:companion_app/state/auth.state.dart';
 import 'package:companion_app/state/main.state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,9 +16,8 @@ class _InitPageState extends State<InitPage> {
   void initState() {
     super.initState();
 
-    var authState = context.read<AuthState>();
     var mainState = context.read<MainState>();
-    getSession(authState).then((value) => {
+    getSession().then((value) => {
           if (value == null)
             {mainState.setContext(Context.login)}
           else

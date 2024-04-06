@@ -3,7 +3,7 @@ import { BookStatus, OwnershipStatus } from '@prisma/client';
 import { Exclude } from 'class-transformer';
 
 export class OwnershipStatusDto implements OwnershipStatus {
-    @ApiProperty()
+    @ApiProperty({ enum: BookStatus })
     status: BookStatus;
     @Exclude()
     createdAt: Date;

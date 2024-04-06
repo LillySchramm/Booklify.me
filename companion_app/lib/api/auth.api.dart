@@ -1,70 +1,18 @@
 library auth_api;
 
-import 'dart:io';
+import 'package:booklify_api/booklify_api.dart';
+import '../globals.dart' as globals;
 
-import 'package:companion_app/state/auth.state.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
-const String _baseUrl = 'https://api.booklify.me/auth';
-
-class TokenDto {
-  final String accessToken;
-
-  const TokenDto({
-    required this.accessToken,
-  });
-
-  factory TokenDto.fromJson(Map<String, dynamic> json) {
-    return TokenDto(
-      accessToken: json['accessToken'],
-    );
-  }
-}
-
-class SessionDto {
-  final String id;
-  final String userId;
-  final String name;
-  final String createdAt;
-  final bool permanent;
-
-  const SessionDto({
-    required this.id,
-    required this.userId,
-    required this.name,
-    required this.createdAt,
-    required this.permanent,
-  });
-
-  factory SessionDto.fromJson(Map<String, dynamic> json) {
-    return SessionDto(
-      id: json['id'],
-      userId: json['userId'],
-      name: json['name'],
-      createdAt: json['createdAt'],
-      permanent: json['permanent'],
-    );
-  }
-}
-
-Future<TokenDto> login(String email, String password, bool rememberMe) async {
-  final response = await http.post(
-    Uri.parse('$_baseUrl/login'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, dynamic>{
-      'email': email,
-      'password': password,
-      'permanent': rememberMe,
-    }),
-  );
-
+Future<SignInSuccessDto> login(
+    String email, String password, bool rememberMe) async {
+  final response = await globals.api!.getAuthApi().authControllerSignIn(
+        signInDto: SignInDto((b) => b
+          ..email = email
+          ..password = password
+          ..permanent = rememberMe),
+      );
   if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return TokenDto.fromJson(jsonDecode(response.body));
+    return response.data!;
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
@@ -72,65 +20,52 @@ Future<TokenDto> login(String email, String password, bool rememberMe) async {
   }
 }
 
-Future<TokenDto?> refreshWithRefreshToken(
+Future<UserTokenDto?> refreshWithRefreshToken(
     String refreshToken, String sessionId) async {
-  final response = await http.get(
-    Uri.parse('$_baseUrl/refresh?token=$refreshToken&session_id=$sessionId'),
-  );
+  final response = await globals.api!
+      .getAuthApi()
+      .authControllerRefreshToken(token: refreshToken, sessionId: sessionId);
 
   if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return TokenDto.fromJson(jsonDecode(response.body));
+    return response.data;
   }
 
   return null;
 }
 
-Future<TokenDto?> refreshWithAccessToken(String accessToken) async {
-  final response = await http.get(Uri.parse('$_baseUrl/token'), headers: {
-    HttpHeaders.authorizationHeader: 'Bearer $accessToken',
-  });
+Future<UserTokenDto?> refreshWithAccessToken(String accessToken) async {
+  final response = await globals.api!.getAuthApi().authControllerGetNewToken();
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
-    return TokenDto.fromJson(jsonDecode(response.body));
+    return response.data;
   }
 
   return null;
 }
 
-Future<SessionDto?> getSession(AuthState state) async {
-  var accessToken = await state.getToken();
-
-  if (accessToken.isEmpty) return null;
-
-  final response = await http.get(
-    Uri.parse('$_baseUrl/session'),
-    headers: {
-      HttpHeaders.authorizationHeader: 'Bearer $accessToken',
-    },
-  );
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return SessionDto.fromJson(jsonDecode(response.body));
+Future<SessionDto?> getSession() async {
+  try {
+    final response = await globals.api!.getAuthApi().authControllerGetSession();
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return response.data;
+    }
+  } catch (e) {
+    return null;
   }
 
   return null;
 }
 
-Future logout(AuthState state) async {
-  var accessToken = await state.getToken();
+Future logout() async {
+  final response = await globals.api!.getAuthApi().authControllerSignOut();
 
-  if (accessToken.isEmpty) return null;
+  if (response.statusCode == 200) {
+    return response.data;
+  }
 
-  await http.post(
-    Uri.parse('$_baseUrl/logout'),
-    headers: {
-      HttpHeaders.authorizationHeader: 'Bearer $accessToken',
-    },
-  );
+  return null;
 }

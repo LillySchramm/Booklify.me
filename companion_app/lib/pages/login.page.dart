@@ -1,7 +1,8 @@
+import 'package:booklify_api/booklify_api.dart';
 import 'package:checkbox_formfield/checkbox_formfield.dart';
+import 'package:companion_app/api/api.dart';
 import 'package:companion_app/api/auth.api.dart';
 import 'package:companion_app/pages/main.page.dart';
-import 'package:companion_app/state/auth.state.dart';
 import 'package:companion_app/state/main.state.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class _LoginFormState extends State<LoginForm> {
     var valid = _formKey.currentState!.validate();
     if (!valid) return;
 
-    TokenDto? tokenDto = null;
+    SignInSuccessDto? tokenDto = null;
     try {
       tokenDto = await login(
           emailController.text, passwordController.text, rememberMe);
@@ -59,8 +60,7 @@ class _LoginFormState extends State<LoginForm> {
       ));
     }
 
-    var authState = context.read<AuthState>();
-    authState.processToken(tokenDto!.accessToken);
+    processToken(tokenDto!.accessToken);
 
     var mainState = context.read<MainState>();
     mainState.setContext(Context.home);
@@ -80,8 +80,6 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    var authState = context.watch<AuthState>();
-
     return Form(
       key: _formKey,
       child: Column(

@@ -1,13 +1,23 @@
+import 'package:booklify_api/booklify_api.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:companion_app/api/book.api.dart';
-import 'package:companion_app/pages/init.page.dart';
 import 'package:companion_app/pages/main.page.dart';
-import 'package:companion_app/state/auth.state.dart';
 import 'package:companion_app/state/main.state.dart';
 import 'package:companion_app/state/scanner.state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+SetOwnershipStatusDtoStatusEnum fromOwnershipStatusDtoStatusEnum(OwnershipStatusDtoStatusEnum e) {
+  switch (e) {
+    case OwnershipStatusDtoStatusEnum.OWNED:
+      return SetOwnershipStatusDtoStatusEnum.OWNED;
+    case OwnershipStatusDtoStatusEnum.NONE:
+      return SetOwnershipStatusDtoStatusEnum.NONE;
+    default:
+      throw Exception('Unknown enum value: $e');
+  }
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -103,7 +113,7 @@ class BookHideButton extends StatelessWidget {
     var text = "Hide book";
     var icon = Icons.visibility_off;
 
-    if (scannerState.ownershipStatus == "NONE") {
+    if (scannerState.ownershipStatus ==SetOwnershipStatusDtoStatusEnum.NONE) {
       text = "Add book and hide";
     }
 
@@ -126,17 +136,15 @@ class BookHideButton extends StatelessWidget {
 
   void onHiddenPressed(BuildContext context) async {
     var scannerState = context.read<ScannerState>();
-    var authState = context.read<AuthState>();
 
     scannerState.setChangingOwnership(true);
 
-    await setOwnershipStatus(
-        authState, scannerState.book!, "OWNED", !scannerState.isHidden);
+    await setOwnershipStatus(scannerState.book!,
+        SetOwnershipStatusDtoStatusEnum.OWNED, !scannerState.isHidden);
 
-    var hiddenStatus =
-        await getBookOwnershipStatus(authState, scannerState.book!.isbn);
+    var hiddenStatus = await getBookOwnershipStatus(scannerState.book!.isbn);
     scannerState.setHidden(hiddenStatus!.hidden);
-    scannerState.setOwnershipStatus(hiddenStatus.status);
+    scannerState.setOwnershipStatus(fromOwnershipStatusDtoStatusEnum(hiddenStatus.status));
 
     scannerState.setChangingOwnership(false);
   }
@@ -154,7 +162,7 @@ class BookStatusButton extends StatelessWidget {
     var color = Colors.green;
     var text = "Add book to your collection";
     var icon = Icons.add;
-    if (scannerState.ownershipStatus == "OWNED") {
+    if (scannerState.ownershipStatus == SetOwnershipStatusDtoStatusEnum.OWNED) {
       color = Colors.red;
       text = "Remove book from your collection";
       icon = CupertinoIcons.trash;
@@ -173,16 +181,18 @@ class BookStatusButton extends StatelessWidget {
 
   void onStatusPressed(BuildContext context) async {
     var scannerState = context.read<ScannerState>();
-    var authState = context.read<AuthState>();
 
     scannerState.setChangingOwnership(true);
 
-    await setOwnershipStatus(authState, scannerState.book!,
-        scannerState.ownershipStatus == "OWNED" ? "NONE" : "OWNED", false);
+    await setOwnershipStatus(
+        scannerState.book!,
+        scannerState.ownershipStatus == SetOwnershipStatusDtoStatusEnum.OWNED
+            ? SetOwnershipStatusDtoStatusEnum.NONE
+            : SetOwnershipStatusDtoStatusEnum.OWNED,
+        false);
 
-    var ownershipStatus =
-        await getBookOwnershipStatus(authState, scannerState.book!.isbn);
-    scannerState.setOwnershipStatus(ownershipStatus!.status);
+    var ownershipStatus = await getBookOwnershipStatus(scannerState.book!.isbn);
+    scannerState.setOwnershipStatus(fromOwnershipStatusDtoStatusEnum(ownershipStatus!.status));
     scannerState.setHidden(ownershipStatus.hidden);
 
     scannerState.setChangingOwnership(false);
@@ -199,7 +209,7 @@ class BookCover extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (scannerState.book!.cover == null) {
+    if (scannerState.book!.bookCoverId == null) {
       return const Center(
           child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -213,7 +223,7 @@ class BookCover extends StatelessWidget {
 
     return CachedNetworkImage(
       imageUrl:
-          "https://api.booklify.me/books/cover/${scannerState.book!.cover}.png",
+          "https://api.booklify.me/books/cover/${scannerState.book!.bookCoverId}.png",
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
             image: DecorationImage(

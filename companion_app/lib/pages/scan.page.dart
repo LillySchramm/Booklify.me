@@ -1,11 +1,12 @@
 import 'dart:typed_data';
 
+import 'package:booklify_api/booklify_api.dart';
 import 'package:checkdigit/checkdigit.dart';
 import 'package:companion_app/api/author.api.dart';
 import 'package:companion_app/api/book.api.dart';
 import 'package:companion_app/api/publisher.api.dart';
+import 'package:companion_app/pages/home.page.dart';
 import 'package:companion_app/pages/main.page.dart';
-import 'package:companion_app/state/auth.state.dart';
 import 'package:companion_app/state/main.state.dart';
 import 'package:companion_app/state/scanner.state.dart';
 import 'package:flutter/material.dart';
@@ -76,16 +77,15 @@ class _ScanPageState extends State<ScanPage> {
   }
 
   void loadBookDetails(String isbn) async {
-    var authState = context.read<AuthState>();
     var scannerState = context.read<ScannerState>();
 
     scannerState.reset();
     scannerState.setLoading(true);
 
-    var known = await isBookKnown(authState, isbn);
+    var known = await isBookKnown(isbn);
     scannerState.setWasKnown(known);
 
-    var book = await getBook(authState, isbn);
+    var book = await getBook(isbn);
     scannerState.setBook(book);
 
     if (book == null) {
@@ -95,16 +95,16 @@ class _ScanPageState extends State<ScanPage> {
       return;
     }
 
-    var ownershipStatus = await getBookOwnershipStatus(authState, isbn);
-    scannerState.setOwnershipStatus(ownershipStatus!.status);
+    var ownershipStatus = await getBookOwnershipStatus(isbn);
+    scannerState.setOwnershipStatus(fromOwnershipStatusDtoStatusEnum(ownershipStatus!.status));
     scannerState.setHidden(ownershipStatus.hidden);
 
-    var publisher = await getPublisher(authState, book.publisher);
+    var publisher = await getPublisher(book.publisherId!);
     scannerState.setPublisher(publisher);
 
     List<AuthorDto> authors = [];
     for (var authorId in book.authors) {
-      var author = await getAuthor(authState, authorId.id);
+      var author = await getAuthor(authorId.id);
 
       if (author != null) {
         authors.add(author);

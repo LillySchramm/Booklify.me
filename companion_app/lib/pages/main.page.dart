@@ -1,9 +1,9 @@
+import 'package:companion_app/api/api.dart';
 import 'package:companion_app/api/auth.api.dart';
 import 'package:companion_app/pages/home.page.dart';
 import 'package:companion_app/pages/init.page.dart';
 import 'package:companion_app/pages/login.page.dart';
 import 'package:companion_app/pages/scan.page.dart';
-import 'package:companion_app/state/auth.state.dart';
 import 'package:companion_app/state/main.state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -55,9 +55,8 @@ class MainPage extends StatelessWidget {
   }
 
   void onLogoutPressed(BuildContext context) async {
-    var authState = context.read<AuthState>();
-    await logout(authState);
-    authState.clearToken();
+    await logout();
+    clearToken();
 
     var mainState = context.read<MainState>();
     mainState.setContext(Context.login);

@@ -1,6 +1,4 @@
-import 'package:companion_app/api/author.api.dart';
-import 'package:companion_app/api/book.api.dart';
-import 'package:companion_app/api/publisher.api.dart';
+import 'package:booklify_api/booklify_api.dart';
 import 'package:flutter/material.dart';
 
 class ScannerState extends ChangeNotifier {
@@ -13,7 +11,7 @@ class ScannerState extends ChangeNotifier {
   bool isHidden = false;
   BookDto? book;
   PublisherDto? publisher;
-  String? ownershipStatus;
+  SetOwnershipStatusDtoStatusEnum? ownershipStatus;
   List<AuthorDto> authors = [];
 
   void reset() {
@@ -49,7 +47,7 @@ class ScannerState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setOwnershipStatus(String? status) {
+  void setOwnershipStatus(SetOwnershipStatusDtoStatusEnum? status) {
     ownershipStatus = status;
     notifyListeners();
   }
