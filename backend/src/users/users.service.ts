@@ -299,6 +299,17 @@ export class UsersService implements OnModuleInit {
         await this.prisma.user.delete({ where: { id: userId } });
     }
 
+    async deleteUnactivatedUsers(): Promise<number> {
+        const deleteThreshold = new Date();
+        deleteThreshold.setDate(deleteThreshold.getDate() - 7);
+
+        const result = await this.prisma.user.deleteMany({
+            where: { activated: false, createdAt: { lt: deleteThreshold } },
+        });
+
+        return result.count;
+    }
+
     async exportUserData(userId: string): Promise<any> {
         const user = await this.prisma.user.findFirst({
             where: { id: userId },

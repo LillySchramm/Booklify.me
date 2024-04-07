@@ -230,7 +230,16 @@ These are all the configuration options which can be set for the application.
 
 ## tasks
 **Type:** `object`\
-**Description:** Crone jobs which are used to run tasks in the background. **Make sure you know what you are doing when you change these settings, as they can have a big impact on the performance and functionality of the server.**
+**Description:** Cron jobs which are used to run tasks in the background. **Make sure you know what you are doing when you change these settings, as they can have a big impact on the performance and functionality of the server.**
+### tasks.deleteUnactivatedUsers
+**Type:** `object`\
+**Description:** Deletes all users which have not activated their account after a week.
+#### tasks.deleteUnactivatedUsers.cron
+**Type:** `string`\
+**Default:** `"*/5 * * * * *"`
+#### tasks.deleteUnactivatedUsers.enabled
+**Type:** `boolean`\
+**Default:** `true`
 ### tasks.doLongruning
 **Type:** `object`\
 **Description:** Processes pending crawlers which take a long time to run (e.g. Amazon).

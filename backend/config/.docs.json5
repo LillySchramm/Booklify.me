@@ -349,9 +349,27 @@
     },
     tasks: {
         "default": null,
-        description: "Crone jobs which are used to run tasks in the background. **Make sure you know what you are doing when you change these settings, as they can have a big impact on the performance and functionality of the server.**",
+        description: "Cron jobs which are used to run tasks in the background. **Make sure you know what you are doing when you change these settings, as they can have a big impact on the performance and functionality of the server.**",
         examples: [],
         type: "object",
+    },
+    "tasks.deleteUnactivatedUsers": {
+        "default": null,
+        description: "Deletes all users which have not activated their account after a week.",
+        examples: [],
+        type: "object",
+    },
+    "tasks.deleteUnactivatedUsers.cron": {
+        "default": "*/5 * * * * *",
+        description: "",
+        examples: [],
+        type: "string",
+    },
+    "tasks.deleteUnactivatedUsers.enabled": {
+        "default": true,
+        description: "",
+        examples: [],
+        type: "boolean",
     },
     "tasks.doLongruning": {
         "default": null,

@@ -1,0 +1,7 @@
+id: c2b4f32c-2c82-4e3d-9aa6-0717bbbb3352
+title: Accounts which did not get activated are now being deleted after a week.
+type: 1
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1712514679

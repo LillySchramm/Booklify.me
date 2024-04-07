@@ -6,9 +6,10 @@ import { UsersController } from './users.controller';
 import { AuthModule } from 'src/auth/auth.module';
 import { SecretsModule } from 'src/secrets/secrets.module';
 import { ChangelogModule } from 'src/changelog/changelog.module';
+import { UserTasksService } from './user-tasks.service';
 
 @Module({
-    providers: [UsersService],
+    providers: [UsersService, UserTasksService],
     exports: [UsersService],
     imports: [
         PrismaModule,
