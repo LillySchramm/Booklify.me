@@ -62,7 +62,7 @@
     "title": "Reset Password",
     "request": "Request Reset E-Mail",
     "back-to-login": "Back To Login",
-    "request-success": "We have send an E-Mail containing the reset instructions to {{ email }}. The message may need a few minutes to be delivered. Please also check your junk folder.",
+    "request-success": "We have send an E-Mail containing the reset instructions to '<b>{{ email }}</b>'. The message may need a few minutes to be delivered. Please also check your junk folder.",
     "reset": "Reset Password",
     "reset-success": "Password reset was successful. You can now login!"
   },
