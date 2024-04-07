@@ -4,7 +4,7 @@ description: Booklify API Client
 homepage: homepage
 
 environment:
-  sdk: '>=2.15.0 <3.0.0'
+  sdk: '<4.0.0'
 
 dependencies:
   dio: '^5.2.0'
