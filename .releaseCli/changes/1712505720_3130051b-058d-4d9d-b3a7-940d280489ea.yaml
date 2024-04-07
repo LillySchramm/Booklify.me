@@ -1,0 +1,7 @@
+id: 3130051b-058d-4d9d-b3a7-940d280489ea
+title: Fixed a bug which caused the book detail sidenav to not overlay correctly.
+type: 5
+description: ""
+breaking: false
+breaking_migration_guide: ""
+timestamp: 1712505720
