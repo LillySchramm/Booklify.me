@@ -64,6 +64,20 @@ export class CollectionComponent {
     @Select(PublisherState.publishers) publishers$!: Observable<PublisherMap>;
     $publishers = toSignal(this.publishers$);
 
+    @Select(BooksState.currentLanguages) languages$!: Observable<
+        Map<string, string>
+    >;
+    $languages = toSignal(this.languages$);
+
+    languageNames$ = combineLatest([this.languages$]).pipe(
+        map(([languages]) => {
+            return Array.from(languages.keys())
+                .sort()
+                .filter((name) => name !== 'unknown');
+        }),
+    );
+    $languageNames = toSignal(this.languageNames$);
+
     publisherNames$ = combineLatest([
         this.publisherIds$,
         this.publishers$,
@@ -132,6 +146,19 @@ export class CollectionComponent {
         );
 
         this.store.dispatch(new BookActions.SetAuthorFilter(authorIds));
+    }
+
+    setLanguageFilter(languageNames: string[]) {
+        const languages = this.$languages();
+        if (!languages) {
+            return;
+        }
+
+        const languageIds = languageNames
+            .map((name) => this.$languages()?.get(name))
+            .filter((id) => id !== undefined) as string[];
+
+        this.store.dispatch(new BookActions.SetLanguageFilter(languageIds));
     }
 
     setPublisherFilter(publisherNames: string[]) {

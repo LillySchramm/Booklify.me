@@ -44,6 +44,7 @@ interface BookStateModel {
     filter?: string;
     authorFilter?: string[];
     publisherFilter?: string[];
+    languageFilter?: string[];
 }
 
 @State<BookStateModel>({
@@ -358,6 +359,16 @@ export class BooksState {
         });
     }
 
+    @Action(BookActions.SetLanguageFilter)
+    setLanguageFilter(
+        { patchState }: StateContext<BookStateModel>,
+        { languageIds }: BookActions.SetLanguageFilter,
+    ) {
+        patchState({
+            languageFilter: languageIds,
+        });
+    }
+
     @Action(BookActions.UpdateBookVisibility)
     updateBookVisibility(
         { getState, dispatch, patchState }: StateContext<BookStateModel>,
@@ -566,6 +577,11 @@ export class BooksState {
     }
 
     @Selector()
+    static languageFilter(state: BookStateModel) {
+        return state.languageFilter;
+    }
+
+    @Selector()
     static currentPublishers(state: BookStateModel) {
         const publishers = new Set<string>();
 
@@ -581,6 +597,30 @@ export class BooksState {
         }
 
         return Array.from(publishers.values());
+    }
+
+    @Selector()
+    static currentLanguages(state: BookStateModel) {
+        const languages = new Map<string, string>();
+
+        if (!state.currentCollection) {
+            return [];
+        }
+
+        const languageNames = new Intl.DisplayNames(['en'], {
+            type: 'language',
+        });
+
+        for (const isbn of state.currentCollection) {
+            const book = state.bookMap[isbn];
+
+            const language = book.language || 'unknown';
+            const languageName = languageNames.of(language) || 'Unknown';
+
+            languages.set(languageName, language);
+        }
+
+        return languages;
     }
 
     @Selector()

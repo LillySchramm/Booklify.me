@@ -76,7 +76,9 @@
     "publisher": "Publisher",
     "add-publisher": "Add Publisher",
     "author": "Author",
-    "add-author": "Add Author"
+    "add-author": "Add Author",
+    "language": "Language",
+    "add-language": "Add language"
   },
   "book-groups": {
     "unknown": "Unassigned",

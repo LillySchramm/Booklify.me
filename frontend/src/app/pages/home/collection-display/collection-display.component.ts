@@ -45,6 +45,9 @@ export class CollectionDisplayComponent {
     @Select(BooksState.publisherFilter) publisherFilter$!: Observable<
         string[] | undefined
     >;
+    @Select(BooksState.languageFilter) languageFilter$!: Observable<
+        string[] | undefined
+    >;
 
     @Select(BooksState.currentGroupMap) currentGroupMap$!: Observable<
         BookGroupMap | undefined
@@ -145,47 +148,70 @@ export class CollectionDisplayComponent {
                 };
             });
         }),
-        withLatestFrom(this.filter$, this.authorFilter$, this.publisherFilter$),
-        map(([entries, filter, authorFilter, publisherFilter]) => {
-            this.sorting$.next(true);
-            const cache = this.getFilterFromCache(
-                entries.length,
-                filter,
-                authorFilter,
-            );
-
-            if ((!filter && !authorFilter && !publisherFilter) || cache) {
-                this.sorting$.next(false);
-                return cache ?? entries;
-            }
-
-            const sorted = entries
-                .map((entry) => {
-                    return {
-                        key: entry.key,
-                        value: entry.value.filter((book) =>
-                            this.filterBook(
-                                book,
-                                entry.key,
-                                filter,
-                                authorFilter,
-                                publisherFilter,
-                            ),
-                        ),
-                    };
-                })
-                .filter((entry) => entry.value.length > 0);
-
-            this.setFilterToCache(
+        withLatestFrom(
+            this.filter$,
+            this.authorFilter$,
+            this.publisherFilter$,
+            this.languageFilter$,
+        ),
+        map(
+            ([
+                entries,
                 filter,
                 authorFilter,
                 publisherFilter,
-                sorted,
-            );
-            this.sorting$.next(false);
+                languageFilter,
+            ]) => {
+                this.sorting$.next(true);
+                const cache = this.getFilterFromCache(
+                    entries.length,
+                    filter,
+                    authorFilter,
+                    publisherFilter,
+                    languageFilter,
+                );
 
-            return sorted;
-        }),
+                if (
+                    (!filter &&
+                        !authorFilter &&
+                        !publisherFilter &&
+                        !languageFilter) ||
+                    cache
+                ) {
+                    this.sorting$.next(false);
+                    return cache ?? entries;
+                }
+
+                const sorted = entries
+                    .map((entry) => {
+                        return {
+                            key: entry.key,
+                            value: entry.value.filter((book) =>
+                                this.filterBook(
+                                    book,
+                                    entry.key,
+                                    filter,
+                                    authorFilter,
+                                    publisherFilter,
+                                    languageFilter,
+                                ),
+                            ),
+                        };
+                    })
+                    .filter((entry) => entry.value.length > 0);
+
+                this.setFilterToCache(
+                    filter,
+                    authorFilter,
+                    publisherFilter,
+                    languageFilter,
+                    sorted,
+                );
+                this.sorting$.next(false);
+
+                return sorted;
+            },
+        ),
     );
     $groupedBooks = toSignal(this.groupedBooks$);
 
@@ -214,8 +240,14 @@ export class CollectionDisplayComponent {
         filter: string | undefined,
         authorFilter: string[] | undefined,
         publisherFilter?: string[] | undefined,
+        languageFilter?: string[] | undefined,
     ): boolean {
         filter = filter ? filter.toLowerCase() : '';
+
+        const containsLanguage = languageFilter?.length
+            ? languageFilter.includes(book.language || '')
+            : true;
+        if (!containsLanguage) return false;
 
         const containsAuthor = authorFilter?.length
             ? !!book.authors.find((author) => authorFilter.includes(author.id))
@@ -250,6 +282,7 @@ export class CollectionDisplayComponent {
         filter: string | undefined,
         authorFilter: string[] | undefined,
         publisherFilter?: string[] | undefined,
+        languageFilter?: string[] | undefined,
     ):
         | {
               key: string;
@@ -263,7 +296,7 @@ export class CollectionDisplayComponent {
             this.lastFilterSize = count;
         }
 
-        const key = `${filter}-${authorFilter?.join('-')}-${publisherFilter?.join('-')}`;
+        const key = `${filter}-${authorFilter?.join('-')}-${publisherFilter?.join('-')}-${languageFilter?.join('-')}`;
         return this.filterCache.get(key) || null;
     }
 
@@ -271,12 +304,13 @@ export class CollectionDisplayComponent {
         filter: string | undefined,
         authorFilter: string[] | undefined,
         publisherFilter: string[] | undefined,
+        languageFilter: string[] | undefined,
         value: {
             key: string;
             value: BookDto[];
         }[],
     ): void {
-        const key = `${filter}-${authorFilter?.join('-')}-${publisherFilter?.join('-')}`;
+        const key = `${filter}-${authorFilter?.join('-')}-${publisherFilter?.join('-')}-${languageFilter?.join('-')}`;
         this.filterCache.set(key, value);
     }
 }

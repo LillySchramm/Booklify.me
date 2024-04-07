@@ -103,6 +103,11 @@ export namespace BookActions {
         constructor(public publisherIds: string[]) {}
     }
 
+    export class SetLanguageFilter {
+        static readonly type = '[Books] Set Language Filter';
+        constructor(public languageIds: string[]) {}
+    }
+
     export class UpdateBookVisibility {
         static readonly type = '[Books] Update Book Visibility';
         constructor(
