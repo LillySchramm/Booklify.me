@@ -10,8 +10,6 @@ doc/BasicUserDto.md
 doc/BookDto.md
 doc/BookGroupDto.md
 doc/BookGroupListDto.md
-doc/BookGroupPatchDto.md
-doc/BookGroupPostDto.md
 doc/BookGroupsApi.md
 doc/BookListDto.md
 doc/BooksApi.md
@@ -69,8 +67,6 @@ lib/src/model/basic_user_dto.dart
 lib/src/model/book_dto.dart
 lib/src/model/book_group_dto.dart
 lib/src/model/book_group_list_dto.dart
-lib/src/model/book_group_patch_dto.dart
-lib/src/model/book_group_post_dto.dart
 lib/src/model/book_list_dto.dart
 lib/src/model/change_password_dto.dart
 lib/src/model/create_report_dto.dart

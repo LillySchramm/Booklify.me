@@ -21,8 +21,6 @@ model/basicUserDto.ts
 model/bookDto.ts
 model/bookGroupDto.ts
 model/bookGroupListDto.ts
-model/bookGroupPatchDto.ts
-model/bookGroupPostDto.ts
 model/bookListDto.ts
 model/changePasswordDto.ts
 model/createReportDto.ts

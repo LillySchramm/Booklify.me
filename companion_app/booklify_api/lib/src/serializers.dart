@@ -21,8 +21,6 @@ import 'package:booklify_api/src/model/basic_user_dto.dart';
 import 'package:booklify_api/src/model/book_dto.dart';
 import 'package:booklify_api/src/model/book_group_dto.dart';
 import 'package:booklify_api/src/model/book_group_list_dto.dart';
-import 'package:booklify_api/src/model/book_group_patch_dto.dart';
-import 'package:booklify_api/src/model/book_group_post_dto.dart';
 import 'package:booklify_api/src/model/book_list_dto.dart';
 import 'package:booklify_api/src/model/change_password_dto.dart';
 import 'package:booklify_api/src/model/create_report_dto.dart';
@@ -61,8 +59,6 @@ part 'serializers.g.dart';
   BookDto,
   BookGroupDto,
   BookGroupListDto,
-  BookGroupPatchDto,
-  BookGroupPostDto,
   BookListDto,
   ChangePasswordDto,
   CreateReportDto,

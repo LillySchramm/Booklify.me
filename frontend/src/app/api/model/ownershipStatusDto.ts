@@ -11,7 +11,7 @@
  */
 
 export interface OwnershipStatusDto {
-    status: string;
+    status: OwnershipStatusDto.StatusEnum;
     updatedAt: string;
     userId: string;
     bookIsbn: string;
@@ -19,4 +19,11 @@ export interface OwnershipStatusDto {
     hidden: boolean;
     noGroup: boolean;
     favorite: boolean;
+}
+export namespace OwnershipStatusDto {
+    export type StatusEnum = 'NONE' | 'OWNED';
+    export const StatusEnum = {
+        None: 'NONE' as StatusEnum,
+        Owned: 'OWNED' as StatusEnum,
+    };
 }

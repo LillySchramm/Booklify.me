@@ -82,10 +82,7 @@ Class | Method | HTTP request | Description
 [*AuthApi*](doc/AuthApi.md) | [**authControllerVerify**](doc/AuthApi.md#authcontrollerverify) | **GET** /auth/verify | 
 [*AuthorsApi*](doc/AuthorsApi.md) | [**authorsControllerGetAuthor**](doc/AuthorsApi.md#authorscontrollergetauthor) | **GET** /authors/{id} | 
 [*AuthorsApi*](doc/AuthorsApi.md) | [**authorsControllerGetAuthors**](doc/AuthorsApi.md#authorscontrollergetauthors) | **POST** /authors | 
-[*BookGroupsApi*](doc/BookGroupsApi.md) | [**bookGroupsControllerCreateBookGroup**](doc/BookGroupsApi.md#bookgroupscontrollercreatebookgroup) | **POST** /book-groups | 
-[*BookGroupsApi*](doc/BookGroupsApi.md) | [**bookGroupsControllerDeleteBookGroup**](doc/BookGroupsApi.md#bookgroupscontrollerdeletebookgroup) | **DELETE** /book-groups/{id} | 
 [*BookGroupsApi*](doc/BookGroupsApi.md) | [**bookGroupsControllerGetAllBookGroups**](doc/BookGroupsApi.md#bookgroupscontrollergetallbookgroups) | **GET** /book-groups | 
-[*BookGroupsApi*](doc/BookGroupsApi.md) | [**bookGroupsControllerUpdateBookGroup**](doc/BookGroupsApi.md#bookgroupscontrollerupdatebookgroup) | **PATCH** /book-groups/{id} | 
 [*BooksApi*](doc/BooksApi.md) | [**booksControllerGetAllOwnedBooks**](doc/BooksApi.md#bookscontrollergetallownedbooks) | **GET** /books/owned | 
 [*BooksApi*](doc/BooksApi.md) | [**booksControllerGetBook**](doc/BooksApi.md#bookscontrollergetbook) | **GET** /books/{isbn} | 
 [*BooksApi*](doc/BooksApi.md) | [**booksControllerGetBookCover**](doc/BooksApi.md#bookscontrollergetbookcover) | **GET** /books/cover/{id}.png | 
@@ -114,8 +111,6 @@ Class | Method | HTTP request | Description
  - [BookDto](doc/BookDto.md)
  - [BookGroupDto](doc/BookGroupDto.md)
  - [BookGroupListDto](doc/BookGroupListDto.md)
- - [BookGroupPatchDto](doc/BookGroupPatchDto.md)
- - [BookGroupPostDto](doc/BookGroupPostDto.md)
  - [BookListDto](doc/BookListDto.md)
  - [ChangePasswordDto](doc/ChangePasswordDto.md)
  - [CreateReportDto](doc/CreateReportDto.md)

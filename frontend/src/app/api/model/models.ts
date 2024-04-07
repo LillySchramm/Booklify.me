@@ -5,8 +5,6 @@ export * from './basicUserDto';
 export * from './bookDto';
 export * from './bookGroupDto';
 export * from './bookGroupListDto';
-export * from './bookGroupPatchDto';
-export * from './bookGroupPostDto';
 export * from './bookListDto';
 export * from './changePasswordDto';
 export * from './createReportDto';
