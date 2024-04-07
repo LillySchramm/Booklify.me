@@ -18,7 +18,10 @@ const TOKEN_EXPIRATION = config.get<string>('security.access_token_expiration');
             global: true,
             signOptions: {
                 expiresIn: TOKEN_EXPIRATION,
-                issuer: 'Mangalist',
+                issuer: 'Booklify',
+                allowInsecureKeySizes: false,
+                allowInvalidAsymmetricKeyTypes: false,
+                algorithm: 'HS512',
             },
         }),
         PrismaModule,

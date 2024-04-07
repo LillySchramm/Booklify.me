@@ -38,11 +38,13 @@ export class AuthGuard implements CanActivate {
             throw new UnauthorizedException();
         }
         try {
-            const publicKey = await this.secretService.getSecret('JWT_PUBLIC');
+            const jwtKey =
+                (await this.secretService.getSecret('JWT_SECRET')) ?? '';
 
             const payload = await this.jwtService.verifyAsync(token, {
-                publicKey: publicKey || '',
+                secret: jwtKey,
             });
+
             const session = await this.authService.findValidSession(
                 payload.jti,
             );

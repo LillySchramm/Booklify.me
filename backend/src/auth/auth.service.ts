@@ -79,7 +79,7 @@ export class AuthService {
     }
 
     async createNewToken(user: User, session: Session): Promise<UserToken> {
-        const privateKey = await this.secretService.getSecret('JWT_PRIVATE');
+        const jwtKey = (await this.secretService.getSecret('JWT_SECRET')) ?? '';
 
         let refreshToken = null;
         if (session.permanent) {
@@ -95,8 +95,7 @@ export class AuthService {
         };
         return {
             accessToken: await this.jwtService.signAsync(payload, {
-                algorithm: 'RS512',
-                privateKey: privateKey || '',
+                secret: jwtKey,
             }),
         };
     }
