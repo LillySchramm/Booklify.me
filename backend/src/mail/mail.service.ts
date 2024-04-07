@@ -86,6 +86,7 @@ export class MailService implements OnModuleInit {
             to,
             subject,
             html,
+            from: config.get<string>('mail.from'),
         });
 
         this.logger.log('Message sent: ' + info.messageId);
@@ -93,7 +94,7 @@ export class MailService implements OnModuleInit {
             data: {
                 id: info.messageId,
                 content: html,
-                from: this.transporter.options.from?.toString() || '',
+                from: config.get<string>('mail.from'),
                 title: subject,
                 to,
             },
