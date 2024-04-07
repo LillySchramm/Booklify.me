@@ -7,29 +7,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../globals.dart' as globals;
 
-/// Creates instance of [Dio] to be used in the remote layer of the app.
 Dio createDio(BaseOptions baseConfiguration) {
   var dio = Dio(baseConfiguration);
-  dio.interceptors.addAll([
-    // interceptor to retry failed requests
-    // interceptor to add bearer token to requests
-    // interceptor to refresh access tokens
-    // interceptor to log requests/responses
-    // etc.
-  ]);
+  dio.interceptors.addAll([]);
 
   return dio;
 }
 
-/// Creates Dio Options for initializing a Dio client.
-///
-/// [baseUrl] Base url for the configuration
-/// [connectionTimeout] Timeout when sending data
-/// [connectionReadTimeout] Timeout when receiving data
-BaseOptions createDioOptions(
-    String baseUrl, int connectionTimeout, int connectionReadTimeout) {
+BaseOptions createDioOptions(int connectionTimeout, int connectionReadTimeout) {
   return BaseOptions(
-    baseUrl: baseUrl,
     connectTimeout: Duration(seconds: connectionTimeout),
     receiveTimeout: Duration(seconds: connectionReadTimeout),
     validateStatus: (status) => status! < 500,
@@ -57,10 +43,10 @@ void processToken(String token) async {
   kv.setString('refreshToken', globals.refreshToken ?? '');
 
   globals.nextRefresh = refreshTime;
-  kv.setInt('nextRefresh', globals.nextRefresh );
+  kv.setInt('nextRefresh', globals.nextRefresh);
 
   globals.sessionId = payload['jti'] ?? '';
-  kv.setString('sessionId', globals.sessionId ?? '') ;
+  kv.setString('sessionId', globals.sessionId ?? '');
 }
 
 void clearToken() async {
@@ -97,8 +83,8 @@ Future<String> _refreshToken() async {
   if (globals.refreshToken!.isEmpty) {
     token = await refreshWithAccessToken(globals.authToken!);
   } else {
-    token =
-        await refreshWithRefreshToken(globals.refreshToken!, globals.sessionId!);
+    token = await refreshWithRefreshToken(
+        globals.refreshToken!, globals.sessionId!);
   }
 
   if (token == null) {
@@ -118,24 +104,24 @@ Future init() async {
   globals.refreshToken = kv.getString('refreshToken') ?? '';
   globals.nextRefresh = kv.getInt('nextRefresh') ?? 0;
   globals.sessionId = kv.getString('sessionId') ?? '';
+  globals.baseUrl = kv.getString('baseUrl') ?? 'https://api.booklify.me';
+  kv.setString('baseUrl', globals.baseUrl);
 }
 
-/// Creates an instance of the backend API with default options.
 BooklifyApi createApiInstance() {
-  const baseUrl = 'https://api.booklify.me';
-  final options = createDioOptions(baseUrl, 10, 30);
+  final options = createDioOptions(10, 30);
   final dio = createDio(options);
 
   dio.interceptors.add(LogInterceptor());
   dio.interceptors.add(InterceptorsWrapper(
     onRequest: (options, handler) async {
-      options.baseUrl = baseUrl;
-
-      init();
+      await init();
 
       String token = globals.authToken ?? '';
+      options.baseUrl = globals.baseUrl;
 
-      if (!(options.uri.path.contains('auth/') && !options.uri.path.contains('session'))) {
+      if (!(options.uri.path.contains('auth/') &&
+          !options.uri.path.contains('session'))) {
         token = await getToken();
       }
 

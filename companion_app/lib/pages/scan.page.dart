@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:booklify_api/booklify_api.dart';
 import 'package:checkdigit/checkdigit.dart';
 import 'package:companion_app/api/author.api.dart';
@@ -96,7 +94,8 @@ class _ScanPageState extends State<ScanPage> {
     }
 
     var ownershipStatus = await getBookOwnershipStatus(isbn);
-    scannerState.setOwnershipStatus(fromOwnershipStatusDtoStatusEnum(ownershipStatus!.status));
+    scannerState.setOwnershipStatus(
+        fromOwnershipStatusDtoStatusEnum(ownershipStatus!.status));
     scannerState.setHidden(ownershipStatus.hidden);
 
     var publisher = await getPublisher(book.publisherId!);

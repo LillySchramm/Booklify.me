@@ -7,8 +7,10 @@ import 'package:companion_app/state/scanner.state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../globals.dart' as globals;
 
-SetOwnershipStatusDtoStatusEnum fromOwnershipStatusDtoStatusEnum(OwnershipStatusDtoStatusEnum e) {
+SetOwnershipStatusDtoStatusEnum fromOwnershipStatusDtoStatusEnum(
+    OwnershipStatusDtoStatusEnum e) {
   switch (e) {
     case OwnershipStatusDtoStatusEnum.OWNED:
       return SetOwnershipStatusDtoStatusEnum.OWNED;
@@ -113,7 +115,7 @@ class BookHideButton extends StatelessWidget {
     var text = "Hide book";
     var icon = Icons.visibility_off;
 
-    if (scannerState.ownershipStatus ==SetOwnershipStatusDtoStatusEnum.NONE) {
+    if (scannerState.ownershipStatus == SetOwnershipStatusDtoStatusEnum.NONE) {
       text = "Add book and hide";
     }
 
@@ -144,7 +146,8 @@ class BookHideButton extends StatelessWidget {
 
     var hiddenStatus = await getBookOwnershipStatus(scannerState.book!.isbn);
     scannerState.setHidden(hiddenStatus!.hidden);
-    scannerState.setOwnershipStatus(fromOwnershipStatusDtoStatusEnum(hiddenStatus.status));
+    scannerState.setOwnershipStatus(
+        fromOwnershipStatusDtoStatusEnum(hiddenStatus.status));
 
     scannerState.setChangingOwnership(false);
   }
@@ -192,7 +195,8 @@ class BookStatusButton extends StatelessWidget {
         false);
 
     var ownershipStatus = await getBookOwnershipStatus(scannerState.book!.isbn);
-    scannerState.setOwnershipStatus(fromOwnershipStatusDtoStatusEnum(ownershipStatus!.status));
+    scannerState.setOwnershipStatus(
+        fromOwnershipStatusDtoStatusEnum(ownershipStatus!.status));
     scannerState.setHidden(ownershipStatus.hidden);
 
     scannerState.setChangingOwnership(false);
@@ -223,7 +227,7 @@ class BookCover extends StatelessWidget {
 
     return CachedNetworkImage(
       imageUrl:
-          "https://api.booklify.me/books/cover/${scannerState.book!.bookCoverId}.png",
+          "${globals.baseUrl}/books/cover/${scannerState.book!.bookCoverId}.png",
       imageBuilder: (context, imageProvider) => Container(
         decoration: BoxDecoration(
             image: DecorationImage(

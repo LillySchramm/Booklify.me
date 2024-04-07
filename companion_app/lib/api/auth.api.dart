@@ -22,24 +22,33 @@ Future<SignInSuccessDto> login(
 
 Future<UserTokenDto?> refreshWithRefreshToken(
     String refreshToken, String sessionId) async {
-  final response = await globals.api!
-      .getAuthApi()
-      .authControllerRefreshToken(token: refreshToken, sessionId: sessionId);
+  try {
+    final response = await globals.api!
+        .getAuthApi()
+        .authControllerRefreshToken(token: refreshToken, sessionId: sessionId);
 
-  if (response.statusCode == 200) {
-    return response.data;
+    if (response.statusCode == 200) {
+      return response.data;
+    }
+  } catch (e) {
+    return null;
   }
 
   return null;
 }
 
 Future<UserTokenDto?> refreshWithAccessToken(String accessToken) async {
-  final response = await globals.api!.getAuthApi().authControllerGetNewToken();
+  try {
+    final response =
+        await globals.api!.getAuthApi().authControllerGetNewToken();
 
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return response.data;
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return response.data;
+    }
+  } catch (e) {
+    return null;
   }
 
   return null;
@@ -61,11 +70,15 @@ Future<SessionDto?> getSession() async {
 }
 
 Future logout() async {
-  final response = await globals.api!.getAuthApi().authControllerSignOut();
+  try {
+    final response = await globals.api!.getAuthApi().authControllerSignOut();
 
-  if (response.statusCode == 200) {
-    return response.data;
+    if (response.statusCode == 200) {
+      return response.data;
+    }
+
+    return null;
+  } catch (e) {
+    return null;
   }
-
-  return null;
 }

@@ -8,3 +8,5 @@ String? authToken = '';
 String? refreshToken = '';
 int nextRefresh = 0;
 String? sessionId = '';
+
+String baseUrl = 'https://api.booklify.me';

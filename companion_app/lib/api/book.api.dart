@@ -17,20 +17,28 @@ Future<BookDto?> getBook(String isbn) async {
 }
 
 Future<bool> isBookKnown(String isbn) async {
-  final response = await globals.api!
-      .getBooksApi()
-      .booksControllerGetBook(isbn: isbn, skipCrawl: true);
+  try {
+    final response = await globals.api!
+        .getBooksApi()
+        .booksControllerGetBook(isbn: isbn, skipCrawl: true);
 
-  return response.statusCode == 200;
+    return response.statusCode == 200;
+  } catch (e) {
+    return false;
+  }
 }
 
 Future<OwnershipStatusDto?> getBookOwnershipStatus(String isbn) async {
-  final response = await globals.api!
-      .getBooksApi()
-      .booksControllerGetBookOwnershipStatus(isbn: isbn);
+  try {
+    final response = await globals.api!
+        .getBooksApi()
+        .booksControllerGetBookOwnershipStatus(isbn: isbn);
 
-  if (response.statusCode == 200) {
-    return response.data;
+    if (response.statusCode == 200) {
+      return response.data;
+    }
+  } catch (e) {
+    return null;
   }
 
   return null;
@@ -45,6 +53,12 @@ Future setOwnershipStatus(BookDto bookDto,
       ..hidden = hidden,
   );
 
-  await globals.api!.getBooksApi().booksControllerSetBookOwnershipStatus(
-      isbn: bookDto.isbn, setOwnershipStatusDto: dto);
+  try {
+    await globals.api!.getBooksApi().booksControllerSetBookOwnershipStatus(
+        isbn: bookDto.isbn, setOwnershipStatusDto: dto);
+  } catch (e) {
+    return null;
+  }
+
+  return null;
 }
