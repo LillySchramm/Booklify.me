@@ -4,7 +4,7 @@
     "cdn_url": "",
     "disable_registration": false,
     "cors": "*",
-    "version": "v0.0.0",
+    "version": "v1.2.3",
     "db": {
         "url": "postgresql://uwu:owo@localhost:5432/mangalist?schema=public"
     },

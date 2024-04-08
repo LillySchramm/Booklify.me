@@ -331,7 +331,7 @@ These are all the configuration options which can be set for the application.
 **Description:** The URL of the frontend server.
 ## version
 **Type:** `string`\
-**Default:** `"v1.2.3"`\
+**Default:** `"v0.0.0"`\
 **Description:** The version of the server, shown in the frontend.\
 **Examples:**
 - `"v1.0.0"`

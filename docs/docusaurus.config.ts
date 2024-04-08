@@ -50,7 +50,7 @@ const config: Config = {
             indexName: 'booklify',
             contextualSearch: false,
             searchParameters: {
-                facetFilters: ['lang:en', 'version:1.2.2'],
+                facetFilters: ['lang:en', 'version:1.2.3'],
             },
         },
         navbar: {
