@@ -201,6 +201,8 @@ build_docs_container:
 api_test:
     image: ${DOCKER_CACHE}/node:18
     stage: test
+    except:
+        - tags
     needs:
         - build_backend_container
         - install_npm_dependencies
