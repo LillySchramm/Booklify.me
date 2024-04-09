@@ -1293,10 +1293,10 @@
   resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-3.3.8.tgz#84dbf2d020a9209a272058725e168f21d331a67e"
   integrity sha512-jYvz8UMLDgy3a5SkGJne8H7VA7zPV2Lwohjx0V8V31+SqAjNmurWMkk9cQhfvlcnXWudBpK9xPM1n4rljOcHYQ==
 
-"@types/markdown-it@^13.0.7":
-  version "13.0.7"
-  resolved "https://registry.yarnpkg.com/@types/markdown-it/-/markdown-it-13.0.7.tgz#4a495115f470075bd4434a0438ac477a49c2e152"
-  integrity sha512-U/CBi2YUUcTHBt5tjO2r5QV/x0Po6nsYwQU4Y04fBS6vfoImaiZ6f8bi3CjTCxBPQSO1LMyUqkByzi8AidyxfA==
+"@types/markdown-it@^14.0.0":
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/@types/markdown-it/-/markdown-it-14.0.0.tgz#baa2d412dafcb67875bce5ebe7c4b16a4b04162f"
+  integrity sha512-2rStaAqMaLQNfo9mg2HNlley75jUTAkZKqlk3pxDSgaFk44zd+CAVpczpoh6/RtOzfUtwpEyD6lsHWUfKbVSDg==
   dependencies:
     "@types/linkify-it" "*"
     "@types/mdurl" "*"
