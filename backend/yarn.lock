@@ -1294,9 +1294,9 @@
   integrity sha512-jYvz8UMLDgy3a5SkGJne8H7VA7zPV2Lwohjx0V8V31+SqAjNmurWMkk9cQhfvlcnXWudBpK9xPM1n4rljOcHYQ==
 
 "@types/markdown-it@^14.0.0":
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/@types/markdown-it/-/markdown-it-14.0.0.tgz#baa2d412dafcb67875bce5ebe7c4b16a4b04162f"
-  integrity sha512-2rStaAqMaLQNfo9mg2HNlley75jUTAkZKqlk3pxDSgaFk44zd+CAVpczpoh6/RtOzfUtwpEyD6lsHWUfKbVSDg==
+  version "14.0.1"
+  resolved "https://registry.yarnpkg.com/@types/markdown-it/-/markdown-it-14.0.1.tgz#3d3fdf9dba83b69edececc070d39ec72b84270a7"
+  integrity sha512-6WfOG3jXR78DW8L5cTYCVVGAsIFZskRHCDo5tbqa+qtKVt4oDRVH7hyIWu1SpDQJlmIoEivNQZ5h+AGAOrgOtQ==
   dependencies:
     "@types/linkify-it" "*"
     "@types/mdurl" "*"
