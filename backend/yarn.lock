@@ -1290,9 +1290,9 @@
     "@types/node" "*"
 
 "@types/linkify-it@*":
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/@types/linkify-it/-/linkify-it-3.0.5.tgz#1e78a3ac2428e6d7e6c05c1665c242023a4601d8"
-  integrity sha512-yg6E+u0/+Zjva+buc3EIb+29XEg4wltq7cSmd4Uc2EE/1nUVmxyzpX6gUXD0V8jIrG0r7YeOGVIbYRkxeooCtw==
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@types/linkify-it/-/linkify-it-5.0.0.tgz#21413001973106cda1c3a9b91eedd4ccd5469d76"
+  integrity sha512-sVDA58zAw4eWAffKOaQH5/5j3XeayukzDk+ewSsnv3p4yJEZHCCzMDiZM8e0OUrRvmpGZ85jf4yDHkHsgBNr9Q==
 
 "@types/lodash@^4.14.199":
   version "4.17.0"
@@ -1305,17 +1305,17 @@
   integrity sha512-jYvz8UMLDgy3a5SkGJne8H7VA7zPV2Lwohjx0V8V31+SqAjNmurWMkk9cQhfvlcnXWudBpK9xPM1n4rljOcHYQ==
 
 "@types/markdown-it@^14.0.0":
-  version "14.0.1"
-  resolved "https://registry.yarnpkg.com/@types/markdown-it/-/markdown-it-14.0.1.tgz#3d3fdf9dba83b69edececc070d39ec72b84270a7"
-  integrity sha512-6WfOG3jXR78DW8L5cTYCVVGAsIFZskRHCDo5tbqa+qtKVt4oDRVH7hyIWu1SpDQJlmIoEivNQZ5h+AGAOrgOtQ==
+  version "14.1.0"
+  resolved "https://registry.yarnpkg.com/@types/markdown-it/-/markdown-it-14.1.0.tgz#88d42de529f70afe4d33cbdc02d5801f48d9aed3"
+  integrity sha512-B/o5iMXxpIAl1+792pO4ryhrNNiAus9HhrTs+Gt2m+6SIdEUEvyOIs0iqDNjTSRgbelWvyeek3UxfYYOKDaWfA==
   dependencies:
     "@types/linkify-it" "*"
     "@types/mdurl" "*"
 
 "@types/mdurl@*":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@types/mdurl/-/mdurl-1.0.5.tgz#3e0d2db570e9fb6ccb2dc8fde0be1d79ac810d39"
-  integrity sha512-6L6VymKTzYSrEf4Nev4Xa1LCHKrlTlYCBMTlQKFuddo1CvQcE52I0mwfOJayueUC7MJuXOeHTcIU683lzd0cUA==
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@types/mdurl/-/mdurl-2.0.0.tgz#d43878b5b20222682163ae6f897b20447233bdfd"
+  integrity sha512-RGdgjQUZba5p6QEFAVx2OGb8rQDL/cPRG7GiedRzMcJ1tYnUANBncjbSB1NRGwbvjcPeikRABz2nshyPk1bhWg==
 
 "@types/methods@^1.1.4":
   version "1.1.4"
