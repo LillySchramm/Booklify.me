@@ -15,7 +15,7 @@ dependencies:
   provider: ^6.0.0
   mobile_scanner: ^4.0.0
   checkbox_formfield: ^0.2.0
-  email_validator: ^2.1.17
+  email_validator: ^3.0.0
   checkdigit: ^0.3.1
   http: ^1.1.0
   shared_preferences: ^2.2.1
