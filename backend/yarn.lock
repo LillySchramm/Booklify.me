@@ -3272,9 +3272,9 @@ file-type-cjs@^1.0.7:
     token-types "^4.1.1"
 
 file-type@^19.0.0:
-  version "19.2.0"
-  resolved "https://registry.yarnpkg.com/file-type/-/file-type-19.2.0.tgz#bee68e02aab6712ac7ec81816be50f684ab7ba40"
-  integrity sha512-tUgGaVcM7enfk+toLsBbbCP71iIThjBiMWLk1gYUprcY21/uRNnui0Py9oJ5AIXE7EJYfBeJRAl8pNHBmujboQ==
+  version "19.3.0"
+  resolved "https://registry.yarnpkg.com/file-type/-/file-type-19.3.0.tgz#7b5989c4af05e4b02c553f29a6acca0508e9ea9b"
+  integrity sha512-mROwiKLZf/Kwa/2Rol+OOZQn1eyTkPB3ZTwC0ExY6OLFCbgxHYZvBm7xI77NvfZFMKBsmuXfmLJnD4eEftEhrA==
   dependencies:
     strtok3 "^8.0.0"
     token-types "^6.0.0"
@@ -6212,9 +6212,9 @@ strnum@^1.0.5:
   integrity sha512-J8bbNyKKXl5qYcR36TIO8W3mVGVHrmmxsd5PAItGkmyzwJvybiw2IVq5nqd0i4LSNSkB/sx9VHllbfFdr9k1JA==
 
 strtok3@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/strtok3/-/strtok3-8.0.0.tgz#0b44ef1032f791e36091ea2365fa8590dc695b4c"
-  integrity sha512-YzsSP+kli3q1tTA04HsfY1GqIapi3vEMN38jJ+aLpFyoev0onI/RuZWBGkQgc7ORynb3LW4cSOP3XtsKV21X6Q==
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/strtok3/-/strtok3-8.0.1.tgz#74088e62b2ba43b2f12256600c0225adbed90641"
+  integrity sha512-HNkTAnNWQj2YBzfTtoC5OQyu1QwPsMwiB7VyQmNvQKCrmEDSvFB857Vh97UY9InGLNRAB91sdS1ztifRo/3hdA==
   dependencies:
     "@tokenizer/token" "^0.3.0"
     peek-readable "^5.1.3"
