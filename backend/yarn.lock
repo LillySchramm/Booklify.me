@@ -6393,15 +6393,15 @@ terser@^5.26.0:
     commander "^2.20.0"
     source-map-support "~0.5.20"
 
-tesseract.js-core@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/tesseract.js-core/-/tesseract.js-core-5.1.0.tgz#4e1d0b9133e92748f9866c7fa76469ec85858f1a"
-  integrity sha512-D4gc5ET1DF/sDayF/eVmHgVGo7nqVC2e3d7uVgVOSAk4NOcmUqvJRTj8etqEmI/2390ZkXCRiDMxTD1RFYyp1g==
+tesseract.js-core@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/tesseract.js-core/-/tesseract.js-core-5.1.1.tgz#2b6f3ef28dd109bf4efdbc8fff70bd11adac8b85"
+  integrity sha512-KX3bYSU5iGcO1XJa+QGPbi+Zjo2qq6eBhNjSGR5E5q0JtzkoipJKOUQD7ph8kFyteCEfEQ0maWLu8MCXtvX5uQ==
 
 tesseract.js@^5.0.4:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/tesseract.js/-/tesseract.js-5.1.0.tgz#eee32a8362e2a168782dc748c7b4a6e93f42b055"
-  integrity sha512-2fH9pqWdS2C6ue/3OoGg91Wtv7Rt/1atYu/g0Q1SGFrowEW/kIBkG361hLienHsWe4KWEjxOJBrCQYpIBWG6WA==
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/tesseract.js/-/tesseract.js-5.1.1.tgz#7bfaca1c103ba0ce3ddf5e101f0692802a01f880"
+  integrity sha512-lzVl/Ar3P3zhpUT31NjqeCo1f+D5+YfpZ5J62eo2S14QNVOmHBTtbchHm/YAbOOOzCegFnKf4B3Qih9LuldcYQ==
   dependencies:
     bmp-js "^0.1.0"
     idb-keyval "^6.2.0"
@@ -6410,7 +6410,7 @@ tesseract.js@^5.0.4:
     node-fetch "^2.6.9"
     opencollective-postinstall "^2.0.3"
     regenerator-runtime "^0.13.3"
-    tesseract.js-core "^5.1.0"
+    tesseract.js-core "^5.1.1"
     wasm-feature-detect "^1.2.11"
     zlibjs "^0.3.1"
 
@@ -6769,9 +6769,9 @@ walker@^1.0.8:
     makeerror "1.0.12"
 
 wasm-feature-detect@^1.2.11:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/wasm-feature-detect/-/wasm-feature-detect-1.6.1.tgz#21c7c35f9b233d71d2948d4a8b3e2098c452b940"
-  integrity sha512-R1i9ED8UlLu/foILNB1ck9XS63vdtqU/tP1MCugVekETp/ySCrBZRk5I/zI67cI1wlQYeSonNm1PLjDHZDNg6g==
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/wasm-feature-detect/-/wasm-feature-detect-1.6.2.tgz#d6229cae95311d82cc6c0c3b6934173c222ccbed"
+  integrity sha512-4dnaZ+Fq/q+BbMlTIfaNS851i+0zmHzui++NUZdskESRu3xwB6g6x2FnGvBdWtpijqO5yuj1l+EUTJGc4S4DKg==
 
 watchpack@^2.4.1:
   version "2.4.1"
