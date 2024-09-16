@@ -50,6 +50,7 @@ generate_public_licenses:
     cache:
         <<: *npm-cache
     script:
+        - npm install -g license-checker-rseidelsohn
         - cd backend
         - license-checker-rseidelsohn --production --json --out ../frontend/src/assets/licenses/backend_licenses.json --customPath /format.json
         - cd ../frontend
