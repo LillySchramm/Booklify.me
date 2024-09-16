@@ -3,7 +3,7 @@
     [ngClass]="{
         '!bg-accent':
             $selectedBook()?.isbn === book.isbn &&
-            favorite === $selectedFavorite()
+            favorite === $selectedFavorite(),
     }"
     *transloco="let t"
     (click)="openInfo(); scroll(card)"
