@@ -4108,9 +4108,9 @@ isarray@~1.0.0:
   integrity sha512-VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ==
 
 isbn3@^1.1.41:
-  version "1.1.52"
-  resolved "https://registry.yarnpkg.com/isbn3/-/isbn3-1.1.52.tgz#865c539e3822958bdcf310d38bff60c18fa7b422"
-  integrity sha512-eXkto3ehvZcGB5mMpyrhVMM8lo6I4NhkCziOxyYNmVVOg4dveEQ5L5J6AxdZkD4iienVfELukrjeLdLOdyUkyg==
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/isbn3/-/isbn3-1.2.0.tgz#f2eb787078b9eff4ab721ae5050845ee4b1f4df1"
+  integrity sha512-ackTSv/bE4MxrMIoqwl9FihRFHKdoM+E3hxYeRoYozoaCFuhxjtlS/27kkdUD75bG+CwO6Z1pYxxVYY+66rqAA==
 
 isexe@^2.0.0:
   version "2.0.0"
@@ -5487,11 +5487,6 @@ path-to-regexp@0.1.10:
   version "0.1.10"
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-0.1.10.tgz#67e9108c5c0551b9e5326064387de4763c4d5f8b"
   integrity sha512-7lf7qcQidTku0Gu3YDPc8DJ1q7OOucfa/BSsIwjuh56VU7katFvuM8hULfkwB3Fns/rsVF7PwPKVw1sl5KQS9w==
-
-path-to-regexp@3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-3.2.0.tgz#fa7877ecbc495c601907562222453c43cc204a5f"
-  integrity sha512-jczvQbCUS7XmS7o+y1aEO9OBVFeZBQ1MDSEqmO7xSoPgOPoowY/SxLpZ6Vh97/8qHZOteiCKb7gkG9gA2ZUxJA==
 
 path-to-regexp@3.3.0:
   version "3.3.0"
