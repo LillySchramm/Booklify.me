@@ -546,7 +546,7 @@
         type: "string",
     },
     version: {
-        "default": "v1.2.3",
+        "default": "v1.2.4",
         description: "The version of the server, shown in the frontend.",
         examples: [
             "v1.0.0",

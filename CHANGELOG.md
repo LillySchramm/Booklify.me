@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.2.4  - 16.9.2024
+
+### Changed
+
+- Dependency Updates 
+- Security Updates 
+
+
 ## v1.2.3  - 8.4.2024
 
 ### Added
