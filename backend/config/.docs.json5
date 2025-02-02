@@ -19,6 +19,28 @@
         examples: [],
         type: "string",
     },
+    brightdata: {
+        "default": null,
+        description: "BrightData is a proxy service which can be used to scrape websites. It is required for the Amazon crawler.",
+        examples: [],
+        type: "object",
+    },
+    "brightdata.key": {
+        "default": "",
+        description: "The API key which is used to authenticate against the BrightData proxy.",
+        examples: [
+            "ey..",
+        ],
+        type: "string",
+    },
+    "brightdata.zone": {
+        "default": "",
+        description: "The zone which should be used by the BrightData proxy.",
+        examples: [
+            "web_unlocker1",
+        ],
+        type: "string",
+    },
     cdn_url: {
         "default": "",
         description: "The URL of the CDN server. If set the frontend will use this URL to load book covers instead of using the backend.",
@@ -72,28 +94,6 @@
         description: "Disable the registration of new users. This can be useful if you want to run the server in a private environment. Please note that this does not disable the registration of the first user.",
         examples: [],
         type: "boolean",
-    },
-    geonode: {
-        "default": null,
-        description: "[GeoNode](https://geonode.com/) is a paid service which provides services usefull for crawling. Read more about why you should use GeoNode for Booklify [here](/docs/crawlers/amazon).",
-        examples: [],
-        type: "object",
-    },
-    "geonode.password": {
-        "default": "",
-        description: "Your GeoNode API password.",
-        examples: [
-            "00000000-0000-0000-0000-000000000000",
-        ],
-        type: "string",
-    },
-    "geonode.username": {
-        "default": "",
-        description: "Your GeoNode API username.",
-        examples: [
-            "geonode_xxxxxxxxxx",
-        ],
-        type: "string",
     },
     isbndb: {
         "default": null,
@@ -534,7 +534,7 @@
         type: "object",
     },
     "tasks.updateAIClassifications.cron": {
-        "default": "*/2 * * * * *",
+        "default": "0 * * * * *",
         description: "",
         examples: [],
         type: "string",
@@ -576,7 +576,7 @@
         type: "string",
     },
     version: {
-        "default": "v1.2.4",
+        "default": "v1.3.0",
         description: "The version of the server, shown in the frontend.",
         examples: [
             "v1.0.0",

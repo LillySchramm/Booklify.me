@@ -8,6 +8,10 @@
     "db": {
         "url": "postgresql://uwu:owo@localhost:5432/mangalist?schema=public"
     },
+    "brightdata": {
+        "key": "",
+        "zone": ""
+    },
     "mail": {
         "enabled": false,
         "smtp": "",
@@ -33,10 +37,6 @@
     },
     "isbndb": {
         "key": ""
-    },
-    "geonode": {
-        "username": "",
-        "password": ""
     },
     // https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do
     "recaptcha": {
@@ -87,7 +87,7 @@
         },
         "updateAIClassifications": {
             "enabled": true,
-            "cron": "*/2 * * * * *"
+            "cron": "0 * * * * *"
         },
     },
     "legal": {

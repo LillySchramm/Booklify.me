@@ -9,18 +9,10 @@ import * as dateParser from 'any-date-parser';
 import * as config from 'config';
 import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 
-const GEONODE_CONFIG = {
-    js_render: false,
-    is_json_response: false,
-    block_resources: true,
-    response_format: 'json',
-    mode: 'documentLoaded',
-    device_type: 'desktop',
-    country_code: 'de',
-    HTMLMinifier: { useMinifier: true },
-    proxy: {
-        useOnlyResidential: true,
-    },
+const BRIGHT_DATA_CONFIG = {
+    format: 'json',
+    country: 'DE',
+    method: 'GET',
 };
 
 const MAX_ATTEMPTS = 3;
@@ -31,16 +23,16 @@ export class AmazonBookScraper implements BookScraper {
     private readonly amazonBaseUrl = 'https://www.amazon.de';
     private readonly amazonSearchUrl = 'https://www.amazon.de/s?k=';
 
-    private readonly geoNodeUrl =
-        'https://scraper.geonode.com/api/scraper/scrape/realtime';
+    private readonly brightDataUrl = 'https://api.brightdata.com/request';
 
-    private geoNodeUsername: string;
-    private geoNodePassword: string;
+    private brightDataApiKey: string;
+    private brightDataZone: string;
 
     constructor(private readonly prisma: PrismaService) {
-        this.geoNodeUsername = config.get('geonode.username');
-        this.geoNodePassword = config.get('geonode.password');
+        this.brightDataApiKey = config.get('brightdata.key');
+        this.brightDataZone = config.get('brightdata.zone');
     }
+
     isLongRunning(): boolean {
         return true;
     }
@@ -48,20 +40,23 @@ export class AmazonBookScraper implements BookScraper {
     private async _get(
         url: string,
     ): Promise<{ statusCode: number; body: string; rawResponse: string }> {
-        const result = await gotScraping.post(this.geoNodeUrl, {
-            username: this.geoNodeUsername,
-            password: this.geoNodePassword,
+        const result = await gotScraping.post(this.brightDataUrl, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${this.brightDataApiKey}`,
+            },
             json: {
+                ...BRIGHT_DATA_CONFIG,
+                zone: this.brightDataZone,
                 url,
-                configurations: GEONODE_CONFIG,
             },
         });
 
         const body = JSON.parse(result.body);
 
         return {
-            statusCode: body.statusCode || 200,
-            body: body.html,
+            statusCode: body.status_code || 200,
+            body: body.body,
             rawResponse: result.body,
         };
     }
@@ -239,9 +234,9 @@ export class AmazonBookScraper implements BookScraper {
     }
 
     checkConfig(): boolean {
-        if (!this.geoNodeUsername || !this.geoNodePassword) {
+        if (!this.brightDataApiKey || !this.brightDataZone) {
             this.logger.error(
-                'Geonode credentials are not set. Please set them in the config. (https://geonode.com/)',
+                'BrightData credentials are not set. Please set them in the config. (https://brightdata.com)',
             );
 
             return false;

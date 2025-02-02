@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.3.1  - 2.2.2025
+
+### Changed
+
+- The Amazon crawler now uses BrightData instead of GeoNode 
+	> The crawler API that was used until now has been deprecated by GeoNode. The offer by BrightData has the same functionality. Please update your config if you want to use the Amazon crawler.
+
+
+
 ## v1.3.0  - 19.11.2024
 
 ### Added
@@ -82,57 +91,12 @@
 - Fixed a frontend bug which caused the favorite toggle to show up for user that are not logged in. 
 
 
-## v1.2.0  - 11.2.2024
-
-### Added
-
-- Added Amazon referral link button to book details. 
-- Added a button to the book interaction menu which copies the link to the books' page. 
-- Added a feature which allows users to favorite books. 
-- Added a standalone page for viewing book details. 
-- Reduce backend load by allowing the usage of a CDN for media delivery. 
-### Changed
-
-- Updated the browser icons to match the companion app. 
-### Fixed
-
-- Fixed a duplicated log entry. 
-- Fixed a few typos. 
-- Limit the length of book titles shown in the book cards. 
-
-
 ## v1.1.1  - 13.1.2024
 
 ### Fixed
 
 - Fixed a bug which caused scrollbars to always be shown in sidenav. 
 - Fixed a bug which sometimes caused the book groups to be shown with incorrect titles. 
-
-
-## v1.1.0  - 12.1.2024
-
-### Added
-
-- Add-An-Hide has been added to the Companion App 
-- Added a 'Add And Hide' button to the add book dialog. 
-- Added a new interaction menu for the book cards. 
-- Added an author filter to the collection pages.  
-- Added the ability to exclude books from the auto grouping algorithms. (Usefull for excluding false-positives) 
-- Added the ability to hide books from the public account page. 
-### Changed
-
-- Greatly improved frontend performance for collections with many books. 
-- Refined the automatic book grouping. 
-### Removed
-
-- Collections with only one book are no longer collapsed by default. 
-### Fixed
-
-- Fixed a bug which prevented signup if recaptcha was disabled. 
-- Fixed a bug, which caused inactive users to be logged out. 
-- Fixed a bug, which caused the backend to indicate a system error if a book could not be found.  
-- Fixed a bug, which caused the sidenav info about a book to not update correctly. 
-- If no books match the given filter an appropriate message will be displayed. 
 
 
 ## v1.0.3  - 31.12.2023
@@ -181,6 +145,51 @@
 - Fixed a bug which sometimes did not let users add books if they have to few in their collection. 
 - Fixed the book series detection in certain cases where the title was weirdly formated by the publisher. 
 - Fixed the name of the Android App 
+
+
+## v1.2.0  - 11.2.2024
+
+### Added
+
+- Added Amazon referral link button to book details. 
+- Added a button to the book interaction menu which copies the link to the books' page. 
+- Added a feature which allows users to favorite books. 
+- Added a standalone page for viewing book details. 
+- Reduce backend load by allowing the usage of a CDN for media delivery. 
+### Changed
+
+- Updated the browser icons to match the companion app. 
+### Fixed
+
+- Fixed a duplicated log entry. 
+- Fixed a few typos. 
+- Limit the length of book titles shown in the book cards. 
+
+
+## v1.1.0  - 12.1.2024
+
+### Added
+
+- Add-An-Hide has been added to the Companion App 
+- Added a 'Add And Hide' button to the add book dialog. 
+- Added a new interaction menu for the book cards. 
+- Added an author filter to the collection pages.  
+- Added the ability to exclude books from the auto grouping algorithms. (Usefull for excluding false-positives) 
+- Added the ability to hide books from the public account page. 
+### Changed
+
+- Greatly improved frontend performance for collections with many books. 
+- Refined the automatic book grouping. 
+### Removed
+
+- Collections with only one book are no longer collapsed by default. 
+### Fixed
+
+- Fixed a bug which prevented signup if recaptcha was disabled. 
+- Fixed a bug, which caused inactive users to be logged out. 
+- Fixed a bug, which caused the backend to indicate a system error if a book could not be found.  
+- Fixed a bug, which caused the sidenav info about a book to not update correctly. 
+- If no books match the given filter an appropriate message will be displayed. 
 
 
 ## v1.0.0  - 29.12.2023
