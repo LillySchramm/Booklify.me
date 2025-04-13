@@ -1426,9 +1426,7 @@
     "@types/nodemailer" "*"
 
 "@types/nodemailer@*", "@types/nodemailer@^6.4.9":
-  version "6.4.16"
-  resolved "https://registry.yarnpkg.com/@types/nodemailer/-/nodemailer-6.4.16.tgz#db006abcb1e1c8e6ea2fb53b27fefec3c03eaa6c"
-  integrity sha512-uz6hN6Pp0upXMcilM61CoKyjT7sskBoOWpptkjjJp8jIMlTdc3xG01U7proKkXzruMS4hS0zqtHNkNPFB20rKQ==
+  version "6.4.17"
   dependencies:
     "@types/node" "*"
 
@@ -5296,9 +5294,7 @@ nodemailer-html-to-text@^3.2.0:
     html-to-text "7.1.1"
 
 nodemailer@^6.9.7:
-  version "6.9.16"
-  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-6.9.16.tgz#3ebdf6c6f477c571c0facb0727b33892635e0b8b"
-  integrity sha512-psAuZdTIRN08HKVd/E8ObdV6NO7NTBY3KsC30F7M4H1OnmLCUNaS56FpYxyb26zWLSyYF9Ozch9KYHhHegsiOQ==
+  version "6.10.1"
 
 nopt@^5.0.0:
   version "5.0.0"
