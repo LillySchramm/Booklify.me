@@ -7,12 +7,12 @@ ARG BUILD_VERSION=dev
 ENV NODE_ENV=production
 
 COPY package.json package.json
-COPY yarn.lock yarn.lock
+COPY package-lock.json package-lock.json
 COPY prisma/ prisma/
 COPY entrypoint.sh entrypoint.sh
 
-RUN yarn
-RUN yarn add prisma
+RUN npm i
+RUN npm i prisma
 RUN npx prisma generate
 
 COPY dist/main.js main.js
