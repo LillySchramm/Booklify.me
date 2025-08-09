@@ -12,7 +12,6 @@ import { License } from '../../services/licenses.service';
 
 @Component({
     selector: 'app-license-dialog',
-    standalone: true,
     imports: [
         MatButtonModule,
         MatDialogActions,

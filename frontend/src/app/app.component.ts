@@ -18,6 +18,7 @@ import { UiState } from './state/ui/ui.state';
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
+    standalone: false,
 })
 export class AppComponent {
     @Select(UiState.isSidenavVisible) isSidenavVisible$!: Observable<boolean>;

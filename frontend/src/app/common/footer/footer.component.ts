@@ -8,7 +8,6 @@ import { Observable } from 'rxjs';
 import { SystemState } from 'src/app/state/system/system.state';
 @Component({
     selector: 'app-footer',
-    standalone: true,
     imports: [CommonModule, TranslocoModule, RouterModule],
     templateUrl: './footer.component.html',
     styleUrl: './footer.component.scss',

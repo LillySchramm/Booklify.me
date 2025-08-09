@@ -2,7 +2,7 @@ import {
     provideHttpClient,
     withInterceptorsFromDi,
 } from '@angular/common/http';
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { NgModule, inject, provideAppInitializer } from '@angular/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -83,12 +83,14 @@ import { TranslocoRootModule } from './transloco-root.module';
             provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
             useValue: { appearance: 'outline' },
         },
-        {
-            provide: APP_INITIALIZER,
-            useFactory: initApp,
-            deps: [TranslocoService, TokenService, ConfigService],
-            multi: true,
-        },
+        provideAppInitializer(() => {
+            const initializerFn = initApp(
+                inject(TranslocoService),
+                inject(TokenService),
+                inject(ConfigService),
+            );
+            return initializerFn();
+        }),
         provideHttpClient(withInterceptorsFromDi()),
     ],
 })

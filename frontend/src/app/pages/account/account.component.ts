@@ -24,7 +24,6 @@ import { SessionTableComponent } from './session-table/session-table.component';
 
 @Component({
     selector: 'app-account',
-    standalone: true,
     imports: [
         MatDividerModule,
         TranslocoModule,

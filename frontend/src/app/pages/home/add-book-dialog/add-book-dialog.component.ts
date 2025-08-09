@@ -27,7 +27,6 @@ import { BooksState } from 'src/app/state/books/books.state';
 
 @Component({
     selector: 'app-add-book-dialog',
-    standalone: true,
     imports: [
         MatDialogModule,
         MatButtonModule,

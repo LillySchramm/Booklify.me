@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import * as JsBarcode from 'jsbarcode';
+import JsBarcode from 'jsbarcode';
 
 @Component({
     selector: 'app-isbn-debug',
-    standalone: true,
     imports: [],
     templateUrl: './isbn-debug.component.html',
     styleUrl: './isbn-debug.component.scss',

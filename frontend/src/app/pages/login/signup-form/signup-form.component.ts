@@ -30,7 +30,6 @@ import { UserState } from 'src/app/state/user/user.state';
 @UntilDestroy()
 @Component({
     selector: 'app-signup-form',
-    standalone: true,
     imports: [
         ReactiveFormsModule,
         MatFormFieldModule,

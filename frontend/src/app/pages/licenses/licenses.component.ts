@@ -10,7 +10,6 @@ import { UserActions } from 'src/app/state/user/user.actions';
 
 @Component({
     selector: 'app-licenses',
-    standalone: true,
     imports: [MatTabsModule, TranslocoModule, LicenseItemComponent],
     templateUrl: './licenses.component.html',
     styleUrl: './licenses.component.scss',

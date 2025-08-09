@@ -11,7 +11,6 @@ import { SignupCardComponent } from './signup-card/signup-card.component';
 
 @Component({
     selector: 'app-login',
-    standalone: true,
     imports: [LoginCardComponent, SignupCardComponent, TranslocoModule],
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],

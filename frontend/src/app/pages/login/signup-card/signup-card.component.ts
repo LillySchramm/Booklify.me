@@ -10,7 +10,6 @@ import { SignupFormComponent } from '../signup-form/signup-form.component';
 
 @Component({
     selector: 'app-signup-card',
-    standalone: true,
     imports: [
         SignupFormComponent,
         MatCardModule,

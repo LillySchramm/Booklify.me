@@ -25,7 +25,6 @@ import { NoImagePlaceholderComponent } from '../no-image-placeholder/no-image-pl
 @UntilDestroy()
 @Component({
     selector: 'app-book-details',
-    standalone: true,
     imports: [
         CommonModule,
         NoImagePlaceholderComponent,

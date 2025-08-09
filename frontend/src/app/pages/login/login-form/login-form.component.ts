@@ -21,7 +21,6 @@ import { UserState } from 'src/app/state/user/user.state';
 
 @Component({
     selector: 'app-login-form',
-    standalone: true,
     imports: [
         ReactiveFormsModule,
         MatFormFieldModule,

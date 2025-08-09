@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import * as syncFetch from 'sync-fetch';
+import syncFetch from 'sync-fetch';
 
 export interface FrontendConfig {
     backend?: string;

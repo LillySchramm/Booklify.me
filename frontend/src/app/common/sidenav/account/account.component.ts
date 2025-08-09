@@ -7,7 +7,6 @@ import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({
     selector: 'app-account',
-    standalone: true,
     imports: [
         MatDividerModule,
         MatButtonModule,

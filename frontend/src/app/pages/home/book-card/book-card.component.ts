@@ -23,7 +23,6 @@ import { UiState } from 'src/app/state/ui/ui.state';
 
 @Component({
     selector: 'app-book-card',
-    standalone: true,
     imports: [
         CommonModule,
         MatDividerModule,

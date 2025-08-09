@@ -13,7 +13,6 @@ import { ReportDialogComponent } from '../report-dialog/report-dialog.component'
 
 @Component({
     selector: 'app-report-button',
-    standalone: true,
     imports: [MatIconModule, MatDialogModule, MatButtonModule],
     templateUrl: './report-button.component.html',
     styleUrl: './report-button.component.scss',

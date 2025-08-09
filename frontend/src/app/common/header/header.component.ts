@@ -14,7 +14,6 @@ import { UserDisplayComponent } from './user-display/user-display.component';
 
 @Component({
     selector: 'app-header',
-    standalone: true,
     imports: [
         MatToolbarModule,
         MatButtonModule,

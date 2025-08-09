@@ -13,7 +13,6 @@ import { UserState } from 'src/app/state/user/user.state';
 
 @Component({
     selector: 'app-user-display',
-    standalone: true,
     imports: [
         MatButtonModule,
         TranslocoModule,

@@ -5,7 +5,6 @@ import { ResetPasswordFormComponent } from '../reset-password-form/reset-passwor
 
 @Component({
     selector: 'app-reset-password-card',
-    standalone: true,
     imports: [MatCardModule, TranslocoModule, ResetPasswordFormComponent],
     templateUrl: './reset-password-card.component.html',
     styleUrls: ['./reset-password-card.component.scss'],

@@ -12,7 +12,6 @@ import { UserState } from 'src/app/state/user/user.state';
 
 @Component({
     selector: 'app-signup-success',
-    standalone: true,
     imports: [
         TranslocoModule,
         MatCardModule,

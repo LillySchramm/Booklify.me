@@ -24,7 +24,6 @@ import { UserState } from 'src/app/state/user/user.state';
 @UntilDestroy()
 @Component({
     selector: 'app-reset-password-form',
-    standalone: true,
     imports: [
         ReactiveFormsModule,
         MatFormFieldModule,

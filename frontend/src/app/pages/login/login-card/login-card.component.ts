@@ -5,7 +5,6 @@ import { LoginFormComponent } from '../login-form/login-form.component';
 
 @Component({
     selector: 'app-login-card',
-    standalone: true,
     imports: [LoginFormComponent, MatCardModule, TranslocoModule],
     templateUrl: './login-card.component.html',
     styleUrls: ['./login-card.component.scss'],

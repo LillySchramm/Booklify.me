@@ -11,7 +11,6 @@ import { CollectionComponent } from './collection/collection.component';
 
 @Component({
     selector: 'app-sidenav',
-    standalone: true,
     imports: [
         CollectionComponent,
         MatDividerModule,

@@ -27,7 +27,6 @@ import { FormErrorPipe } from '../../pipes/form-error.pipe';
 @UntilDestroy()
 @Component({
     selector: 'app-report-dialog',
-    standalone: true,
     imports: [
         MatDialogModule,
         TranslocoModule,

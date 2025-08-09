@@ -23,7 +23,6 @@ import { BookGroupingService } from 'src/book-groups/bookGrouping.service';
 import { Scraper } from './scraper/scraper';
 import { LokiLogger } from 'src/loki/loki-logger/loki-logger.service';
 import { InjectSentry, SentryService } from '@ntegral/nestjs-sentry';
-import { Magic } from 'mmmagic';
 
 @Injectable()
 export class BooksService implements OnModuleInit {
@@ -239,20 +238,21 @@ export class BooksService implements OnModuleInit {
     ): Promise<boolean> {
         if (buffer === null) return false;
 
-        const type: string | string[] = await new Promise((resolve) => {
-            const magic = new Magic();
-            magic.detect(buffer as Buffer, (_, result) => resolve(result));
-        });
+        // TODO: Find an alternative to this
+        // const type: string | string[] = await new Promise((resolve) => {
+        //     const magic = new Magic();
+        //     magic.detect(buffer as Buffer, (_, result) => resolve(result));
+        // });
 
-        if (
-            !type.includes('JPEG') ||
-            type.includes('Premature') ||
-            type === 'data'
-        ) {
-            await this.setBookCover(isbn, null);
+        // if (
+        //     !type.includes('JPEG') ||
+        //     type.includes('Premature') ||
+        //     type === 'data'
+        // ) {
+        //     await this.setBookCover(isbn, null);
 
-            return false;
-        }
+        //     return false;
+        // }
 
         const onBlacklist = await this.doesCoverContainBlacklistedWord(buffer);
         if (onBlacklist) {

@@ -21,7 +21,6 @@ export interface BookGrouping {
 @UntilDestroy()
 @Component({
     selector: 'app-collection-display',
-    standalone: true,
     imports: [
         BookGroupComponent,
         TranslocoModule,

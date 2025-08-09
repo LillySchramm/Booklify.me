@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import * as syncFetch from 'sync-fetch';
 import { ConfigService } from './config.service';
+import syncFetch from 'sync-fetch';
 
 export interface TokenInfo {
     sub: string;

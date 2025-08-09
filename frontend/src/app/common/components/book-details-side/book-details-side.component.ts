@@ -13,7 +13,6 @@ import { BookDetailsComponent } from '../book-details/book-details.component';
 
 @Component({
     selector: 'app-book-details-side',
-    standalone: true,
     imports: [MatButtonModule, BookDetailsComponent, MatIconModule],
     templateUrl: './book-details-side.component.html',
     styleUrls: ['./book-details-side.component.scss'],

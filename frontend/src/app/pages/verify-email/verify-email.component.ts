@@ -6,7 +6,6 @@ import { UserActions } from 'src/app/state/user/user.actions';
 
 @Component({
     selector: 'app-verify-email',
-    standalone: true,
     imports: [],
     templateUrl: './verify-email.component.html',
     styleUrls: ['./verify-email.component.scss'],

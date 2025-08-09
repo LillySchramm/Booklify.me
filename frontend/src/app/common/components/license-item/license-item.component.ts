@@ -9,7 +9,6 @@ import { LicenseDialogComponent } from '../license-dialog/license-dialog.compone
 
 @Component({
     selector: 'app-license-item',
-    standalone: true,
     imports: [MatCardModule, MatButtonModule, MatIconModule, TranslocoModule],
     templateUrl: './license-item.component.html',
     styleUrl: './license-item.component.scss',

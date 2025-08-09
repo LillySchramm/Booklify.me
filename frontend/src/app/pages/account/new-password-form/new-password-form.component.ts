@@ -17,7 +17,6 @@ import { UserActions } from 'src/app/state/user/user.actions';
 
 @Component({
     selector: 'app-new-password-form',
-    standalone: true,
     imports: [
         ReactiveFormsModule,
         MatFormFieldModule,

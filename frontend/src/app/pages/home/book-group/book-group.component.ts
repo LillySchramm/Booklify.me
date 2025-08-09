@@ -20,7 +20,6 @@ import { BookCardComponent } from '../book-card/book-card.component';
 @UntilDestroy()
 @Component({
     selector: 'app-book-group',
-    standalone: true,
     imports: [
         CommonModule,
         TranslocoModule,

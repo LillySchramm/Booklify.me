@@ -30,7 +30,6 @@ import { LanguagePipe } from '../../common/pipes/language.pipe';
 @UntilDestroy()
 @Component({
     selector: 'app-standalone-book',
-    standalone: true,
     templateUrl: './standalone-book.component.html',
     styleUrl: './standalone-book.component.scss',
     imports: [

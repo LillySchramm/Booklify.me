@@ -20,7 +20,6 @@ import { BehaviorSubject, map, startWith } from 'rxjs';
 
 @Component({
     selector: 'app-chip-filter',
-    standalone: true,
     imports: [
         FormsModule,
         MatFormFieldModule,

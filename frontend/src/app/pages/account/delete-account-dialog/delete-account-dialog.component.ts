@@ -14,7 +14,6 @@ import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({
     selector: 'app-delete-account-dialog',
-    standalone: true,
     imports: [
         MatFormFieldModule,
         FormsModule,

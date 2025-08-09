@@ -12,7 +12,6 @@ import { UserState } from 'src/app/state/user/user.state';
 
 @Component({
     selector: 'app-update-book-ownership-button',
-    standalone: true,
     imports: [MatButtonModule, MatIconModule, TranslocoModule],
     templateUrl: './update-book-ownership-button.component.html',
     styleUrls: ['./update-book-ownership-button.component.scss'],

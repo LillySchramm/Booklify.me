@@ -15,7 +15,6 @@ import { CollectionDisplayComponent } from '../home/collection-display/collectio
 @UntilDestroy()
 @Component({
     selector: 'app-user-collection',
-    standalone: true,
     imports: [CollectionDisplayComponent],
     templateUrl: './user-collection.component.html',
     styleUrls: ['./user-collection.component.scss'],

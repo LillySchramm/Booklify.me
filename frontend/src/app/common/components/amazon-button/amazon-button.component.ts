@@ -9,7 +9,6 @@ import { SystemState } from 'src/app/state/system/system.state';
 
 @Component({
     selector: 'app-amazon-button',
-    standalone: true,
     imports: [MatButtonModule, MatIconModule, TranslocoModule],
     templateUrl: './amazon-button.component.html',
     styleUrl: './amazon-button.component.scss',

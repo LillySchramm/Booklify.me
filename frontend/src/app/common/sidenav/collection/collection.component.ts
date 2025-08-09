@@ -28,7 +28,6 @@ import { ChipFilterComponent } from '../../components/chip-filter/chip-filter.co
 @UntilDestroy()
 @Component({
     selector: 'app-collection',
-    standalone: true,
     imports: [
         MatFormFieldModule,
         MatInputModule,
