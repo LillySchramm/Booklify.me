@@ -231,7 +231,7 @@ api_test:
     script:
         - curl --head -X GET --retry 60 --retry-connrefused --retry-delay 1 http://backend:3000/system/health
         - cd backend
-        - yarn run test
+        - npm run test
 
 backend_prettier:
     image: ${DOCKER_CACHE}/node:22-alpine
@@ -242,7 +242,7 @@ backend_prettier:
         <<: *npm-cache
     script:
         - cd backend
-        - yarn run format:check
+        - npm run format:check
 
 backend_lint:
     image: ${DOCKER_CACHE}/node:22-alpine
@@ -253,7 +253,7 @@ backend_lint:
         <<: *npm-cache
     script:
         - cd backend
-        - yarn run lint
+        - npm run lint
 
 frontend_prettier:
     image: ${DOCKER_CACHE}/node:22-alpine
@@ -264,7 +264,7 @@ frontend_prettier:
         <<: *npm-cache
     script:
         - cd frontend
-        - yarn run format:check
+        - npm run format:check
 
 frontend_lint:
     image: ${DOCKER_CACHE}/node:22-alpine
@@ -275,7 +275,7 @@ frontend_lint:
         <<: *npm-cache
     script:
         - cd frontend
-        - yarn run lint
+        - npm run lint
 
 deploy_docs:
     stage: deploy
