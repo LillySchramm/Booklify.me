@@ -30,7 +30,7 @@ install_npm_dependencies:
         policy: pull-push
     script:
         - cd backend
-        - yarn
+        - npm i
         - cd ../frontend
         - npm i
         - cd ../docs
@@ -71,7 +71,7 @@ check_licenses:
         <<: *npm-cache
     script:
         - cd backend
-        - yarn run licenses
+        - npm run licenses
         - cd ../frontend
         - npm run licenses
 
@@ -110,7 +110,7 @@ build_backend:
     script:
         - cd backend
         - npx prisma generate
-        - yarn run build
+        - npm run build
 
 build_frontend:
     image: ${DOCKER_CACHE}/node:22
