@@ -280,7 +280,7 @@ frontend_lint:
 deploy_docs:
     stage: deploy
     image:
-        name: registry.cdev.nexus/devops/kubernetes:latest
+        name: registry.cdev.nexus/devops/kubernetes-fsn0:latest
         entrypoint: [""]
     only:
         - v2
